@@ -15,7 +15,7 @@ Getting Started
 Requirements
 ------------
 
-* Python 2.7+ or Python 3.3+
+* Python 3.3+
 * Git (w/ stored credentials)
 
 Optional
@@ -29,7 +29,7 @@ Installation
 GDM can be installed with pip:
 
 ```
-$ pip install gdm
+$ pip3 install gdm
 ```
 
 or directly from the source code:
@@ -37,7 +37,7 @@ or directly from the source code:
 ```
 $ git clone https://github.com/jacebrowning/gdm.git
 $ cd gdm
-$ python setup.py install
+$ python3 setup.py install
 ```
 
 Basic Usage
@@ -46,7 +46,7 @@ Basic Usage
 After installation:
 
 ```
-$ python
+$ python3
 >>> import gdm
 >>> gdm.__version__
 ```

@@ -1,0 +1,5 @@
+root: gdm_modules
+dependencies:
+- clone: https://github.com/jacebrowning/gdm
+  to: gdm_1
+  at: fb693447579235391a45ca170959b5583c5042d8

@@ -5,7 +5,9 @@ import sys
 __project__ = 'GDM'
 __version__ = '0.0.0'
 
+CLI = 'gdm'
 VERSION = __project__ + '-' + __version__
+DESCRIPTION = "A very basic language-agnostic dependency manager using Git."
 
 PYTHON_VERSION = 3, 4
 
