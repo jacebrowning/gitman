@@ -13,3 +13,8 @@ PYTHON_VERSION = 3, 4
 
 if not sys.version_info >= PYTHON_VERSION:  # pragma: no cover (manual test)
     exit("Python {}.{}+ is required.".format(*PYTHON_VERSION))
+
+try:
+    from .commands import install
+except ImportError:
+    pass

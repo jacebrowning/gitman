@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 import yorm
 
@@ -7,7 +8,7 @@ import yorm
 @yorm.map_attr(dir=yorm.standard.String)
 @yorm.map_attr(rev=yorm.standard.String)
 @yorm.map_attr(link=yorm.standard.String)
-class Dependency(yorm.extended.AttributeDictionary):
+class Source(yorm.extended.AttributeDictionary):
 
     """A dictionary of `git` and `ln` arguments."""
 
@@ -18,34 +19,69 @@ class Dependency(yorm.extended.AttributeDictionary):
         self.rev = rev
         self.link = link
 
-    def update(self, root):
+    def get(self, root, location):
+        path = os.path.join(root, location)
+
+        if not os.path.isdir(path):
+            self._mkdir(path)
+
+        self._cd(path)
+
+        if os.path.exists(self.dir):
+            self._cd(self.dir)
+            self._reset()
+        else:
+            self._clone()
+            self._cd(self.dir)
+
+        self._checkout()
+
+    def _reset(self):
+        # self._git('reset', '--hard')
         pass
 
     def _clone(self):
-        self._call('git', 'clone', self.repo, self.dir)
+        self._git('clone', self.repo, self.dir)
 
     def _checkout(self):
-        self._call('git', 'checkout', self.rev)
+        # self._git('checkout', self.rev)
+        pass
 
     def _link(self, root):
         path = os.path.join(root, self.dir)
         self._call('ln', '-sf', path, self.link)
 
     @staticmethod
+    def _mkdir(path):
+        print("$ mkdir -p {}".format(path))
+        os.makedirs(path)
+
+    @staticmethod
+    def _cd(path):
+        print("$ cd {}".format(path))
+        os.chdir(path)
+
+    @classmethod
+    def _git(cls, *args):
+        args = ['git'] + list(args)
+        cls._call(*args)
+
+    @staticmethod
     def _call(*args):
-        pass
+        print("$ {}".format(' '.join(args)))
+        subprocess.check_call(args)
 
 
-@yorm.map_attr(all=Dependency)
-class DependencyList(yorm.container.List):
+@yorm.map_attr(all=Source)
+class Sources(yorm.container.List):
 
     """A list of dependencies."""
 
 
 @yorm.map_attr(location=yorm.standard.String)
-@yorm.map_attr(sources=DependencyList)
+@yorm.map_attr(sources=Sources)
 @yorm.store_instances("{self.root}/{self.filename}")
-class Configuration:
+class Dependencies:
 
     """A dictionary of dependency configuration options."""
 
@@ -56,5 +92,6 @@ class Configuration:
         self.location = location
         self.sources = []
 
-    def __iter__(self):
-        pass
+    def update(self):
+        for source in self.sources:
+            source.get(self.root, self.location)

@@ -6,37 +6,24 @@ import sys
 import argparse
 
 from . import CLI, VERSION, DESCRIPTION
-from .types import Configuration
-
-import yorm
-
-
-log = common.logger(__name__)
+from . import commands
 
 
 def main(args=None):
     """Process command-line arguments and run the program."""
 
+    args = sys.argv if args is None else args
+
+    assert len(args) == 2
+    root = args[1]
+
+    run(root)
 
 
-
-def run(path):
+def run(root):
     """Run the program."""
 
-    configuration = Configuration()
-    # TODO: convert to `yorm.load()` when available
-    yorm.store(configuration, path)
-
-    for dependency in dependencies:
-        dependency.update()
-
-
-
-
-    return True
-
-
-
+    commands.install(root)
 
 
 if __name__ == '__main__':  # pragma: no cover (manual test)

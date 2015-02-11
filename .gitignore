@@ -1,3 +1,5 @@
+gdm/test/files/dependencies
+
 # Temporary Python files
 *.pyc
 *.egg-info
