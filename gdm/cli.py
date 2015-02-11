@@ -2,6 +2,7 @@
 
 """Command-line interface."""
 
+import os
 import sys
 import argparse
 
@@ -15,7 +16,7 @@ def main(args=None):
     args = sys.argv if args is None else args
 
     assert len(args) == 2
-    root = args[1]
+    root = os.path.abspath(args[1])
 
     run(root)
 
