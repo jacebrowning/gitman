@@ -9,11 +9,12 @@ class ShellMixIn:
     indent = 0
 
     def _mkdir(self, path):
-        print("{}$ mkdir -p {}".format(' ' * self.indent, path))
+        self._show('mkdir', '-p', path)
         os.makedirs(path)
 
-    def _cd(self, path):
-        print("{}$ cd {}".format(' ' * self.indent, path))
+    def _cd(self, path, visible=True):
+        if visible:
+            self._show('cd', path)
         os.chdir(path)
 
     def _git(self, *args):
@@ -21,12 +22,13 @@ class ShellMixIn:
         self._call(*args, quiet=True)
 
     def _call(self, *args, quiet=False):
-        print("{}$ {}".format(' ' * self.indent, ' '.join(args)))
+        self._show(*args)
         if quiet:
             args = list(args) + ['--quiet']
         subprocess.check_call(args)
 
-
+    def _show(self, *args):
+        print("{}$ {}".format(' ' * self.indent, ' '.join(args)))
 
 
 @yorm.map_attr(repo=yorm.standard.String)
@@ -44,11 +46,12 @@ class Source(yorm.extended.AttributeDictionary, ShellMixIn):
         self.rev = rev
         self.link = link
 
-    def get(self, path):
+    def get(self):
 
         if os.path.exists(self.dir):
             self._cd(self.dir)
             self._fetch()
+            self._clean()
             self._reset()
         else:
             self._clone()
@@ -58,6 +61,9 @@ class Source(yorm.extended.AttributeDictionary, ShellMixIn):
 
     def _fetch(self):
         self._git('fetch')
+
+    def _clean(self):
+        self._git('clean', '-fdx')
 
     def _reset(self):
         self._git('reset', '--hard')
@@ -71,7 +77,6 @@ class Source(yorm.extended.AttributeDictionary, ShellMixIn):
     def _link(self, root):
         path = os.path.join(root, self.dir)
         self._call('ln', '-sf', path, self.link)
-
 
 
 @yorm.map_attr(all=Source)
@@ -110,6 +115,7 @@ class Dependencies(ShellMixIn):
         for source in self.sources:
 
             source.indent = self.indent + 2
-            source.get(path)
+            source.get()
+            self._cd(path, visible=False)
 
             print()
