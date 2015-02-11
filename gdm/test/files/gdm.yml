@@ -1,10 +1,10 @@
 location: dependencies
-repositories:
-- clone: https://github.com/jacebrowning/gdm
-  to: gdm_1
-  at: fb693447579235391a45ca170959b5583c5042d8
+sources:
+- repo: https://github.com/jacebrowning/gdm
+  dir: gdm_1
+  rev: fb693447579235391a45ca170959b5583c5042d8
   link: src/gdm_a
-- clone: https://github.com/jacebrowning/gdm
-  to: gdm_2
-  at: master
+- repo: https://github.com/jacebrowning/gdm
+  dir: gdm_2
+  rev: master
   link: src/gdm_b
