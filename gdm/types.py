@@ -9,25 +9,24 @@ class ShellMixIn:
     indent = 0
 
     def _mkdir(self, path):
-        self._show('mkdir', '-p', path)
+        self._display_in('mkdir', '-p', path)
         os.makedirs(path)
 
     def _cd(self, path, visible=True):
         if visible:
-            self._show('cd', path)
+            self._display_in('cd', path)
         os.chdir(path)
 
     def _git(self, *args):
-        args = ['git'] + list(args)
-        self._call(*args, quiet=True)
+        self._call('git', *args, quiet=True)
 
     def _call(self, *args, quiet=False):
-        self._show(*args)
+        self._display_in(*args)
         if quiet:
             args = list(args) + ['--quiet']
         subprocess.check_call(args)
 
-    def _show(self, *args):
+    def _display_in(self, *args):
         print("{}$ {}".format(' ' * self.indent, ' '.join(args)))
 
 
@@ -60,10 +59,10 @@ class Source(yorm.extended.AttributeDictionary, ShellMixIn):
         self._checkout()
 
     def _fetch(self):
-        self._git('fetch')
+        self._git('fetch', '--tags', '--force', '--prune')
 
     def _clean(self):
-        self._git('clean', '-fdx')
+        self._git('clean', '--force', '-d', '-x')
 
     def _reset(self):
         self._git('reset', '--hard')
@@ -72,7 +71,7 @@ class Source(yorm.extended.AttributeDictionary, ShellMixIn):
         self._git('clone', self.repo, self.dir)
 
     def _checkout(self):
-        self._git('checkout', '--detach', self.rev)
+        self._git('checkout', self.rev)
 
     def _link(self, root):
         path = os.path.join(root, self.dir)
