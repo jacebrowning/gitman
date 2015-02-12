@@ -70,7 +70,7 @@ class Config(ShellMixin):
 
     FILENAMES = ('gdm.yml', 'gdm.yaml', '.gdm.yml', 'gdm.yaml')
 
-    def __init__(self, root, filename='gdm.yml', location='gdm_modules'):
+    def __init__(self, root, filename='gdm.yml', location='gdm_sources'):
         super().__init__()
         self.root = root
         self.filename = filename
