@@ -4,8 +4,10 @@ import subprocess
 import yorm
 
 
+
 class ShellMixIn:
 
+    INDENT = 2
     indent = 0
 
     def _mkdir(self, path):
@@ -91,6 +93,8 @@ class Dependencies(ShellMixIn):
 
     """A dictionary of dependency configuration options."""
 
+    FILENAMES = ('gdm.yml', 'gdm.yaml', '.gdm.yml', 'gdm.yaml')
+
     def __init__(self, root, filename='gdm.yml', location='gdm_modules'):
         super().__init__()
         self.root = root
@@ -98,23 +102,40 @@ class Dependencies(ShellMixIn):
         self.location = location
         self.sources = []
 
+    @classmethod
+    def update_all(cls, root=None, indent=0):
+
+        if root is None:
+            root = os.getcwd()
+
+        for filename in os.listdir(root):
+            if filename.lower() in cls.FILENAMES:
+
+                dependencies = cls(root, filename)
+
+                dependencies.indent = indent
+                dependencies.update()
+
+                break
+
     def update(self):
 
         path = os.path.join(self.root, self.location)
 
-        print()
+        if not self.indent:
+            print()
 
         if not os.path.isdir(path):
             self._mkdir(path)
-
         self._cd(path)
-
         print()
 
         for source in self.sources:
 
-            source.indent = self.indent + 2
+            source.indent = self.indent + self.INDENT
             source.get()
-            self._cd(path, visible=False)
-
             print()
+
+            self.__class__.update_all(indent=source.indent + self.INDENT)
+
+            self._cd(path, visible=False)
