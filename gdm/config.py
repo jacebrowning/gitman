@@ -4,14 +4,14 @@ import os
 
 import yorm
 
-from .shell import ShellMixin
+from .shell import ShellMixin, GitMixin
 
 
 @yorm.map_attr(repo=yorm.standard.String)
 @yorm.map_attr(dir=yorm.standard.String)
 @yorm.map_attr(rev=yorm.standard.String)
 @yorm.map_attr(link=yorm.standard.String)
-class Source(yorm.extended.AttributeDictionary, ShellMixin):
+class Source(yorm.extended.AttributeDictionary, ShellMixin, GitMixin):
 
     """A dictionary of `git` and `ln` arguments."""
 
@@ -23,42 +23,21 @@ class Source(yorm.extended.AttributeDictionary, ShellMixin):
         self.link = link
 
     def get(self):
-
         if os.path.exists(self.dir):
             self._cd(self.dir)
-            self._fetch()
+            self._fetch(self.repo)
             self._clean()
             self._reset()
         else:
-            self._clone()
+            self._clone(self.repo, self.dir)
             self._cd(self.dir)
-
-        self._checkout()
-
-    def _fetch(self):
-        self._git('fetch', self.repo, '--tags', '--force', '--prune')
-
-    def _clean(self):
-        self._git('clean', '--force', '-d', '-x')
-
-    def _reset(self):
-        self._git('reset', '--hard')
-
-    def _clone(self):
-        self._git('clone', self.repo, self.dir)
-
-    def _checkout(self):
-        self._git('checkout', self.rev)
-
-    def _link(self, root):
-        path = os.path.join(root, self.dir)
-        self._call('ln', '-sf', path, self.link)
+        self._checkout(self.rev)
 
 
 @yorm.map_attr(all=Source)
 class Sources(yorm.container.List):
 
-    """A list of dependencies."""
+    """A list of source dependencies."""
 
 
 @yorm.map_attr(location=yorm.standard.String)
