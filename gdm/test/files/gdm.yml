@@ -6,5 +6,5 @@ sources:
   link: src/gdm_a
 - repo: https://github.com/jacebrowning/gdm
   dir: gdm_2
-  rev: fb693447579235391a45ca170959b5583c5042d8
+  rev: example-tag
   link: src/gdm_b
