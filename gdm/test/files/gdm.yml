@@ -1,4 +1,4 @@
-location: dependencies
+location: /tmp/gdm-test-dependencies
 sources:
 - repo: https://github.com/jacebrowning/gdm
   dir: gdm_1

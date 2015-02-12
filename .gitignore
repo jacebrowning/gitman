@@ -1,5 +1,3 @@
-gdm/test/files/dependencies
-
 # Temporary Python files
 *.pyc
 *.egg-info
@@ -28,6 +26,7 @@ docs/*.png
 
 # Testing and coverage results
 .coverage
+.coverage-html
 pyunit.xml
 
 # Build and release directories

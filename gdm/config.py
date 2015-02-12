@@ -1,46 +1,21 @@
+"""Wrappers for the dependency configuration files."""
+
 import os
-import subprocess
 
 import yorm
 
-
-
-class ShellMixIn:
-
-    INDENT = 2
-    indent = 0
-
-    def _mkdir(self, path):
-        self._display_in('mkdir', '-p', path)
-        os.makedirs(path)
-
-    def _cd(self, path, visible=True):
-        if visible:
-            self._display_in('cd', path)
-        os.chdir(path)
-
-    def _git(self, *args):
-        self._call('git', *args, quiet=True)
-
-    def _call(self, *args, quiet=False):
-        self._display_in(*args)
-        if quiet:
-            args = list(args) + ['--quiet']
-        subprocess.check_call(args)
-
-    def _display_in(self, *args):
-        print("{}$ {}".format(' ' * self.indent, ' '.join(args)))
+from .shell import ShellMixin
 
 
 @yorm.map_attr(repo=yorm.standard.String)
 @yorm.map_attr(dir=yorm.standard.String)
 @yorm.map_attr(rev=yorm.standard.String)
 @yorm.map_attr(link=yorm.standard.String)
-class Source(yorm.extended.AttributeDictionary, ShellMixIn):
+class Source(yorm.extended.AttributeDictionary, ShellMixin):
 
     """A dictionary of `git` and `ln` arguments."""
 
-    def __init__(self, repo, dir, rev='master', link=None):
+    def __init__(self, repo, dir, rev='master', link=None):  # pylint: disable=W0622
         super().__init__()
         self.repo = repo
         self.dir = dir
@@ -61,7 +36,7 @@ class Source(yorm.extended.AttributeDictionary, ShellMixIn):
         self._checkout()
 
     def _fetch(self):
-        self._git('fetch', '--tags', '--force', '--prune')
+        self._git('fetch', self.repo, '--tags', '--force', '--prune')
 
     def _clean(self):
         self._git('clean', '--force', '-d', '-x')
@@ -89,7 +64,7 @@ class Sources(yorm.container.List):
 @yorm.map_attr(location=yorm.standard.String)
 @yorm.map_attr(sources=Sources)
 @yorm.store_instances("{self.root}/{self.filename}")
-class Dependencies(ShellMixIn):
+class Config(ShellMixin):
 
     """A dictionary of dependency configuration options."""
 
@@ -102,23 +77,7 @@ class Dependencies(ShellMixIn):
         self.location = location
         self.sources = []
 
-    @classmethod
-    def update_all(cls, root=None, indent=0):
-
-        if root is None:
-            root = os.getcwd()
-
-        for filename in os.listdir(root):
-            if filename.lower() in cls.FILENAMES:
-
-                dependencies = cls(root, filename)
-
-                dependencies.indent = indent
-                dependencies.update()
-
-                break
-
-    def update(self):
+    def install_deps(self):
 
         path = os.path.join(self.root, self.location)
 
@@ -136,6 +95,20 @@ class Dependencies(ShellMixIn):
             source.get()
             print()
 
-            self.__class__.update_all(indent=source.indent + self.INDENT)
+            install_deps(root=os.getcwd(), indent=source.indent + self.INDENT)
 
             self._cd(path, visible=False)
+
+
+def install_deps(root, indent=0):
+    """Install the dependences listed in the project's configuration file."""
+
+    for filename in os.listdir(root):
+        if filename.lower() in Config.FILENAMES:
+
+            config = Config(root, filename)
+
+            config.indent = indent
+            config.install_deps()
+
+            break

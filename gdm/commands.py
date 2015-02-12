@@ -1,15 +1,16 @@
+"""Functions to manage the installation of dependencies."""
 
-from .types import Dependencies
+import os
 
-
-def install(root):
-
-    Dependencies.update_all(root)
+from . import config
 
 
+def install(root=None):
+    """Install dependencies for a project."""
+
+    if root is None:
+        root = os.getcwd()
+
+    config.install_deps(root)
 
     return True
-
-
-
-

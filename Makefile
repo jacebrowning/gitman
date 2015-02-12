@@ -9,8 +9,8 @@ ifndef TEST_RUNNER
 	# options are: nose, pytest
 	TEST_RUNNER := pytest
 endif
-UNIT_TEST_COVERAGE := 100
-INTEGRATION_TEST_COVERAGE := 100
+UNIT_TEST_COVERAGE := 40
+INTEGRATION_TEST_COVERAGE := 86
 
 # Project settings
 PROJECT := GDM
@@ -162,7 +162,7 @@ pep257: depends-ci
 
 .PHONY: pylint
 pylint: depends-ci
-	$(PYLINT) $(PACKAGE) --rcfile=.pylintrc
+	$(PYLINT) $(PACKAGE) --rcfile=.pylintrc --disable=C0111
 
 .PHONY: fix
 fix: depends-dev
@@ -175,6 +175,10 @@ test: test-$(TEST_RUNNER)
 
 .PHONY: tests
 tests: tests-$(TEST_RUNNER)
+
+.PHONY: read-coverage
+read-coverage:
+	$(OPEN) .coverage-html/index.html
 
 # nosetest commands
 
@@ -190,12 +194,16 @@ tests-nose: depends-ci
 
 .PHONY: test-pytest
 test-pytest: depends-ci
-	$(COVERAGE) run --source $(PACKAGE) -m py.test $(PACKAGE) --doctest-modules
+	$(COVERAGE) erase; rm -rf .coverage-html
+	$(COVERAGE) run --source $(PACKAGE) --module py.test $(PACKAGE) --doctest-modules
+	$(COVERAGE) html --directory .coverage-html
 	$(COVERAGE) report --show-missing --fail-under=$(UNIT_TEST_COVERAGE)
 
 .PHONY: tests-pytest
 tests-pytest: depends-ci
-	TEST_INTEGRATION=1 $(MAKE) test
+	$(COVERAGE) erase; rm -rf .coverage-html
+	TEST_INTEGRATION=1 $(COVERAGE) run --source $(PACKAGE) --module py.test $(PACKAGE) --doctest-modules
+	$(COVERAGE) html --directory .coverage-html
 	$(COVERAGE) report --show-missing --fail-under=$(INTEGRATION_TEST_COVERAGE)
 
 # Cleanup ####################################################################
