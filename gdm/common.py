@@ -12,7 +12,7 @@ logger = logging.getLogger
 verbosity = 0
 
 
-class HelpFormatter(argparse.HelpFormatter):
+class WideHelpFormatter(argparse.HelpFormatter):
 
     """Command-line help text formatter with wider help text."""
 
@@ -30,7 +30,7 @@ class WarningFormatter(logging.Formatter):
         self.verbose_format = verbose_format
 
     def format(self, record):
-        """Python 3 hack to change the formatting style dynamically."""
+        """A hack to change the formatting style dynamically."""
         # pylint: disable=W0212
         if record.levelno > logging.INFO:
             self._style._fmt = self.verbose_format

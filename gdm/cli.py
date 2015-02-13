@@ -26,7 +26,7 @@ def main(args=None, function=None):
     project = argparse.ArgumentParser(add_help=False)
     project.add_argument('-r', '--root', metavar='PATH',
                          help="root directory of the project")
-    shared = {'formatter_class': common.HelpFormatter,
+    shared = {'formatter_class': common.WideHelpFormatter,
               'parents': [project, debug]}
 
     # Build main parser
