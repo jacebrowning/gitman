@@ -1,10 +1,13 @@
 """Wrappers for the dependency configuration files."""
 
 import os
+import logging
 
 import yorm
 
 from .shell import ShellMixin, GitMixin
+
+logging.getLogger('yorm').setLevel(logging.INFO)
 
 
 @yorm.map_attr(repo=yorm.standard.String)
@@ -87,26 +90,27 @@ class Config(ShellMixin):
         self._cd(path)
         print()
 
+        count = 0
         for source in self.sources:
 
             source.indent = self.indent + self.INDENT
             source.get()
+            count += 1
             print()
 
-            install_deps(root=os.getcwd(), indent=source.indent + self.INDENT)
+            count += install_deps(root=os.getcwd(),
+                                  indent=source.indent + self.INDENT)
 
             self._cd(path, visible=False)
+
+        return count
 
 
 def install_deps(root, indent=0):
     """Install the dependences listed in the project's configuration file."""
-
     for filename in os.listdir(root):
         if filename.lower() in Config.FILENAMES:
-
             config = Config(root, filename)
-
             config.indent = indent
-            config.install_deps()
-
-            break
+            return config.install_deps()
+    return 0

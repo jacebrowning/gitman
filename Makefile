@@ -9,7 +9,7 @@ ifndef TEST_RUNNER
 	# options are: nose, pytest
 	TEST_RUNNER := pytest
 endif
-UNIT_TEST_COVERAGE := 73
+UNIT_TEST_COVERAGE := 74
 INTEGRATION_TEST_COVERAGE := 96
 
 # Project settings

@@ -2,8 +2,11 @@
 
 import os
 import sys
+import logging
 
 from sh import Command, ErrorReturnCode
+
+logging.getLogger('sh').setLevel(logging.WARNING)
 
 
 class _Base:
