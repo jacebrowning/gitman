@@ -21,16 +21,35 @@ class Source(yorm.extended.AttributeDictionary, ShellMixin, GitMixin):
         self.dir = dir
         self.rev = rev
         self.link = link
+        if not self.repo:
+            raise ValueError("'repo' missing on {}".format(repr(self)))
+        if not self.dir:
+            raise ValueError("'dir' missing on {}".format(repr(self)))
+
+    def __repr__(self):
+        return "<source {}>".format(self)
+
+    def __str__(self):
+        fmt = "'{r}' @ '{v}' in '{d}'"
+        if self.link:
+            fmt += " <- '{s}'"
+        return fmt.format(r=self.repo, v=self.rev, d=self.dir, s=self.link)
 
     def get(self):
+
+        # Fetch and clean the working copy if it exists
         if os.path.exists(self.dir):
             self._cd(self.dir)
             self._fetch(self.repo)
             self._clean()
             self._reset()
+
+        # If it doesn't exist, clone a new one
         else:
             self._clone(self.repo, self.dir)
             self._cd(self.dir)
+
+        # Update the working copy to the specified revision
         self._checkout(self.rev)
 
 

@@ -9,8 +9,8 @@ ifndef TEST_RUNNER
 	# options are: nose, pytest
 	TEST_RUNNER := pytest
 endif
-UNIT_TEST_COVERAGE := 40
-INTEGRATION_TEST_COVERAGE := 86
+UNIT_TEST_COVERAGE := 53
+INTEGRATION_TEST_COVERAGE := 91
 
 # Project settings
 PROJECT := GDM
