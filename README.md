@@ -1,7 +1,7 @@
 GDM
 ===
 
-A very basic language-agnostic dependency manager using Git.
+A very basic language-agnostic "dependency manager" using Git.
 
 [![Build Status](http://img.shields.io/travis/jacebrowning/gdm/master.svg)](https://travis-ci.org/jacebrowning/gdm)
 [![Coverage Status](http://img.shields.io/coveralls/jacebrowning/gdm/master.svg)](https://coveralls.io/r/jacebrowning/gdm)
