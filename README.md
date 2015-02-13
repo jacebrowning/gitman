@@ -17,7 +17,7 @@ Requirements
 
 * Python 3.3+
 * Git (with stored credentials)
-* OSX/Linux (i.e. a decent shell for Git)
+* OSX/Linux (with a decent shell for Git)
 
 Installation
 ------------
