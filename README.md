@@ -19,11 +19,6 @@ Requirements
 * Git (with stored credentials)
 * OSX/Linux (i.e. a decent shell for Git)
 
-Optional
---------
-
-* A platform capable of creating symbolic links
-
 Installation
 ------------
 
