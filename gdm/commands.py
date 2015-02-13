@@ -10,6 +10,8 @@ def install(root=None):
 
     if root is None:
         root = os.getcwd()
+    else:
+        root = os.path.abspath(root)
 
     config.install_deps(root)
 

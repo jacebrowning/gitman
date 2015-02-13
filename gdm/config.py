@@ -66,9 +66,9 @@ class Config(ShellMixin):
 
     """A dictionary of dependency configuration options."""
 
-    FILENAMES = ('gdm.yml', 'gdm.yaml', '.gdm.yml', 'gdm.yaml')
+    FILENAMES = ('gdm.yml', 'gdm.yaml', '.gdm.yml', '.gdm.yaml')
 
-    def __init__(self, root, filename='gdm.yml', location='gdm_sources'):
+    def __init__(self, root, filename=FILENAMES[0], location='gdm_sources'):
         super().__init__()
         self.root = root
         self.filename = filename

@@ -2,29 +2,73 @@
 
 """Command-line interface."""
 
-import os
 import sys
-# import argparse
+import argparse
 
-# from . import CLI, VERSION, DESCRIPTION
+from . import CLI, VERSION, DESCRIPTION
+from . import common
 from . import commands
 
+log = common.logger(__name__)
 
-def main(args=None):
+
+def main(args=None, function=None):
     """Process command-line arguments and run the program."""
 
-    args = sys.argv if args is None else args
+    # Shared options
+    debug = argparse.ArgumentParser(add_help=False)
+    debug.add_argument('-V', '--version', action='version', version=VERSION)
+    group = debug.add_mutually_exclusive_group()
+    group.add_argument('-v', '--verbose', action='count', default=0,
+                       help="enable verbose logging")
+    group.add_argument('-q', '--quiet', action='store_const', const=-1,
+                       dest='verbose', help="only display errors and prompts")
+    project = argparse.ArgumentParser(add_help=False)
+    project.add_argument('-r', '--root', metavar='PATH',
+                         help="root directory of the project")
+    shared = {'formatter_class': common.HelpFormatter,
+              'parents': [project, debug]}
 
-    assert len(args) == 2
-    root = os.path.abspath(args[1])
+    # Build main parser
+    parser = argparse.ArgumentParser(prog=CLI, description=DESCRIPTION,
+                                     **shared)
 
-    run(root)
+    subs = parser.add_subparsers(help="", dest='command', metavar="<command>")
 
+    # Build switch parser
+    info = "install the specified versions of all dependencies"
+    subs.add_parser('install', description=info.capitalize() + '.',
+                    help=info, **shared)
 
-def run(root):
-    """Run the program."""
+    # Parse arguments
+    args = parser.parse_args(args=args)
+    kwargs = {}
+    if args.command == 'install':
+        function = commands.install
+        kwargs['root'] = args.root
+    if function is None:
+        parser.print_help()
+        sys.exit(1)
 
-    commands.install(root)
+    # Configure logging
+    common.configure_logging(args.verbose)
+
+    # Run the program
+    try:
+        log.debug("running command...")
+        success = function(**kwargs)
+    except KeyboardInterrupt:
+        msg = "command cancelled"
+        if common.verbosity == common.MAX_VERBOSITY:
+            log.exception(msg)
+        else:
+            log.debug(msg)
+        success = False
+    if success:
+        log.debug("command succeeded")
+    else:
+        log.debug("command failed")
+        sys.exit(1)
 
 
 if __name__ == '__main__':  # pragma: no cover (manual test)
