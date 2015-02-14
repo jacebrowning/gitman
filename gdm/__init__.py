@@ -3,7 +3,7 @@
 import sys
 
 __project__ = 'GDM'
-__version__ = '0.1a2'
+__version__ = '0.1a3'
 
 CLI = 'gdm'
 VERSION = __project__ + '-' + __version__
