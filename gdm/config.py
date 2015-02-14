@@ -1,10 +1,15 @@
 """Wrappers for the dependency configuration files."""
 
 import os
+import logging
 
 import yorm
 
+from . import common
 from .shell import ShellMixin, GitMixin
+
+logging.getLogger('yorm').setLevel(logging.INFO)
+log = common.logger(__name__)
 
 
 @yorm.map_attr(repo=yorm.standard.String)
@@ -66,17 +71,22 @@ class Config(ShellMixin):
 
     """A dictionary of dependency configuration options."""
 
-    FILENAMES = ('gdm.yml', 'gdm.yaml', '.gdm.yml', 'gdm.yaml')
+    FILENAMES = ('gdm.yml', 'gdm.yaml', '.gdm.yml', '.gdm.yaml')
 
-    def __init__(self, root, filename='gdm.yml', location='gdm_sources'):
+    def __init__(self, root, filename=FILENAMES[0], location='gdm_sources'):
         super().__init__()
         self.root = root
         self.filename = filename
         self.location = location
         self.sources = []
 
-    def install_deps(self):
+    @property
+    def path(self):
+        """Get the full path to the configuration file."""
+        return os.path.join(self.root, self.filename)
 
+    def install_deps(self):
+        """Get all sources, recursively."""
         path = os.path.join(self.root, self.location)
 
         if not self.indent:
@@ -87,26 +97,28 @@ class Config(ShellMixin):
         self._cd(path)
         print()
 
+        count = 0
         for source in self.sources:
 
             source.indent = self.indent + self.INDENT
             source.get()
+            count += 1
             print()
 
-            install_deps(root=os.getcwd(), indent=source.indent + self.INDENT)
+            count += install_deps(root=os.getcwd(),
+                                  indent=source.indent + self.INDENT)
 
             self._cd(path, visible=False)
+
+        return count
 
 
 def install_deps(root, indent=0):
     """Install the dependences listed in the project's configuration file."""
-
     for filename in os.listdir(root):
         if filename.lower() in Config.FILENAMES:
-
             config = Config(root, filename)
-
+            log.debug("loaded config: %s", config.path)
             config.indent = indent
-            config.install_deps()
-
-            break
+            return config.install_deps()
+    return 0

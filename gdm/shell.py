@@ -2,8 +2,11 @@
 
 import os
 import sys
+import logging
 
 from sh import Command, ErrorReturnCode
+
+logging.getLogger('sh').setLevel(logging.WARNING)
 
 
 class _Base:
@@ -13,11 +16,8 @@ class _Base:
     INDENT = 2
     indent = 0
 
-    def _call(self, name, *args, quiet=False):
+    def _call(self, name, *args):
         self._display_in(*args)
-
-        if quiet:
-            args = list(args) + ['--quiet']
 
         try:
             program = Command(name)
@@ -52,7 +52,7 @@ class GitMixin(_Base):
     """Provides classes with Git utilities."""
 
     def _git(self, *args):
-        self._call('git', *args, quiet=True)
+        self._call('git', *args)
 
     def _fetch(self, repo):
         self._git('fetch', repo, '--tags', '--force', '--prune')

@@ -16,5 +16,5 @@ if not sys.version_info >= PYTHON_VERSION:  # pragma: no cover (manual test)
 
 try:
     from .commands import install
-except ImportError:
+except ImportError:  # pragma: no cover (manual test)
     pass
