@@ -7,7 +7,7 @@ __version__ = '0.1dev'
 
 CLI = 'gdm'
 VERSION = __project__ + '-' + __version__
-DESCRIPTION = "A very basic language-agnostic dependency manager using Git."
+DESCRIPTION = 'A very basic language-agnostic "dependency manager" using Git.'
 
 PYTHON_VERSION = 3, 3
 
