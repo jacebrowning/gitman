@@ -1,9 +1,11 @@
 """Unit tests for the `config` module."""
 # pylint: disable=R0201
 
-from gdm.config import Source, Config
-
 import pytest
+
+from gdm.config import Source, Config, install_deps
+
+from .conftest import FILES
 
 
 class TestSource:
@@ -65,3 +67,17 @@ class TestConfig:
         config = Config('mock/root', location='.gdm')
         assert 'gdm.yml' == config.filename
         assert '.gdm' == config.location
+
+
+class TestInstall:
+
+    @pytest.mark.integration
+    def test_multiple(self):
+        """Verify the correct number of dependencies is installed."""
+        assert 6 == install_deps(FILES)
+
+    @pytest.mark.integration
+    def test_empty(self, tmpdir):
+        """Verify zero dependencies are installed with no configuration."""
+        tmpdir.chdir()
+        assert 0 == install_deps(str(tmpdir))

@@ -5,9 +5,11 @@ import logging
 
 import yorm
 
+from . import common
 from .shell import ShellMixin, GitMixin
 
 logging.getLogger('yorm').setLevel(logging.INFO)
+log = common.logger(__name__)
 
 
 @yorm.map_attr(repo=yorm.standard.String)
@@ -78,8 +80,13 @@ class Config(ShellMixin):
         self.location = location
         self.sources = []
 
-    def install_deps(self):
+    @property
+    def path(self):
+        """Get the full path to the configuration file."""
+        return os.path.join(self.root, self.filename)
 
+    def install_deps(self):
+        """Get all sources, recursively."""
         path = os.path.join(self.root, self.location)
 
         if not self.indent:
@@ -111,6 +118,7 @@ def install_deps(root, indent=0):
     for filename in os.listdir(root):
         if filename.lower() in Config.FILENAMES:
             config = Config(root, filename)
+            log.debug("loaded config: %s", config.path)
             config.indent = indent
             return config.install_deps()
     return 0

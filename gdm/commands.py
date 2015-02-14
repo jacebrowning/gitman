@@ -21,7 +21,7 @@ def install(root=None):
     else:
         log.warn("no dependencies installed")
 
-    return True
+    return count
 
 
 def _find_root(root, cwd=None):
