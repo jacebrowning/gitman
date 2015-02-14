@@ -9,19 +9,12 @@ from sh import Command, ErrorReturnCode
 logging.getLogger('sh').setLevel(logging.WARNING)
 
 
-def _call(*args):
-    assert args
-    args = list(args)
-    name = args.pop(0)
-    if name == 'mkdir':
-        assert len(args) == 2
-        assert args.pop(0) == '-p'
-        path = args.pop(0)
-        os.makedirs(path)
-    elif name == 'cd':
-        assert len(args) == 1
-        path = args.pop(0)
-        os.chdir(path)
+def _call(name, *args):
+    """Call a shell program with arguments."""
+    if name == 'mkdir' and len(args) == 2 and args[0] == '-p':
+        os.makedirs(args[1])
+    elif name == 'cd' and len(args) == 1:
+        os.chdir(args[0])
     else:
         try:
             program = Command(name)
@@ -38,9 +31,10 @@ class _Base:
     INDENT = 2
     indent = 0
 
-    def _call(self, name, *args):
-        self._display_in(*args)
-        _call(name, *args)
+    def _call(self, *args, visible=True):
+        if visible:
+            self._display_in(*args)
+        _call(*args)
 
     def _display_in(self, *args):
         print("{}$ {}".format(' ' * self.indent, ' '.join(args)))
@@ -51,13 +45,10 @@ class ShellMixin(_Base):
     """Provides classes with shell utilities."""
 
     def mkdir(self, path):
-        self._display_in('mkdir', '-p', path)
         self._call('mkdir', '-p', path)
 
     def cd(self, path, visible=True):
-        if visible:
-            self._display_in('cd', path)
-        self._call('cd', path)
+        self._call('cd', path, visible=visible)
 
     def ln(self, source, target):
         self._call('ln', '-sf', source, target)
