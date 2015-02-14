@@ -55,7 +55,9 @@ class GitMixin(_Base):
         self._call('git', *args)
 
     def _fetch(self, repo):
-        self._git('fetch', repo, '--tags', '--force', '--prune')
+        self._git('remote', 'remove', 'origin')
+        self._git('remote', 'add', 'origin', repo)
+        self._git('fetch', '--all', '--tags', '--force', '--prune')
 
     def _clean(self):
         self._git('clean', '--force', '-d', '-x')
