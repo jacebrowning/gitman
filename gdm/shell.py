@@ -68,8 +68,9 @@ class GitMixin(_Base):
 
     def git_revert(self):
         """Revert all changes in the working tree."""
-        self._clean()
+        self._stash()
         self._reset()
+        self._clean()
 
     def git_update(self, rev):
         """Update the working tree to the specified revision."""
@@ -85,6 +86,9 @@ class GitMixin(_Base):
         self._git('remote', 'remove', 'origin')
         self._git('remote', 'add', 'origin', repo)
         self._git('fetch', '--all', '--tags', '--force', '--prune')
+
+    def _stash(self):
+        self._git('stash')
 
     def _clean(self):
         self._git('clean', '--force', '-d', '-x')

@@ -100,8 +100,9 @@ class TestGit(_BaseTestCalls):
         """Verify the commands to revert all changes in a working tree."""
         self.shell.git_revert()
         self.assert_calls(mock_call, [
-            "git clean --force -d -x",
+            "git stash",
             "git reset --hard",
+            "git clean --force -d -x",
         ])
 
     def test_update(self, mock_call):
