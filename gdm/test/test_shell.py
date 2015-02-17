@@ -1,7 +1,7 @@
 """Unit tests for the `shell` module."""
 # pylint: disable=R0201
 
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 
 import pytest
 
@@ -67,10 +67,18 @@ class TestShell(_BaseTestCalls):
         self.shell.cd('mock/dir/path')
         self.assert_calls(mock_call, ["cd mock/dir/path"])
 
+    @patch('os.path.isdir', Mock(return_value=True))
     def test_ln(self, mock_call):
         """Verify the commands to create symbolic links."""
         self.shell.ln('mock/target', 'mock/source')
-        self.assert_calls(mock_call, ["ln -sf mock/target mock/source"])
+        self.assert_calls(mock_call, ["ln -s -f -F mock/target mock/source"])
+
+    @patch('os.path.isdir', Mock(return_value=False))
+    def test_ln_missing_parent(self, mock_call):
+        """Verify the commands to create symbolic links (missing parent)."""
+        self.shell.ln('mock/target', 'mock/source')
+        self.assert_calls(mock_call, ["mkdir -p mock",
+                                      "ln -s -f -F mock/target mock/source"])
 
 
 @patch('gdm.shell._call')

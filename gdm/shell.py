@@ -51,7 +51,10 @@ class ShellMixin(_Base):
         self._call('cd', path, visible=visible)
 
     def ln(self, source, target):
-        self._call('ln', '-sf', source, target)
+        dirpath = os.path.dirname(target)
+        if not os.path.isdir(dirpath):
+            self.mkdir(dirpath)
+        self._call('ln', '-s', '-f', '-F', source, target)
 
 
 class GitMixin(_Base):

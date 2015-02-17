@@ -21,7 +21,6 @@ def test_install():
     # clean install
     assert gdm.install(FILES)
     assert os.path.isdir(config.location)
-
     # second install
     assert gdm.install(FILES)
     assert 'gdm_1' in os.listdir(config.location)
