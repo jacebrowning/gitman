@@ -15,8 +15,7 @@ from .conftest import FILES
 def test_install():
     """Verify dependencies can be installed."""
     config = Config(FILES)
-    if os.path.exists(config.location):
-        shutil.rmtree(config.location)
+    shutil.rmtree(config.location, ignore_errors=True)
     assert not os.path.exists(config.location)
 
     # clean install
@@ -27,4 +26,16 @@ def test_install():
     assert 'gdm_1' in os.listdir(config.location)
     assert 'gdm_2' in os.listdir(config.location)
 
-    shutil.rmtree(os.path.join(FILES, 'src'))
+    shutil.rmtree(os.path.join(FILES, 'src'), ignore_errors=True)
+
+
+@pytest.mark.integration
+def test_uninstall():
+    """Verify dependencies can be uninstalled."""
+    config = Config(FILES)
+    assert gdm.install(FILES)
+    assert os.path.isdir(config.location)
+
+    assert gdm.uninstall(FILES)
+
+    assert not os.path.isdir(config.location)

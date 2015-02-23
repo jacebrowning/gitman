@@ -1,9 +1,10 @@
 """Functions to manage the installation of dependencies."""
 
 import os
+import shutil
 
 from . import common
-from . import config
+from .config import load, install_deps
 
 log = common.logger(__name__)
 
@@ -13,7 +14,7 @@ def install(root=None):
     root = _find_root(root)
 
     log.info("installing dependencies...")
-    count = config.install_deps(root)
+    count = install_deps(root)
     if count == 1:
         log.info("installed 1 dependency")
     elif count > 1:
@@ -22,6 +23,23 @@ def install(root=None):
         log.warn("no dependencies installed")
 
     return count
+
+
+def uninstall(root=None):
+    """Uninstall dependencies for a project."""
+    root = _find_root(root)
+
+    log.info("uninstalling dependencies...")
+    config = load(root)
+    if config:
+        if os.path.exists(config.location):
+            log.debug("deleting '%s'...", config.location)
+            shutil.rmtree(config.location)
+        log.info("dependencies uninstalled")
+        return True
+    else:
+        log.warn("no dependencies to uninstall")
+        return False
 
 
 def _find_root(root, cwd=None):

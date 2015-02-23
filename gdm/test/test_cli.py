@@ -64,6 +64,23 @@ class TestInstall:
         mock_install.assert_called_once_with(root='mock/path/to/root')
 
 
+class TestUninstall:
+
+    """Unit tests for the `uninstall` command."""
+
+    @patch('gdm.commands.uninstall')
+    def test_uninstall(self, mock_uninstall):
+        """Verify the 'uninstall' command can be run."""
+        cli.main(['uninstall'])
+        mock_uninstall.assert_called_once_with(root=None)
+
+    @patch('gdm.commands.uninstall')
+    def test_uninstall_root(self, mock_uninstall):
+        """Verify the project's root can be specified."""
+        cli.main(['uninstall', '--root', 'mock/path/to/root'])
+        mock_uninstall.assert_called_once_with(root='mock/path/to/root')
+
+
 class TestLogging:
 
     """Unit tests for logging."""

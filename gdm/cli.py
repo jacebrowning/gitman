@@ -29,15 +29,20 @@ def main(args=None, function=None):
     shared = {'formatter_class': common.WideHelpFormatter,
               'parents': [project, debug]}
 
-    # Build main parser
+    # Main parser
     parser = argparse.ArgumentParser(prog=CLI, description=DESCRIPTION,
                                      **shared)
 
     subs = parser.add_subparsers(help="", dest='command', metavar="<command>")
 
-    # Build switch parser
-    info = "install the specified versions of all dependencies"
+    # Install parser
+    info = "get the specified versions of all dependencies"
     subs.add_parser('install', description=info.capitalize() + '.',
+                    help=info, **shared)
+
+    # Uninstall parser
+    info = "remove all installed dependencies"
+    subs.add_parser('uninstall', description=info.capitalize() + '.',
                     help=info, **shared)
 
     # Parse arguments
@@ -45,6 +50,9 @@ def main(args=None, function=None):
     kwargs = {}
     if args.command == 'install':
         function = commands.install
+        kwargs['root'] = args.root
+    elif args.command == 'uninstall':
+        function = commands.uninstall
         kwargs['root'] = args.root
     if function is None:
         parser.print_help()

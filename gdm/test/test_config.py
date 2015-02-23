@@ -1,9 +1,11 @@
 """Unit tests for the `config` module."""
 # pylint: disable=R0201
 
+import os
+
 import pytest
 
-from gdm.config import Source, Config, install_deps
+from gdm.config import Source, Config, load, install_deps
 
 from .conftest import FILES
 
@@ -72,6 +74,19 @@ class TestConfig:
         """Verify a configuration's path is correct."""
         config = Config('mock/root')
         assert "mock/root/gdm.yml" == config.path
+
+
+class TestLoad:
+
+    def test_load(self):
+        """Verify a configuration can be loaded."""
+        config = load(FILES)
+        assert None is not config
+
+    def test_load_missing(self):
+        """Verify None is returned for a missing config."""
+        config = load(os.path.dirname(FILES))
+        assert None is config
 
 
 class TestInstall:
