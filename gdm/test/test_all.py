@@ -1,7 +1,7 @@
 """Integration tests for the `gdm` package."""
 
 import os
-import subprocess
+import shutil
 
 import pytest
 
@@ -15,7 +15,7 @@ from .conftest import FILES
 def test_install():
     """Verify dependencies can be installed."""
     config = Config(FILES)
-    subprocess.call(['rm', '-rf', config.location])
+    shutil.rmtree(config.location)
     assert not os.path.exists(config.location)
 
     # clean install
@@ -25,3 +25,5 @@ def test_install():
     assert gdm.install(FILES)
     assert 'gdm_1' in os.listdir(config.location)
     assert 'gdm_2' in os.listdir(config.location)
+
+    shutil.rmtree(os.path.join(FILES, 'src'))
