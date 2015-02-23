@@ -40,8 +40,9 @@ class Source(yorm.extended.AttributeDictionary, ShellMixin, GitMixin):
             fmt += " <- '{s}'"
         return fmt.format(r=self.repo, v=self.rev, d=self.dir, s=self.link)
 
-    def get(self):
+    def update_files(self):
         """Ensure the source matches the specified revision."""
+        log.info("updating source files...")
 
         # Fetch the latest changes and revert the working tree if it exists
         if os.path.exists(self.dir):
@@ -56,6 +57,14 @@ class Source(yorm.extended.AttributeDictionary, ShellMixin, GitMixin):
 
         # Update the working tree to the specified revision
         self.git_update(self.rev)
+
+    def create_link(self, root):
+        """Create a link from the target name to the current directory."""
+        if self.link:
+            log.info("creating a symbolic link...")
+            target = os.path.join(root, self.link)
+            source = os.path.relpath(os.getcwd(), os.path.dirname(target))
+            self.ln(source, target)
 
 
 @yorm.map_attr(all=Source)
@@ -101,7 +110,8 @@ class Config(ShellMixin):
         for source in self.sources:
 
             source.indent = self.indent + self.INDENT
-            source.get()
+            source.update_files()
+            source.create_link(self.root)
             count += 1
             print()
 

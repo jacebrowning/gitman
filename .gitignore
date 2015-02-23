@@ -1,3 +1,5 @@
+*/test/files/src
+
 # Temporary Python files
 *.pyc
 *.egg-info
