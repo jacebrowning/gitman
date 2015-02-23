@@ -68,6 +68,11 @@ class TestConfig:
         assert 'gdm.yml' == config.filename
         assert '.gdm' == config.location
 
+    def test_path(self):
+        """Verify a configuration's path is correct."""
+        config = Config('mock/root')
+        assert "mock/root/gdm.yml" == config.path
+
 
 class TestInstall:
 

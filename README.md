@@ -1,6 +1,3 @@
-GDM
-===
-
 [![Build Status](http://img.shields.io/travis/jacebrowning/gdm/master.svg)](https://travis-ci.org/jacebrowning/gdm)
 [![Coverage Status](http://img.shields.io/coveralls/jacebrowning/gdm/master.svg)](https://coveralls.io/r/jacebrowning/gdm)
 [![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/jacebrowning/gdm.svg)](https://scrutinizer-ci.com/g/jacebrowning/gdm/?branch=master)
