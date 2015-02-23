@@ -15,7 +15,8 @@ from .conftest import FILES
 def test_install():
     """Verify dependencies can be installed."""
     config = Config(FILES)
-    shutil.rmtree(config.location)
+    if os.path.exists(config.location):
+        shutil.rmtree(config.location)
     assert not os.path.exists(config.location)
 
     # clean install
