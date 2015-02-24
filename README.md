@@ -31,18 +31,44 @@ $ cd gdm
 $ python3 setup.py install
 ```
 
+Setup
+-----
+
+Create a GDM configuration file in the root of your working tree:
+
+```yaml
+location: .gdm
+sources:
+- repo: https://github.com/kstenerud/iOS-Universal-Framework
+  dir: framework
+  rev: Mk5-end-of-life
+  link: Frameworks/iOS-Universal-Framework
+- repo: https://github.com/jonreid/XcodeCoverage
+  dir: coverage
+  rev: master
+  link: Tools/XcodeCoverage
+```
+
+Ignore the source location:
+
+```
+$ echo .gdm >> .gitignore
+```
+
 Basic Usage
 ===========
 
-After installation:
+Get the specified versions of all dependencies:
 
 ```
-$ python3
->>> import gdm
->>> gdm.__version__
+$ gdm install
 ```
 
-GDM doesn't do anything yet.
+Remove all installed dependencies:
+
+```
+$ gdm uninstall
+```
 
 For Contributors
 ================
