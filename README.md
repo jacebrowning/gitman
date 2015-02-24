@@ -34,7 +34,7 @@ $ python3 setup.py install
 Setup
 -----
 
-Create a GDM configuration file in the root of your working tree:
+Create a GDM configuration file (`gdm.yml` or `.gdm.yml`) in the root of your working tree:
 
 ```yaml
 location: .gdm
@@ -49,7 +49,7 @@ sources:
   link: Tools/XcodeCoverage
 ```
 
-Ignore the source location:
+Ignore GDM's dependency storage location:
 
 ```
 $ echo .gdm >> .gitignore
@@ -66,9 +66,9 @@ $ gdm install
 
 which will essentially:
 
-1. clone each `repo` to `location`/`dir`
+1. clone each `repo` to \<root\>/`location`/`dir`
 2. checkout `rev` in each working tree
-3. create a symbolic link to `location`/`dir` named `link`
+3. symbolicly link `location`/`dir` at \<root\>/`link`
 4. repeat for all dependencies, recursively
 
 To remove all installed dependencies:
