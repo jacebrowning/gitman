@@ -123,12 +123,22 @@ class Config(ShellMixin):
         return count
 
 
-def install_deps(root, indent=0):
-    """Install the dependences listed in the project's configuration file."""
+def load(root):
+    """Load the configuration for the current project."""
+    config = None
     for filename in os.listdir(root):
         if filename.lower() in Config.FILENAMES:
             config = Config(root, filename)
             log.debug("loaded config: %s", config.path)
-            config.indent = indent
-            return config.install_deps()
-    return 0
+            break
+    return config
+
+
+def install_deps(root, indent=0):
+    """Install the dependences listed in the project's configuration file."""
+    config = load(root)
+    if config:
+        config.indent = indent
+        return config.install_deps()
+    else:
+        return 0

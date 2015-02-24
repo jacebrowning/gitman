@@ -14,6 +14,7 @@ PROJECT_PARENT = os.path.dirname(PROJECT_ROOT)
 class TestFindRoot:
 
     def test_specified(self):
+        os.chdir(PROJECT_PARENT)
         assert FILES == _find_root(FILES)
 
     def test_none(self):
