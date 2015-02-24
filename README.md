@@ -64,7 +64,7 @@ Get the specified versions of all dependencies:
 $ gdm install
 ```
 
-which will exentially:
+which will essentially:
 
 1. clone each `repo` to `location`/`dir`
 2. checkout `rev` in each working tree
