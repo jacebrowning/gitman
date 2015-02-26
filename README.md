@@ -66,10 +66,10 @@ $ gdm install
 
 which will essentially:
 
-1. clone each `repo` to \<root\>/`location`/`dir`
-2. checkout `rev` in each working tree
-3. symbolicly link `location`/`dir` at \<root\>/`link`
-4. repeat for all dependencies, recursively
+1. clone each specfied `repo` to _root_/`location`/`dir`
+2. checkout the specified `rev` for each nested working tree
+3. symbolicly link each `location`/`dir` from _root_/`link` (optional)
+4. repeat for all nested working trees containing a configuration file
 
 To remove all installed dependencies:
 
