@@ -6,10 +6,13 @@ import logging
 
 from sh import Command, ErrorReturnCode
 
+from . import common
+
 logging.getLogger('sh').setLevel(logging.WARNING)
+log = common.logger(__name__)
 
 
-def _call(name, *args):
+def _call(name, *args, catch=True):
     """Call a shell program with arguments."""
     if name == 'mkdir' and len(args) == 2 and args[0] == '-p':
         os.makedirs(args[1])
@@ -21,7 +24,10 @@ def _call(name, *args):
             program(*args)
         except ErrorReturnCode as exc:
             msg = "\n  IN: '{}'{}".format(os.getcwd(), exc)
-            sys.exit(msg)
+            if catch:
+                sys.exit(msg)
+            else:
+                raise common.CallException(msg)
 
 
 class _Base:
@@ -31,10 +37,10 @@ class _Base:
     INDENT = 2
     indent = 0
 
-    def _call(self, *args, visible=True):
+    def _call(self, *args, visible=True, catch=True):
         if visible:
             self._display_in(*args)
-        _call(*args)
+        _call(*args, catch=catch)
 
     def _display_in(self, *args):
         print("{}$ {}".format(' ' * self.indent, ' '.join(args)))
@@ -69,32 +75,46 @@ class GitMixin(_Base):
         """Fetch the latest changes from the remote repository."""
         self._fetch(repo)
 
+    def git_changes(self):
+        """Determine if there are changes in the working tree."""
+        kwargs = {'visible': False}
+        self._git('update-index', '-q', '--refresh', **kwargs)
+        try:
+            kwargs['catch'] = False
+            self._git('diff-files', '--quiet', **kwargs)
+            self._git('diff-index', '--cached', '--quiet', 'HEAD', **kwargs)
+        except common.CallException as exc:
+            log.debug(exc)
+            return True
+        else:
+            return False
+
     def git_revert(self):
         """Revert all changes in the working tree."""
-        self._stash()
+        self._stash(visible=False)
         self._reset()
-        self._clean()
+        self._clean(visible=False)
 
     def git_update(self, rev):
         """Update the working tree to the specified revision."""
         self._checkout(rev)
 
-    def _git(self, *args):
-        self._call('git', *args)
+    def _git(self, *args, **kwargs):
+        self._call('git', *args, **kwargs)
 
     def _clone(self, repo, dir):  # pylint: disable=W0622
         self._git('clone', repo, dir)
 
     def _fetch(self, repo):
-        self._git('remote', 'remove', 'origin')
+        self._git('remote', 'remove', 'origin', visible=False)
         self._git('remote', 'add', 'origin', repo)
         self._git('fetch', '--all', '--tags', '--force', '--prune')
 
-    def _stash(self):
-        self._git('stash')
+    def _stash(self, visible=True):
+        self._git('stash', visible=visible)
 
-    def _clean(self):
-        self._git('clean', '--force', '-d', '-x')
+    def _clean(self, visible=True):
+        self._git('clean', '--force', '-d', '-x', visible=visible)
 
     def _reset(self):
         self._git('reset', '--hard')

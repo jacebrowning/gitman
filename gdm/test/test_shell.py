@@ -104,6 +104,16 @@ class TestGit(_BaseTestCalls):
             "git fetch --all --tags --force --prune",
         ])
 
+    def test_changes(self, mock_call):
+        """Verify the commands to check for uncommitted changes."""
+        self.shell.git_changes()
+        self.assert_calls(mock_call, [
+            # based on: http://stackoverflow.com/questions/3878624
+            "git update-index -q --refresh",
+            "git diff-files --quiet",
+            "git diff-index --cached --quiet HEAD",
+        ])
+
     def test_revert(self, mock_call):
         """Verify the commands to revert all changes in a working tree."""
         self.shell.git_revert()

@@ -12,6 +12,11 @@ logger = logging.getLogger
 verbosity = 0
 
 
+class CallException(Exception):
+
+    """Exception raised when a program call has a non-zero return code."""
+
+
 class WideHelpFormatter(argparse.HelpFormatter):
 
     """Command-line help text formatter with wider help text."""
