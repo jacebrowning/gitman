@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.2 (dev)
----------
+0.1.1 (2014/02/27)
+------------------
 
 - Added '--force' argument to:
     - overwrite uncommitted changes
