@@ -21,7 +21,7 @@ def _call(name, *args, catch=True):
     else:
         try:
             program = Command(name)
-            program(*args)
+            program(*args, _err=log.debug, _out=log.debug)
         except ErrorReturnCode as exc:
             msg = "\n  IN: '{}'{}".format(os.getcwd(), exc)
             if catch:
@@ -81,8 +81,7 @@ class GitMixin(_Base):
             kwargs = {'visible': False, 'catch': False}
             self._git('diff-files', '--quiet', **kwargs)
             self._git('diff-index', '--cached', '--quiet', 'HEAD', **kwargs)
-        except common.CallException as exc:
-            log.debug(exc)
+        except common.CallException:
             return True
         else:
             return False
