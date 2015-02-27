@@ -81,6 +81,7 @@ class GitMixin(_Base):
         """Determine if there are changes in the working tree."""
         try:
             kwargs = {'visible': False, 'catch': False}
+            self._git('update-index', '-q', '--refresh', **kwargs)
             self._git('diff-files', '--quiet', **kwargs)
             self._git('diff-index', '--cached', '--quiet', 'HEAD', **kwargs)
         except common.CallException:

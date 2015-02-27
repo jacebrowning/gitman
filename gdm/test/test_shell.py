@@ -115,6 +115,7 @@ class TestGit(_BaseTestCalls):
         assert False is self.shell.git_changes()
         self.assert_calls(mock_call, [
             # based on: http://stackoverflow.com/questions/3878624
+            "git update-index -q --refresh",
             "git diff-files --quiet",
             "git diff-index --cached --quiet HEAD",
         ])

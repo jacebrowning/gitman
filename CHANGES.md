@@ -1,10 +1,15 @@
 Changelog
 =========
 
+0.1.4 (2014/02/27)
+------------------
+
+- Fixed an outdated index when checking for changes.
+
 0.1.3 (2014/02/27)
 ------------------
 
-- Strip whitespace during shell logging.
+- Fixed extra whitespace when logging shell output.
 
 0.1.2 (2014/02/27)
 ------------------
