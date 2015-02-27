@@ -2,6 +2,7 @@
 # pylint: disable=R0201
 
 import os
+import shutil
 
 import pytest
 
@@ -94,7 +95,10 @@ class TestInstall:
     @pytest.mark.integration
     def test_multiple(self):
         """Verify the correct number of dependencies is installed."""
-        assert 6 == install_deps(FILES)
+        try:
+            assert 6 == install_deps(FILES)
+        finally:
+            shutil.rmtree(os.path.join(FILES, 'src'), ignore_errors=True)
 
     @pytest.mark.integration
     def test_empty(self, tmpdir):

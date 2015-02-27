@@ -5,6 +5,7 @@ from unittest.mock import patch, Mock
 
 import pytest
 
+from gdm.common import CallException
 from gdm.shell import _call, ShellMixin, GitMixin
 
 
@@ -34,6 +35,11 @@ class TestCall:
         """Verify program errors are handled."""
         with pytest.raises(SystemExit):
             _call('git', '--invalid-git-argument')
+
+    def test_other_error_uncaught(self):
+        """Verify program errors can be left uncaught."""
+        with pytest.raises(CallException):
+            _call('git', '--invalid-git-argument', catch=False)
 
 
 class _BaseTestCalls:
@@ -71,14 +77,14 @@ class TestShell(_BaseTestCalls):
     def test_ln(self, mock_call):
         """Verify the commands to create symbolic links."""
         self.shell.ln('mock/target', 'mock/source')
-        self.assert_calls(mock_call, ["ln -s -f -F mock/target mock/source"])
+        self.assert_calls(mock_call, ["ln -s mock/target mock/source"])
 
     @patch('os.path.isdir', Mock(return_value=False))
     def test_ln_missing_parent(self, mock_call):
         """Verify the commands to create symbolic links (missing parent)."""
         self.shell.ln('mock/target', 'mock/source')
         self.assert_calls(mock_call, ["mkdir -p mock",
-                                      "ln -s -f -F mock/target mock/source"])
+                                      "ln -s mock/target mock/source"])
 
 
 @patch('gdm.shell._call')
@@ -103,6 +109,20 @@ class TestGit(_BaseTestCalls):
             "git remote add origin mock.git",
             "git fetch --all --tags --force --prune",
         ])
+
+    def test_changes(self, mock_call):
+        """Verify the commands to check for uncommitted changes."""
+        assert False is self.shell.git_changes()
+        self.assert_calls(mock_call, [
+            # based on: http://stackoverflow.com/questions/3878624
+            "git diff-files --quiet",
+            "git diff-index --cached --quiet HEAD",
+        ])
+
+    def test_changes_true(self, _):
+        """Verify the commands to check for uncommitted changes (w/ changes)."""
+        with patch('gdm.shell._call', Mock(side_effect=CallException)):
+            assert True is self.shell.git_changes()
 
     def test_revert(self, mock_call):
         """Verify the commands to revert all changes in a working tree."""

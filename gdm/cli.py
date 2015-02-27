@@ -37,8 +37,10 @@ def main(args=None, function=None):
 
     # Install parser
     info = "get the specified versions of all dependencies"
-    subs.add_parser('install', description=info.capitalize() + '.',
-                    help=info, **shared)
+    sub = subs.add_parser('install', description=info.capitalize() + '.',
+                          help=info, **shared)
+    sub.add_argument('-f', '--force', action='store_true',
+                     help="overwrite uncommitted changes in dependencies")
 
     # Uninstall parser
     info = "remove all installed dependencies"
@@ -51,6 +53,7 @@ def main(args=None, function=None):
     if args.command == 'install':
         function = commands.install
         kwargs['root'] = args.root
+        kwargs['force'] = args.force
     elif args.command == 'uninstall':
         function = commands.uninstall
         kwargs['root'] = args.root

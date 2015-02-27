@@ -14,19 +14,23 @@ from .conftest import FILES
 @pytest.mark.integration
 def test_install():
     """Verify dependencies can be installed."""
-    config = Config(FILES)
-    shutil.rmtree(config.location, ignore_errors=True)
-    assert not os.path.exists(config.location)
+    try:
 
-    # clean install
-    assert gdm.install(FILES)
-    assert os.path.isdir(config.location)
-    # second install
-    assert gdm.install(FILES)
-    assert 'gdm_1' in os.listdir(config.location)
-    assert 'gdm_2' in os.listdir(config.location)
+        config = Config(FILES)
+        shutil.rmtree(config.location, ignore_errors=True)
+        assert not os.path.exists(config.location)
 
-    shutil.rmtree(os.path.join(FILES, 'src'), ignore_errors=True)
+        # clean install
+        assert gdm.install(FILES)
+        assert os.path.isdir(config.location)
+        # second install
+        assert gdm.install(FILES)
+        assert 'gdm_1' in os.listdir(config.location)
+        assert 'gdm_2' in os.listdir(config.location)
+
+    finally:
+
+        shutil.rmtree(os.path.join(FILES, 'src'), ignore_errors=True)
 
 
 @pytest.mark.integration

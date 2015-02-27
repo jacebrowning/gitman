@@ -1,6 +1,8 @@
 """Wrappers for the dependency configuration files."""
 
 import os
+import sys
+import shutil
 import logging
 
 import yorm
@@ -40,15 +42,18 @@ class Source(yorm.extended.AttributeDictionary, ShellMixin, GitMixin):
             fmt += " <- '{s}'"
         return fmt.format(r=self.repo, v=self.rev, d=self.dir, s=self.link)
 
-    def update_files(self):
+    def update_files(self, force=False):
         """Ensure the source matches the specified revision."""
         log.info("updating source files...")
 
         # Fetch the latest changes and revert the working tree if it exists
         if os.path.exists(self.dir):
             self.cd(self.dir)
-            self.git_fetch(self.repo)
+            if self.git_changes() and not force:
+                sys.exit("\n" + "uncomitted changes"
+                         " ('--force' to overwrite): {}".format(os.getcwd()))
             self.git_revert()
+            self.git_fetch(self.repo)
 
         # If it doesn't exist, clone a new one
         else:
@@ -58,12 +63,20 @@ class Source(yorm.extended.AttributeDictionary, ShellMixin, GitMixin):
         # Update the working tree to the specified revision
         self.git_update(self.rev)
 
-    def create_link(self, root):
+    def create_link(self, root, force=False):
         """Create a link from the target name to the current directory."""
         if self.link:
             log.info("creating a symbolic link...")
             target = os.path.join(root, self.link)
             source = os.path.relpath(os.getcwd(), os.path.dirname(target))
+            if os.path.islink(target):
+                os.remove(target)
+            elif os.path.exists(target):
+                if force:
+                    shutil.rmtree(target)
+                else:
+                    sys.exit("\n" + "preexisting link location"
+                             " ('--force' to overwrite): {}".format(target))
             self.ln(source, target)
 
 
@@ -94,7 +107,7 @@ class Config(ShellMixin):
         """Get the full path to the configuration file."""
         return os.path.join(self.root, self.filename)
 
-    def install_deps(self):
+    def install_deps(self, force=False):
         """Get all sources, recursively."""
         path = os.path.join(self.root, self.location)
 
@@ -110,8 +123,8 @@ class Config(ShellMixin):
         for source in self.sources:
 
             source.indent = self.indent + self.INDENT
-            source.update_files()
-            source.create_link(self.root)
+            source.update_files(force=force)
+            source.create_link(self.root, force=force)
             count += 1
             print()
 
@@ -134,11 +147,11 @@ def load(root):
     return config
 
 
-def install_deps(root, indent=0):
+def install_deps(root, indent=0, force=False):
     """Install the dependences listed in the project's configuration file."""
     config = load(root)
     if config:
         config.indent = indent
-        return config.install_deps()
+        return config.install_deps(force=force)
     else:
         return 0
