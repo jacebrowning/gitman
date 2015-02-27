@@ -2,6 +2,7 @@
 
 import os
 import sys
+import shutil
 import logging
 
 import yorm
@@ -62,12 +63,20 @@ class Source(yorm.extended.AttributeDictionary, ShellMixin, GitMixin):
         # Update the working tree to the specified revision
         self.git_update(self.rev)
 
-    def create_link(self, root):
+    def create_link(self, root, force=False):
         """Create a link from the target name to the current directory."""
         if self.link:
             log.info("creating a symbolic link...")
             target = os.path.join(root, self.link)
             source = os.path.relpath(os.getcwd(), os.path.dirname(target))
+            if os.path.islink(target):
+                os.remove(target)
+            elif os.path.exists(target):
+                if force:
+                    shutil.rmtree(target)
+                else:
+                    sys.exit("\n" + "preexisting link location"
+                             " ('--force' to overwrite): {}".format(target))
             self.ln(source, target)
 
 
@@ -115,7 +124,7 @@ class Config(ShellMixin):
 
             source.indent = self.indent + self.INDENT
             source.update_files(force=force)
-            source.create_link(self.root)
+            source.create_link(self.root, force=force)
             count += 1
             print()
 

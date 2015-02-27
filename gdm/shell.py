@@ -60,7 +60,7 @@ class ShellMixin(_Base):
         dirpath = os.path.dirname(target)
         if not os.path.isdir(dirpath):
             self.mkdir(dirpath)
-        self._call('ln', '-s', '-f', '-F', source, target)
+        self._call('ln', '-s', source, target)
 
 
 class GitMixin(_Base):
@@ -77,10 +77,8 @@ class GitMixin(_Base):
 
     def git_changes(self):
         """Determine if there are changes in the working tree."""
-        kwargs = {'visible': False}
-        self._git('update-index', '-q', '--refresh', **kwargs)
         try:
-            kwargs['catch'] = False
+            kwargs = {'visible': False, 'catch': False}
             self._git('diff-files', '--quiet', **kwargs)
             self._git('diff-index', '--cached', '--quiet', 'HEAD', **kwargs)
         except common.CallException as exc:
