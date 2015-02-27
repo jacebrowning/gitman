@@ -42,7 +42,6 @@ sources:
 - repo: https://github.com/kstenerud/iOS-Universal-Framework
   dir: framework
   rev: Mk5-end-of-life
-  link: Frameworks/iOS-Universal-Framework
 - repo: https://github.com/jonreid/XcodeCoverage
   dir: coverage
   rev: master
