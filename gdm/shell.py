@@ -21,7 +21,9 @@ def _call(name, *args, catch=True):
     else:
         try:
             program = Command(name)
-            program(*args, _err=log.debug, _out=log.debug)
+            program(*args,
+                    _err=lambda line: log.debug(line.strip()),
+                    _out=lambda line: log.debug(line.strip()))
         except ErrorReturnCode as exc:
             msg = "\n  IN: '{}'{}".format(os.getcwd(), exc)
             if catch:
