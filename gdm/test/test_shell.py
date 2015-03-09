@@ -125,18 +125,11 @@ class TestGit(_BaseTestCalls):
         with patch('gdm.shell._call', Mock(side_effect=CallException)):
             assert True is self.shell.git_changes()
 
-    def test_revert(self, mock_call):
-        """Verify the commands to revert all changes in a working tree."""
-        self.shell.git_revert()
-        self.assert_calls(mock_call, [
-            "git stash",
-            "git reset --hard",
-            "git clean --force -d -x",
-        ])
-
     def test_update(self, mock_call):
         """Verify the commands to update a working tree to a revision."""
         self.shell.git_update('mock_rev')
         self.assert_calls(mock_call, [
-            "git checkout mock_rev",
+            "git stash",
+            "git clean --force -d -x",
+            "git reset --hard mock_rev",
         ])

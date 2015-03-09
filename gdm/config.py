@@ -52,7 +52,6 @@ class Source(yorm.extended.AttributeDictionary, ShellMixin, GitMixin):
             if self.git_changes() and not force:
                 sys.exit("\n" + "uncomitted changes"
                          " ('--force' to overwrite): {}".format(os.getcwd()))
-            self.git_revert()
             self.git_fetch(self.repo)
 
         # If it doesn't exist, clone a new one

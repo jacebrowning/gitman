@@ -2,6 +2,7 @@
 
 import os
 import sys
+import subprocess
 import logging
 
 from sh import Command, ErrorReturnCode
@@ -89,15 +90,14 @@ class GitMixin(_Base):
         else:
             return False
 
-    def git_revert(self):
-        """Revert all changes in the working tree."""
-        self._stash(visible=False)
-        self._reset()
-        self._clean(visible=False)
-
     def git_update(self, rev):
         """Update the working tree to the specified revision."""
-        self._checkout(rev)
+        self._stash(visible=False)
+        self._clean(visible=False)
+        subprocess.call("for remote in `git branch -r | grep -v master `; "
+                        "do git checkout --track $remote ; done", shell=True,
+                        stderr=subprocess.PIPE)
+        self._reset(rev)
 
     def _git(self, *args, **kwargs):
         self._call('git', *args, **kwargs)
@@ -116,8 +116,5 @@ class GitMixin(_Base):
     def _clean(self, visible=True):
         self._git('clean', '--force', '-d', '-x', visible=visible)
 
-    def _reset(self):
-        self._git('reset', '--hard')
-
-    def _checkout(self, rev):
-        self._git('checkout', rev)
+    def _reset(self, rev='HEAD'):
+        self._git('reset', '--hard', rev)
