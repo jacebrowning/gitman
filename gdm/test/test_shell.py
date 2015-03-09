@@ -13,12 +13,6 @@ class TestCall:
 
     """Tests for interacting with the shell."""
 
-    @patch('os.makedirs')
-    def test_mkdir(self, mock_makedirs):
-        """Verify directories are created correctly."""
-        _call('mkdir', '-p', 'mock/dir')
-        mock_makedirs.assert_called_once_with('mock/dir')
-
     @patch('os.chdir')
     def test_cd(self, mock_chdir):
         """Verify directories are changed correctly."""
@@ -40,6 +34,10 @@ class TestCall:
         """Verify program errors can be left uncaught."""
         with pytest.raises(CallException):
             _call('git', '--invalid-git-argument', catch=False)
+
+    def test_other_error_ignored(self):
+        """Verify program errors can be ignored."""
+        _call('git', '--invalid-git-argument', ignore=True)
 
 
 class _BaseTestCalls:
@@ -94,12 +92,10 @@ class TestGit(_BaseTestCalls):
 
     shell = GitMixin()
 
-    def test_clone(self, mock_call):
-        """Verify the commands to clone a Git repository."""
-        self.shell.git_clone('mock.git', 'mock_dir')
-        self.assert_calls(mock_call, [
-            "git clone mock.git mock_dir",
-        ])
+    def test_create(self, mock_call):
+        """Verify the commands to create a new Git repository."""
+        self.shell.git_create()
+        self.assert_calls(mock_call, ["git init"])
 
     def test_fetch(self, mock_call):
         """Verify the commands to fetch from a Git repository."""
@@ -107,7 +103,16 @@ class TestGit(_BaseTestCalls):
         self.assert_calls(mock_call, [
             "git remote remove origin",
             "git remote add origin mock.git",
-            "git fetch --all --tags --force --prune",
+            "git fetch --tags --force --prune origin",
+        ])
+
+    def test_fetch_rev(self, mock_call):
+        """Verify the commands to fetch from a Git repository w/ rev."""
+        self.shell.git_fetch('mock.git', 'mock-rev')
+        self.assert_calls(mock_call, [
+            "git remote remove origin",
+            "git remote add origin mock.git",
+            "git fetch --tags --force --prune origin mock-rev",
         ])
 
     def test_changes(self, mock_call):

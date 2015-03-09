@@ -46,20 +46,26 @@ class Source(yorm.extended.AttributeDictionary, ShellMixin, GitMixin):
         """Ensure the source matches the specified revision."""
         log.info("updating source files...")
 
-        # Fetch the latest changes and revert the working tree if it exists
-        if os.path.exists(self.dir):
-            self.cd(self.dir)
+        # Enter the working tree
+        if os.path.isdir(self.dir):
+            tree = True
+        else:
+            tree = False
+            self.mkdir(self.dir)
+        self.cd(self.dir)
+
+        # Exit if there are changes
+        if tree:
             if self.git_changes() and not force:
                 sys.exit("\n" + "uncomitted changes"
                          " ('--force' to overwrite): {}".format(os.getcwd()))
-            self.git_fetch(self.repo)
-
-        # If it doesn't exist, clone a new one
         else:
-            self.git_clone(self.repo, self.dir)
-            self.cd(self.dir)
+            self.git_create()
 
-        # Update the working tree to the specified revision
+        # Fetch the desired revision
+        self.git_fetch(self.repo, self.rev)
+
+        # Update the working tree to the desired revision
         self.git_update(self.rev)
 
     def create_link(self, root, force=False):
