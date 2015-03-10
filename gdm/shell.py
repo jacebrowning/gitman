@@ -2,7 +2,6 @@
 
 import os
 import sys
-import subprocess
 import logging
 
 from sh import Command, ErrorReturnCode
@@ -43,7 +42,7 @@ class _Base:
     indent = 0
 
     def _call(self, *args,
-              visible=True, catch=True, ignore=True, capture=False):
+              visible=True, catch=True, ignore=False, capture=False):
         if visible:
             self._display_in(*args)
         return _call(*args, catch=catch, ignore=ignore, capture=capture)
@@ -82,7 +81,7 @@ class GitMixin(_Base):
         self._git('remote', 'remove', 'origin', visible=False, ignore=True)
         self._git('remote', 'add', 'origin', repo)
         args = ['fetch', '--tags', '--force', '--prune', 'origin']
-        if rev:
+        if rev and len(rev) != 40:  # fetch doesn't work with SHAs
             args.append(rev)
         self._git(*args)
 
@@ -102,11 +101,7 @@ class GitMixin(_Base):
         """Update the working tree to the specified revision."""
         self._git('stash', visible=False, ignore=True)
         self._git('clean', '--force', '-d', '-x', visible=False)
-        subprocess.call("for remote in `git branch -r`; "
-                        "do git checkout --track $remote ; "
-                        "done", shell=True,
-                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        self._git('reset', '--hard', rev)
+        self._git('checkout', '--force', rev)
 
     def git_get_url(self):
         """Get the current repository's URL."""

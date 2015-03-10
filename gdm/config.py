@@ -47,20 +47,17 @@ class Source(yorm.extended.AttributeDictionary, ShellMixin, GitMixin):
         log.info("updating source files...")
 
         # Enter the working tree
-        if os.path.isdir(self.dir):
-            tree = True
-        else:
-            tree = False
+        if not os.path.exists(self.dir):
             self.mkdir(self.dir)
         self.cd(self.dir)
-
-        # Exit if there are changes
-        if tree:
-            if self.git_changes() and not force:
-                sys.exit("\n" + "uncomitted changes"
-                         " ('--force' to overwrite): {}".format(os.getcwd()))
-        else:
+        if not os.path.exists('.git'):  # create it if needed
+            log.debug("creating a new repository...")
             self.git_create()
+        elif not force:  # exit if there are changes
+            log.debug("confirming there are no uncommitted changes...")
+            if self.git_changes():
+                sys.exit("\n" + "uncommitted changes"
+                         " ('--force' to overwrite): {}".format(os.getcwd()))
 
         # Fetch the desired revision
         self.git_fetch(self.repo, self.rev)

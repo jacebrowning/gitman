@@ -120,6 +120,15 @@ class TestGit(_BaseTestCalls):
             "git fetch --tags --force --prune origin mock-rev",
         ])
 
+    def test_fetch_rev_sha(self, mock_call):
+        """Verify the commands to fetch from a Git repository w/ rev (SHA)."""
+        self.shell.git_fetch('mock.git', 'abcdef1234' * 4)
+        self.assert_calls(mock_call, [
+            "git remote remove origin",
+            "git remote add origin mock.git",
+            "git fetch --tags --force --prune origin",
+        ])
+
     def test_changes(self, mock_call):
         """Verify the commands to check for uncommitted changes."""
         assert False is self.shell.git_changes()
@@ -141,7 +150,7 @@ class TestGit(_BaseTestCalls):
         self.assert_calls(mock_call, [
             "git stash",
             "git clean --force -d -x",
-            "git reset --hard mock_rev",
+            "git checkout --force mock_rev",
         ])
 
     def test_get_url(self, mock_call):
