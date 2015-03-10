@@ -84,6 +84,27 @@ class Source(yorm.extended.AttributeDictionary, ShellMixin, GitMixin):
                              " ('--force' to overwrite): {}".format(target))
             self.ln(source, target)
 
+    def identify(self):
+        """Get the path and current repository URL and hash."""
+        path = os.path.join(os.getcwd(), self.dir)
+
+        if os.path.isdir(path):
+
+            self.cd(path, visible=False)
+
+            path = os.getcwd()
+            url = self.git_get_url()
+            if self.git_changes():
+                sha = "<dirty>"
+            else:
+                sha = self.git_get_sha()
+
+            return path, url, sha
+
+        else:
+
+            return path, "<missing>", "<unknown>"
+
 
 @yorm.map_attr(all=Source)
 class Sources(yorm.container.List):
@@ -140,6 +161,21 @@ class Config(ShellMixin):
 
         return count
 
+    def get_deps(self):
+        """Yield the path, repository URL, and hash of each dependency."""
+        path = os.path.join(self.root, self.location)
+
+        if os.path.exists(path):
+            self.cd(path, visible=False)
+        else:
+            return
+
+        for source in self.sources:
+            yield source.identify()
+            yield from get_deps(root=os.getcwd())
+
+            self.cd(path, visible=False)
+
 
 def load(root):
     """Load the configuration for the current project."""
@@ -160,3 +196,10 @@ def install_deps(root, indent=0, force=False):
         return config.install_deps(force=force)
     else:
         return 0
+
+
+def get_deps(root):
+    """Get the path, repository URL, and hash of each installed dependency."""
+    config = load(root)
+    if config:
+        yield from config.get_deps()

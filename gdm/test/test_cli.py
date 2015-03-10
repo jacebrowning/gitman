@@ -17,7 +17,7 @@ class TestMain:
         """Verify the top-level command can be run."""
         mock_function = Mock(return_value=True)
         cli.main([], mock_function)
-        mock_function.assert_called_once_with()
+        mock_function.assert_called_once_with(root=None)
 
     def test_main_fail(self):
         """Verify error in commands are detected."""
@@ -86,6 +86,23 @@ class TestUninstall:
         """Verify the project's root can be specified."""
         cli.main(['uninstall', '--root', 'mock/path/to/root'])
         mock_uninstall.assert_called_once_with(root='mock/path/to/root')
+
+
+class TestList:
+
+    """Unit tests for the `list` command."""
+
+    @patch('gdm.commands.display')
+    def test_list(self, mock_display):
+        """Verify the 'list' command can be run."""
+        cli.main(['list'])
+        mock_display.assert_called_once_with(root=None)
+
+    @patch('gdm.commands.display')
+    def test_list_root(self, mock_display):
+        """Verify the project's root can be specified."""
+        cli.main(['list', '--root', 'mock/path/to/root'])
+        mock_display.assert_called_once_with(root='mock/path/to/root')
 
 
 class TestLogging:

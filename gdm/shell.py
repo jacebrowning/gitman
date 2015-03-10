@@ -13,15 +13,18 @@ logging.getLogger('sh').setLevel(logging.WARNING)
 log = common.logger(__name__)
 
 
-def _call(name, *args, ignore=False, catch=True):
+def _call(name, *args, ignore=False, catch=True, capture=False):
     """Call a shell program with arguments."""
     if name == 'cd' and len(args) == 1:
         os.chdir(args[0])
     else:
         try:
             program = Command(name)
-            for line in program(*args, _iter='err'):
-                log.debug(line.strip())
+            if capture:
+                return program(*args).strip()
+            else:
+                for line in program(*args, _iter='err'):
+                    log.debug(line.strip())
         except ErrorReturnCode as exc:
             msg = "\n  IN: '{}'{}".format(os.getcwd(), exc)
             if ignore:
@@ -39,10 +42,11 @@ class _Base:
     INDENT = 2
     indent = 0
 
-    def _call(self, *args, visible=True, catch=True, ignore=True):
+    def _call(self, *args,
+              visible=True, catch=True, ignore=True, capture=False):
         if visible:
             self._display_in(*args)
-        _call(*args, catch=catch, ignore=ignore)
+        return _call(*args, catch=catch, ignore=ignore, capture=capture)
 
     def _display_in(self, *args):
         print("{}$ {}".format(' ' * self.indent, ' '.join(args)))
@@ -98,10 +102,20 @@ class GitMixin(_Base):
         """Update the working tree to the specified revision."""
         self._git('stash', visible=False, ignore=True)
         self._git('clean', '--force', '-d', '-x', visible=False)
-        subprocess.call("for remote in `git branch -r | grep -v master `; "
-                        "do git checkout --track $remote ; done", shell=True,
-                        stderr=subprocess.PIPE)
+        subprocess.call("for remote in `git branch -r`; "
+                        "do git checkout --track $remote ; "
+                        "done", shell=True,
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         self._git('reset', '--hard', rev)
 
+    def git_get_url(self):
+        """Get the current repository's URL."""
+        return self._git('config', '--get', 'remote.origin.url',
+                         visible=False, capture=True)
+
+    def git_get_sha(self):
+        """Get the current working tree's hash."""
+        return self._git('rev-parse', 'HEAD', visible=False, capture=True)
+
     def _git(self, *args, **kwargs):
-        self._call('git', *args, **kwargs)
+        return self._call('git', *args, **kwargs)

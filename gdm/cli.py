@@ -47,16 +47,21 @@ def main(args=None, function=None):
     subs.add_parser('uninstall', description=info.capitalize() + '.',
                     help=info, **shared)
 
+    # Display parser
+    info = "show the current hash of each dependency"
+    subs.add_parser('list', description=info.capitalize() + '.',
+                    help=info, **shared)
+
     # Parse arguments
     args = parser.parse_args(args=args)
-    kwargs = {}
+    kwargs = {'root': args.root}
     if args.command == 'install':
         function = commands.install
-        kwargs['root'] = args.root
         kwargs['force'] = args.force
     elif args.command == 'uninstall':
         function = commands.uninstall
-        kwargs['root'] = args.root
+    elif args.command == 'list':
+        function = commands.display
     if function is None:
         parser.print_help()
         sys.exit(1)

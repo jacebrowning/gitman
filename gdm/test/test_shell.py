@@ -39,6 +39,11 @@ class TestCall:
         """Verify program errors can be ignored."""
         _call('git', '--invalid-git-argument', ignore=True)
 
+    def test_other_capture(self):
+        """Verify a program's output can be captured."""
+        stdout = _call('echo', 'Hello, world!\n', capture=True)
+        assert "Hello, world!" == stdout
+
 
 class _BaseTestCalls:
 
@@ -138,3 +143,13 @@ class TestGit(_BaseTestCalls):
             "git clean --force -d -x",
             "git reset --hard mock_rev",
         ])
+
+    def test_get_url(self, mock_call):
+        """Verify the commands to get the current repository's URL."""
+        self.shell.git_get_url()
+        self.assert_calls(mock_call, ["git config --get remote.origin.url"])
+
+    def test_get_sha(self, mock_call):
+        """Verify the commands to get the working tree's SHA."""
+        self.shell.git_get_sha()
+        self.assert_calls(mock_call, ["git rev-parse HEAD"])

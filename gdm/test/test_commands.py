@@ -5,10 +5,20 @@ import os
 
 from .conftest import ROOT, FILES
 
-from gdm.commands import _find_root
+from gdm.commands import _find_root, install, uninstall, display
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(ROOT))
 PROJECT_PARENT = os.path.dirname(PROJECT_ROOT)
+
+
+class TestCommands:
+
+    def test_no_project(self, tmpdir):
+        """Verify each command can be running without a project."""
+        tmpdir.chdir()
+        assert not install()
+        assert display()
+        assert not uninstall()
 
 
 class TestFindRoot:

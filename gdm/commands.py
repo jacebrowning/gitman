@@ -4,7 +4,7 @@ import os
 import shutil
 
 from . import common
-from .config import load, install_deps
+from .config import load, install_deps, get_deps
 
 log = common.logger(__name__)
 
@@ -40,6 +40,18 @@ def uninstall(root=None):
     else:
         log.warn("no dependencies to uninstall")
         return False
+
+
+def display(root=None):
+    """Display installed dependencies for a project."""
+    root = _find_root(root)
+
+    log.info("displaying dependencies...")
+    for path, url, sha in get_deps(root):
+        print("{p}: {u} @ {s}".format(p=path, u=url, s=sha))
+    log.info("all dependencies displayed")
+
+    return True
 
 
 def _find_root(root, cwd=None):
