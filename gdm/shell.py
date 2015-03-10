@@ -45,6 +45,7 @@ class _Base:
               visible=True, catch=True, ignore=False, capture=False):
         if visible:
             self._display_in(*args)
+        log.debug("running: %s", ' '.join(args))
         return _call(*args, catch=catch, ignore=ignore, capture=capture)
 
     def _display_in(self, *args):
@@ -88,14 +89,22 @@ class GitMixin(_Base):
     def git_changes(self):
         """Determine if there are changes in the working tree."""
         try:
-            kwargs = {'visible': False, 'catch': False}
-            self._git('update-index', '-q', '--refresh', **kwargs)
-            self._git('diff-files', '--quiet', **kwargs)
-            self._git('diff-index', '--cached', '--quiet', 'HEAD', **kwargs)
+            # refresh changes
+            self._git('update-index', '-q', '--refresh',
+                      visible=False, catch=False)
+            # check for uncommitted changes
+            self._git('diff-index', '--quiet', 'HEAD',
+                      visible=False, catch=False)
+            # check for untracked files
+            output = self._git('ls-files', '--others', '--exclude-standard',
+                               visible=False, catch=False, capture=True)
         except common.CallException:
             return True
         else:
-            return False
+            filenames = output.splitlines()
+            for filename in filenames:
+                log.debug("new file: %s", filename)
+            return bool(filenames)
 
     def git_update(self, rev):
         """Update the working tree to the specified revision."""
