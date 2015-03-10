@@ -66,7 +66,7 @@ $ gdm install
 which will essentially:
 
 1. create a working tree at _root_/`location`/`dir`
-2. fetch from `repo` and reset to the specified `rev`
+2. fetch from `repo` and checkout the specified `rev`
 3. symbolicly link each `location`/`dir` from _root_/`link` (optional)
 4. repeat for all nested working trees containing a configuration file
 

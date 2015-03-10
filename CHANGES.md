@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.2 (dev)
----------
+0.2 (2015/03/10)
+----------------
 
 - Added 'list' command to display current URLs/SHAs.
 
