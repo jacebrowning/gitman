@@ -13,12 +13,6 @@ class TestCall:
 
     """Tests for interacting with the shell."""
 
-    @patch('os.makedirs')
-    def test_mkdir(self, mock_makedirs):
-        """Verify directories are created correctly."""
-        _call('mkdir', '-p', 'mock/dir')
-        mock_makedirs.assert_called_once_with('mock/dir')
-
     @patch('os.chdir')
     def test_cd(self, mock_chdir):
         """Verify directories are changed correctly."""
@@ -40,6 +34,15 @@ class TestCall:
         """Verify program errors can be left uncaught."""
         with pytest.raises(CallException):
             _call('git', '--invalid-git-argument', catch=False)
+
+    def test_other_error_ignored(self):
+        """Verify program errors can be ignored."""
+        _call('git', '--invalid-git-argument', ignore=True)
+
+    def test_other_capture(self):
+        """Verify a program's output can be captured."""
+        stdout = _call('echo', 'Hello, world!\n', capture=True)
+        assert "Hello, world!" == stdout
 
 
 class _BaseTestCalls:
@@ -94,12 +97,10 @@ class TestGit(_BaseTestCalls):
 
     shell = GitMixin()
 
-    def test_clone(self, mock_call):
-        """Verify the commands to clone a Git repository."""
-        self.shell.git_clone('mock.git', 'mock_dir')
-        self.assert_calls(mock_call, [
-            "git clone mock.git mock_dir",
-        ])
+    def test_create(self, mock_call):
+        """Verify the commands to create a new Git repository."""
+        self.shell.git_create()
+        self.assert_calls(mock_call, ["git init"])
 
     def test_fetch(self, mock_call):
         """Verify the commands to fetch from a Git repository."""
@@ -107,7 +108,16 @@ class TestGit(_BaseTestCalls):
         self.assert_calls(mock_call, [
             "git remote remove origin",
             "git remote add origin mock.git",
-            "git fetch --all --tags --force --prune",
+            "git fetch --tags --force --prune origin",
+        ])
+
+    def test_fetch_rev(self, mock_call):
+        """Verify the commands to fetch from a Git repository w/ rev."""
+        self.shell.git_fetch('mock.git', 'mock-rev')
+        self.assert_calls(mock_call, [
+            "git remote remove origin",
+            "git remote add origin mock.git",
+            "git fetch --tags --force --prune origin mock-rev",
         ])
 
     def test_changes(self, mock_call):
@@ -125,18 +135,21 @@ class TestGit(_BaseTestCalls):
         with patch('gdm.shell._call', Mock(side_effect=CallException)):
             assert True is self.shell.git_changes()
 
-    def test_revert(self, mock_call):
-        """Verify the commands to revert all changes in a working tree."""
-        self.shell.git_revert()
-        self.assert_calls(mock_call, [
-            "git stash",
-            "git reset --hard",
-            "git clean --force -d -x",
-        ])
-
     def test_update(self, mock_call):
         """Verify the commands to update a working tree to a revision."""
         self.shell.git_update('mock_rev')
         self.assert_calls(mock_call, [
-            "git checkout mock_rev",
+            "git stash",
+            "git clean --force -d -x",
+            "git reset --hard mock_rev",
         ])
+
+    def test_get_url(self, mock_call):
+        """Verify the commands to get the current repository's URL."""
+        self.shell.git_get_url()
+        self.assert_calls(mock_call, ["git config --get remote.origin.url"])
+
+    def test_get_sha(self, mock_call):
+        """Verify the commands to get the working tree's SHA."""
+        self.shell.git_get_sha()
+        self.assert_calls(mock_call, ["git rev-parse HEAD"])

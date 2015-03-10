@@ -46,21 +46,26 @@ class Source(yorm.extended.AttributeDictionary, ShellMixin, GitMixin):
         """Ensure the source matches the specified revision."""
         log.info("updating source files...")
 
-        # Fetch the latest changes and revert the working tree if it exists
-        if os.path.exists(self.dir):
-            self.cd(self.dir)
+        # Enter the working tree
+        if os.path.isdir(self.dir):
+            tree = True
+        else:
+            tree = False
+            self.mkdir(self.dir)
+        self.cd(self.dir)
+
+        # Exit if there are changes
+        if tree:
             if self.git_changes() and not force:
                 sys.exit("\n" + "uncomitted changes"
                          " ('--force' to overwrite): {}".format(os.getcwd()))
-            self.git_revert()
-            self.git_fetch(self.repo)
-
-        # If it doesn't exist, clone a new one
         else:
-            self.git_clone(self.repo, self.dir)
-            self.cd(self.dir)
+            self.git_create()
 
-        # Update the working tree to the specified revision
+        # Fetch the desired revision
+        self.git_fetch(self.repo, self.rev)
+
+        # Update the working tree to the desired revision
         self.git_update(self.rev)
 
     def create_link(self, root, force=False):
@@ -78,6 +83,27 @@ class Source(yorm.extended.AttributeDictionary, ShellMixin, GitMixin):
                     sys.exit("\n" + "preexisting link location"
                              " ('--force' to overwrite): {}".format(target))
             self.ln(source, target)
+
+    def identify(self):
+        """Get the path and current repository URL and hash."""
+        path = os.path.join(os.getcwd(), self.dir)
+
+        if os.path.isdir(path):
+
+            self.cd(path, visible=False)
+
+            path = os.getcwd()
+            url = self.git_get_url()
+            if self.git_changes():
+                sha = "<dirty>"
+            else:
+                sha = self.git_get_sha()
+
+            return path, url, sha
+
+        else:
+
+            return path, "<missing>", "<unknown>"
 
 
 @yorm.map_attr(all=Source)
@@ -135,6 +161,21 @@ class Config(ShellMixin):
 
         return count
 
+    def get_deps(self):
+        """Yield the path, repository URL, and hash of each dependency."""
+        path = os.path.join(self.root, self.location)
+
+        if os.path.exists(path):
+            self.cd(path, visible=False)
+        else:
+            return
+
+        for source in self.sources:
+            yield source.identify()
+            yield from get_deps(root=os.getcwd())
+
+            self.cd(path, visible=False)
+
 
 def load(root):
     """Load the configuration for the current project."""
@@ -155,3 +196,10 @@ def install_deps(root, indent=0, force=False):
         return config.install_deps(force=force)
     else:
         return 0
+
+
+def get_deps(root):
+    """Get the path, repository URL, and hash of each installed dependency."""
+    config = load(root)
+    if config:
+        yield from config.get_deps()

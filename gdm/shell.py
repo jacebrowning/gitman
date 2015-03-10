@@ -2,6 +2,7 @@
 
 import os
 import sys
+import subprocess
 import logging
 
 from sh import Command, ErrorReturnCode
@@ -12,21 +13,23 @@ logging.getLogger('sh').setLevel(logging.WARNING)
 log = common.logger(__name__)
 
 
-def _call(name, *args, catch=True):
+def _call(name, *args, ignore=False, catch=True, capture=False):
     """Call a shell program with arguments."""
-    if name == 'mkdir' and len(args) == 2 and args[0] == '-p':
-        os.makedirs(args[1])
-    elif name == 'cd' and len(args) == 1:
+    if name == 'cd' and len(args) == 1:
         os.chdir(args[0])
     else:
         try:
             program = Command(name)
-            program(*args,
-                    _err=lambda line: log.debug(line.strip()),
-                    _out=lambda line: log.debug(line.strip()))
+            if capture:
+                return program(*args).strip()
+            else:
+                for line in program(*args, _iter='err'):
+                    log.debug(line.strip())
         except ErrorReturnCode as exc:
             msg = "\n  IN: '{}'{}".format(os.getcwd(), exc)
-            if catch:
+            if ignore:
+                log.debug("ignored error from call to '%s'", name)
+            elif catch:
                 sys.exit(msg)
             else:
                 raise common.CallException(msg)
@@ -39,10 +42,11 @@ class _Base:
     INDENT = 2
     indent = 0
 
-    def _call(self, *args, visible=True, catch=True):
+    def _call(self, *args,
+              visible=True, catch=True, ignore=True, capture=False):
         if visible:
             self._display_in(*args)
-        _call(*args, catch=catch)
+        return _call(*args, catch=catch, ignore=ignore, capture=capture)
 
     def _display_in(self, *args):
         print("{}$ {}".format(' ' * self.indent, ' '.join(args)))
@@ -69,13 +73,18 @@ class GitMixin(_Base):
 
     """Provides classes with Git utilities."""
 
-    def git_clone(self, repo, dir):  # pylint: disable=W0622
-        """Clone a new working tree."""
-        self._clone(repo, dir)
+    def git_create(self):
+        """Initialize a new Git repository."""
+        self._git('init')
 
-    def git_fetch(self, repo):
+    def git_fetch(self, repo, rev=None):
         """Fetch the latest changes from the remote repository."""
-        self._fetch(repo)
+        self._git('remote', 'remove', 'origin', visible=False, ignore=True)
+        self._git('remote', 'add', 'origin', repo)
+        args = ['fetch', '--tags', '--force', '--prune', 'origin']
+        if rev:
+            args.append(rev)
+        self._git(*args)
 
     def git_changes(self):
         """Determine if there are changes in the working tree."""
@@ -89,35 +98,24 @@ class GitMixin(_Base):
         else:
             return False
 
-    def git_revert(self):
-        """Revert all changes in the working tree."""
-        self._stash(visible=False)
-        self._reset()
-        self._clean(visible=False)
-
     def git_update(self, rev):
         """Update the working tree to the specified revision."""
-        self._checkout(rev)
+        self._git('stash', visible=False, ignore=True)
+        self._git('clean', '--force', '-d', '-x', visible=False)
+        subprocess.call("for remote in `git branch -r`; "
+                        "do git checkout --track $remote ; "
+                        "done", shell=True,
+                        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self._git('reset', '--hard', rev)
+
+    def git_get_url(self):
+        """Get the current repository's URL."""
+        return self._git('config', '--get', 'remote.origin.url',
+                         visible=False, capture=True)
+
+    def git_get_sha(self):
+        """Get the current working tree's hash."""
+        return self._git('rev-parse', 'HEAD', visible=False, capture=True)
 
     def _git(self, *args, **kwargs):
-        self._call('git', *args, **kwargs)
-
-    def _clone(self, repo, dir):  # pylint: disable=W0622
-        self._git('clone', repo, dir)
-
-    def _fetch(self, repo):
-        self._git('remote', 'remove', 'origin', visible=False)
-        self._git('remote', 'add', 'origin', repo)
-        self._git('fetch', '--all', '--tags', '--force', '--prune')
-
-    def _stash(self, visible=True):
-        self._git('stash', visible=visible)
-
-    def _clean(self, visible=True):
-        self._git('clean', '--force', '-d', '-x', visible=visible)
-
-    def _reset(self):
-        self._git('reset', '--hard')
-
-    def _checkout(self, rev):
-        self._git('checkout', rev)
+        return self._call('git', *args, **kwargs)

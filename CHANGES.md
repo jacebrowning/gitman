@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.2 (dev)
+---------
+
+- Switched to `git reset` to update working trees.
+- Added 'list' command to display current URLs/SHAs.
+
 0.1.4 (2014/02/27)
 ------------------
 

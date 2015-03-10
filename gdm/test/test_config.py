@@ -6,7 +6,7 @@ import shutil
 
 import pytest
 
-from gdm.config import Source, Config, load, install_deps
+from gdm.config import Source, Config, load, install_deps, get_deps
 
 from .conftest import FILES
 
@@ -90,17 +90,34 @@ class TestLoad:
         assert None is config
 
 
-class TestInstall:
+@pytest.mark.integration
+class TestInstallAndGet:
 
-    @pytest.mark.integration
     def test_multiple(self):
-        """Verify the correct number of dependencies is installed."""
+        """Verify the correct dependencies are installed."""
         try:
-            assert 6 == install_deps(FILES)
+
+            count = install_deps(FILES)
+            assert 6 == count
+
+            deps = list(get_deps(FILES))
+            assert 6 == len(deps)
+            assert 'https://github.com/jacebrowning/gdm' == deps[0][1]
+            assert '79195180ce6c9cddfd9de48696d7468276b1d9ce' == deps[0][2]
+            assert 'https://github.com/jacebrowning/gdm' == deps[1][1]
+            assert '19721d728ad84b7314b9d21156ca95f6b916cee7' == deps[1][2]
+            assert 'https://github.com/jacebrowning/gdm' == deps[2][1]
+            assert 'fb693447579235391a45ca170959b5583c5042d8' == deps[2][2]
+            assert 'https://github.com/jacebrowning/gdm' == deps[3][1]
+            # master branch always changes -------------------- deps[3][2]
+            assert 'https://github.com/jacebrowning/gdm' == deps[4][1]
+            # master branch always changes --------------------- deps[4][2]
+            assert 'https://github.com/jacebrowning/gdm' == deps[5][1]
+            assert '7bd138fe7359561a8c2ff9d195dff238794ccc04' == deps[5][2]
+
         finally:
             shutil.rmtree(os.path.join(FILES, 'src'), ignore_errors=True)
 
-    @pytest.mark.integration
     def test_empty(self, tmpdir):
         """Verify zero dependencies are installed with no configuration."""
         tmpdir.chdir()
