@@ -14,10 +14,10 @@ logging.getLogger('yorm').setLevel(logging.INFO)
 log = common.logger(__name__)
 
 
-@yorm.map_attr(repo=yorm.standard.String)
-@yorm.map_attr(dir=yorm.standard.String)
-@yorm.map_attr(rev=yorm.standard.String)
-@yorm.map_attr(link=yorm.standard.String)
+@yorm.attr(repo=yorm.standard.String)
+@yorm.attr(dir=yorm.standard.String)
+@yorm.attr(rev=yorm.standard.String)
+@yorm.attr(link=yorm.standard.String)
 class Source(yorm.extended.AttributeDictionary, ShellMixin, GitMixin):
 
     """A dictionary of `git` and `ln` arguments."""
@@ -106,15 +106,15 @@ class Source(yorm.extended.AttributeDictionary, ShellMixin, GitMixin):
             return path, "<missing>", "<unknown>"
 
 
-@yorm.map_attr(all=Source)
+@yorm.attr(all=Source)
 class Sources(yorm.container.List):
 
     """A list of source dependencies."""
 
 
-@yorm.map_attr(location=yorm.standard.String)
-@yorm.map_attr(sources=Sources)
-@yorm.store_instances("{self.root}/{self.filename}")
+@yorm.attr(location=yorm.standard.String)
+@yorm.attr(sources=Sources)
+@yorm.sync("{self.root}/{self.filename}")
 class Config(ShellMixin):
 
     """A dictionary of dependency configuration options."""
