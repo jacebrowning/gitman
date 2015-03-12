@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.3 (dev)
----------
+0.2.1 (2015/03/12)
+------------------
 
 - Automatically track dependencies that are on branches.
 - Require '--force' when there are untracked files.
