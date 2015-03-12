@@ -151,6 +151,8 @@ class TestGit(_BaseTestCalls):
             "git stash",
             "git clean --force -d -x",
             "git checkout --force mock_rev",
+            "git branch --set-upstream-to origin/mock_rev",
+            "git pull --ff-only --no-rebase",
         ])
 
     def test_get_url(self, mock_call):
