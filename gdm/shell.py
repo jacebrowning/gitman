@@ -49,7 +49,7 @@ class _Base:
         return _call(*args, catch=catch, ignore=ignore, capture=capture)
 
     def _display_in(self, *args):
-        print("{}$ {}".format(' ' * self.indent, ' '.join(args)))
+        common.show("{}$ {}".format(' ' * self.indent, ' '.join(args)))
 
 
 class ShellMixin(_Base):

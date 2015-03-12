@@ -88,3 +88,9 @@ def configure_logging(count=0):
         verbosity = MAX_VERBOSITY
     else:
         verbosity = count
+
+
+def show(*args, **kwargs):
+    """Write to standard output if enabled."""
+    if verbosity >= 0:
+        print(*args, **kwargs)

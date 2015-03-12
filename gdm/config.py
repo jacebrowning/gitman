@@ -135,12 +135,12 @@ class Config(ShellMixin):
         path = os.path.join(self.root, self.location)
 
         if not self.indent:
-            print()
+            common.show()
 
         if not os.path.isdir(path):
             self.mkdir(path)
         self.cd(path)
-        print()
+        common.show()
 
         count = 0
         for source in self.sources:
@@ -149,7 +149,7 @@ class Config(ShellMixin):
             source.update_files(force=force)
             source.create_link(self.root, force=force)
             count += 1
-            print()
+            common.show()
 
             count += install_deps(root=os.getcwd(),
                                   indent=source.indent + self.INDENT)

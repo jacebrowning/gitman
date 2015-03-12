@@ -48,7 +48,7 @@ def display(root=None):
 
     log.info("displaying dependencies...")
     for path, url, sha in get_deps(root):
-        print("{p}: {u} @ {s}".format(p=path, u=url, s=sha))
+        common.show("{p}: {u} @ {s}".format(p=path, u=url, s=sha))
     log.info("all dependencies displayed")
 
     return True
