@@ -131,16 +131,26 @@ class TestGit(_BaseTestCalls):
 
     def test_changes(self, mock_call):
         """Verify the commands to check for uncommitted changes."""
-        assert False is self.shell.git_changes()
+        self.shell.git_changes()
         self.assert_calls(mock_call, [
             # based on: http://stackoverflow.com/questions/3878624
             "git update-index -q --refresh",
-            "git diff-files --quiet",
-            "git diff-index --cached --quiet HEAD",
+            "git diff-index --quiet HEAD",
+            "git ls-files --others --exclude-standard",
         ])
 
-    def test_changes_true(self, _):
-        """Verify the commands to check for uncommitted changes (w/ changes)."""
+    def test_changes_false(self, _):
+        """Verify the absence of changes can be detected."""
+        with patch('gdm.shell._call', Mock(return_value="")):
+            assert False is self.shell.git_changes()
+
+    def test_changes_true_untracked(self, _):
+        """Verify untracked files can be detected."""
+        with patch('gdm.shell._call', Mock(return_value="file_1")):
+            assert True is self.shell.git_changes()
+
+    def test_changes_true_uncommitted(self, _):
+        """Verify uncommitted changes can be detected."""
         with patch('gdm.shell._call', Mock(side_effect=CallException)):
             assert True is self.shell.git_changes()
 

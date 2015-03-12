@@ -5,6 +5,7 @@ Changelog
 ---------
 
 - Automatically track dependencies that are on branches.
+- Require '--force' when there are untracked files.
 
 0.2 (2015/03/10)
 ----------------

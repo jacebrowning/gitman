@@ -2,7 +2,6 @@
 # pylint: disable=R0201
 
 import os
-import shutil
 
 import pytest
 
@@ -95,28 +94,23 @@ class TestInstallAndGet:
 
     def test_multiple(self):
         """Verify the correct dependencies are installed."""
-        try:
+        count = install_deps(FILES)
+        assert 6 == count
 
-            count = install_deps(FILES)
-            assert 6 == count
-
-            deps = list(get_deps(FILES))
-            assert 6 == len(deps)
-            assert 'https://github.com/jacebrowning/gdm' == deps[0][1]
-            assert '972f095130da2c2796ae022b9b3f68925c19c4ed' == deps[0][2]
-            assert 'https://github.com/jacebrowning/gdm' == deps[1][1]
-            assert '19721d728ad84b7314b9d21156ca95f6b916cee7' == deps[1][2]
-            assert 'https://github.com/jacebrowning/gdm' == deps[2][1]
-            assert 'fb693447579235391a45ca170959b5583c5042d8' == deps[2][2]
-            assert 'https://github.com/jacebrowning/gdm' == deps[3][1]
-            # master branch always changes -------------------- deps[3][2]
-            assert 'https://github.com/jacebrowning/gdm' == deps[4][1]
-            # master branch always changes --------------------- deps[4][2]
-            assert 'https://github.com/jacebrowning/gdm' == deps[5][1]
-            assert '7bd138fe7359561a8c2ff9d195dff238794ccc04' == deps[5][2]
-
-        finally:
-            shutil.rmtree(os.path.join(FILES, 'src'), ignore_errors=True)
+        deps = list(get_deps(FILES))
+        assert 6 == len(deps)
+        assert 'https://github.com/jacebrowning/gdm-demo' == deps[0][1]
+        assert 'eb37743011a398b208dd9f9ef79a408c0fc10d48' == deps[0][2]
+        assert 'https://github.com/jacebrowning/gdm-demo' == deps[1][1]
+        assert 'ddbe17ef173538d1fda29bd99a14bab3c5d86e78' == deps[1][2]
+        assert 'https://github.com/jacebrowning/gdm-demo' == deps[2][1]
+        assert 'fb693447579235391a45ca170959b5583c5042d8' == deps[2][2]
+        assert 'https://github.com/jacebrowning/gdm-demo' == deps[3][1]
+        # master branch always changes --------------------- deps[3][2]
+        assert 'https://github.com/jacebrowning/gdm-demo' == deps[4][1]
+        # master branch always changes --------------------- deps[4][2]
+        assert 'https://github.com/jacebrowning/gdm-demo' == deps[5][1]
+        assert '7bd138fe7359561a8c2ff9d195dff238794ccc04' == deps[5][2]
 
     def test_empty(self, tmpdir):
         """Verify zero dependencies are installed with no configuration."""
