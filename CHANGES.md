@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3 (dev)
+---------
+
+- Automatically track dependencies that are on branches.
+
 0.2 (2015/03/10)
 ----------------
 

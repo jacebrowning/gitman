@@ -103,7 +103,7 @@ class TestInstallAndGet:
             deps = list(get_deps(FILES))
             assert 6 == len(deps)
             assert 'https://github.com/jacebrowning/gdm' == deps[0][1]
-            assert '79195180ce6c9cddfd9de48696d7468276b1d9ce' == deps[0][2]
+            assert '972f095130da2c2796ae022b9b3f68925c19c4ed' == deps[0][2]
             assert 'https://github.com/jacebrowning/gdm' == deps[1][1]
             assert '19721d728ad84b7314b9d21156ca95f6b916cee7' == deps[1][2]
             assert 'https://github.com/jacebrowning/gdm' == deps[2][1]

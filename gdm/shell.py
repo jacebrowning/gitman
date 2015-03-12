@@ -99,9 +99,12 @@ class GitMixin(_Base):
 
     def git_update(self, rev):
         """Update the working tree to the specified revision."""
-        self._git('stash', visible=False, ignore=True)
+        hide = {'visible': False, 'ignore': True}
+        self._git('stash', **hide)
         self._git('clean', '--force', '-d', '-x', visible=False)
         self._git('checkout', '--force', rev)
+        self._git('branch', '--set-upstream-to', 'origin/' + rev, **hide)
+        self._git('pull', '--ff-only', '--no-rebase', **hide)
 
     def git_get_url(self):
         """Get the current repository's URL."""
