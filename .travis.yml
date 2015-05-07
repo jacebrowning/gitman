@@ -1,23 +1,28 @@
-sudo: false
 language: python
 python:
 - 3.3
 - 3.4
+
 before_install:
 - sudo add-apt-repository ppa:git-core/ppa -y
 - sudo apt-get update
+
 install:
 - sudo apt-get install git
 - git --version
 - pip install coveralls scrutinizer-ocular
+
 before_script:
 - make env
 - make depends-ci
+
 script:
 - make ci
+
 after_success:
 - coveralls
 - ocular
+
 notifications:
   email:
     on_success: never
