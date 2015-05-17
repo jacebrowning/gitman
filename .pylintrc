@@ -6,7 +6,8 @@
 # RO903: Too few public methods
 # R0904: Too many public methods
 # C0103: Invalid constant name
-disable=I0011,W0142,W0511,R0903,R0904,C0103
+# R0901: Too many ancestors
+disable=I0011,W0142,W0511,R0903,R0904,C0103,R0901
 
 [REPORTS]
 
