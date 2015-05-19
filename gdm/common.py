@@ -79,6 +79,7 @@ def configure_logging(count=0):
     formatter = WarningFormatter(default_format, verbose_format,
                                  datefmt=settings.LOGGING_DATEFMT)
     logging.root.handlers[0].setFormatter(formatter)
+    logging.getLogger('yorm').setLevel(min(level, settings.YORM_LOGGING_LEVEL))
 
     # Warn about excessive verbosity
     global verbosity  # pylint: disable=W0603
