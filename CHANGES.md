@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.2.5 (dev)
+-----------
+
+- Hide warnings with '--quiet' option.
+
 0.2.4 (2015/05/19)
 ------------------
 
