@@ -121,8 +121,17 @@ class TestGit(_BaseTestCalls):
         ])
 
     def test_fetch_rev_sha(self, mock_call):
-        """Verify the commands to fetch from a Git repository w/ rev (SHA)."""
+        """Verify the commands to fetch from a Git repository w/ SHA."""
         self.shell.git_fetch('mock.git', 'abcdef1234' * 4)
+        self.assert_calls(mock_call, [
+            "git remote remove origin",
+            "git remote add origin mock.git",
+            "git fetch --tags --force --prune origin",
+        ])
+
+    def test_fetch_rev_revparse(self, mock_call):
+        """Verify the commands to fetch from a Git repository w/ rev-parse."""
+        self.shell.git_fetch('mock.git', 'master@{2015-02-12 18:30:00}')
         self.assert_calls(mock_call, [
             "git remote remove origin",
             "git remote add origin mock.git",
@@ -162,6 +171,18 @@ class TestGit(_BaseTestCalls):
             "git clean --force -d -x",
             "git checkout --force mock_rev",
             "git branch --set-upstream-to origin/mock_rev",
+            "git pull --ff-only --no-rebase",
+        ])
+
+    def test_update_revparse(self, mock_call):
+        """Verify the commands to update a working tree to a rev-parse."""
+        self.shell.git_update('mock_branch@{2015-02-12 18:30:00}')
+        self.assert_calls(mock_call, [
+            "git stash",
+            "git clean --force -d -x",
+            "git checkout --force mock_branch",
+            "git checkout --force mock_branch@{2015-02-12 18:30:00}",
+            "git branch --set-upstream-to origin/mock_branch",
             "git pull --ff-only --no-rebase",
         ])
 

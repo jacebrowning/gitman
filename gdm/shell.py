@@ -82,8 +82,14 @@ class GitMixin(_Base):
         self._git('remote', 'remove', 'origin', visible=False, ignore=True)
         self._git('remote', 'add', 'origin', repo)
         args = ['fetch', '--tags', '--force', '--prune', 'origin']
-        if rev and len(rev) != 40:  # fetch doesn't work with SHAs
-            args.append(rev)
+        if rev:
+            if len(rev) == 40:
+                pass  # fetch doesn't work with SHAs
+            elif '@' in rev:
+                pass  # fetch doesn't work with rev-parse
+                log.warn("rev-parse history only goes back 90 days")
+            else:
+                args.append(rev)
         self._git(*args)
 
     def git_changes(self):
@@ -108,11 +114,18 @@ class GitMixin(_Base):
 
     def git_update(self, rev):
         """Update the working tree to the specified revision."""
+        if '@' in rev:
+            branch = rev.split('@')[0]
+        else:
+            branch = rev
+
         hide = {'visible': False, 'ignore': True}
         self._git('stash', **hide)
         self._git('clean', '--force', '-d', '-x', visible=False)
+        if branch != rev:
+            self._git('checkout', '--force', branch, visible=False)
         self._git('checkout', '--force', rev)
-        self._git('branch', '--set-upstream-to', 'origin/' + rev, **hide)
+        self._git('branch', '--set-upstream-to', 'origin/' + branch, **hide)
         self._git('pull', '--ff-only', '--no-rebase', **hide)
 
     def git_get_url(self):

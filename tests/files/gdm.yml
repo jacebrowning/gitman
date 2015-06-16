@@ -8,4 +8,4 @@ sources:
   rev: example-tag
 - repo: https://github.com/jacebrowning/gdm-demo
   dir: gdm_3
-  rev: 'master@{2015-02-12 18:30:00}'
+  rev: 'master@{2015-06-16 10:30:00}'
