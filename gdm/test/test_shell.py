@@ -176,13 +176,15 @@ class TestGit(_BaseTestCalls):
 
     def test_update_revparse(self, mock_call):
         """Verify the commands to update a working tree to a rev-parse."""
+        mock_call.return_value = "abc123"
         self.shell.git_update('mock_branch@{2015-02-12 18:30:00}')
         self.assert_calls(mock_call, [
+            "git checkout --force mock_branch",
+            "git rev-list -n 1 --before='2015-02-12 18:30:00' mock_branch",
             "git stash",
             "git clean --force -d -x",
-            "git checkout --force mock_branch",
-            "git checkout --force mock_branch@{2015-02-12 18:30:00}",
-            "git branch --set-upstream-to origin/mock_branch",
+            "git checkout --force abc123",
+            "git branch --set-upstream-to origin/abc123",
             "git pull --ff-only --no-rebase",
         ])
 

@@ -87,7 +87,6 @@ class GitMixin(_Base):
                 pass  # fetch doesn't work with SHAs
             elif '@' in rev:
                 pass  # fetch doesn't work with rev-parse
-                log.warn("rev-parse history only goes back 90 days")
             else:
                 args.append(rev)
         self._git(*args)
@@ -114,18 +113,12 @@ class GitMixin(_Base):
 
     def git_update(self, rev):
         """Update the working tree to the specified revision."""
-        if '@' in rev:
-            branch = rev.split('@')[0]
-        else:
-            branch = rev
-
         hide = {'visible': False, 'ignore': True}
+        rev = self._git_get_sha_from_rev(rev)
         self._git('stash', **hide)
         self._git('clean', '--force', '-d', '-x', visible=False)
-        if branch != rev:
-            self._git('checkout', '--force', branch, visible=False)
         self._git('checkout', '--force', rev)
-        self._git('branch', '--set-upstream-to', 'origin/' + branch, **hide)
+        self._git('branch', '--set-upstream-to', 'origin/' + rev, **hide)
         self._git('pull', '--ff-only', '--no-rebase', **hide)
 
     def git_get_url(self):
@@ -136,6 +129,17 @@ class GitMixin(_Base):
     def git_get_sha(self):
         """Get the current working tree's hash."""
         return self._git('rev-parse', 'HEAD', visible=False, capture=True)
+
+    def _git_get_sha_from_rev(self, rev):
+        """Get a rev-parse string's hash."""
+        if '@{' in rev:  # TODO: use regex for this
+            parts = rev.split('@')
+            branch = parts[0]
+            date = parts[1].strip("{}")
+            self._git('checkout', '--force', branch, visible=False)
+            rev = self._git('rev-list', '-n', '1', '--before={!r}'.format(date),
+                            branch, visible=False, capture=True)
+        return rev
 
     def _git(self, *args, **kwargs):
         return self._call('git', *args, **kwargs)
