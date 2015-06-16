@@ -1,1 +1,1 @@
-"""Tests for the `gdm` package."""
+"""Unit tests for the `gdm` package."""

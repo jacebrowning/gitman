@@ -12,17 +12,24 @@ endif
 
 # Test settings
 UNIT_TEST_COVERAGE := 77
-INTEGRATION_TEST_COVERAGE := 95
+INTEGRATION_TEST_COVERAGE := 52
+COMBINED_TEST_COVERAGE := 95
 
 # System paths
 PLATFORM := $(shell python -c 'import sys; print(sys.platform)')
 ifneq ($(findstring win32, $(PLATFORM)), )
+	WINDOWS := 1
 	SYS_PYTHON_DIR := C:\\Python$(PYTHON_MAJOR)$(PYTHON_MINOR)
 	SYS_PYTHON := $(SYS_PYTHON_DIR)\\python.exe
 	SYS_VIRTUALENV := $(SYS_PYTHON_DIR)\\Scripts\\virtualenv.exe
 	# https://bugs.launchpad.net/virtualenv/+bug/449537
 	export TCL_LIBRARY=$(SYS_PYTHON_DIR)\\tcl\\tcl8.5
 else
+	ifneq ($(findstring darwin, $(PLATFORM)), )
+		MAC := 1
+	else
+		LINUX := 1
+	endif
 	SYS_PYTHON := python$(PYTHON_MAJOR)
 	ifdef PYTHON_MINOR
 		SYS_PYTHON := $(SYS_PYTHON).$(PYTHON_MINOR)
@@ -58,19 +65,21 @@ PYREVERSE := $(BIN)/pyreverse
 NOSE := $(BIN)/nosetests
 PYTEST := $(BIN)/py.test
 COVERAGE := $(BIN)/coverage
+SNIFFER := $(BIN)/sniffer
 
 # Flags for PHONY targets
-DEPENDS_CI := $(ENV)/.depends-ci
-DEPENDS_DEV := $(ENV)/.depends-dev
-ALL := $(ENV)/.all
+DEPENDS_CI_FLAG := $(ENV)/.depends-ci
+DEPENDS_DEV_FLAG := $(ENV)/.depends-dev
+DOCS_FLAG := $(ENV)/.docs
+ALL_FLAG := $(ENV)/.all
 
 # Main Targets #################################################################
 
 .PHONY: all
-all: depends doc $(ALL)
-$(ALL): $(SOURCES)
+all: depends doc $(ALL_FLAG)
+$(ALL_FLAG): $(SOURCES)
 	$(MAKE) check
-	touch $(ALL)  # flag to indicate all setup steps were successful
+	touch $(ALL_FLAG)  # flag to indicate all setup steps were successful
 
 .PHONY: ci
 ci: check test tests
@@ -81,7 +90,7 @@ ci: check test tests
 env: .virtualenv $(EGG_INFO)
 $(EGG_INFO): Makefile setup.py requirements.txt
 	VIRTUAL_ENV=$(ENV) $(PYTHON) setup.py develop
-	touch $(EGG_INFO)  # flag to indicate package is installed
+	@ touch $(EGG_INFO)  # flag to indicate package is installed
 
 .PHONY: .virtualenv
 .virtualenv: $(PIP)
@@ -93,16 +102,23 @@ $(PIP):
 depends: depends-ci depends-dev
 
 .PHONY: depends-ci
-depends-ci: env Makefile $(DEPENDS_CI)
-$(DEPENDS_CI): Makefile
+depends-ci: env Makefile $(DEPENDS_CI_FLAG)
+$(DEPENDS_CI_FLAG): Makefile
 	$(PIP) install --upgrade pep8 pep257 pylint coverage pytest pytest-cov
-	touch $(DEPENDS_CI)  # flag to indicate dependencies are installed
+	@ touch $(DEPENDS_CI_FLAG)  # flag to indicate dependencies are installed
 
 .PHONY: depends-dev
-depends-dev: env Makefile $(DEPENDS_DEV)
-$(DEPENDS_DEV): Makefile
-	$(PIP) install --upgrade pip pep8radius pygments docutils pdoc wheel readme
-	touch $(DEPENDS_DEV)  # flag to indicate dependencies are installed
+depends-dev: env Makefile $(DEPENDS_DEV_FLAG)
+$(DEPENDS_DEV_FLAG): Makefile
+	$(PIP) install --upgrade pip pep8radius pygments docutils pdoc wheel readme sniffer
+ifdef WINDOWS
+	$(PIP) install --upgrade pywin32
+else ifdef MAC
+	$(PIP) install --upgrade pync MacFSEvents
+else ifdef LINUX
+	$(PIP) install --upgrade pyinotify
+endif
+	@ touch $(DEPENDS_DEV_FLAG)  # flag to indicate dependencies are installed
 
 # Documentation ################################################################
 
@@ -119,8 +135,10 @@ README.rst: README.md
 	pandoc -f markdown_github -t rst -o README.rst README.md
 
 .PHONY: verify-readme
-verify-readme: README.rst
+verify-readme: $(DOCS_FLAG)
+$(DOCS_FLAG): README.rst
 	$(PYTHON) setup.py check --restructuredtext --strict --metadata
+	@ touch $(DOCS_FLAG)  # flag to indicate README has been checked
 
 .PHONY: apidocs
 apidocs: depends-dev apidocs/$(PACKAGE)/index.html
@@ -130,7 +148,7 @@ apidocs/$(PACKAGE)/index.html: $(SOURCES)
 .PHONY: uml
 uml: depends-dev docs/*.png
 docs/*.png: $(SOURCES)
-	$(PYREVERSE) $(PACKAGE) -p $(PACKAGE) -f ALL -o png --ignore test
+	$(PYREVERSE) $(PACKAGE) -p $(PACKAGE) -a 1 -f ALL -o png --ignore test
 	- mv -f classes_$(PACKAGE).png docs/classes.png
 	- mv -f packages_$(PACKAGE).png docs/packages.png
 
@@ -147,8 +165,7 @@ check: pep8 pep257 pylint
 
 .PHONY: pep8
 pep8: depends-ci
-# E501: line too long (checked by PyLint)
-	$(PEP8) $(PACKAGE) --ignore=E501
+	$(PEP8) $(PACKAGE) --config=.pep8rc
 
 .PHONY: pep257
 pep257: depends-ci
@@ -158,7 +175,7 @@ pep257: depends-ci
 
 .PHONY: pylint
 pylint: depends-ci
-	$(PYLINT) $(PACKAGE) --rcfile=.pylintrc --disable=C0111
+	$(PYLINT) $(PACKAGE) --rcfile=.pylintrc  --disable=C0111
 
 .PHONY: fix
 fix: depends-dev
@@ -166,21 +183,38 @@ fix: depends-dev
 
 # Testing ######################################################################
 
-PYTEST_OPTS := --doctest-modules --cov=$(PACKAGE) --cov-report=term-missing --cov-report=html
+PYTEST_OPTS := --doctest-modules --cov=$(PACKAGE) --cov-report=term-missing --no-cov-on-fail
 
-.PHONY: test
-test: depends-ci .clean-test
+.PHONY: test test-unit
+test: test-unit
+test-unit: depends-ci .clean-test
 	$(PYTEST) $(PYTEST_OPTS) $(PACKAGE)
-	$(COVERAGE) report --fail-under=$(UNIT_TEST_COVERAGE) > /dev/null
+ifndef TRAVIS
+	$(COVERAGE) html --directory htmlcov --fail-under=$(UNIT_TEST_COVERAGE)
+endif
 
-.PHONY: tests
-tests: depends-ci .clean-test
-	TEST_INTEGRATION=1 $(PYTEST) $(PYTEST_OPTS) $(PACKAGE)
-	$(COVERAGE) report --fail-under=$(INTEGRATION_TEST_COVERAGE) > /dev/null
+.PHONY: test-int
+test-int: depends-ci .clean-test
+	TEST_INTEGRATION=1 $(PYTEST) $(PYTEST_OPTS) tests
+ifndef TRAVIS
+	$(COVERAGE) html --directory htmlcov --fail-under=$(INTEGRATION_TEST_COVERAGE)
+endif
+
+.PHONY: tests test-all
+tests: test-all
+test-all: depends-ci .clean-test
+	TEST_INTEGRATION=1 $(PYTEST) $(PYTEST_OPTS) $(PACKAGE) tests
+ifndef TRAVIS
+	$(COVERAGE) html --directory htmlcov --fail-under=$(COMBINED_TEST_COVERAGE)
+endif
 
 .PHONY: read-coverage
 read-coverage:
 	$(OPEN) htmlcov/index.html
+
+.PHONY: watch
+watch: depends-dev
+	$(SNIFFER)
 
 # Cleanup ######################################################################
 

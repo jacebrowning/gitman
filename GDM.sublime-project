@@ -23,19 +23,18 @@
             },
             "pep8": {
                 "@disable": false,
-                "args": [],
+                "args": ["--config=.pep8rc"],
                 "excludes": [],
-                "ignore": "E501",
-                "max-line-length": 79,
+                "ignore": "",
                 "select": ""
             },
             "pylint": {
                 "@disable": false,
-                "args": ["--max-line-length=79"],
-                "disable": "I0011,W0142,W0511,R0801",
+                "args": [],
+                "disable": "",
                 "enable": "",
                 "excludes": [],
-                "rcfile": ""
+                "rcfile": ".pylintrc"
             }
         }
     },

@@ -1,0 +1,8 @@
+location: /tmp/gdm-test-dependencies
+sources:
+- repo: https://github.com/jacebrowning/gdm-demo
+  dir: gdm_1
+  rev: example-branch
+- repo: https://github.com/jacebrowning/gdm-demo
+  dir: gdm_2
+  rev: example-tag
