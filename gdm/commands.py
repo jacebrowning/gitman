@@ -9,12 +9,12 @@ from .config import load, install_deps, get_deps
 log = common.logger(__name__)
 
 
-def install(root=None, force=False):
+def install(root=None, force=False, clean=True):
     """Install dependencies for a project."""
     root = _find_root(root)
 
     log.info("%sinstalling dependencies...", 'force-' if force else '')
-    count = install_deps(root, force=force)
+    count = install_deps(root, force=force, clean=clean)
     if count == 1:
         log.info("installed 1 dependency")
     elif count > 1:
