@@ -41,6 +41,8 @@ def main(args=None, function=None):
                           help=info, **shared)
     sub.add_argument('-f', '--force', action='store_true',
                      help="overwrite uncommitted changes in dependencies")
+    sub.add_argument('-C', '--no-clean', action='store_false', dest='clean',
+                     help="keep ignored files in dependencies")
 
     # Uninstall parser
     info = "remove all installed dependencies"
@@ -54,10 +56,11 @@ def main(args=None, function=None):
 
     # Parse arguments
     args = parser.parse_args(args=args)
-    kwargs = {'root': args.root}
+    kwargs = dict(root=args.root)
     if args.command == 'install':
         function = commands.install
-        kwargs['force'] = args.force
+        kwargs.update(dict(force=args.force,
+                           clean=args.clean))
     elif args.command == 'uninstall':
         function = commands.uninstall
     elif args.command == 'list':

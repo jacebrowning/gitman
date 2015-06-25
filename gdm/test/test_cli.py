@@ -55,20 +55,29 @@ class TestInstall:
     def test_install(self, mock_install):
         """Verify the 'install' command can be run."""
         cli.main(['install'])
-        mock_install.assert_called_once_with(root=None, force=False)
+        mock_install.assert_called_once_with(root=None,
+                                             force=False, clean=True)
 
     @patch('gdm.commands.install')
     def test_install_root(self, mock_install):
         """Verify the project's root can be specified."""
         cli.main(['install', '--root', 'mock/path/to/root'])
         mock_install.assert_called_once_with(root='mock/path/to/root',
-                                             force=False)
+                                             force=False, clean=True)
 
     @patch('gdm.commands.install')
     def test_install_force(self, mock_install):
         """Verify dependencies can be force-installed."""
         cli.main(['install', '--force'])
-        mock_install.assert_called_once_with(root=None, force=True)
+        mock_install.assert_called_once_with(root=None,
+                                             force=True, clean=True)
+
+    @patch('gdm.commands.install')
+    def test_install_no_clean(self, mock_install):
+        """Verify dependency cleaning can be disabled."""
+        cli.main(['install', '--no-clean'])
+        mock_install.assert_called_once_with(root=None,
+                                             force=False, clean=False)
 
 
 class TestUninstall:

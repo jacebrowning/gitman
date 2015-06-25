@@ -106,11 +106,12 @@ class GitMixin(_Base):
                 log.debug("new file: %s", filename)
             return bool(filenames)
 
-    def git_update(self, rev):
+    def git_update(self, rev, clean=True):
         """Update the working tree to the specified revision."""
         hide = {'visible': False, 'ignore': True}
         self._git('stash', **hide)
-        self._git('clean', '--force', '-d', '-x', visible=False)
+        if clean:
+            self._git('clean', '--force', '-d', '-x', visible=False)
         self._git('checkout', '--force', rev)
         self._git('branch', '--set-upstream-to', 'origin/' + rev, **hide)
         self._git('pull', '--ff-only', '--no-rebase', **hide)

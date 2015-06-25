@@ -11,7 +11,7 @@ PYTHON_MINOR ?= 4
 # Test settings
 UNIT_TEST_COVERAGE := 77
 INTEGRATION_TEST_COVERAGE := 52
-COMBINED_TEST_COVERAGE := 90
+COMBINED_TEST_COVERAGE := 94
 
 # System paths
 PLATFORM := $(shell python -c 'import sys; print(sys.platform)')
@@ -183,7 +183,7 @@ fix: depends-dev
 
 TIMESTAMP := $(shell date +%s)
 
-PYTEST_CORE_OPTS := --doctest-modules --quiet -r X --maxfail=3
+PYTEST_CORE_OPTS := --doctest-modules --verbose -r X --maxfail=3
 PYTEST_COV_OPTS := --cov=$(PACKAGE) --cov-report=term-missing --no-cov-on-fail
 PYTEST_RANDOM_OPTS := --random --random-seed=$(TIMESTAMP)
 
@@ -206,7 +206,7 @@ endif
 test-int: depends-ci
 	@ if test -e $(FAILED); then $(MAKE) test-all; fi
 	@ $(COVERAGE) erase
-	$(PYTEST) $(PYTEST_OPTS_FAILFAST) tests
+	TEST_INTEGRATION=1 $(PYTEST) $(PYTEST_OPTS_FAILFAST) tests
 ifndef TRAVIS
 	@ rm -rf $(FAILED)  # next time, don't run the previously failing test
 	$(COVERAGE) html --directory htmlcov --fail-under=$(INTEGRATION_TEST_COVERAGE)
@@ -217,7 +217,7 @@ tests: test-all
 test-all: depends-ci
 	@ if test -e $(FAILED); then $(PYTEST) --failed $(PACKAGE) tests; fi
 	@ $(COVERAGE) erase
-	$(PYTEST) $(PYTEST_OPTS_FAILFAST) $(PACKAGE) tests
+	TEST_INTEGRATION=1 $(PYTEST) $(PYTEST_OPTS_FAILFAST) $(PACKAGE) tests
 ifndef TRAVIS
 	@ rm -rf $(FAILED)  # next time, don't run the previously failing test
 	$(COVERAGE) html --directory htmlcov --fail-under=$(COMBINED_TEST_COVERAGE)
