@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3 (dev)
+---------
+
+- Add '--no-clean' option to disable removing untracked files.
+
 0.2.5 (2015/06/15)
 ------------------
 

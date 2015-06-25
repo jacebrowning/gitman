@@ -7,7 +7,7 @@ import pytest
 
 from gdm.config import Source, Config, load, install_deps, get_deps
 
-from .conftest import FILES
+from .conftest import FILES, ROOT
 
 
 class TestSource:
@@ -91,6 +91,9 @@ class TestLoad:
 
 @pytest.mark.integration
 class TestInstallAndGet:
+
+    def teardown_method(self, _):
+        os.chdir(ROOT)
 
     def test_multiple(self):
         """Verify the correct dependencies are installed."""

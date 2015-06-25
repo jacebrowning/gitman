@@ -28,9 +28,9 @@ def python_tests(*args):
     group = int(time.time())  # unique per run
 
     for count, (command, title) in enumerate((
+        (('make', 'check'), "Static Analysis"),
         (('make', 'test-unit'), "Unit Tests"),
         (('make', 'test-all'), "Integration Tests"),
-        (('make', 'check'), "Static Analysis"),
         (('make', 'doc'), None),
     ), start=1):
 
