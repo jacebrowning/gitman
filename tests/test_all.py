@@ -8,12 +8,13 @@ import pytest
 import gdm
 from gdm.config import Config
 
-from .conftest import FILES
+from .conftest import FILES, ROOT
 
 
 @pytest.mark.integration
 def test_install():
     """Verify dependencies can be installed."""
+    os.chdir(ROOT)
     config = Config(FILES)
     shutil.rmtree(config.location, ignore_errors=True)
     assert not os.path.exists(config.location)
@@ -30,10 +31,11 @@ def test_install():
 @pytest.mark.integration
 def test_uninstall():
     """Verify dependencies can be uninstalled."""
+    os.chdir(ROOT)
     config = Config(FILES)
+
     assert gdm.install(FILES)
     assert os.path.isdir(config.location)
 
     assert gdm.uninstall(FILES)
-
     assert not os.path.isdir(config.location)
