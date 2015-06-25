@@ -115,7 +115,7 @@ class TestInstallAndGet:
         assert 'https://github.com/jacebrowning/gdm-demo' == deps[5][1]
         assert '7bd138fe7359561a8c2ff9d195dff238794ccc04' == deps[5][2]
         assert 'https://github.com/jacebrowning/gdm-demo' == deps[6][1]
-        assert '9bf18e16b956041f0267c21baad555a23237b52e' == deps[6][2]
+        assert '2da24fca34af3748e3cab61db81a2ae8b35aec94' == deps[6][2]
 
     def test_empty(self, tmpdir):
         """Verify zero dependencies are installed with no configuration."""
