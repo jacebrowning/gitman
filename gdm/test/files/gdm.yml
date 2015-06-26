@@ -6,3 +6,6 @@ sources:
 - repo: https://github.com/jacebrowning/gdm-demo
   dir: gdm_2
   rev: example-tag
+- repo: https://github.com/jacebrowning/gdm-demo
+  dir: gdm_3
+  rev: 'master@{2015-06-18 11:11:11}'

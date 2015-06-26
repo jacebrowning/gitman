@@ -70,6 +70,13 @@ which will essentially:
 3. symbolicly link each `location`/`dir` from _root_/`link` (optional)
 4. repeat for all nested working trees containing a configuration file
 
+where `rev` can be:
+
+* all or part of a commit SHA: `123def`
+* a tag: `v1.0`
+* a branch: `master`
+* a `rev-parse` date: `'develop@{2015-06-18 10:30:59}'`
+
 To display the specific versions installed:
 
 ```

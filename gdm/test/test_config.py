@@ -98,10 +98,10 @@ class TestInstallAndGet:
     def test_multiple(self):
         """Verify the correct dependencies are installed."""
         count = install_deps(FILES)
-        assert 6 == count
+        assert 7 == count
 
         deps = list(get_deps(FILES))
-        assert 6 == len(deps)
+        assert 7 == len(deps)
         assert 'https://github.com/jacebrowning/gdm-demo' == deps[0][1]
         assert 'eb37743011a398b208dd9f9ef79a408c0fc10d48' == deps[0][2]
         assert 'https://github.com/jacebrowning/gdm-demo' == deps[1][1]
@@ -114,6 +114,8 @@ class TestInstallAndGet:
         # master branch always changes --------------------- deps[4][2]
         assert 'https://github.com/jacebrowning/gdm-demo' == deps[5][1]
         assert '7bd138fe7359561a8c2ff9d195dff238794ccc04' == deps[5][2]
+        assert 'https://github.com/jacebrowning/gdm-demo' == deps[6][1]
+        assert '2da24fca34af3748e3cab61db81a2ae8b35aec94' == deps[6][2]
 
     def test_empty(self, tmpdir):
         """Verify zero dependencies are installed with no configuration."""
