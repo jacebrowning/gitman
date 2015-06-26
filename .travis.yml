@@ -1,15 +1,18 @@
+sudo: required
+
 language: python
 python:
 - 3.3
 - 3.4
+
+cache: pip
 
 before_install:
 - sudo add-apt-repository ppa:git-core/ppa -y
 - sudo apt-get update
 
 install:
-- sudo apt-get install git
-- git --version
+- sudo apt-get install git; git --version
 - pip install coveralls scrutinizer-ocular
 
 before_script:

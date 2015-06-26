@@ -42,7 +42,7 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
             fmt += " <- '{s}'"
         return fmt.format(r=self.repo, v=self.rev, d=self.dir, s=self.link)
 
-    def update_files(self, force=False):
+    def update_files(self, force=False, clean=True):
         """Ensure the source matches the specified revision."""
         log.info("updating source files...")
 
@@ -63,7 +63,7 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
         self.git_fetch(self.repo, self.rev)
 
         # Update the working tree to the desired revision
-        self.git_update(self.rev)
+        self.git_update(self.rev, clean=clean)
 
     def create_link(self, root, force=False):
         """Create a link from the target name to the current directory."""
@@ -130,7 +130,7 @@ class Config(ShellMixin):
         """Get the full path to the configuration file."""
         return os.path.join(self.root, self.filename)
 
-    def install_deps(self, force=False):
+    def install_deps(self, force=False, clean=True):
         """Get all sources, recursively."""
         path = os.path.join(self.root, self.location)
 
@@ -146,12 +146,12 @@ class Config(ShellMixin):
         for source in self.sources:
 
             source.indent = self.indent + self.INDENT
-            source.update_files(force=force)
+            source.update_files(force=force, clean=clean)
             source.create_link(self.root, force=force)
             count += 1
             common.show()
 
-            count += install_deps(root=os.getcwd(),
+            count += install_deps(root=os.getcwd(), force=force, clean=clean,
                                   indent=source.indent + self.INDENT)
 
             self.cd(path, visible=False)
@@ -185,12 +185,12 @@ def load(root):
     return config
 
 
-def install_deps(root, indent=0, force=False):
+def install_deps(root, force=False, clean=True, indent=0):
     """Install the dependences listed in the project's configuration file."""
     config = load(root)
     if config:
         config.indent = indent
-        return config.install_deps(force=force)
+        return config.install_deps(force=force, clean=clean)
     else:
         return 0
 

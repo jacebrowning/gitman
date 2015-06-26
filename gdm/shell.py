@@ -82,8 +82,13 @@ class GitMixin(_Base):
         self._git('remote', 'remove', 'origin', visible=False, ignore=True)
         self._git('remote', 'add', 'origin', repo)
         args = ['fetch', '--tags', '--force', '--prune', 'origin']
-        if rev and len(rev) != 40:  # fetch doesn't work with SHAs
-            args.append(rev)
+        if rev:
+            if len(rev) == 40:
+                pass  # fetch doesn't work with SHAs
+            elif '@' in rev:
+                pass  # fetch doesn't work with rev-parse
+            else:
+                args.append(rev)
         self._git(*args)
 
     def git_changes(self):
@@ -106,11 +111,13 @@ class GitMixin(_Base):
                 log.debug("new file: %s", filename)
             return bool(filenames)
 
-    def git_update(self, rev):
+    def git_update(self, rev, clean=True):
         """Update the working tree to the specified revision."""
         hide = {'visible': False, 'ignore': True}
+        rev = self._git_get_sha_from_rev(rev)
         self._git('stash', **hide)
-        self._git('clean', '--force', '-d', '-x', visible=False)
+        if clean:
+            self._git('clean', '--force', '-d', '-x', visible=False)
         self._git('checkout', '--force', rev)
         self._git('branch', '--set-upstream-to', 'origin/' + rev, **hide)
         self._git('pull', '--ff-only', '--no-rebase', **hide)
@@ -123,6 +130,17 @@ class GitMixin(_Base):
     def git_get_sha(self):
         """Get the current working tree's hash."""
         return self._git('rev-parse', 'HEAD', visible=False, capture=True)
+
+    def _git_get_sha_from_rev(self, rev):
+        """Get a rev-parse string's hash."""
+        if '@{' in rev:  # TODO: use regex for this
+            parts = rev.split('@')
+            branch = parts[0]
+            date = parts[1].strip("{}")
+            self._git('checkout', '--force', branch, visible=False)
+            rev = self._git('rev-list', '-n', '1', '--before={!r}'.format(date),
+                            branch, visible=False, capture=True)
+        return rev
 
     def _git(self, *args, **kwargs):
         return self._call('git', *args, **kwargs)

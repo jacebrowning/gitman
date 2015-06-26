@@ -52,11 +52,8 @@ class _BaseTestCalls:
     @staticmethod
     def assert_calls(mock_call, expected):
         """Confirm the expected list of calls matches the mock call."""
-        actual = mock_call.call_args_list
-        assert len(expected) == len(actual)
-        for index, call in enumerate(expected):
-            args = actual[index][0]
-            assert call == ' ' .join(args)
+        actual = [' '.join(args[0]) for args in mock_call.call_args_list]
+        assert expected == actual
 
 
 @patch('gdm.shell._call')
@@ -121,8 +118,17 @@ class TestGit(_BaseTestCalls):
         ])
 
     def test_fetch_rev_sha(self, mock_call):
-        """Verify the commands to fetch from a Git repository w/ rev (SHA)."""
+        """Verify the commands to fetch from a Git repository w/ SHA."""
         self.shell.git_fetch('mock.git', 'abcdef1234' * 4)
+        self.assert_calls(mock_call, [
+            "git remote remove origin",
+            "git remote add origin mock.git",
+            "git fetch --tags --force --prune origin",
+        ])
+
+    def test_fetch_rev_revparse(self, mock_call):
+        """Verify the commands to fetch from a Git repository w/ rev-parse."""
+        self.shell.git_fetch('mock.git', 'master@{2015-02-12 18:30:00}')
         self.assert_calls(mock_call, [
             "git remote remove origin",
             "git remote add origin mock.git",
@@ -162,6 +168,29 @@ class TestGit(_BaseTestCalls):
             "git clean --force -d -x",
             "git checkout --force mock_rev",
             "git branch --set-upstream-to origin/mock_rev",
+            "git pull --ff-only --no-rebase",
+        ])
+
+    def test_update_no_clean(self, mock_call):
+        self.shell.git_update('mock_rev', clean=False)
+        self.assert_calls(mock_call, [
+            "git stash",
+            "git checkout --force mock_rev",
+            "git branch --set-upstream-to origin/mock_rev",
+            "git pull --ff-only --no-rebase",
+        ])
+
+    def test_update_revparse(self, mock_call):
+        """Verify the commands to update a working tree to a rev-parse."""
+        mock_call.return_value = "abc123"
+        self.shell.git_update('mock_branch@{2015-02-12 18:30:00}')
+        self.assert_calls(mock_call, [
+            "git checkout --force mock_branch",
+            "git rev-list -n 1 --before='2015-02-12 18:30:00' mock_branch",
+            "git stash",
+            "git clean --force -d -x",
+            "git checkout --force abc123",
+            "git branch --set-upstream-to origin/abc123",
             "git pull --ff-only --no-rebase",
         ])
 
