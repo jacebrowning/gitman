@@ -1,8 +1,8 @@
-Changelog
-=========
+Revision History
+================
 
-0.3 (dev)
----------
+0.3 (2015/06/26)
+----------------
 
 - Add '--no-clean' option to disable removing untracked files.
 - Add support for `rev-parse` dates as the dependency `rev`.
