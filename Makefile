@@ -82,6 +82,11 @@ $(ALL_FLAG): $(SOURCES)
 .PHONY: ci
 ci: check test tests
 
+.PHONY: watch
+watch: depends-dev .clean-test
+	@ rm -rf $(FAILED_FLAG)
+	$(SNIFFER)
+
 # Development Installation #####################################################
 
 .PHONY: env
@@ -163,17 +168,22 @@ check: pep8 pep257 pylint
 
 .PHONY: pep8
 pep8: depends-ci
-	$(PEP8) $(PACKAGE) --config=.pep8rc
+	$(PEP8) $(PACKAGE) tests --config=.pep8rc
 
 .PHONY: pep257
 pep257: depends-ci
-# D102: docstring missing (checked by PyLint)
-# D202: No blank lines allowed *after* function docstring
-	$(PEP257) $(PACKAGE) --ignore=D102,D202
+# D102/D103: docstring missing (checked by PyLint)
+# D202: No blank lines allowed *after* function docstring (personal preference)
+# D203: 1 blank line required before class (deprecated warning)
+	$(PEP257) $(PACKAGE) tests --ignore=D102,D103,D202,D203
 
 .PHONY: pylint
 pylint: depends-ci
-	$(PYLINT) $(PACKAGE) --rcfile=.pylintrc  --disable=C0111
+# These warnings shouldn't fail builds, but warn in editors:
+# C0111: Line too long
+# R0913: Too many arguments
+# R0914: Too many local variables
+	$(PYLINT) $(PACKAGE) tests --rcfile=.pylintrc --disable=C0111,R0913,R0914
 
 .PHONY: fix
 fix: depends-dev
@@ -181,21 +191,21 @@ fix: depends-dev
 
 # Testing ######################################################################
 
-TIMESTAMP := $(shell date +%s)
+RANDOM_SEED ?= $(shell date +%s)
 
 PYTEST_CORE_OPTS := --doctest-modules --verbose -r X --maxfail=3
 PYTEST_COV_OPTS := --cov=$(PACKAGE) --cov-report=term-missing --no-cov-on-fail
-PYTEST_RANDOM_OPTS := --random --random-seed=$(TIMESTAMP)
+PYTEST_RANDOM_OPTS := --random --random-seed=$(RANDOM_SEED)
 
 PYTEST_OPTS := $(PYTEST_CORE_OPTS) $(PYTEST_COV_OPTS) $(PYTEST_RANDOM_OPTS)
 PYTEST_OPTS_FAILFAST := $(PYTEST_OPTS) --failed --exitfirst
 
-FAILED := .pytest/failed
+FAILED_FLAG := .pytest/failed
 
 .PHONY: test test-unit
 test: test-unit
 test-unit: depends-ci
-	@ if test -e $(FAILED); then $(MAKE) test-all; fi
+	@ if test -e $(FAILED_FLAG); then $(MAKE) test-all; fi
 	@ $(COVERAGE) erase
 	$(PYTEST) $(PYTEST_OPTS) $(PACKAGE)
 ifndef TRAVIS
@@ -204,22 +214,22 @@ endif
 
 .PHONY: test-int
 test-int: depends-ci
-	@ if test -e $(FAILED); then $(MAKE) test-all; fi
+	@ if test -e $(FAILED_FLAG); then $(MAKE) test-all; fi
 	@ $(COVERAGE) erase
 	TEST_INTEGRATION=1 $(PYTEST) $(PYTEST_OPTS_FAILFAST) tests
 ifndef TRAVIS
-	@ rm -rf $(FAILED)  # next time, don't run the previously failing test
+	@ rm -rf $(FAILED_FLAG)  # next time, don't run the previously failing test
 	$(COVERAGE) html --directory htmlcov --fail-under=$(INTEGRATION_TEST_COVERAGE)
 endif
 
 .PHONY: tests test-all
 tests: test-all
 test-all: depends-ci
-	@ if test -e $(FAILED); then $(PYTEST) --failed $(PACKAGE) tests; fi
+	@ if test -e $(FAILED_FLAG); then $(PYTEST) --failed $(PACKAGE) tests; fi
 	@ $(COVERAGE) erase
 	TEST_INTEGRATION=1 $(PYTEST) $(PYTEST_OPTS_FAILFAST) $(PACKAGE) tests
 ifndef TRAVIS
-	@ rm -rf $(FAILED)  # next time, don't run the previously failing test
+	@ rm -rf $(FAILED_FLAG)  # next time, don't run the previously failing test
 	$(COVERAGE) html --directory htmlcov --fail-under=$(COMBINED_TEST_COVERAGE)
 endif
 
@@ -227,16 +237,11 @@ endif
 read-coverage:
 	$(OPEN) htmlcov/index.html
 
-.PHONY: watch
-watch: depends-dev .clean-test
-	@ rm -rf $(FAILED)
-	$(SNIFFER)
-
 # Cleanup ######################################################################
 
 .PHONY: clean
 clean: .clean-dist .clean-test .clean-doc .clean-build
-	rm -rf $(ALL)
+	rm -rf $(ALL_FLAG)
 
 .PHONY: clean-env
 clean-env: clean
@@ -274,7 +279,7 @@ register-test: doc
 	$(PYTHON) setup.py register --strict --repository https://testpypi.python.org/pypi
 
 .PHONY: upload-test
-upload-test: .git-no-changes register-test
+upload-test: register-test
 	$(PYTHON) setup.py sdist upload --repository https://testpypi.python.org/pypi
 	$(PYTHON) setup.py bdist_wheel upload --repository https://testpypi.python.org/pypi
 	$(OPEN) https://testpypi.python.org/pypi/$(PROJECT)
@@ -291,7 +296,7 @@ upload: .git-no-changes register
 
 .PHONY: .git-no-changes
 .git-no-changes:
-	@if git diff --name-only --exit-code;         \
+	@ if git diff --name-only --exit-code;        \
 	then                                          \
 		echo Git working copy is clean...;        \
 	else                                          \

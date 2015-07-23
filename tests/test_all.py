@@ -1,4 +1,5 @@
 """Integration tests for the `gdm` package."""
+# pylint: disable=no-self-use
 
 import os
 import shutil
@@ -9,7 +10,6 @@ import gdm
 from gdm.config import Config
 
 from .conftest import FILES, ROOT
-
 
 
 @pytest.mark.integration
