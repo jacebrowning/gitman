@@ -91,7 +91,11 @@ def configure_logging(count=0):
         verbosity = count
 
 
-def show(*args, **kwargs):
-    """Write to standard output if enabled."""
-    if verbosity >= 0:
-        print(*args, **kwargs)
+def show(msg="", log=logger(__name__)):
+    """Write to standard output or error if enabled."""
+    if verbosity == 0:
+        print(msg)
+    elif verbosity >= 1:
+        msg = msg.strip()
+        if msg:
+            log.info(msg)
