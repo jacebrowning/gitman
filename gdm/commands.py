@@ -4,17 +4,23 @@ import os
 import shutil
 
 from . import common
-from .config import load, install_deps, get_deps
+from .config import load
 
 log = common.logger(__name__)
 
 
 def install(root=None, force=False, clean=True):
     """Install dependencies for a project."""
-    root = _find_root(root)
-
     log.info("%sinstalling dependencies...", 'force-' if force else '')
-    count = install_deps(root, force=force, clean=clean)
+
+    root = _find_root(root)
+    config = load(root)
+
+    if config:
+        count = config.install_deps(force=force, clean=clean, update=False)
+    else:
+        count = 0
+
     if count == 1:
         log.info("installed 1 dependency")
     elif count > 1:
@@ -25,12 +31,35 @@ def install(root=None, force=False, clean=True):
     return count
 
 
+def update(root=None, force=False, clean=True):
+    """Update dependencies for a project."""
+    log.info("%supdating dependencies...", 'force-' if force else '')
+
+    root = _find_root(root)
+    config = load(root)
+
+    if config:
+        count = config.install_deps(force=force, clean=clean)
+    else:
+        count = 0
+
+    if count == 1:
+        log.info("updated 1 dependency")
+    elif count > 1:
+        log.info("updated %s dependencies", count)
+    else:
+        log.warn("no dependencies updated")
+
+    return count
+
+
 def uninstall(root=None):
     """Uninstall dependencies for a project."""
-    root = _find_root(root)
-
     log.info("uninstalling dependencies...")
+
+    root = _find_root(root)
     config = load(root)
+
     if config:
         if os.path.exists(config.location):
             log.debug("deleting '%s'...", config.location)
@@ -45,10 +74,12 @@ def uninstall(root=None):
 def display(root=None):
     """Display installed dependencies for a project."""
     root = _find_root(root)
+    config = load(root)
 
     log.info("displaying dependencies...")
-    for path, url, sha in get_deps(root):
-        common.show("{p}: {u} @ {s}".format(p=path, u=url, s=sha))
+    if config:
+        for path, url, sha in config.get_deps():
+            common.show("{p}: {u} @ {s}".format(p=path, u=url, s=sha))
     log.info("all dependencies displayed")
 
     return True

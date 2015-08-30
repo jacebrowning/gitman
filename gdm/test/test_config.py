@@ -5,9 +5,9 @@ import os
 
 import pytest
 
-from gdm.config import Source, Config, load, install_deps, get_deps
+from gdm.config import Source, Config, load
 
-from .conftest import FILES, ROOT
+from .conftest import FILES
 
 
 class TestSource:
@@ -53,6 +53,7 @@ class TestConfig:
     def test_init_defaults(self):
         """Verify a configuration has a default filename and location."""
         config = Config('mock/root')
+
         assert 'mock/root' == config.root
         assert 'gdm.yml' == config.filename
         assert 'gdm_sources' == config.location
@@ -61,46 +62,32 @@ class TestConfig:
     def test_init_filename(self):
         """Verify the filename can be customized."""
         config = Config('mock/root', 'mock.custom')
+
         assert 'mock.custom' == config.filename
         assert 'gdm_sources' == config.location
 
     def test_init_location(self):
         """Verify the location can be customized."""
         config = Config('mock/root', location='.gdm')
+
         assert 'gdm.yml' == config.filename
         assert '.gdm' == config.location
 
     def test_path(self):
         """Verify a configuration's path is correct."""
         config = Config('mock/root')
+
         assert "mock/root/gdm.yml" == config.path
 
-
-class TestLoad:
-
-    def test_load(self):
-        """Verify a configuration can be loaded."""
-        config = load(FILES)
-        assert None is not config
-
-    def test_load_missing(self):
-        """Verify None is returned for a missing config."""
-        config = load(os.path.dirname(FILES))
-        assert None is config
-
-
-@pytest.mark.integration
-class TestInstallAndGet:
-
-    def teardown_method(self, _):
-        os.chdir(ROOT)
-
-    def test_multiple(self):
+    @pytest.mark.integration
+    def test_install_and_list(self):
         """Verify the correct dependencies are installed."""
-        count = install_deps(FILES)
+        config = Config(FILES)
+
+        count = config.install_deps()
         assert 7 == count
 
-        deps = list(get_deps(FILES))
+        deps = list(config.get_deps())
         assert 7 == len(deps)
         assert 'https://github.com/jacebrowning/gdm-demo' == deps[0][1]
         assert 'eb37743011a398b208dd9f9ef79a408c0fc10d48' == deps[0][2]
@@ -117,7 +104,15 @@ class TestInstallAndGet:
         assert 'https://github.com/jacebrowning/gdm-demo' == deps[6][1]
         assert '2da24fca34af3748e3cab61db81a2ae8b35aec94' == deps[6][2]
 
-    def test_empty(self, tmpdir):
-        """Verify zero dependencies are installed with no configuration."""
-        tmpdir.chdir()
-        assert 0 == install_deps(str(tmpdir))
+
+class TestLoad:
+
+    def test_load(self):
+        """Verify a configuration can be loaded."""
+        config = load(FILES)
+        assert None is not config
+
+    def test_load_missing(self):
+        """Verify None is returned for a missing config."""
+        config = load(os.path.dirname(FILES))
+        assert None is config

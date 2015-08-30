@@ -44,21 +44,31 @@ def main(args=None, function=None):
     sub.add_argument('-C', '--no-clean', action='store_false', dest='clean',
                      help="keep ignored files in dependencies")
 
-    # Uninstall parser
-    info = "remove all installed dependencies"
-    subs.add_parser('uninstall', description=info.capitalize() + '.',
-                    help=info, **shared)
+    # Update parser
+    info = "update all dependencies to the latest versions"
+    sub = subs.add_parser('update', description=info.capitalize() + '.',
+                          help=info, **shared)
+    # TODO: share these with 'install'
+    sub.add_argument('-f', '--force', action='store_true',
+                     help="overwrite uncommitted changes in dependencies")
+    sub.add_argument('-C', '--no-clean', action='store_false', dest='clean',
+                     help="keep ignored files in dependencies")
 
     # Display parser
     info = "show the current hash of each dependency"
     subs.add_parser('list', description=info.capitalize() + '.',
                     help=info, **shared)
 
+    # Uninstall parser
+    info = "remove all installed dependencies"
+    subs.add_parser('uninstall', description=info.capitalize() + '.',
+                    help=info, **shared)
+
     # Parse arguments
     args = parser.parse_args(args=args)
     kwargs = dict(root=args.root)
-    if args.command == 'install':
-        function = commands.install
+    if args.command in ('install', 'update'):
+        function = getattr(commands, args.command)
         kwargs.update(dict(force=args.force,
                            clean=args.clean))
     elif args.command == 'uninstall':
@@ -77,7 +87,7 @@ def main(args=None, function=None):
         log.debug("running command...")
         success = function(**kwargs)
     except KeyboardInterrupt:
-        msg = "command cancelled"
+        msg = "command canceled"
         if common.verbosity == common.MAX_VERBOSITY:
             log.exception(msg)
         else:

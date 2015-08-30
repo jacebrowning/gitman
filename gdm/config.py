@@ -103,14 +103,35 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
             return path, "<missing>", "<unknown>"
 
 
+@yorm.attr(repo=yorm.converters.String)
+@yorm.attr(dir=yorm.converters.String)
+@yorm.attr(rev=yorm.converters.String)
+@yorm.attr(link=yorm.converters.String)
+class LockedSource(Source):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.sources_locked = []
+
+
 @yorm.attr(all=Source)
 class Sources(yorm.converters.List):
 
     """A list of source dependencies."""
 
 
+@yorm.attr(all=LockedSource)
+class LockedSources(Sources):
+
+    """A list of source dependencies locked to specific revisions."""
+
+
+yorm.attr(sources_locked=LockedSources)(LockedSource)
+
+
 @yorm.attr(location=yorm.converters.String)
 @yorm.attr(sources=Sources)
+@yorm.attr(sources_locked=LockedSources)
 @yorm.sync("{self.root}/{self.filename}")
 class Config(ShellMixin):
 
@@ -124,17 +145,18 @@ class Config(ShellMixin):
         self.filename = filename
         self.location = location
         self.sources = []
+        self.sources_locked = []
 
     @property
     def path(self):
         """Get the full path to the configuration file."""
         return os.path.join(self.root, self.filename)
 
-    def install_deps(self, force=False, clean=True):
+    def install_deps(self, force=False, clean=True, update=True):
         """Get all sources, recursively."""
         path = os.path.join(self.root, self.location)
 
-        if not self.indent:
+        if self.indent == 0:
             common.show()
 
         if not os.path.isdir(path):
@@ -143,16 +165,22 @@ class Config(ShellMixin):
         common.show()
 
         count = 0
-        for source in self.sources:
-
+        if update or not self.sources_locked:
+            sources = self.sources
+        else:
+            sources = self.sources_locked
+        for source in sources:
+            count += 1
             source.indent = self.indent + self.INDENT
+
             source.update_files(force=force, clean=clean)
             source.create_link(self.root, force=force)
-            count += 1
             common.show()
 
-            count += install_deps(root=os.getcwd(), force=force, clean=clean,
-                                  indent=source.indent + self.INDENT)
+            config = load(os.getcwd())
+            if config:
+                config.indent = source.indent
+                count += config.install_deps(force, clean, update)
 
             self.cd(path, visible=False)
 
@@ -169,34 +197,20 @@ class Config(ShellMixin):
 
         for source in self.sources:
             yield source.identify()
-            yield from get_deps(root=os.getcwd())
+            config = load(os.getcwd())
+            if config:
+                yield from config.get_deps()
 
             self.cd(path, visible=False)
 
 
 def load(root):
     """Load the configuration for the current project."""
-    config = None
     for filename in os.listdir(root):
         if filename.lower() in Config.FILENAMES:
             config = Config(root, filename)
             log.debug("loaded config: %s", config.path)
-            break
-    return config
+            return config
 
-
-def install_deps(root, force=False, clean=True, indent=0):
-    """Install the dependences listed in the project's configuration file."""
-    config = load(root)
-    if config:
-        config.indent = indent
-        return config.install_deps(force=force, clean=clean)
-    else:
-        return 0
-
-
-def get_deps(root):
-    """Get the path, repository URL, and hash of each installed dependency."""
-    config = load(root)
-    if config:
-        yield from config.get_deps()
+    log.debug("no config found in: %s", root)
+    return None
