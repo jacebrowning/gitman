@@ -38,18 +38,12 @@ class _Base:
 
     """Functions to call shell commands."""
 
-    INDENT = 2
-    indent = 0
-
-    def _call(self, *args,
-              visible=True, catch=True, ignore=False, capture=False):
+    @staticmethod
+    def _call(*args, visible=True, catch=True, ignore=False, capture=False):
         if visible:
-            self._display_in(*args)
+            common.show("$ {}".format(' '.join(args)))
         log.debug("running: %s", ' '.join(args))
         return _call(*args, catch=catch, ignore=ignore, capture=capture)
-
-    def _display_in(self, *args):
-        common.show("{}$ {}".format(' ' * self.indent, ' '.join(args)))
 
 
 class ShellMixin(_Base):

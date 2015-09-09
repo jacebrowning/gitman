@@ -17,6 +17,8 @@ def install(root=None, force=False, clean=True):
     config = load(root)
 
     if config:
+        common.show("Installing dependencies...", log=False)
+        common.show()
         count = config.install_deps(force=force, clean=clean, update=False)
     else:
         count = 0
@@ -39,6 +41,8 @@ def update(root=None, force=False, clean=True):
     config = load(root)
 
     if config:
+        common.show("Updating dependencies...", log=False)
+        common.show()
         count = config.install_deps(force=force, clean=clean)
     else:
         count = 0
@@ -61,6 +65,7 @@ def uninstall(root=None):
     config = load(root)
 
     if config:
+        common.show("Uninstalling dependencies...", log=False)
         if os.path.exists(config.location):
             log.debug("deleting '%s'...", config.location)
             shutil.rmtree(config.location)
@@ -73,14 +78,19 @@ def uninstall(root=None):
 
 def display(root=None):
     """Display installed dependencies for a project."""
+    log.info("displaying dependencies...")
+
     root = _find_root(root)
     config = load(root)
 
-    log.info("displaying dependencies...")
     if config:
+        common.show("Listing dependencies...", log=False)
+        common.show()
         for path, url, sha in config.get_deps():
             common.show("{p}: {u} @ {s}".format(p=path, u=url, s=sha))
-    log.info("all dependencies displayed")
+        log.info("all dependencies displayed")
+    else:
+        log.warn("no dependencies to display")
 
     return True
 

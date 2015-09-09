@@ -154,37 +154,43 @@ class Config(ShellMixin):
 
     def install_deps(self, force=False, clean=True, update=True):
         """Get all sources, recursively."""
+        sources = self._get_sources(update)
+
         path = os.path.join(self.root, self.location)
-
-        if self.indent == 0:
-            common.show()
-
         if not os.path.isdir(path):
             self.mkdir(path)
         self.cd(path)
+        common.indent()
         common.show()
 
         count = 0
-        if update or not self.sources_locked:
-            sources = self.sources
-        else:
-            sources = self.sources_locked
         for source in sources:
             count += 1
-            source.indent = self.indent + self.INDENT
 
             source.update_files(force=force, clean=clean)
             source.create_link(self.root, force=force)
             common.show()
 
-            config = load(os.getcwd())
+            config = load()
             if config:
-                config.indent = source.indent
+                common.indent()
                 count += config.install_deps(force, clean, update)
+                common.dedent()
 
             self.cd(path, visible=False)
 
+        common.dedent()
+
         return count
+
+    def _get_sources(self, update):
+        if update:
+            return self.sources
+        elif self.sources_locked:
+            return self.sources_locked
+        else:
+            log.warn("no locked sources available, installing latest...")
+            return self.sources
 
     def get_deps(self):
         """Yield the path, repository URL, and hash of each dependency."""
@@ -204,8 +210,11 @@ class Config(ShellMixin):
             self.cd(path, visible=False)
 
 
-def load(root):
+def load(root=None):
     """Load the configuration for the current project."""
+    if root is None:
+        root = os.getcwd()
+
     for filename in os.listdir(root):
         if filename.lower() in Config.FILENAMES:
             config = Config(root, filename)
