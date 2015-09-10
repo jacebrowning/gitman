@@ -3,11 +3,11 @@
 import sys
 
 __project__ = 'GDM'
-__version__ = '0.3'
+__version__ = '0.4.beta1'
 
 CLI = 'gdm'
-VERSION = __project__ + '-' + __version__
-DESCRIPTION = 'A very basic language-agnostic "dependency manager" using Git.'
+VERSION = __project__ + ' v' + __version__
+DESCRIPTION = "A language-agnostic \"dependency manager\" using Git."
 
 PYTHON_VERSION = 3, 3
 
