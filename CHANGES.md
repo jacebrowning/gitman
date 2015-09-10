@@ -1,6 +1,11 @@
 Revision History
 ================
 
+0.3.1 (2015/09/09)
+------------------
+
+- Ensures files are not needlessly reloaded with newer versions of YORM.
+
 0.3 (2015/06/26)
 ----------------
 
