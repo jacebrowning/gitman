@@ -111,7 +111,7 @@ class Sources(yorm.converters.List):
 
 @yorm.attr(location=yorm.converters.String)
 @yorm.attr(sources=Sources)
-@yorm.sync("{self.root}/{self.filename}")
+@yorm.sync("{self.root}/{self.filename}", auto=False)
 class Config(ShellMixin):
 
     """A dictionary of dependency configuration options."""
