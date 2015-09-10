@@ -6,6 +6,8 @@ import os
 import pytest
 import yorm
 
+from gdm.config import Source
+
 ENV = 'TEST_INTEGRATION'  # environment variable to enable integration tests
 REASON = "'{0}' variable not set".format(ENV)
 
@@ -37,3 +39,8 @@ def pytest_runtest_setup(item):
             yorm.settings.fake = False
     else:
         yorm.settings.fake = True
+
+
+@pytest.fixture
+def source():
+    return Source(repo='repo', dir='dir', rev='rev', link='link')

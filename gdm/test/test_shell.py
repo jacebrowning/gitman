@@ -1,5 +1,5 @@
 """Unit tests for the `shell` module."""
-# pylint: disable=R0201
+# pylint: disable=no-self-use
 
 from unittest.mock import patch, Mock
 

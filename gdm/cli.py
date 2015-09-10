@@ -55,12 +55,12 @@ def main(args=None, function=None):
                      help="keep ignored files in dependencies")
 
     # Display parser
-    info = "show the current hash of each dependency"
+    info = "display the current version of each dependency"
     subs.add_parser('list', description=info.capitalize() + '.',
                     help=info, **shared)
 
     # Uninstall parser
-    info = "remove all installed dependencies"
+    info = "delete all installed dependencies"
     subs.add_parser('uninstall', description=info.capitalize() + '.',
                     help=info, **shared)
 
@@ -72,7 +72,7 @@ def main(args=None, function=None):
         kwargs.update(dict(force=args.force,
                            clean=args.clean))
     elif args.command == 'uninstall':
-        function = commands.uninstall
+        function = commands.delete
     elif args.command == 'list':
         function = commands.display
     if function is None:

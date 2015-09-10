@@ -1,5 +1,5 @@
 """Unit tests for the 'cli' module."""
-# pylint: disable=R0201
+# pylint: disable=no-self-use
 
 import pytest
 from unittest.mock import Mock, patch
@@ -47,9 +47,9 @@ class TestMain:
         assert mock_log.exception.call_count == 1
 
 
-class TestInstall:
+class TestInstallAndUpdate:
 
-    """Unit tests for the `install` command."""
+    """Unit tests for the `install` and `update` commands."""
 
     @patch('gdm.commands.install')
     def test_install(self, mock_install):
@@ -79,18 +79,25 @@ class TestInstall:
         mock_install.assert_called_once_with(root=None,
                                              force=False, clean=False)
 
+    @patch('gdm.commands.update')
+    def test_update(self, mock_update):
+        """Verify the 'update' command can be run."""
+        cli.main(['update'])
+        mock_update.assert_called_once_with(root=None,
+                                            force=False, clean=True)
+
 
 class TestUninstall:
 
     """Unit tests for the `uninstall` command."""
 
-    @patch('gdm.commands.uninstall')
+    @patch('gdm.commands.delete')
     def test_uninstall(self, mock_uninstall):
         """Verify the 'uninstall' command can be run."""
         cli.main(['uninstall'])
         mock_uninstall.assert_called_once_with(root=None)
 
-    @patch('gdm.commands.uninstall')
+    @patch('gdm.commands.delete')
     def test_uninstall_root(self, mock_uninstall):
         """Verify the project's root can be specified."""
         cli.main(['uninstall', '--root', 'mock/path/to/root'])

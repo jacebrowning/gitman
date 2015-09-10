@@ -102,16 +102,11 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
 
             return path, "<missing>", "<unknown>"
 
-
-@yorm.attr(repo=yorm.converters.String)
-@yorm.attr(dir=yorm.converters.String)
-@yorm.attr(rev=yorm.converters.String)
-@yorm.attr(link=yorm.converters.String)
-class LockedSource(Source):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.sources_locked = []
+    def lock(self):
+        """Return a locked version of the current source."""
+        _, _, sha = self.identify()
+        source = self.__class__(self.repo, self.dir, sha, self.link)
+        return source
 
 
 @yorm.attr(all=Source)
@@ -120,13 +115,10 @@ class Sources(yorm.converters.List):
     """A list of source dependencies."""
 
 
-@yorm.attr(all=LockedSource)
+@yorm.attr(all=Source)
 class LockedSources(Sources):
 
     """A list of source dependencies locked to specific revisions."""
-
-
-yorm.attr(sources_locked=LockedSources)(LockedSource)
 
 
 @yorm.attr(location=yorm.converters.String)
@@ -154,12 +146,12 @@ class Config(ShellMixin):
 
     def install_deps(self, force=False, clean=True, update=True):
         """Get all sources, recursively."""
-        sources = self._get_sources(update)
-
         path = os.path.join(self.root, self.location)
         if not os.path.isdir(path):
             self.mkdir(path)
         self.cd(path)
+
+        sources = self._get_sources(update)
         common.indent()
         common.show()
 
@@ -183,14 +175,13 @@ class Config(ShellMixin):
 
         return count
 
-    def _get_sources(self, update):
-        if update:
-            return self.sources
-        elif self.sources_locked:
-            return self.sources_locked
-        else:
-            log.warn("no locked sources available, installing latest...")
-            return self.sources
+    def lock_deps(self):
+        """Lock down the immediate dependency versions."""
+        cwd = os.getcwd()
+        self.sources_locked = []
+        for source in self.sources:
+            self.sources_locked.append(source.lock())
+            self.cd(cwd, visible=False)
 
     def get_deps(self):
         """Yield the path, repository URL, and hash of each dependency."""
@@ -208,6 +199,15 @@ class Config(ShellMixin):
                 yield from config.get_deps()
 
             self.cd(path, visible=False)
+
+    def _get_sources(self, update):
+        if update:
+            return self.sources
+        elif self.sources_locked:
+            return self.sources_locked
+        else:
+            log.warn("no locked sources available, installing latest...")
+            return self.sources
 
 
 def load(root=None):

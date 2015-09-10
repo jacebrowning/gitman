@@ -1,10 +1,11 @@
 """Common exceptions, classes, and functions."""
 
+import sys
 import argparse
 import logging
 
-
 from . import settings
+
 
 MAX_VERBOSITY = 4
 
@@ -104,10 +105,10 @@ def dedent():
     _indent_level = max(0, _indent_level - 1)
 
 
-def show(message="", log=logger(__name__)):
+def show(message="", file=sys.stdout, log=logger(__name__)):
     """Write to standard output or error if enabled."""
     if verbosity == 0:
-        print("  " * _indent_level + message)
+        print("  " * _indent_level + message, file=file)
     elif verbosity >= 1:
         message = message.strip()
         if message and log:

@@ -13,31 +13,34 @@ from .conftest import FILES, ROOT
 
 
 @pytest.mark.integration
-class TestInstallAndGet:
+class TestCommands:
 
     def teardown_method(self, _):
         os.chdir(ROOT)
 
-    def test_install(self):
-        """Verify dependencies can be installed."""
+    def test_commands(self):
         config = Config(FILES)
         shutil.rmtree(config.location, ignore_errors=True)
         assert not os.path.exists(config.location)
 
-        # clean install
-        assert gdm.install(FILES)
-        assert os.path.isdir(config.location)
-        # second install
+        # install sources
         assert gdm.install(FILES)
         assert 'gdm_1' in os.listdir(config.location)
         assert 'gdm_2' in os.listdir(config.location)
 
-    def test_uninstall(self):
-        """Verify dependencies can be uninstalled."""
-        config = Config(FILES)
+        # list versions
+        assert gdm.list(FILES)
 
+        # update sources
+        assert gdm.update(FILES)
+        assert 'gdm_1' in os.listdir(config.location)
+        assert 'gdm_2' in os.listdir(config.location)
+
+        # install locked sources
         assert gdm.install(FILES)
-        assert os.path.isdir(config.location)
+        assert 'gdm_1' in os.listdir(config.location)
+        assert 'gdm_2' in os.listdir(config.location)
 
+        # uninstall sources
         assert gdm.uninstall(FILES)
         assert not os.path.isdir(config.location)
