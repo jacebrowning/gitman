@@ -9,7 +9,7 @@ PYTHON_MAJOR ?= 3
 PYTHON_MINOR ?= 4
 
 # Test settings
-UNIT_TEST_COVERAGE := 77
+UNIT_TEST_COVERAGE := 75
 INTEGRATION_TEST_COVERAGE := 52
 COMBINED_TEST_COVERAGE := 94
 
@@ -183,7 +183,7 @@ pylint: depends-ci
 # C0111: Line too long
 # R0913: Too many arguments
 # R0914: Too many local variables
-	$(PYLINT) $(PACKAGE) tests --rcfile=.pylintrc --disable=C0111,R0913,R0914
+	$(PYLINT) $(PACKAGE) tests --rcfile=.pylintrc --disable=missing-docstring,too-many-statements
 
 .PHONY: fix
 fix: depends-dev

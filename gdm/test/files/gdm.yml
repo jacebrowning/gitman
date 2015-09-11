@@ -1,11 +1,27 @@
 location: /tmp/gdm-test-dependencies
 sources:
-- repo: https://github.com/jacebrowning/gdm-demo
-  dir: gdm_1
+- dir: gdm_1
+  link: ''
+  repo: https://github.com/jacebrowning/gdm-demo
   rev: example-branch
-- repo: https://github.com/jacebrowning/gdm-demo
-  dir: gdm_2
+- dir: gdm_2
+  link: ''
+  repo: https://github.com/jacebrowning/gdm-demo
   rev: example-tag
-- repo: https://github.com/jacebrowning/gdm-demo
-  dir: gdm_3
-  rev: 'master@{2015-06-18 11:11:11}'
+- dir: gdm_3
+  link: ''
+  repo: https://github.com/jacebrowning/gdm-demo
+  rev: master@{2015-06-18 11:11:11}
+sources_locked:
+- dir: gdm_1
+  link: ''
+  repo: https://github.com/jacebrowning/gdm-demo
+  rev: eb37743011a398b208dd9f9ef79a408c0fc10d48
+- dir: gdm_2
+  link: ''
+  repo: https://github.com/jacebrowning/gdm-demo
+  rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+- dir: gdm_3
+  link: ''
+  repo: https://github.com/jacebrowning/gdm-demo
+  rev: 2da24fca34af3748e3cab61db81a2ae8b35aec94

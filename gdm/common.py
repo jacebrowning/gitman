@@ -1,10 +1,11 @@
 """Common exceptions, classes, and functions."""
 
+import sys
 import argparse
 import logging
 
-
 from . import settings
+
 
 MAX_VERBOSITY = 4
 
@@ -91,11 +92,24 @@ def configure_logging(count=0):
         verbosity = count
 
 
-def show(msg="", log=logger(__name__)):
+_indent_level = 0
+
+
+def indent():
+    global _indent_level
+    _indent_level += 1
+
+
+def dedent():
+    global _indent_level
+    _indent_level = max(0, _indent_level - 1)
+
+
+def show(message="", file=sys.stdout, log=logger(__name__)):
     """Write to standard output or error if enabled."""
     if verbosity == 0:
-        print(msg)
+        print("  " * _indent_level + message, file=file)
     elif verbosity >= 1:
-        msg = msg.strip()
-        if msg:
-            log.info(msg)
+        message = message.strip()
+        if message and log:
+            log.info(message)

@@ -1,11 +1,11 @@
 """Unit tests for the `commands` module."""
-# pylint: disable=R0201
+# pylint: disable=no-self-use
 
 import os
 
 from .conftest import ROOT, FILES
 
-from gdm.commands import _find_root, install, uninstall, display
+from gdm.commands import _find_root, install, update, display, delete
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(ROOT))
 PROJECT_PARENT = os.path.dirname(PROJECT_ROOT)
@@ -13,12 +13,13 @@ PROJECT_PARENT = os.path.dirname(PROJECT_ROOT)
 
 class TestCommands:
 
-    def test_no_project(self, tmpdir):
-        """Verify each command can be running without a project."""
+    def test_commands_can_be_run_without_project(self, tmpdir):
         tmpdir.chdir()
+
         assert not install()
+        assert not update()
         assert display()
-        assert not uninstall()
+        assert not delete()
 
 
 class TestFindRoot:
