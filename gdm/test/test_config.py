@@ -1,5 +1,5 @@
 """Unit tests for the `config` module."""
-# pylint: disable=no-self-use
+# pylint: disable=no-self-use,redefined-outer-name
 
 from unittest.mock import Mock
 
@@ -8,6 +8,11 @@ import pytest
 from gdm.config import Source, Config, load
 
 from .conftest import FILES
+
+
+@pytest.fixture
+def source():
+    return Source(repo='repo', dir='dir', rev='rev', link='link')
 
 
 class TestSource:
@@ -49,6 +54,17 @@ class TestSource:
         source.link = None
 
         assert "<source 'repo' @ 'rev' in 'dir'>" == repr(source)
+
+    def test_sorting(self):
+        sources = [
+            Source('zzz', '123'),
+            Source('bbb', '456'),
+            Source('ccc', '456'),
+            Source('BBB', 'AAA'),
+            Source('AAA', 'AAA'),
+        ]
+
+        assert sources == sorted(sources)
 
     def test_lock_uses_the_identity_rev(self, source):
         source.identify = Mock(return_value=('path2', 'dir2', 'abc123'))

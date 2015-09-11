@@ -6,6 +6,7 @@ Revision History
 
 - Replaced 'install' command with 'update'.
 - Updated 'install' command to use locked dependency versions.
+- Now sorting sources after a successful 'update'.
 
 0.3.1 (2015/09/09)
 ------------------

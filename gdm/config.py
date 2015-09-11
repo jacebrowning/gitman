@@ -42,6 +42,9 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
             fmt += " <- '{s}'"
         return fmt.format(r=self.repo, v=self.rev, d=self.dir, s=self.link)
 
+    def __lt__(self, other):
+        return self.dir < other.dir
+
     def update_files(self, force=False, clean=True):
         """Ensure the source matches the specified revision."""
         log.info("updating source files...")
@@ -110,20 +113,14 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
 
 
 @yorm.attr(all=Source)
-class Sources(yorm.converters.List):
+class Sources(yorm.converters.SortedList):
 
     """A list of source dependencies."""
 
 
-@yorm.attr(all=Source)
-class LockedSources(Sources):
-
-    """A list of source dependencies locked to specific revisions."""
-
-
 @yorm.attr(location=yorm.converters.String)
 @yorm.attr(sources=Sources)
-@yorm.attr(sources_locked=LockedSources)
+@yorm.attr(sources_locked=Sources)
 @yorm.sync("{self.root}/{self.filename}")
 class Config(ShellMixin):
 
