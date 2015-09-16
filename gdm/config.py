@@ -216,6 +216,8 @@ class Config(ShellMixin):
 
             self.cd(self.location_path, visible=False)
 
+        common.dedent()
+
     def _get_sources(self, update):
         if update:
             return self.sources
