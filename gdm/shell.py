@@ -62,6 +62,9 @@ class ShellMixin(_Base):
             self.mkdir(dirpath)
         self._call('ln', '-s', source, target)
 
+    def rm(self, path):
+        self._call('rm', '-rf', path)
+
 
 class GitMixin(_Base):
 
@@ -85,7 +88,7 @@ class GitMixin(_Base):
                 args.append(rev)
         self._git(*args)
 
-    def git_changes(self):
+    def git_changes(self, visible=False):
         """Determine if there are changes in the working tree."""
         try:
             # refresh changes
@@ -93,10 +96,10 @@ class GitMixin(_Base):
                       visible=False, catch=False)
             # check for uncommitted changes
             self._git('diff-index', '--quiet', 'HEAD',
-                      visible=False, catch=False)
+                      visible=visible, catch=False)
             # check for untracked files
             output = self._git('ls-files', '--others', '--exclude-standard',
-                               visible=False, catch=False, capture=True)
+                               visible=visible, catch=False, capture=True)
         except common.CallException:
             return True
         else:
@@ -123,7 +126,7 @@ class GitMixin(_Base):
 
     def git_get_sha(self):
         """Get the current working tree's hash."""
-        return self._git('rev-parse', 'HEAD', visible=False, capture=True)
+        return self._git('rev-parse', 'HEAD', capture=True)
 
     def _git_get_sha_from_rev(self, rev):
         """Get a rev-parse string's hash."""

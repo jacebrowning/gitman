@@ -9,9 +9,9 @@ PYTHON_MAJOR ?= 3
 PYTHON_MINOR ?= 4
 
 # Test settings
-UNIT_TEST_COVERAGE := 75
+UNIT_TEST_COVERAGE := 73
 INTEGRATION_TEST_COVERAGE := 52
-COMBINED_TEST_COVERAGE := 94
+COMBINED_TEST_COVERAGE := 95
 
 # System paths
 PLATFORM := $(shell python -c 'import sys; print(sys.platform)')

@@ -100,9 +100,9 @@ def indent():
     _indent_level += 1
 
 
-def dedent():
+def dedent(level=None):
     global _indent_level
-    _indent_level = max(0, _indent_level - 1)
+    _indent_level = max(0, _indent_level - 1) if level is None else level
 
 
 def show(message="", file=sys.stdout, log=logger(__name__)):
