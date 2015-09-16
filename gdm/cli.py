@@ -103,13 +103,12 @@ def main(args=None, function=None):
         else:
             log.debug(msg)
     except RuntimeError as exc:
-        common.dedent(level=0)
-        common.show("\n" + str(exc) + msg)
+        msg = str(exc) + msg
     if success:
         log.debug("command succeeded")
     else:
         log.debug("command failed")
-        sys.exit(1)
+        sys.exit(msg or 1)
 
 
 if __name__ == '__main__':  # pragma: no cover (manual test)

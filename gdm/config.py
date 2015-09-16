@@ -57,6 +57,7 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
         elif not force:  # exit if there are changes
             log.debug("confirming there are no uncommitted changes...")
             if self.git_changes():
+                common.show()
                 msg = "Uncommitted changes: {}".format(os.getcwd())
                 raise RuntimeError(msg)
 
@@ -78,6 +79,7 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
                 if force:
                     self.rm(target)
                 else:
+                    common.show()
                     msg = "Preexisting link location: {}".format(target)
                     raise RuntimeError(msg)
             self.ln(source, target)
@@ -93,6 +95,7 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
             if self.git_changes(visible=True):
                 revision = "<dirty>"
                 if not allow_dirty:
+                    common.show()
                     msg = "Uncommitted changes: {}".format(os.getcwd())
                     raise RuntimeError(msg)
             else:
