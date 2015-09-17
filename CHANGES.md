@@ -8,7 +8,7 @@ Revision History
 - Updated 'install' command to use locked dependency versions.
 - Now sorting sources after a successful 'update'.
 - Now requiring '--force' to 'uninstall' with uncommitted changes.
-- Update 'list' command to show full shell commands.
+- Updated 'list' command to show full shell commands.
 
 0.3.1 (2015/09/09)
 ------------------
