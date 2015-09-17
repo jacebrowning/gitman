@@ -1,8 +1,6 @@
 """Wrappers for the dependency configuration files."""
 
 import os
-import sys
-import shutil
 import logging
 
 import yorm
@@ -59,8 +57,9 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
         elif not force:  # exit if there are changes
             log.debug("confirming there are no uncommitted changes...")
             if self.git_changes():
-                sys.exit("\n" + "uncommitted changes"
-                         " ('--force' to overwrite): {}".format(os.getcwd()))
+                common.show()
+                msg = "Uncommitted changes: {}".format(os.getcwd())
+                raise RuntimeError(msg)
 
         # Fetch the desired revision
         self.git_fetch(self.repo, self.rev)
@@ -78,28 +77,32 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
                 os.remove(target)
             elif os.path.exists(target):
                 if force:
-                    shutil.rmtree(target)
+                    self.rm(target)
                 else:
-                    sys.exit("\n" + "preexisting link location"
-                             " ('--force' to overwrite): {}".format(target))
+                    common.show()
+                    msg = "Preexisting link location: {}".format(target)
+                    raise RuntimeError(msg)
             self.ln(source, target)
 
-    def identify(self):
+    def identify(self, allow_dirty=True):
         """Get the path and current repository URL and hash."""
-        path = os.path.join(os.getcwd(), self.dir)
+        if os.path.isdir(self.dir):
 
-        if os.path.isdir(path):
-
-            self.cd(path, visible=False)
+            self.cd(self.dir)
 
             path = os.getcwd()
             url = self.git_get_url()
-            if self.git_changes():
-                sha = "<dirty>"
+            if self.git_changes(visible=True):
+                revision = "<dirty>"
+                if not allow_dirty:
+                    common.show()
+                    msg = "Uncommitted changes: {}".format(os.getcwd())
+                    raise RuntimeError(msg)
             else:
-                sha = self.git_get_sha()
+                revision = self.git_get_sha()
+            common.show(revision, log=False)
 
-            return path, url, sha
+            return path, url, revision
 
         else:
 
@@ -141,16 +144,20 @@ class Config(ShellMixin):
         """Get the full path to the configuration file."""
         return os.path.join(self.root, self.filename)
 
+    @property
+    def location_path(self):
+        """Get the full path to the sources location."""
+        return os.path.join(self.root, self.location)
+
     def install_deps(self, force=False, clean=True, update=True):
         """Get all sources, recursively."""
-        path = os.path.join(self.root, self.location)
-        if not os.path.isdir(path):
-            self.mkdir(path)
-        self.cd(path)
+        if not os.path.isdir(self.location_path):
+            self.mkdir(self.location_path)
+        self.cd(self.location_path)
 
         sources = self._get_sources(update)
-        common.indent()
         common.show()
+        common.indent()
 
         count = 0
         for source in sources:
@@ -166,7 +173,7 @@ class Config(ShellMixin):
                 count += config.install_deps(force, clean, update)
                 common.dedent()
 
-            self.cd(path, visible=False)
+            self.cd(self.location_path, visible=False)
 
         common.dedent()
 
@@ -174,28 +181,45 @@ class Config(ShellMixin):
 
     def lock_deps(self):
         """Lock down the immediate dependency versions."""
-        cwd = os.getcwd()
+        self.cd(self.location_path)
+        common.show()
+        common.indent()
+
         self.sources_locked = []
         for source in self.sources:
             self.sources_locked.append(source.lock())
-            self.cd(cwd, visible=False)
+            common.show()
 
-    def get_deps(self):
+            self.cd(self.location_path, visible=False)
+
+    def uninstall_deps(self):
+        """Remove the sources location."""
+        self.rm(self.location_path)
+        common.show()
+
+    def get_deps(self, allow_dirty=True):
         """Yield the path, repository URL, and hash of each dependency."""
-        path = os.path.join(self.root, self.location)
-
-        if os.path.exists(path):
-            self.cd(path, visible=False)
+        if os.path.exists(self.location_path):
+            self.cd(self.location_path)
+            common.show()
+            common.indent()
         else:
             return
 
         for source in self.sources:
-            yield source.identify()
-            config = load(os.getcwd())
-            if config:
-                yield from config.get_deps()
 
-            self.cd(path, visible=False)
+            yield source.identify(allow_dirty=allow_dirty)
+            common.show()
+
+            config = load()
+            if config:
+                common.indent()
+                yield from config.get_deps(allow_dirty=allow_dirty)
+                common.dedent()
+
+            self.cd(self.location_path, visible=False)
+
+        common.dedent()
 
     def _get_sources(self, update):
         if update:

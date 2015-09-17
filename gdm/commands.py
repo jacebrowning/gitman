@@ -1,7 +1,6 @@
 """Functions to manage the installation of dependencies."""
 
 import os
-import shutil
 
 from . import common
 from .config import load
@@ -39,6 +38,9 @@ def update(root=None, force=False, clean=True):
         common.show("Updating dependencies...", log=False)
         common.show()
         count = config.install_deps(force=force, clean=clean)
+        common.dedent(level=0)
+        common.show("Recording installed versions...", log=False)
+        common.show()
         config.lock_deps()
 
     _display_result("update", "updated", count)
@@ -46,7 +48,7 @@ def update(root=None, force=False, clean=True):
     return count
 
 
-def display(root=None):
+def display(root=None, allow_dirty=True):
     """Display installed dependencies for a project."""
     log.info("displaying dependencies...")
 
@@ -54,10 +56,12 @@ def display(root=None):
     config = load(root)
 
     if config:
-        common.show("Displaying dependencies...", log=False)
+        common.show("Displaying current dependency versions...", log=False)
         common.show()
-        for path, url, sha in config.get_deps():
-            common.show("{p}: {u} @ {s}".format(p=path, u=url, s=sha))
+        for path, url, revision in config.get_deps(allow_dirty=allow_dirty):
+            log.info("revision: %s", revision)
+            log.info("of repo: %s", url)
+            log.info("at path: %s", path)
         log.info("all dependencies displayed")
     else:
         log.warn("no dependencies to display")
@@ -65,7 +69,7 @@ def display(root=None):
     return True
 
 
-def delete(root=None):
+def delete(root=None, force=False):
     """Delete dependencies for a project."""
     log.info("deleting dependencies...")
 
@@ -73,10 +77,14 @@ def delete(root=None):
     config = load(root)
 
     if config:
-        common.show("Deleting dependencies...", log=False)
-        if os.path.exists(config.location):
-            log.debug("deleting '%s'...", config.location)
-            shutil.rmtree(config.location)
+        common.show("Checking for uncommitted changes...", log=False)
+        common.show()
+        for _ in config.get_deps(allow_dirty=force):
+            pass
+        common.dedent(level=0)
+        common.show("Deleting all dependencies...", log=False)
+        common.show()
+        config.uninstall_deps()
         log.info("dependencies deleted")
         return True
     else:
