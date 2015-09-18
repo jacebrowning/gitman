@@ -71,16 +71,16 @@ def main(args=None, function=None):
     # Parse arguments
     args = parser.parse_args(args=args)
     kwargs = dict(root=args.root)
-    retry_msg = ""
+    exit_msg = ""
     if args.command in ('install', 'update'):
         function = getattr(commands, args.command)
         kwargs.update(dict(force=args.force,
                            clean=args.clean))
-        retry_msg = "\n" + "Run again with '--force' to overwrite"
+        exit_msg = "\n" + "Run again with '--force' to overwrite"
     elif args.command == 'uninstall':
         function = commands.delete
         kwargs.update(dict(force=args.force))
-        retry_msg = "\n" + "Run again with '--force' to ignore"
+        exit_msg = "\n" + "Run again with '--force' to ignore"
     elif args.command == 'list':
         function = commands.display
         kwargs.update(dict(allow_dirty=args.no_dirty))
@@ -93,7 +93,6 @@ def main(args=None, function=None):
 
     # Run the program
     success = False
-    exit_msg = ""
     try:
         log.debug("running command...")
         success = function(**kwargs)
@@ -104,7 +103,9 @@ def main(args=None, function=None):
         else:
             log.debug(msg)
     except RuntimeError as exc:
-        exit_msg = str(exc) + retry_msg
+        exit_msg = str(exc) + exit_msg
+    else:
+        exit_msg = ""
     if success:
         log.debug("command succeeded")
     else:
