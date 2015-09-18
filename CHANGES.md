@@ -1,8 +1,8 @@
 Revision History
 ================
 
-0.4 (dev)
----------
+0.4 (2015/09/18)
+----------------
 
 - Replaced 'install' command with 'update'.
 - Updated 'install' command to use locked dependency versions.
