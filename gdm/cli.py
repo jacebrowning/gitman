@@ -44,27 +44,46 @@ def main(args=None, function=None):
     sub.add_argument('-C', '--no-clean', action='store_false', dest='clean',
                      help="keep ignored files in dependencies")
 
-    # Uninstall parser
-    info = "remove all installed dependencies"
-    subs.add_parser('uninstall', description=info.capitalize() + '.',
-                    help=info, **shared)
+    # Update parser
+    info = "update all dependencies to the latest versions"
+    sub = subs.add_parser('update', description=info.capitalize() + '.',
+                          help=info, **shared)
+    # TODO: share these with 'install'
+    sub.add_argument('-f', '--force', action='store_true',
+                     help="overwrite uncommitted changes in dependencies")
+    sub.add_argument('-C', '--no-clean', action='store_false', dest='clean',
+                     help="keep ignored files in dependencies")
 
     # Display parser
-    info = "show the current hash of each dependency"
-    subs.add_parser('list', description=info.capitalize() + '.',
-                    help=info, **shared)
+    info = "display the current version of each dependency"
+    sub = subs.add_parser('list', description=info.capitalize() + '.',
+                          help=info, **shared)
+    sub.add_argument('-D', '--no-dirty', action='store_false',
+                     help="fail if a source has uncommitted changes")
+
+    # Uninstall parser
+    info = "delete all installed dependencies"
+    sub = subs.add_parser('uninstall', description=info.capitalize() + '.',
+                          help=info, **shared)
+    sub.add_argument('-f', '--force', action='store_true',
+                     help="delete uncommitted changes in dependencies")
 
     # Parse arguments
     args = parser.parse_args(args=args)
     kwargs = dict(root=args.root)
-    if args.command == 'install':
-        function = commands.install
+    exit_msg = ""
+    if args.command in ('install', 'update'):
+        function = getattr(commands, args.command)
         kwargs.update(dict(force=args.force,
                            clean=args.clean))
+        exit_msg = "\n" + "Run again with '--force' to overwrite"
     elif args.command == 'uninstall':
-        function = commands.uninstall
+        function = commands.delete
+        kwargs.update(dict(force=args.force))
+        exit_msg = "\n" + "Run again with '--force' to ignore"
     elif args.command == 'list':
         function = commands.display
+        kwargs.update(dict(allow_dirty=args.no_dirty))
     if function is None:
         parser.print_help()
         sys.exit(1)
@@ -73,21 +92,25 @@ def main(args=None, function=None):
     common.configure_logging(args.verbose)
 
     # Run the program
+    success = False
     try:
         log.debug("running command...")
         success = function(**kwargs)
     except KeyboardInterrupt:
-        msg = "command cancelled"
+        msg = "command canceled"
         if common.verbosity == common.MAX_VERBOSITY:
             log.exception(msg)
         else:
             log.debug(msg)
-        success = False
+    except RuntimeError as exc:
+        exit_msg = str(exc) + exit_msg
+    else:
+        exit_msg = ""
     if success:
         log.debug("command succeeded")
     else:
         log.debug("command failed")
-        sys.exit(1)
+        sys.exit(exit_msg or 1)
 
 
 if __name__ == '__main__':  # pragma: no cover (manual test)

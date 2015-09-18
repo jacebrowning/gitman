@@ -1,8 +1,6 @@
 """Wrappers for the dependency configuration files."""
 
 import os
-import sys
-import shutil
 import logging
 
 import yorm
@@ -42,6 +40,9 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
             fmt += " <- '{s}'"
         return fmt.format(r=self.repo, v=self.rev, d=self.dir, s=self.link)
 
+    def __lt__(self, other):
+        return self.dir < other.dir
+
     def update_files(self, force=False, clean=True):
         """Ensure the source matches the specified revision."""
         log.info("updating source files...")
@@ -56,8 +57,9 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
         elif not force:  # exit if there are changes
             log.debug("confirming there are no uncommitted changes...")
             if self.git_changes():
-                sys.exit("\n" + "uncommitted changes"
-                         " ('--force' to overwrite): {}".format(os.getcwd()))
+                common.show()
+                msg = "Uncommitted changes: {}".format(os.getcwd())
+                raise RuntimeError(msg)
 
         # Fetch the desired revision
         self.git_fetch(self.repo, self.rev)
@@ -75,43 +77,54 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
                 os.remove(target)
             elif os.path.exists(target):
                 if force:
-                    shutil.rmtree(target)
+                    self.rm(target)
                 else:
-                    sys.exit("\n" + "preexisting link location"
-                             " ('--force' to overwrite): {}".format(target))
+                    common.show()
+                    msg = "Preexisting link location: {}".format(target)
+                    raise RuntimeError(msg)
             self.ln(source, target)
 
-    def identify(self):
+    def identify(self, allow_dirty=True):
         """Get the path and current repository URL and hash."""
-        path = os.path.join(os.getcwd(), self.dir)
+        if os.path.isdir(self.dir):
 
-        if os.path.isdir(path):
-
-            self.cd(path, visible=False)
+            self.cd(self.dir)
 
             path = os.getcwd()
             url = self.git_get_url()
-            if self.git_changes():
-                sha = "<dirty>"
+            if self.git_changes(visible=True):
+                revision = "<dirty>"
+                if not allow_dirty:
+                    common.show()
+                    msg = "Uncommitted changes: {}".format(os.getcwd())
+                    raise RuntimeError(msg)
             else:
-                sha = self.git_get_sha()
+                revision = self.git_get_sha()
+            common.show(revision, log=False)
 
-            return path, url, sha
+            return path, url, revision
 
         else:
 
             return path, "<missing>", "<unknown>"
 
+    def lock(self):
+        """Return a locked version of the current source."""
+        _, _, sha = self.identify()
+        source = self.__class__(self.repo, self.dir, sha, self.link)
+        return source
+
 
 @yorm.attr(all=Source)
-class Sources(yorm.converters.List):
+class Sources(yorm.converters.SortedList):
 
     """A list of source dependencies."""
 
 
 @yorm.attr(location=yorm.converters.String)
 @yorm.attr(sources=Sources)
-@yorm.sync("{self.root}/{self.filename}", auto=False)
+@yorm.attr(sources_locked=Sources)
+@yorm.sync("{self.root}/{self.filename}")
 class Config(ShellMixin):
 
     """A dictionary of dependency configuration options."""
@@ -124,79 +137,110 @@ class Config(ShellMixin):
         self.filename = filename
         self.location = location
         self.sources = []
+        self.sources_locked = []
 
     @property
     def path(self):
         """Get the full path to the configuration file."""
         return os.path.join(self.root, self.filename)
 
-    def install_deps(self, force=False, clean=True):
+    @property
+    def location_path(self):
+        """Get the full path to the sources location."""
+        return os.path.join(self.root, self.location)
+
+    def install_deps(self, force=False, clean=True, update=True):
         """Get all sources, recursively."""
-        path = os.path.join(self.root, self.location)
+        if not os.path.isdir(self.location_path):
+            self.mkdir(self.location_path)
+        self.cd(self.location_path)
 
-        if not self.indent:
-            common.show()
-
-        if not os.path.isdir(path):
-            self.mkdir(path)
-        self.cd(path)
+        sources = self._get_sources(update)
         common.show()
+        common.indent()
 
         count = 0
-        for source in self.sources:
+        for source in sources:
+            count += 1
 
-            source.indent = self.indent + self.INDENT
             source.update_files(force=force, clean=clean)
             source.create_link(self.root, force=force)
-            count += 1
             common.show()
 
-            count += install_deps(root=os.getcwd(), force=force, clean=clean,
-                                  indent=source.indent + self.INDENT)
+            config = load()
+            if config:
+                common.indent()
+                count += config.install_deps(force, clean, update)
+                common.dedent()
 
-            self.cd(path, visible=False)
+            self.cd(self.location_path, visible=False)
+
+        common.dedent()
 
         return count
 
-    def get_deps(self):
-        """Yield the path, repository URL, and hash of each dependency."""
-        path = os.path.join(self.root, self.location)
+    def lock_deps(self):
+        """Lock down the immediate dependency versions."""
+        self.cd(self.location_path)
+        common.show()
+        common.indent()
 
-        if os.path.exists(path):
-            self.cd(path, visible=False)
+        self.sources_locked = []
+        for source in self.sources:
+            self.sources_locked.append(source.lock())
+            common.show()
+
+            self.cd(self.location_path, visible=False)
+
+    def uninstall_deps(self):
+        """Remove the sources location."""
+        self.rm(self.location_path)
+        common.show()
+
+    def get_deps(self, allow_dirty=True):
+        """Yield the path, repository URL, and hash of each dependency."""
+        if os.path.exists(self.location_path):
+            self.cd(self.location_path)
+            common.show()
+            common.indent()
         else:
             return
 
         for source in self.sources:
-            yield source.identify()
-            yield from get_deps(root=os.getcwd())
 
-            self.cd(path, visible=False)
+            yield source.identify(allow_dirty=allow_dirty)
+            common.show()
+
+            config = load()
+            if config:
+                common.indent()
+                yield from config.get_deps(allow_dirty=allow_dirty)
+                common.dedent()
+
+            self.cd(self.location_path, visible=False)
+
+        common.dedent()
+
+    def _get_sources(self, update):
+        if update:
+            return self.sources
+        elif self.sources_locked:
+            return self.sources_locked
+        else:
+            log.warn("no locked sources available, installing latest...")
+            return self.sources
 
 
-def load(root):
+def load(root=None):
     """Load the configuration for the current project."""
-    config = None
+    if root is None:
+        root = os.getcwd()
+
     for filename in os.listdir(root):
         if filename.lower() in Config.FILENAMES:
             config = Config(root, filename)
             log.debug("loaded config: %s", config.path)
-            break
-    return config
+            return config
 
-
-def install_deps(root, force=False, clean=True, indent=0):
-    """Install the dependences listed in the project's configuration file."""
-    config = load(root)
-    if config:
-        config.indent = indent
-        return config.install_deps(force=force, clean=clean)
-    else:
-        return 0
-
-
-def get_deps(root):
-    """Get the path, repository URL, and hash of each installed dependency."""
-    config = load(root)
-    if config:
-        yield from config.get_deps()
+    log.debug("no config found in: %s", root)
+    return None

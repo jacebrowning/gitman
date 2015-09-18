@@ -4,12 +4,16 @@ language: python
 python:
 - 3.3
 - 3.4
+- 3.5
 
 cache: pip
 
 before_install:
 - sudo add-apt-repository ppa:git-core/ppa -y
 - sudo apt-get update
+env:
+  global:
+  - RANDOM_SEED=12345
 
 install:
 - sudo apt-get install git; git --version

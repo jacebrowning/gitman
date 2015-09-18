@@ -1,57 +1,95 @@
 """Functions to manage the installation of dependencies."""
 
 import os
-import shutil
 
 from . import common
-from .config import load, install_deps, get_deps
+from .config import load
 
 log = common.logger(__name__)
 
 
 def install(root=None, force=False, clean=True):
     """Install dependencies for a project."""
-    root = _find_root(root)
-
     log.info("%sinstalling dependencies...", 'force-' if force else '')
-    count = install_deps(root, force=force, clean=clean)
-    if count == 1:
-        log.info("installed 1 dependency")
-    elif count > 1:
-        log.info("installed %s dependencies", count)
-    else:
-        log.warn("no dependencies installed")
+    count = None
+
+    root = _find_root(root)
+    config = load(root)
+
+    if config:
+        common.show("Installing dependencies...", log=False)
+        common.show()
+        count = config.install_deps(force=force, clean=clean, update=False)
+
+    _display_result("install", "installed", count)
 
     return count
 
 
-def uninstall(root=None):
-    """Uninstall dependencies for a project."""
-    root = _find_root(root)
+def update(root=None, force=False, clean=True):
+    """Update dependencies for a project."""
+    log.info("%supdating dependencies...", 'force-' if force else '')
+    count = None
 
-    log.info("uninstalling dependencies...")
+    root = _find_root(root)
     config = load(root)
+
     if config:
-        if os.path.exists(config.location):
-            log.debug("deleting '%s'...", config.location)
-            shutil.rmtree(config.location)
-        log.info("dependencies uninstalled")
-        return True
-    else:
-        log.warn("no dependencies to uninstall")
-        return False
+        common.show("Updating dependencies...", log=False)
+        common.show()
+        count = config.install_deps(force=force, clean=clean)
+        common.dedent(level=0)
+        common.show("Recording installed versions...", log=False)
+        common.show()
+        config.lock_deps()
+
+    _display_result("update", "updated", count)
+
+    return count
 
 
-def display(root=None):
+def display(root=None, allow_dirty=True):
     """Display installed dependencies for a project."""
-    root = _find_root(root)
-
     log.info("displaying dependencies...")
-    for path, url, sha in get_deps(root):
-        common.show("{p}: {u} @ {s}".format(p=path, u=url, s=sha))
-    log.info("all dependencies displayed")
+
+    root = _find_root(root)
+    config = load(root)
+
+    if config:
+        common.show("Displaying current dependency versions...", log=False)
+        common.show()
+        for path, url, revision in config.get_deps(allow_dirty=allow_dirty):
+            log.info("revision: %s", revision)
+            log.info("of repo: %s", url)
+            log.info("at path: %s", path)
+        log.info("all dependencies displayed")
+    else:
+        log.warn("no dependencies to display")
 
     return True
+
+
+def delete(root=None, force=False):
+    """Delete dependencies for a project."""
+    log.info("deleting dependencies...")
+
+    root = _find_root(root)
+    config = load(root)
+
+    if config:
+        common.show("Checking for uncommitted changes...", log=False)
+        common.show()
+        for _ in config.get_deps(allow_dirty=force):
+            pass
+        common.dedent(level=0)
+        common.show("Deleting all dependencies...", log=False)
+        common.show()
+        config.uninstall_deps()
+        log.info("dependencies deleted")
+        return True
+    else:
+        log.warn("no dependencies to delete")
+        return False
 
 
 def _find_root(root, cwd=None):
@@ -81,3 +119,12 @@ def _find_root(root, cwd=None):
             log.warning("no root found, default: %s", root)
 
     return root
+
+
+def _display_result(present, past, count):
+    if count is None:
+        log.warn("no dependencies to %s", present)
+    elif count == 1:
+        log.info("%s 1 dependency", past)
+    else:
+        log.info("%s %s dependencies", past, count)

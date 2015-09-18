@@ -1,6 +1,15 @@
 Revision History
 ================
 
+0.4 (2015/09/18)
+----------------
+
+- Replaced 'install' command with 'update'.
+- Updated 'install' command to use locked dependency versions.
+- Now sorting sources after a successful 'update'.
+- Now requiring '--force' to 'uninstall' with uncommitted changes.
+- Updated 'list' command to show full shell commands.
+
 0.3.1 (2015/09/09)
 ------------------
 
@@ -9,34 +18,34 @@ Revision History
 0.3 (2015/06/26)
 ----------------
 
-- Add '--no-clean' option to disable removing untracked files.
-- Add support for `rev-parse` dates as the dependency `rev`.
+- Added '--no-clean' option to disable removing untracked files.
+- Added support for `rev-parse` dates as the dependency `rev`.
 
 0.2.5 (2015/06/15)
 ------------------
 
-- Hide warnings with '--quiet' option.
+- Added '--quiet' option to hide warnings.
 
 0.2.4 (2015/05/19)
 ------------------
 
-- Hide YORM logging bellow warnings.
+- Now hiding YORM logging bellow warnings.
 
 0.2.3 (2015/05/17)
 ------------------
 
-- Upgrade to YORM v0.4
+- Upgraded to YORM v0.4.
 
 0.2.2 (2015/05/04)
 ------------------
 
-- Require YORM < v0.4
+- Specified YORM < v0.4.
 
 0.2.1 (2015/03/12)
 ------------------
 
-- Automatically track dependencies that are on branches.
-- Require '--force' when there are untracked files.
+- Added automatic remote branch tracking in dependencies.
+- Now requiring '--force' when there are untracked files.
 
 0.2 (2015/03/10)
 ----------------

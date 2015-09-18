@@ -57,18 +57,28 @@ $ echo .gdm >> .gitignore
 Basic Usage
 ===========
 
-Get the specified versions of all dependencies:
+See the available commands:
 
 ```
-$ gdm install
+$ gdm --help
+```
+
+Updating Dependencies
+---------------------
+
+Get the latest versions of all dependencies:
+
+```
+$ gdm update
 ```
 
 which will essentially:
 
 1. create a working tree at _root_/`location`/`dir`
 2. fetch from `repo` and checkout the specified `rev`
-3. symbolicly link each `location`/`dir` from _root_/`link` (optional)
+3. symbolically link each `location`/`dir` from _root_/`link` (optional)
 4. repeat for all nested working trees containing a configuration file
+5. record the actual commit SHAs that were checked out
 
 where `rev` can be:
 
@@ -77,13 +87,25 @@ where `rev` can be:
 * a branch: `master`
 * a `rev-parse` date: `'develop@{2015-06-18 10:30:59}'`
 
-To display the specific versions installed:
+Restoring Previous Versions
+---------------------------
+
+Display the specific revisions that are currently installed:
 
 ```
 $ gdm list
 ```
 
-To remove all installed dependencies:
+Reinstall these specific versions at a later time:
+
+```
+$ gdm install
+```
+
+Deleting Dependencies
+---------------------
+
+Remove all installed dependencies:
 
 ```
 $ gdm uninstall

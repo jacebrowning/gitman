@@ -1,5 +1,5 @@
 """Unit tests for the 'cli' module."""
-# pylint: disable=R0201
+# pylint: disable=no-self-use
 
 import pytest
 from unittest.mock import Mock, patch
@@ -46,10 +46,15 @@ class TestMain:
             cli.main(['-vvvv'], Mock(side_effect=KeyboardInterrupt))
         assert mock_log.exception.call_count == 1
 
+    def test_main_error(self):
+        """Verify runtime errors are handled."""
+        with pytest.raises(SystemExit):
+            cli.main([], Mock(side_effect=RuntimeError))
 
-class TestInstall:
 
-    """Unit tests for the `install` command."""
+class TestInstallAndUpdate:
+
+    """Unit tests for the `install` and `update` commands."""
 
     @patch('gdm.commands.install')
     def test_install(self, mock_install):
@@ -79,22 +84,36 @@ class TestInstall:
         mock_install.assert_called_once_with(root=None,
                                              force=False, clean=False)
 
+    @patch('gdm.commands.update')
+    def test_update(self, mock_update):
+        """Verify the 'update' command can be run."""
+        cli.main(['update'])
+        mock_update.assert_called_once_with(root=None,
+                                            force=False, clean=True)
+
 
 class TestUninstall:
 
     """Unit tests for the `uninstall` command."""
 
-    @patch('gdm.commands.uninstall')
+    @patch('gdm.commands.delete')
     def test_uninstall(self, mock_uninstall):
         """Verify the 'uninstall' command can be run."""
         cli.main(['uninstall'])
-        mock_uninstall.assert_called_once_with(root=None)
+        mock_uninstall.assert_called_once_with(root=None, force=False)
 
-    @patch('gdm.commands.uninstall')
+    @patch('gdm.commands.delete')
     def test_uninstall_root(self, mock_uninstall):
         """Verify the project's root can be specified."""
         cli.main(['uninstall', '--root', 'mock/path/to/root'])
-        mock_uninstall.assert_called_once_with(root='mock/path/to/root')
+        mock_uninstall.assert_called_once_with(root='mock/path/to/root',
+                                               force=False)
+
+    @patch('gdm.commands.delete')
+    def test_uninstall_force(self, mock_uninstall):
+        """Verify the 'uninstall' command can be forced."""
+        cli.main(['uninstall', '--force'])
+        mock_uninstall.assert_called_once_with(root=None, force=True)
 
 
 class TestList:
@@ -105,13 +124,20 @@ class TestList:
     def test_list(self, mock_display):
         """Verify the 'list' command can be run."""
         cli.main(['list'])
-        mock_display.assert_called_once_with(root=None)
+        mock_display.assert_called_once_with(root=None, allow_dirty=True)
 
     @patch('gdm.commands.display')
     def test_list_root(self, mock_display):
         """Verify the project's root can be specified."""
         cli.main(['list', '--root', 'mock/path/to/root'])
-        mock_display.assert_called_once_with(root='mock/path/to/root')
+        mock_display.assert_called_once_with(root='mock/path/to/root',
+                                             allow_dirty=True)
+
+    @patch('gdm.commands.display')
+    def test_list_no_dirty(self, mock_display):
+        """Verify the 'list' command can be set to fail when dirty."""
+        cli.main(['list', '--no-dirty'])
+        mock_display.assert_called_once_with(root=None, allow_dirty=False)
 
 
 class TestLogging:

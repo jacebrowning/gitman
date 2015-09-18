@@ -1,5 +1,5 @@
 """Unit tests for the `shell` module."""
-# pylint: disable=R0201
+# pylint: disable=no-self-use
 
 from unittest.mock import patch, Mock
 
@@ -85,6 +85,11 @@ class TestShell(_BaseTestCalls):
         self.shell.ln('mock/target', 'mock/source')
         self.assert_calls(mock_call, ["mkdir -p mock",
                                       "ln -s mock/target mock/source"])
+
+    def test_rm(self, mock_call):
+        """Verify the commands to delete files/folders."""
+        self.shell.rm('mock/dir/path')
+        self.assert_calls(mock_call, ["rm -rf mock/dir/path"])
 
 
 @patch('gdm.shell._call')
