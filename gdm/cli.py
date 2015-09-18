@@ -71,16 +71,16 @@ def main(args=None, function=None):
     # Parse arguments
     args = parser.parse_args(args=args)
     kwargs = dict(root=args.root)
-    msg = ""
+    retry_msg = ""
     if args.command in ('install', 'update'):
         function = getattr(commands, args.command)
         kwargs.update(dict(force=args.force,
                            clean=args.clean))
-        msg = "\n" + "Run again with '--force' to overwrite"
+        retry_msg = "\n" + "Run again with '--force' to overwrite"
     elif args.command == 'uninstall':
         function = commands.delete
         kwargs.update(dict(force=args.force))
-        msg = "\n" + "Run again with '--force' to ignore"
+        retry_msg = "\n" + "Run again with '--force' to ignore"
     elif args.command == 'list':
         function = commands.display
         kwargs.update(dict(allow_dirty=args.no_dirty))
@@ -93,6 +93,7 @@ def main(args=None, function=None):
 
     # Run the program
     success = False
+    exit_msg = ""
     try:
         log.debug("running command...")
         success = function(**kwargs)
@@ -103,12 +104,12 @@ def main(args=None, function=None):
         else:
             log.debug(msg)
     except RuntimeError as exc:
-        msg = str(exc) + msg
+        exit_msg = str(exc) + retry_msg
     if success:
         log.debug("command succeeded")
     else:
         log.debug("command failed")
-        sys.exit(msg or 1)
+        sys.exit(exit_msg or 1)
 
 
 if __name__ == '__main__':  # pragma: no cover (manual test)
