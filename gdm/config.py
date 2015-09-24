@@ -49,12 +49,12 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
 
         # Enter the working tree
         if not os.path.exists(self.dir):
-            self.mkdir(self.dir)
-        self.cd(self.dir)
-        if not os.path.exists('.git'):  # create it if needed
             log.debug("creating a new repository...")
-            self.git_create()
-        elif not force:  # exit if there are changes
+            self.git_clone(self.repo, self.dir)
+        self.cd(self.dir)
+
+        # Check for uncommitted changes
+        if not force:
             log.debug("confirming there are no uncommitted changes...")
             if self.git_changes():
                 common.show()

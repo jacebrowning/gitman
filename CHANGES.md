@@ -1,6 +1,11 @@
 Revision History
 ================
 
+0.4.1 (dev)
+-----------
+
+- Switched to cloning for initial working tree creation.
+
 0.4 (2015/09/18)
 ----------------
 
