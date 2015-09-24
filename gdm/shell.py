@@ -70,9 +70,9 @@ class GitMixin(_Base):
 
     """Provides classes with Git utilities."""
 
-    def git_create(self):
-        """Initialize a new Git repository."""
-        self._git('init')
+    def git_clone(self, repo, path):
+        """Clone a new Git repository."""
+        self._git('clone', repo, path)
 
     def git_fetch(self, repo, rev=None):
         """Fetch the latest changes from the remote repository."""

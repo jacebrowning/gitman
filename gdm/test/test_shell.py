@@ -99,10 +99,10 @@ class TestGit(_BaseTestCalls):
 
     shell = GitMixin()
 
-    def test_create(self, mock_call):
-        """Verify the commands to create a new Git repository."""
-        self.shell.git_create()
-        self.assert_calls(mock_call, ["git init"])
+    def test_clone(self, mock_call):
+        """Verify the commands to clone a new Git repository."""
+        self.shell.git_clone('mock.git', 'mock/path')
+        self.assert_calls(mock_call, ["git clone mock.git mock/path"])
 
     def test_fetch(self, mock_call):
         """Verify the commands to fetch from a Git repository."""
