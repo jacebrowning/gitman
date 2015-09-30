@@ -4,13 +4,13 @@
 
 import setuptools
 
-from gdm import __project__, __version__, CLI, DESCRIPTION
+from gdm import __project__, __version__, CLI, PLUGIN, DESCRIPTION
 
 import os
 if os.path.exists('README.rst'):
     README = open('README.rst').read()
 else:
-    README = ""  # a placeholder, readme is generated on release
+    README = ""  # a placeholder, README is generated on release
 CHANGES = open('CHANGES.md').read()
 
 
@@ -25,7 +25,10 @@ setuptools.setup(
 
     packages=setuptools.find_packages(),
 
-    entry_points={'console_scripts': [CLI + ' = gdm.cli:main']},
+    entry_points={'console_scripts': [
+        CLI + ' = gdm.cli:main',
+        'git-' + PLUGIN + ' = gdm.plugin:main',
+    ]},
 
     long_description=(README + '\n' + CHANGES),
     license='MIT',
