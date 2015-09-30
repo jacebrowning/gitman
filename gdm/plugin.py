@@ -19,29 +19,41 @@ def main(args=None):
 
     # Main parser
     parser = argparse.ArgumentParser(prog=PROG, description=DESCRIPTION)
-    parser.add_argument('-f', '--force', action='store_true',
-                        help="overwrite uncommitted changes in dependencies")
-    parser.add_argument('-C', '--no-clean', action='store_false', dest='clean',
-                        help="keep ignored files when updating dependencies")
+    parser.add_argument(
+        '-f', '--force', action='store_true',
+        help="overwrite uncommitted changes in dependencies",
+    )
+    parser.add_argument(
+        '-c', '--clean', action='store_true',
+        help="keep ignored files when updating dependencies",
+    )
+
+    # Options group
     group = parser.add_mutually_exclusive_group()
+    shared = dict(action='store_const', dest='command')
 
     # Update option
-    info = "update all dependencies to the latest versions"
-    group.add_argument('-u', '--update', action='store_const', const='update',
-                       dest='command', help=info)
+    group.add_argument(
+        '-u', '--update', const='update',
+        help="update all dependencies to the latest versions", **shared
+    )
 
     # Display option
-    info = "display the current version of each dependency"
-    group.add_argument('-l', '--list', action='store_const', const='list',
-                       dest='command', help=info)
+    group.add_argument(
+        '-l', '--list', const='list',
+        help="display the current version of each dependency", **shared
+    )
 
     # Uninstall option
-    info = "delete all installed dependencies"
-    group.add_argument('-x', '--uninstall', action='store_const',
-                       const='uninstall', dest='command', help=info)
+    group.add_argument(
+        '-x', '--uninstall', const='uninstall',
+        help="delete all installed dependencies", **shared
+    )
 
     # Parse arguments
     args = parser.parse_args(args=args)
+
+    # Modify arguments to match CLI interface
     if not args.command:
         args.command = 'install'
     args.root = None

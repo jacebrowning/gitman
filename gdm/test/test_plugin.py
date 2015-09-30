@@ -16,17 +16,17 @@ class TestMain:
         plugin.main([])
 
         assert [
-            call.install(root=None, clean=True, force=False),
+            call.install(root=None, clean=False, force=False),
             call.install().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
     @patch('gdm.cli.commands')
     def test_update(self, mock_commands):
         """Verify 'update' can be invoked with an option."""
-        plugin.main(['--update', '--no-clean'])
+        plugin.main(['--update', '--clean'])
 
         assert [
-            call.update(root=None, clean=False, force=False),
+            call.update(root=None, clean=True, force=False),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
