@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Command-line interface."""
 
@@ -59,6 +59,7 @@ def main(args=None, function=None):
     sub = subs.add_parser('list', description=info.capitalize() + '.',
                           help=info, **shared)
     sub.add_argument('-D', '--no-dirty', action='store_false',
+                     dest='allow_dirty',
                      help="fail if a source has uncommitted changes")
 
     # Uninstall parser
@@ -70,28 +71,39 @@ def main(args=None, function=None):
 
     # Parse arguments
     args = parser.parse_args(args=args)
-    kwargs = dict(root=args.root)
-    exit_msg = ""
-    if args.command in ('install', 'update'):
-        function = getattr(commands, args.command)
-        kwargs.update(dict(force=args.force,
-                           clean=args.clean))
-        exit_msg = "\n" + "Run again with '--force' to overwrite"
-    elif args.command == 'uninstall':
-        function = commands.delete
-        kwargs.update(dict(force=args.force))
-        exit_msg = "\n" + "Run again with '--force' to ignore"
-    elif args.command == 'list':
-        function = commands.display
-        kwargs.update(dict(allow_dirty=args.no_dirty))
-    if function is None:
-        parser.print_help()
-        sys.exit(1)
 
     # Configure logging
     common.configure_logging(args.verbose)
 
     # Run the program
+    function, kwargs, exit_msg = _get_command(function, args)
+    if function is None:
+        parser.print_help()
+        sys.exit(1)
+    _run_command(function, kwargs, exit_msg)
+
+
+def _get_command(function, args):
+    kwargs = dict(root=args.root)
+    exit_msg = ""
+
+    if args.command in ('install', 'update'):
+        function = getattr(commands, args.command)
+        kwargs.update(dict(force=args.force,
+                           clean=args.clean))
+        exit_msg = "\n" + "Run again with '--force' to overwrite"
+    elif args.command == 'list':
+        function = commands.display
+        kwargs.update(dict(allow_dirty=args.allow_dirty))
+    elif args.command == 'uninstall':
+        function = commands.delete
+        kwargs.update(dict(force=args.force))
+        exit_msg = "\n" + "Run again with '--force' to ignore"
+
+    return function, kwargs, exit_msg
+
+
+def _run_command(function, kwargs, exit_msg):
     success = False
     try:
         log.debug("running command...")

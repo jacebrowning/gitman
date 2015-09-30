@@ -3,9 +3,10 @@
 import sys
 
 __project__ = 'GDM'
-__version__ = '0.4.1'
+__version__ = '0.5dev1'
 
 CLI = 'gdm'
+PLUGIN = 'deps'
 VERSION = __project__ + ' v' + __version__
 DESCRIPTION = "A language-agnostic \"dependency manager\" using Git."
 

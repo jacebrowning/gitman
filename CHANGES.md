@@ -1,6 +1,11 @@
 Revision History
 ================
 
+0.5 (unreleased)
+----------------
+
+- Added Git plugin support via: `git deps`
+
 0.4.1 (2015/09/24)
 ------------------
 
