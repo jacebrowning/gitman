@@ -5,6 +5,8 @@ Revision History
 ----------------
 
 - Added Git plugin support via: `git deps`
+- Removed '--no-clean' option (now the default) on 'install' and 'update'.
+- Added '--clean' option to delete ignored files on 'install' and 'update'.
 
 0.4.1 (2015/09/24)
 ------------------

@@ -41,7 +41,7 @@ def main(args=None, function=None):
                           help=info, **shared)
     sub.add_argument('-f', '--force', action='store_true',
                      help="overwrite uncommitted changes in dependencies")
-    sub.add_argument('-C', '--no-clean', action='store_false', dest='clean',
+    sub.add_argument('-c', '--clean', action='store_true',
                      help="keep ignored files in dependencies")
 
     # Update parser
@@ -51,7 +51,7 @@ def main(args=None, function=None):
     # TODO: share these with 'install'
     sub.add_argument('-f', '--force', action='store_true',
                      help="overwrite uncommitted changes in dependencies")
-    sub.add_argument('-C', '--no-clean', action='store_false', dest='clean',
+    sub.add_argument('-c', '--clean', action='store_true',
                      help="keep ignored files in dependencies")
 
     # Display parser
