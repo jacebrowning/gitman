@@ -80,9 +80,7 @@ class GitMixin(_Base):
         self._git('remote', 'add', 'origin', repo)
         args = ['fetch', '--tags', '--force', '--prune', 'origin']
         if rev:
-            if len(rev) == 40:
-                pass  # fetch doesn't work with SHAs
-            elif '@' in rev:
+            if '@' in rev:
                 pass  # fetch doesn't work with rev-parse
             else:
                 args.append(rev)

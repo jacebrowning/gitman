@@ -128,7 +128,7 @@ class TestGit(_BaseTestCalls):
         self.assert_calls(mock_call, [
             "git remote remove origin",
             "git remote add origin mock.git",
-            "git fetch --tags --force --prune origin",
+            "git fetch --tags --force --prune origin " + "abcdef1234" * 4,
         ])
 
     def test_fetch_rev_revparse(self, mock_call):
