@@ -114,6 +114,7 @@ def _run_command(function, kwargs, exit_msg):
             log.exception(msg)
         else:
             log.debug(msg)
+        exit_msg = ""
     except RuntimeError as exc:
         exit_msg = str(exc) + exit_msg
     else:
