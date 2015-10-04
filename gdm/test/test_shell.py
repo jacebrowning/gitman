@@ -110,7 +110,9 @@ class TestGit(_BaseTestCalls):
         self.assert_calls(mock_call, [
             "git remote remove origin",
             "git remote add origin mock.git",
+            "sh -c 'for remote in `git branch -r`; do git branch --track $remote; done'",
             "git fetch --tags --force --prune origin",
+            "git pull --all",
         ])
 
     def test_fetch_rev(self, mock_call):
@@ -119,7 +121,9 @@ class TestGit(_BaseTestCalls):
         self.assert_calls(mock_call, [
             "git remote remove origin",
             "git remote add origin mock.git",
+            "sh -c 'for remote in `git branch -r`; do git branch --track $remote; done'",
             "git fetch --tags --force --prune origin mock-rev",
+            "git pull --all",
         ])
 
     def test_fetch_rev_sha(self, mock_call):
@@ -128,7 +132,9 @@ class TestGit(_BaseTestCalls):
         self.assert_calls(mock_call, [
             "git remote remove origin",
             "git remote add origin mock.git",
-            "git fetch --tags --force --prune origin " + "abcdef1234" * 4,
+            "sh -c 'for remote in `git branch -r`; do git branch --track $remote; done'",
+            "git fetch --tags --force --prune origin",
+            "git pull --all",
         ])
 
     def test_fetch_rev_revparse(self, mock_call):
@@ -137,7 +143,9 @@ class TestGit(_BaseTestCalls):
         self.assert_calls(mock_call, [
             "git remote remove origin",
             "git remote add origin mock.git",
+            "sh -c 'for remote in `git branch -r`; do git branch --track $remote; done'",
             "git fetch --tags --force --prune origin",
+            "git pull --all",
         ])
 
     def test_changes(self, mock_call):
