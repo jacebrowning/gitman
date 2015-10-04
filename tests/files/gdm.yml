@@ -16,7 +16,7 @@ sources_locked:
 - dir: gdm_1
   link: ''
   repo: https://github.com/jacebrowning/gdm-demo
-  rev: eb37743011a398b208dd9f9ef79a408c0fc10d48
+  rev: 63ddfd82d308ddae72d31b61cb8942c898fa05b5
 - dir: gdm_2
   link: ''
   repo: https://github.com/jacebrowning/gdm-demo

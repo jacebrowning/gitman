@@ -78,15 +78,17 @@ class GitMixin(_Base):
         """Fetch the latest changes from the remote repository."""
         self._git('remote', 'remove', 'origin', visible=False, ignore=True)
         self._git('remote', 'add', 'origin', repo)
+        self._call('sh', '-c', "'for remote in `git branch -r`; do git branch --track $remote; done'")
         args = ['fetch', '--tags', '--force', '--prune', 'origin']
         if rev:
             if len(rev) == 40:
-                pass  # fetch doesn't work with SHAs
+                pass  # fetch only work with a SHA if already present locally
             elif '@' in rev:
                 pass  # fetch doesn't work with rev-parse
             else:
                 args.append(rev)
         self._git(*args)
+        self._git('pull', '--all')
 
     def git_changes(self, visible=False):
         """Determine if there are changes in the working tree."""
