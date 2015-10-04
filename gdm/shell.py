@@ -81,7 +81,7 @@ class GitMixin(_Base):
         args = ['fetch', '--tags', '--force', '--prune', 'origin']
         if rev:
             if len(rev) == 40:
-                pass  # fetch doesn't work with SHAs
+                pass  # fetch only works with a SHA if already present locally
             elif '@' in rev:
                 pass  # fetch doesn't work with rev-parse
             else:
