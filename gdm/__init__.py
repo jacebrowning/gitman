@@ -3,7 +3,7 @@
 import sys
 
 __project__ = 'GDM'
-__version__ = '0.5.dev3'
+__version__ = '0.5.dev5'
 
 CLI = 'gdm'
 PLUGIN = 'deps'
