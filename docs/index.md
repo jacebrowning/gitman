@@ -13,13 +13,13 @@ Installation
 
 GDM can be installed with pip:
 
-```
+```sh
 $ pip3 install gdm
 ```
 
 or directly from the source code:
 
-```
+```sh
 $ git clone https://github.com/jacebrowning/gdm.git
 $ cd gdm
 $ python3 setup.py install
@@ -44,7 +44,7 @@ sources:
 
 Ignore GDM's dependency storage location:
 
-```
+```sh
 $ echo .gdm >> .gitignore
 ```
 
@@ -53,7 +53,7 @@ Basic Usage
 
 See the available commands:
 
-```
+```sh
 $ gdm --help
 ```
 
@@ -62,7 +62,7 @@ Updating Dependencies
 
 Get the latest versions of all dependencies:
 
-```
+```sh
 $ gdm update
 ```
 
@@ -86,13 +86,13 @@ Restoring Previous Versions
 
 Display the specific revisions that are currently installed:
 
-```
+```sh
 $ gdm list
 ```
 
 Reinstall these specific versions at a later time:
 
-```
+```sh
 $ gdm install
 ```
 
@@ -101,6 +101,6 @@ Deleting Dependencies
 
 Remove all installed dependencies:
 
-```
+```sh
 $ gdm uninstall
 ```
