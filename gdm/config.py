@@ -17,7 +17,6 @@ log = common.logger(__name__)
 @yorm.attr(rev=yorm.converters.String)
 @yorm.attr(link=yorm.converters.String)
 class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
-
     """A dictionary of `git` and `ln` arguments."""
 
     def __init__(self, repo, dir, rev='master', link=None):  # pylint: disable=W0622
@@ -117,7 +116,6 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
 
 @yorm.attr(all=Source)
 class Sources(yorm.converters.SortedList):
-
     """A list of source dependencies."""
 
 
@@ -126,7 +124,6 @@ class Sources(yorm.converters.SortedList):
 @yorm.attr(sources_locked=Sources)
 @yorm.sync("{self.root}/{self.filename}")
 class Config(ShellMixin):
-
     """A dictionary of dependency configuration options."""
 
     FILENAMES = ('gdm.yml', 'gdm.yaml', '.gdm.yml', '.gdm.yaml')
@@ -149,8 +146,8 @@ class Config(ShellMixin):
         """Get the full path to the sources location."""
         return os.path.join(self.root, self.location)
 
-    def install_deps(self, force=False, clean=True, update=True):
-        """Get all sources, recursively."""
+    def install_deps(self, update=True, recurse=False, force=False, clean=True):
+        """Get all sources."""
         if not os.path.isdir(self.location_path):
             self.mkdir(self.location_path)
         self.cd(self.location_path)
@@ -170,7 +167,10 @@ class Config(ShellMixin):
             config = load()
             if config:
                 common.indent()
-                count += config.install_deps(force, clean, update)
+                count += config.install_deps(update=update and recurse,
+                                             recurse=recurse,
+                                             force=force,
+                                             clean=clean)
                 common.dedent()
 
             self.cd(self.location_path, visible=False)
