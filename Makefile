@@ -64,6 +64,7 @@ NOSE := $(BIN)/nosetests
 PYTEST := $(BIN)/py.test
 COVERAGE := $(BIN)/coverage
 SNIFFER := $(BIN)/sniffer
+MKDOCS := $(BIN)/mkdocs
 
 # Flags for PHONY targets
 DEPENDS_CI_FLAG := $(ENV)/.depends-ci
@@ -113,7 +114,7 @@ $(DEPENDS_CI_FLAG): Makefile
 .PHONY: depends-dev
 depends-dev: env Makefile $(DEPENDS_DEV_FLAG)
 $(DEPENDS_DEV_FLAG): Makefile
-	$(PIP) install --upgrade pip pep8radius pygments docutils pdoc wheel readme sniffer
+	$(PIP) install --upgrade pip pep8radius pygments docutils pdoc mkdocs wheel readme sniffer
 ifdef WINDOWS
 	$(PIP) install --upgrade pywin32
 else ifdef MAC
@@ -126,7 +127,7 @@ endif
 # Documentation ################################################################
 
 .PHONY: doc
-doc: readme verify-readme apidocs uml
+doc: readme verify-readme uml apidocs mkdocs
 
 .PHONY: readme
 readme: depends-dev README-github.html README-pypi.html
@@ -143,11 +144,6 @@ $(DOCS_FLAG): README.rst
 	$(PYTHON) setup.py check --restructuredtext --strict --metadata
 	@ touch $(DOCS_FLAG)  # flag to indicate README has been checked
 
-.PHONY: apidocs
-apidocs: depends-dev apidocs/$(PACKAGE)/index.html
-apidocs/$(PACKAGE)/index.html: $(SOURCES)
-	$(PDOC) --html --overwrite $(PACKAGE) --html-dir apidocs
-
 .PHONY: uml
 uml: depends-dev docs/*.png
 docs/*.png: $(SOURCES)
@@ -155,8 +151,18 @@ docs/*.png: $(SOURCES)
 	- mv -f classes_$(PACKAGE).png docs/classes.png
 	- mv -f packages_$(PACKAGE).png docs/packages.png
 
+.PHONY: apidocs
+apidocs: depends-dev apidocs/$(PACKAGE)/index.html
+apidocs/$(PACKAGE)/index.html: $(SOURCES)
+	$(PDOC) --html --overwrite $(PACKAGE) --html-dir apidocs
+
+.PHONY: mkdocs
+mkdocs: depends-dev mkdocs.yml docs/*.md
+	$(MKDOCS) build --strict
+
 .PHONY: read
 read: doc
+	$(OPEN) site/index.html
 	$(OPEN) apidocs/$(PACKAGE)/index.html
 	$(OPEN) README-pypi.html
 	$(OPEN) README-github.html

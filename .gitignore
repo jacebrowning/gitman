@@ -15,7 +15,8 @@ env
 
 # Generated documentation
 docs/gen
-apidocs
+/apidocs
+/site
 /*.html
 *.rst
 docs/*.png
