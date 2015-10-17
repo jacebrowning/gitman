@@ -35,7 +35,7 @@ after_script: >
   echo $TRAVIS_BRANCH; echo $TRAVIS_PULL_REQUEST;
   if [[ $TRAVIS_BRANCH == 'develop' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
     # Generate site
-    mkdocs build ;
+    make mkdocs ;
     # Configure Git with Travis CI information
     git config --global user.email "travis@travis-ci.org" ;
     git config --global user.name "travis-ci" ;

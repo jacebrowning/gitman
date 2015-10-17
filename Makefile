@@ -126,6 +126,8 @@ endif
 
 # Documentation ################################################################
 
+URL := "git-dependency-manager.info"
+
 .PHONY: doc
 doc: readme verify-readme uml apidocs mkdocs
 
@@ -159,6 +161,7 @@ apidocs/$(PACKAGE)/index.html: $(SOURCES)
 .PHONY: mkdocs
 mkdocs: depends-dev mkdocs.yml docs/*.md
 	$(MKDOCS) build --strict
+	echo $(URL) > site/CNAME
 
 .PHONY: read
 read: doc
