@@ -160,7 +160,7 @@ apidocs/$(PACKAGE)/index.html: $(SOURCES)
 
 .PHONY: mkdocs
 mkdocs: depends-dev mkdocs.yml docs/*.md
-	$(MKDOCS) build --strict
+	$(MKDOCS) build --clean --strict
 	echo $(URL) > site/CNAME
 
 .PHONY: read

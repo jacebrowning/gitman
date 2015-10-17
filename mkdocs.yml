@@ -1,2 +1,16 @@
 site_name: Git Dependency Manager (GDM)
+repo_url: https://github.com/jacebrowning/gdm
+site_author: Jace Browning
+google_analytics: ['UA-6468614-11', 'git-dependency-manager.info']
+
 theme: mkdocs
+
+pages:
+- Home: 'index.md'
+#- 'Use Cases':
+  # - TBD: example.md
+  # - TBD: example2.md
+- About:
+  - License: 'about/license.txt'
+  - Contributing: 'about/contributing.md'
+  - 'Release Notes': 'about/changes.md'
