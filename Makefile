@@ -81,7 +81,7 @@ $(ALL_FLAG): $(SOURCES)
 	@ touch $(ALL_FLAG)  # flag to indicate all setup steps were successful
 
 .PHONY: ci
-ci: check test tests
+ci: mkdocs check test tests
 
 .PHONY: watch
 watch: depends-dev .clean-test
@@ -108,13 +108,13 @@ depends: depends-ci depends-dev
 .PHONY: depends-ci
 depends-ci: env Makefile $(DEPENDS_CI_FLAG)
 $(DEPENDS_CI_FLAG): Makefile
-	$(PIP) install --upgrade pep8 pep257 pylint coverage pytest pytest-cov pytest-random pytest-runfailed
+	$(PIP) install --upgrade pep8 pep257 pylint coverage pytest pytest-cov pytest-random pytest-runfailed mkdocs
 	@ touch $(DEPENDS_CI_FLAG)  # flag to indicate dependencies are installed
 
 .PHONY: depends-dev
 depends-dev: env Makefile $(DEPENDS_DEV_FLAG)
 $(DEPENDS_DEV_FLAG): Makefile
-	$(PIP) install --upgrade pip pep8radius pygments docutils pdoc mkdocs wheel readme sniffer
+	$(PIP) install --upgrade pip pep8radius pygments docutils pdoc wheel readme sniffer
 ifdef WINDOWS
 	$(PIP) install --upgrade pywin32
 else ifdef MAC
@@ -159,7 +159,8 @@ apidocs/$(PACKAGE)/index.html: $(SOURCES)
 	$(PDOC) --html --overwrite $(PACKAGE) --html-dir apidocs
 
 .PHONY: mkdocs
-mkdocs: depends-dev mkdocs.yml docs/*.md
+mkdocs: depends-ci site/index.html
+site/index.html: mkdocs.yml docs/*.md
 	$(MKDOCS) build --clean --strict
 	echo $(URL) > site/CNAME
 
@@ -264,7 +265,7 @@ clean-all: clean clean-env .clean-workspace
 
 .PHONY: .clean-doc
 .clean-doc:
-	rm -rf README.rst apidocs *.html docs/*.png
+	rm -rf README.rst apidocs *.html docs/*.png site
 
 .PHONY: .clean-test
 .clean-test:

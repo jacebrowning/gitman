@@ -18,7 +18,7 @@ env:
 
 install:
 - sudo apt-get install git; git --version
-- pip install coveralls scrutinizer-ocular mkdocs
+- pip install coveralls scrutinizer-ocular
 
 before_script:
 - make env
