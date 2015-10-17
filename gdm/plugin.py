@@ -35,8 +35,10 @@ def main(args=None):
     # Update option
     group.add_argument(
         '-u', '--update', const='update',
-        help="update all dependencies to the latest versions", **shared
+        help="update dependencies to the latest versions", **shared
     )
+    parser.add_argument('-a', '--all', action='store_true', dest='recurse',
+                        help="include nested dependencies when updating")
 
     # Display option
     group.add_argument(

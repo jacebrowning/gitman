@@ -22,17 +22,27 @@ class TestMain:
 
     @patch('gdm.cli.commands')
     def test_update(self, mock_commands):
-        """Verify 'update' can be invoked with an option."""
+        """Verify 'update' can be called with cleaning."""
         plugin.main(['--update', '--clean'])
 
         assert [
-            call.update(root=None, clean=True, force=False),
+            call.update(root=None, clean=True, force=False, recurse=False),
+            call.update().__bool__(),  # command status check
+        ] == mock_commands.mock_calls
+
+    @patch('gdm.cli.commands')
+    def test_update_recursive(self, mock_commands):
+        """Verify 'update' can be called recursively."""
+        plugin.main(['--update', '--all'])
+
+        assert [
+            call.update(root=None, clean=False, force=False, recurse=True),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
     @patch('gdm.cli.commands')
     def test_list(self, mock_commands):
-        """Verify 'list' can be invoked with an option."""
+        """Verify 'list' can be called."""
         plugin.main(['--list'])
 
         assert [
@@ -42,7 +52,7 @@ class TestMain:
 
     @patch('gdm.cli.commands')
     def test_uninstall(self, mock_commands):
-        """Verify 'clean' can be invoked with an option."""
+        """Verify 'clean' can be called with force."""
         plugin.main(['--uninstall', '--force'])
 
         assert [

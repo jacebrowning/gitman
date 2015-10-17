@@ -26,9 +26,11 @@ def install(root=None, force=False, clean=True):
     return count
 
 
-def update(root=None, force=False, clean=True):
+def update(root=None, recurse=False, force=False, clean=True):
     """Update dependencies for a project."""
-    log.info("%supdating dependencies...", 'force-' if force else '')
+    log.info("%supdating dependencies%s...",
+             'force-' if force else '',
+             ', recursively' if recurse else '')
     count = None
 
     root = _find_root(root)
@@ -37,7 +39,7 @@ def update(root=None, force=False, clean=True):
     if config:
         common.show("Updating dependencies...", log=False)
         common.show()
-        count = config.install_deps(force=force, clean=clean)
+        count = config.install_deps(recurse=recurse, force=force, clean=clean)
         common.dedent(level=0)
         common.show("Recording installed versions...", log=False)
         common.show()

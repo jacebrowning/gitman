@@ -35,7 +35,6 @@ def _call(name, *args, ignore=False, catch=True, capture=False):
 
 
 class _Base:
-
     """Functions to call shell commands."""
 
     @staticmethod
@@ -47,7 +46,6 @@ class _Base:
 
 
 class ShellMixin(_Base):
-
     """Provides classes with shell utilities."""
 
     def mkdir(self, path):
@@ -67,7 +65,6 @@ class ShellMixin(_Base):
 
 
 class GitMixin(_Base):
-
     """Provides classes with Git utilities."""
 
     def git_clone(self, repo, path):

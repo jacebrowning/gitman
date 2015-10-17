@@ -77,7 +77,7 @@ ALL_FLAG := $(ENV)/.all
 all: depends doc $(ALL_FLAG)
 $(ALL_FLAG): $(SOURCES)
 	$(MAKE) check
-	touch $(ALL_FLAG)  # flag to indicate all setup steps were successful
+	@ touch $(ALL_FLAG)  # flag to indicate all setup steps were successful
 
 .PHONY: ci
 ci: check test tests
@@ -172,10 +172,7 @@ pep8: depends-ci
 
 .PHONY: pep257
 pep257: depends-ci
-# D102/D103: docstring missing (checked by PyLint)
-# D202: No blank lines allowed *after* function docstring (personal preference)
-# D203: 1 blank line required before class (deprecated warning)
-	$(PEP257) $(PACKAGE) tests --ignore=D102,D103,D202,D203
+	$(PEP257) $(PACKAGE) tests
 
 .PHONY: pylint
 pylint: depends-ci

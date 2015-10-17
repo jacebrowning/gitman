@@ -45,9 +45,11 @@ def main(args=None, function=None):
                      help="keep ignored files in dependencies")
 
     # Update parser
-    info = "update all dependencies to the latest versions"
+    info = "update dependencies to the latest versions"
     sub = subs.add_parser('update', description=info.capitalize() + '.',
                           help=info, **shared)
+    sub.add_argument('-a', '--all', action='store_true', dest='recurse',
+                     help="update all nested dependencies, recursively")
     # TODO: share these with 'install'
     sub.add_argument('-f', '--force', action='store_true',
                      help="overwrite uncommitted changes in dependencies")
@@ -91,6 +93,8 @@ def _get_command(function, args):
         function = getattr(commands, args.command)
         kwargs.update(dict(force=args.force,
                            clean=args.clean))
+        if args.command == 'update':
+            kwargs.update(dict(recurse=args.recurse))
         exit_msg = "\n" + "Run again with '--force' to overwrite"
     elif args.command == 'list':
         function = commands.display
