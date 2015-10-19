@@ -1,4 +1,4 @@
-sudo: required
+sudo: false
 
 language: python
 python:
@@ -6,18 +6,17 @@ python:
 - 3.4
 - 3.5
 
-cache: pip
+cache:
+  pip: true
+  directories:
+  - env
 
-before_install:
-- sudo add-apt-repository ppa:git-core/ppa -y
-- sudo apt-get update
 env:
   global:
   - RANDOM_SEED=12345
   - secure: "UnyHAJ/T6eI/6vaXXKsZgs2XqBib06DubRqMVegy1nMNBjFsmyZ3tU+22gW2NWAGzukwC3GXWsxkN+7sTlTcTldFBvN9onzC1oVDfQrcAUjvSOK02OZ4tepVq5umsDUxGpRqhWB7LgEv0zM6DHzj6k+yaPBtcJg6NFhpScQfHyY="
 
 install:
-- sudo apt-get install git; git --version
 - pip install coveralls scrutinizer-ocular
 
 before_script:
