@@ -8,9 +8,8 @@ theme: mkdocs
 
 pages:
 - Home: 'index.md'
-#- 'Use Cases':
-  # - TBD: example.md
-  # - TBD: example2.md
+- 'Use Cases':
+  - 'Replacing Submodules': 'use-cases/submodules.md'
 - About:
   - License: 'about/license.txt'
   - Contributing: 'about/contributing.md'
