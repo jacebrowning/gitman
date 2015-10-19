@@ -1,6 +1,11 @@
 Revision History
 ================
 
+0.4.2 (2015/10/18)
+------------------
+
+- Fixed crash when running with some sources missing.
+
 0.4.1 (2015/09/24)
 ------------------
 

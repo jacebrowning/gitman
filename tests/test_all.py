@@ -15,6 +15,9 @@ from .conftest import FILES, ROOT
 @pytest.mark.integration
 class TestCommands:
 
+    def setup_method(self, _):
+        os.chdir(ROOT)
+
     def teardown_method(self, _):
         os.chdir(ROOT)
 
