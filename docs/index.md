@@ -1,6 +1,6 @@
 # Git Dependency Manager 
 
-GDM is a language-agnostic "dependency manager" using Git. It aims to be a submodules replacement and serve as a better way to manage versions of nested Git repositories.
+Git Dependency Manager (GDM) is a language-agnostic "dependency manager" using Git. It aims to serve as a submodules replacement and provides advanced options for managing versions of nested Git repositories.
 
 ## Requirements
 
