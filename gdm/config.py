@@ -93,7 +93,7 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
             path = os.getcwd()
             url = self.git_get_url()
             if self.git_changes(visible=True):
-                revision = "<dirty>"
+                revision = '<dirty>'
                 if not allow_dirty:
                     common.show()
                     msg = "Uncommitted changes: {}".format(os.getcwd())
@@ -106,7 +106,7 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
 
         else:
 
-            return path, "<missing>", "<unknown>"
+            return os.getcwd(), '<missing>', '<unknown>'
 
     def lock(self):
         """Return a locked version of the current source."""

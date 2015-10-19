@@ -1,7 +1,7 @@
 """Unit tests for the `config` module."""
 # pylint: disable=no-self-use,redefined-outer-name
 
-from unittest.mock import Mock
+from unittest.mock import patch, Mock
 
 import pytest
 
@@ -65,6 +65,12 @@ class TestSource:
         ]
 
         assert sources == sorted(sources)
+
+    def test_identify_missing(self, source, tmpdir):
+        """Verify a missing source identifies as unknown."""
+        tmpdir.chdir()
+        with patch('os.path.isdir', Mock(return_value=False)):
+            assert (str(tmpdir), '<missing>', '<unknown>') == source.identify()
 
     def test_lock_uses_the_identity_rev(self, source):
         source.identify = Mock(return_value=('path2', 'dir2', 'abc123'))
