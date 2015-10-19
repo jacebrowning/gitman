@@ -1,15 +1,14 @@
-Getting Started
-===============
+# Git Dependency Manager 
 
-Requirements
-------------
+GDM is a language-agnostic "dependency manager" using Git. It aims to be a submodules replacement and serve as a better way to manage versions of nested Git repositories.
+
+## Requirements
 
 * Python 3.3+
 * Latest version of Git (with [stored credentials](http://stackoverflow.com/questions/7773181))
 * OSX/Linux (with a decent shell for Git)
 
-Installation
-------------
+## Installation
 
 GDM can be installed with pip:
 
@@ -25,8 +24,7 @@ $ cd gdm
 $ python3 setup.py install
 ```
 
-Setup
------
+## Setup
 
 Create a GDM configuration file (`gdm.yml` or `.gdm.yml`) in the root of your working tree:
 
@@ -49,30 +47,20 @@ $ echo .gdm >> .gitignore
 ```
 
 Basic Usage
-===========
+-----------
 
-See the available commands:
-
-```sh
-$ gdm --help
-```
-
-Updating Dependencies
----------------------
-
-Get the latest versions of all dependencies:
+Get all dependencies:
 
 ```sh
-$ gdm update
+$ gdm install
 ```
 
 which will essentially:
 
 1. create a working tree at _root_/`location`/`dir`
 2. fetch from `repo` and checkout the specified `rev`
-3. symbolically link each `location`/`dir` from _root_/`link` (optional)
+3. symbolically link each `location`/`dir` from _root_/`link` (if specified)
 4. repeat for all nested working trees containing a configuration file
-5. record the actual commit SHAs that were checked out
 
 where `rev` can be:
 
@@ -80,27 +68,3 @@ where `rev` can be:
 * a tag: `v1.0`
 * a branch: `master`
 * a `rev-parse` date: `'develop@{2015-06-18 10:30:59}'`
-
-Restoring Previous Versions
----------------------------
-
-Display the specific revisions that are currently installed:
-
-```sh
-$ gdm list
-```
-
-Reinstall these specific versions at a later time:
-
-```sh
-$ gdm install
-```
-
-Deleting Dependencies
----------------------
-
-Remove all installed dependencies:
-
-```sh
-$ gdm uninstall
-```

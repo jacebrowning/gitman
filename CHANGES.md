@@ -9,6 +9,7 @@ Revision History
 - Added '--clean' option to delete ignored files on 'install' and 'update'.
 - Switched to 'install' rather than 'update' of nested dependencies.
 - Added '--all' option on 'update' to update all nested dependencies.
+- Disabled warnings when running 'install' without locked sources.
 
 0.4.2 (2015/10/18)
 ------------------

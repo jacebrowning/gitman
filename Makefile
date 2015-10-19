@@ -164,6 +164,11 @@ site/index.html: mkdocs.yml docs/*.md
 	$(MKDOCS) build --clean --strict
 	echo $(URL) > site/CNAME
 
+.PHONY: mkdocs-live
+mkdocs-live: mkdocs
+	eval "sleep 3; open http://127.0.0.1:8000" &
+	$(MKDOCS) serve
+
 .PHONY: read
 read: doc
 	$(OPEN) site/index.html

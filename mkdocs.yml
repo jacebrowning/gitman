@@ -8,10 +8,14 @@ theme: mkdocs
 
 pages:
 - Home: 'index.md'
-#- 'Use Cases':
-  # - TBD: example.md
-  # - TBD: example2.md
+- Interfaces:
+    - Command Line: interfaces/cli.md
+    - Git Plugin: interfaces/plugin.md
+- 'Use Cases':
+  - 'Replacing Submodules': 'use-cases/submodules.md'
+  - 'Tracking Branches': 'use-cases/branches.md'
+  - 'Linking Features Branches': 'use-cases/linked-features.md'
 - About:
-  - License: 'about/license.txt'
-  - Contributing: 'about/contributing.md'
   - 'Release Notes': 'about/changes.md'
+  - Contributing: 'about/contributing.md'
+  - License: 'about/license.md'

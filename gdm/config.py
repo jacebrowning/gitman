@@ -227,7 +227,7 @@ class Config(ShellMixin):
         elif self.sources_locked:
             return self.sources_locked
         else:
-            log.warn("no locked sources available, installing latest...")
+            log.info("no locked sources available, installing latest...")
             return self.sources
 
 
