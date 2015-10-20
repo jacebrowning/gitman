@@ -58,7 +58,7 @@ git deps --list
 
 ## Uninstall
 
-To delete all source dependencies:
+To delete all source dependencies, run:
 
 ```sh
 git deps --uninstall

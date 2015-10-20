@@ -64,7 +64,7 @@ gdm list --no-dirty
 
 ## Uninstall
 
-To delete all source dependencies:
+To delete all source dependencies, run:
 
 ```sh
 gdm uninstall
