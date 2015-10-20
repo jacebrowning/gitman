@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """Command-line interface."""
 
@@ -41,24 +41,30 @@ def main(args=None, function=None):
                           help=info, **shared)
     sub.add_argument('-f', '--force', action='store_true',
                      help="overwrite uncommitted changes in dependencies")
-    sub.add_argument('-C', '--no-clean', action='store_false', dest='clean',
+    sub.add_argument('-c', '--clean', action='store_true',
                      help="keep ignored files in dependencies")
 
     # Update parser
-    info = "update all dependencies to the latest versions"
+    info = "update dependencies to the latest versions"
     sub = subs.add_parser('update', description=info.capitalize() + '.',
                           help=info, **shared)
-    # TODO: share these with 'install'
+    # TODO: share force and clean with 'install'
     sub.add_argument('-f', '--force', action='store_true',
                      help="overwrite uncommitted changes in dependencies")
-    sub.add_argument('-C', '--no-clean', action='store_false', dest='clean',
+    sub.add_argument('-c', '--clean', action='store_true',
                      help="keep ignored files in dependencies")
+    sub.add_argument('-a', '--all', action='store_true', dest='recurse',
+                     help="update all nested dependencies, recursively")
+    sub.add_argument('-L', '--no-lock',
+                     action='store_false', dest='lock', default=True,
+                     help="skip recording of versions for later reinstall")
 
     # Display parser
     info = "display the current version of each dependency"
     sub = subs.add_parser('list', description=info.capitalize() + '.',
                           help=info, **shared)
     sub.add_argument('-D', '--no-dirty', action='store_false',
+                     dest='allow_dirty',
                      help="fail if a source has uncommitted changes")
 
     # Uninstall parser
@@ -70,28 +76,40 @@ def main(args=None, function=None):
 
     # Parse arguments
     args = parser.parse_args(args=args)
-    kwargs = dict(root=args.root)
-    exit_msg = ""
-    if args.command in ('install', 'update'):
-        function = getattr(commands, args.command)
-        kwargs.update(dict(force=args.force,
-                           clean=args.clean))
-        exit_msg = "\n" + "Run again with '--force' to overwrite"
-    elif args.command == 'uninstall':
-        function = commands.delete
-        kwargs.update(dict(force=args.force))
-        exit_msg = "\n" + "Run again with '--force' to ignore"
-    elif args.command == 'list':
-        function = commands.display
-        kwargs.update(dict(allow_dirty=args.no_dirty))
-    if function is None:
-        parser.print_help()
-        sys.exit(1)
 
     # Configure logging
     common.configure_logging(args.verbose)
 
     # Run the program
+    function, kwargs, exit_msg = _get_command(function, args)
+    if function is None:
+        parser.print_help()
+        sys.exit(1)
+    _run_command(function, kwargs, exit_msg)
+
+
+def _get_command(function, args):
+    kwargs = dict(root=args.root)
+    exit_msg = ""
+
+    if args.command in ('install', 'update'):
+        function = getattr(commands, args.command)
+        kwargs.update(force=args.force, clean=args.clean)
+        if args.command == 'update':
+            kwargs.update(recurse=args.recurse, lock=args.lock)
+        exit_msg = "\n" + "Run again with '--force' to overwrite"
+    elif args.command == 'list':
+        function = commands.display
+        kwargs.update(dict(allow_dirty=args.allow_dirty))
+    elif args.command == 'uninstall':
+        function = commands.delete
+        kwargs.update(force=args.force)
+        exit_msg = "\n" + "Run again with '--force' to ignore"
+
+    return function, kwargs, exit_msg
+
+
+def _run_command(function, kwargs, exit_msg):
     success = False
     try:
         log.debug("running command...")
@@ -102,6 +120,7 @@ def main(args=None, function=None):
             log.exception(msg)
         else:
             log.debug(msg)
+        exit_msg = ""
     except RuntimeError as exc:
         exit_msg = str(exc) + exit_msg
     else:

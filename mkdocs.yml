@@ -1,0 +1,22 @@
+site_name: GDM
+site_description: A language-agnostic "dependency manager" using Git.
+site_author: Jace Browning
+repo_url: https://github.com/jacebrowning/gdm
+google_analytics: ['UA-6468614-11', 'git-dependency-manager.info']
+
+theme: mkdocs
+
+pages:
+- Home: 'index.md'
+- Interfaces:
+    - Command Line: interfaces/cli.md
+    - Git Plugin: interfaces/plugin.md
+    - Package API: interfaces/api.md
+- 'Use Cases':
+  - 'Replacing Submodules': 'use-cases/submodules.md'
+  - 'Tracking Branches': 'use-cases/branch-tracking.md'
+  - 'Linking Feature Branches': 'use-cases/linked-features.md'
+- About:
+  - 'Release Notes': 'about/changes.md'
+  - Contributing: 'about/contributing.md'
+  - License: 'about/license.md'

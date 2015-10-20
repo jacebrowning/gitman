@@ -64,6 +64,7 @@ NOSE := $(BIN)/nosetests
 PYTEST := $(BIN)/py.test
 COVERAGE := $(BIN)/coverage
 SNIFFER := $(BIN)/sniffer
+MKDOCS := $(BIN)/mkdocs
 
 # Flags for PHONY targets
 DEPENDS_CI_FLAG := $(ENV)/.depends-ci
@@ -77,10 +78,10 @@ ALL_FLAG := $(ENV)/.all
 all: depends doc $(ALL_FLAG)
 $(ALL_FLAG): $(SOURCES)
 	$(MAKE) check
-	touch $(ALL_FLAG)  # flag to indicate all setup steps were successful
+	@ touch $(ALL_FLAG)  # flag to indicate all setup steps were successful
 
 .PHONY: ci
-ci: check test tests
+ci: mkdocs check test tests
 
 .PHONY: watch
 watch: depends-dev .clean-test
@@ -107,7 +108,7 @@ depends: depends-ci depends-dev
 .PHONY: depends-ci
 depends-ci: env Makefile $(DEPENDS_CI_FLAG)
 $(DEPENDS_CI_FLAG): Makefile
-	$(PIP) install --upgrade pep8 pep257==0.6 pylint coverage pytest pytest-cov pytest-random pytest-runfailed
+	$(PIP) install --upgrade pep8 pep257 pylint coverage pytest pytest-cov pytest-random pytest-runfailed mkdocs
 	@ touch $(DEPENDS_CI_FLAG)  # flag to indicate dependencies are installed
 
 .PHONY: depends-dev
@@ -125,8 +126,10 @@ endif
 
 # Documentation ################################################################
 
+URL := "git-dependency-manager.info"
+
 .PHONY: doc
-doc: readme verify-readme apidocs uml
+doc: readme verify-readme uml apidocs mkdocs
 
 .PHONY: readme
 readme: depends-dev README-github.html README-pypi.html
@@ -143,11 +146,6 @@ $(DOCS_FLAG): README.rst
 	$(PYTHON) setup.py check --restructuredtext --strict --metadata
 	@ touch $(DOCS_FLAG)  # flag to indicate README has been checked
 
-.PHONY: apidocs
-apidocs: depends-dev apidocs/$(PACKAGE)/index.html
-apidocs/$(PACKAGE)/index.html: $(SOURCES)
-	$(PDOC) --html --overwrite $(PACKAGE) --html-dir apidocs
-
 .PHONY: uml
 uml: depends-dev docs/*.png
 docs/*.png: $(SOURCES)
@@ -155,8 +153,25 @@ docs/*.png: $(SOURCES)
 	- mv -f classes_$(PACKAGE).png docs/classes.png
 	- mv -f packages_$(PACKAGE).png docs/packages.png
 
+.PHONY: apidocs
+apidocs: depends-dev apidocs/$(PACKAGE)/index.html
+apidocs/$(PACKAGE)/index.html: $(SOURCES)
+	$(PDOC) --html --overwrite $(PACKAGE) --html-dir apidocs
+
+.PHONY: mkdocs
+mkdocs: depends-ci site/index.html
+site/index.html: mkdocs.yml docs/*.md
+	$(MKDOCS) build --clean --strict
+	echo $(URL) > site/CNAME
+
+.PHONY: mkdocs-live
+mkdocs-live: mkdocs
+	eval "sleep 3; open http://127.0.0.1:8000" &
+	$(MKDOCS) serve
+
 .PHONY: read
 read: doc
+	$(OPEN) site/index.html
 	$(OPEN) apidocs/$(PACKAGE)/index.html
 	$(OPEN) README-pypi.html
 	$(OPEN) README-github.html
@@ -172,10 +187,7 @@ pep8: depends-ci
 
 .PHONY: pep257
 pep257: depends-ci
-# D102/D103: docstring missing (checked by PyLint)
-# D202: No blank lines allowed *after* function docstring (personal preference)
-# D203: 1 blank line required before class (deprecated warning)
-	$(PEP257) $(PACKAGE) tests --ignore=D102,D103,D202,D203
+	$(PEP257) $(PACKAGE) tests
 
 .PHONY: pylint
 pylint: depends-ci
@@ -258,7 +270,7 @@ clean-all: clean clean-env .clean-workspace
 
 .PHONY: .clean-doc
 .clean-doc:
-	rm -rf README.rst apidocs *.html docs/*.png
+	rm -rf README.rst apidocs *.html docs/*.png site
 
 .PHONY: .clean-test
 .clean-test:

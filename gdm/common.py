@@ -14,12 +14,10 @@ verbosity = 0
 
 
 class CallException(Exception):
-
     """Exception raised when a program call has a non-zero return code."""
 
 
 class WideHelpFormatter(argparse.HelpFormatter):
-
     """Command-line help text formatter with wider help text."""
 
     def __init__(self, *args, **kwargs):
@@ -27,7 +25,6 @@ class WideHelpFormatter(argparse.HelpFormatter):
 
 
 class WarningFormatter(logging.Formatter):
-
     """Logging formatter that displays verbose formatting for WARNING+."""
 
     def __init__(self, default_format, verbose_format, *args, **kwargs):

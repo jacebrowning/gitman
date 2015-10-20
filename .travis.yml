@@ -1,4 +1,4 @@
-sudo: required
+sudo: false
 
 language: python
 python:
@@ -6,17 +6,17 @@ python:
 - 3.4
 - 3.5
 
-cache: pip
+cache:
+  pip: true
+  directories:
+  - env
 
-before_install:
-- sudo add-apt-repository ppa:git-core/ppa -y
-- sudo apt-get update
 env:
   global:
   - RANDOM_SEED=12345
+  - secure: "UnyHAJ/T6eI/6vaXXKsZgs2XqBib06DubRqMVegy1nMNBjFsmyZ3tU+22gW2NWAGzukwC3GXWsxkN+7sTlTcTldFBvN9onzC1oVDfQrcAUjvSOK02OZ4tepVq5umsDUxGpRqhWB7LgEv0zM6DHzj6k+yaPBtcJg6NFhpScQfHyY="
 
 install:
-- sudo apt-get install git; git --version
 - pip install coveralls scrutinizer-ocular
 
 before_script:
@@ -29,6 +29,24 @@ script:
 after_success:
 - coveralls
 - ocular
+
+after_script: >
+  echo $TRAVIS_BRANCH; echo $TRAVIS_PULL_REQUEST;
+  if [[ $TRAVIS_BRANCH == 'develop' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
+    # Generate site
+    make mkdocs ;
+    # Configure Git with Travis CI information
+    git config --global user.email "travis@travis-ci.org" ;
+    git config --global user.name "travis-ci" ;
+    # Delete the current repository
+    rm -rf .git ;
+    # Rebuild the repository from the generated files and push to GitHub pages
+    cd site ;
+    git init ;
+    git add . ;
+    git commit -m "Deploy Travis CI build $TRAVIS_BUILD_NUMBER to GitHub pages" ;
+    git push -f https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG} master:gh-pages ;
+  fi
 
 notifications:
   email:

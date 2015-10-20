@@ -52,44 +52,76 @@ class TestMain:
             cli.main([], Mock(side_effect=RuntimeError))
 
 
-class TestInstallAndUpdate:
+class TestInstall:
 
-    """Unit tests for the `install` and `update` commands."""
+    """Unit tests for the `install` command."""
 
     @patch('gdm.commands.install')
     def test_install(self, mock_install):
         """Verify the 'install' command can be run."""
         cli.main(['install'])
         mock_install.assert_called_once_with(root=None,
-                                             force=False, clean=True)
+                                             force=False,
+                                             clean=False)
 
     @patch('gdm.commands.install')
     def test_install_root(self, mock_install):
         """Verify the project's root can be specified."""
         cli.main(['install', '--root', 'mock/path/to/root'])
         mock_install.assert_called_once_with(root='mock/path/to/root',
-                                             force=False, clean=True)
+                                             force=False,
+                                             clean=False)
 
     @patch('gdm.commands.install')
     def test_install_force(self, mock_install):
         """Verify dependencies can be force-installed."""
         cli.main(['install', '--force'])
         mock_install.assert_called_once_with(root=None,
-                                             force=True, clean=True)
+                                             force=True,
+                                             clean=False)
 
     @patch('gdm.commands.install')
-    def test_install_no_clean(self, mock_install):
-        """Verify dependency cleaning can be disabled."""
-        cli.main(['install', '--no-clean'])
+    def test_install_clean(self, mock_install):
+        """Verify dependency cleaning can be enabled."""
+        cli.main(['install', '--clean'])
         mock_install.assert_called_once_with(root=None,
-                                             force=False, clean=False)
+                                             force=False,
+                                             clean=True)
+
+
+class TestUpdate:
+
+    """Unit tests for the `update` command."""
 
     @patch('gdm.commands.update')
     def test_update(self, mock_update):
         """Verify the 'update' command can be run."""
         cli.main(['update'])
         mock_update.assert_called_once_with(root=None,
-                                            force=False, clean=True)
+                                            force=False,
+                                            clean=False,
+                                            recurse=False,
+                                            lock=True)
+
+    @patch('gdm.commands.update')
+    def test_update_recursive(self, mock_update):
+        """Verify the 'update' command can be run recursively."""
+        cli.main(['update', '--all'])
+        mock_update.assert_called_once_with(root=None,
+                                            force=False,
+                                            clean=False,
+                                            recurse=True,
+                                            lock=True)
+
+    @patch('gdm.commands.update')
+    def test_update_no_lock(self, mock_update):
+        """Verify the 'update' command can be run without locking."""
+        cli.main(['update', '--no-lock'])
+        mock_update.assert_called_once_with(root=None,
+                                            force=False,
+                                            clean=False,
+                                            recurse=False,
+                                            lock=False)
 
 
 class TestUninstall:

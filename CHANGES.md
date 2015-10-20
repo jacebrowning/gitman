@@ -1,6 +1,17 @@
 Revision History
 ================
 
+0.5 (2015/10/20)
+----------------
+
+- Added Git plugin support via: `git deps`.
+- Removed '--no-clean' option (now the default) on 'install' and 'update'.
+- Added '--clean' option to delete ignored files on 'install' and 'update'.
+- Switched to 'install' rather than 'update' of nested dependencies.
+- Added '--all' option on 'update' to update all nested dependencies.
+- Disabled warnings when running 'install' without locked sources.
+- Added '--no-lock' option to disable version recording.
+
 0.4.2 (2015/10/18)
 ------------------
 
