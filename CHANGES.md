@@ -1,10 +1,10 @@
 Revision History
 ================
 
-0.5 (unreleased)
+0.5 (2015/10/20)
 ----------------
 
-- Added Git plugin support via: `git deps`
+- Added Git plugin support via: `git deps`.
 - Removed '--no-clean' option (now the default) on 'install' and 'update'.
 - Added '--clean' option to delete ignored files on 'install' and 'update'.
 - Switched to 'install' rather than 'update' of nested dependencies.
