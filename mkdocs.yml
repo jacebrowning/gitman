@@ -14,8 +14,8 @@ pages:
     - Package API: interfaces/api.md
 - 'Use Cases':
   - 'Replacing Submodules': 'use-cases/submodules.md'
-  - 'Tracking Branches': 'use-cases/branches.md'
-  - 'Linking Features Branches': 'use-cases/linked-features.md'
+  - 'Tracking Branches': 'use-cases/branch-tracking.md'
+  - 'Linking Feature Branches': 'use-cases/linked-features.md'
 - About:
   - 'Release Notes': 'about/changes.md'
   - Contributing: 'about/contributing.md'
