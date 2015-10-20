@@ -39,6 +39,9 @@ def main(args=None):
     )
     parser.add_argument('-a', '--all', action='store_true', dest='recurse',
                         help="include nested dependencies when updating")
+    parser.add_argument('-L', '--no-lock',
+                        action='store_false', dest='lock', default=True,
+                        help="skip recording of versions for later reinstall")
 
     # Display option
     group.add_argument(

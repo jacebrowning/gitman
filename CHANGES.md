@@ -10,6 +10,7 @@ Revision History
 - Switched to 'install' rather than 'update' of nested dependencies.
 - Added '--all' option on 'update' to update all nested dependencies.
 - Disabled warnings when running 'install' without locked sources.
+- Added '--no-lock' option to disable version recording.
 
 0.4.2 (2015/10/18)
 ------------------

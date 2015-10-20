@@ -52,9 +52,9 @@ class TestMain:
             cli.main([], Mock(side_effect=RuntimeError))
 
 
-class TestInstallAndUpdate:
+class TestInstall:
 
-    """Unit tests for the `install` and `update` commands."""
+    """Unit tests for the `install` command."""
 
     @patch('gdm.commands.install')
     def test_install(self, mock_install):
@@ -88,6 +88,11 @@ class TestInstallAndUpdate:
                                              force=False,
                                              clean=True)
 
+
+class TestUpdate:
+
+    """Unit tests for the `update` command."""
+
     @patch('gdm.commands.update')
     def test_update(self, mock_update):
         """Verify the 'update' command can be run."""
@@ -95,7 +100,8 @@ class TestInstallAndUpdate:
         mock_update.assert_called_once_with(root=None,
                                             force=False,
                                             clean=False,
-                                            recurse=False)
+                                            recurse=False,
+                                            lock=True)
 
     @patch('gdm.commands.update')
     def test_update_recursive(self, mock_update):
@@ -104,7 +110,18 @@ class TestInstallAndUpdate:
         mock_update.assert_called_once_with(root=None,
                                             force=False,
                                             clean=False,
-                                            recurse=True)
+                                            recurse=True,
+                                            lock=True)
+
+    @patch('gdm.commands.update')
+    def test_update_no_lock(self, mock_update):
+        """Verify the 'update' command can be run without locking."""
+        cli.main(['update', '--no-lock'])
+        mock_update.assert_called_once_with(root=None,
+                                            force=False,
+                                            clean=False,
+                                            recurse=False,
+                                            lock=False)
 
 
 class TestUninstall:

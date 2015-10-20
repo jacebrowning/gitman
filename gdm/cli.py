@@ -48,13 +48,16 @@ def main(args=None, function=None):
     info = "update dependencies to the latest versions"
     sub = subs.add_parser('update', description=info.capitalize() + '.',
                           help=info, **shared)
-    sub.add_argument('-a', '--all', action='store_true', dest='recurse',
-                     help="update all nested dependencies, recursively")
-    # TODO: share these with 'install'
+    # TODO: share force and clean with 'install'
     sub.add_argument('-f', '--force', action='store_true',
                      help="overwrite uncommitted changes in dependencies")
     sub.add_argument('-c', '--clean', action='store_true',
                      help="keep ignored files in dependencies")
+    sub.add_argument('-a', '--all', action='store_true', dest='recurse',
+                     help="update all nested dependencies, recursively")
+    sub.add_argument('-L', '--no-lock',
+                     action='store_false', dest='lock', default=True,
+                     help="skip recording of versions for later reinstall")
 
     # Display parser
     info = "display the current version of each dependency"
@@ -91,17 +94,16 @@ def _get_command(function, args):
 
     if args.command in ('install', 'update'):
         function = getattr(commands, args.command)
-        kwargs.update(dict(force=args.force,
-                           clean=args.clean))
+        kwargs.update(force=args.force, clean=args.clean)
         if args.command == 'update':
-            kwargs.update(dict(recurse=args.recurse))
+            kwargs.update(recurse=args.recurse, lock=args.lock)
         exit_msg = "\n" + "Run again with '--force' to overwrite"
     elif args.command == 'list':
         function = commands.display
         kwargs.update(dict(allow_dirty=args.allow_dirty))
     elif args.command == 'uninstall':
         function = commands.delete
-        kwargs.update(dict(force=args.force))
+        kwargs.update(force=args.force)
         exit_msg = "\n" + "Run again with '--force' to ignore"
 
     return function, kwargs, exit_msg

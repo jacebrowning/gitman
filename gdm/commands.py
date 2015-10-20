@@ -26,7 +26,7 @@ def install(root=None, force=False, clean=True):
     return count
 
 
-def update(root=None, recurse=False, force=False, clean=True):
+def update(root=None, recurse=False, force=False, clean=True, lock=True):
     """Update dependencies for a project."""
     log.info("%supdating dependencies%s...",
              'force-' if force else '',
@@ -41,9 +41,10 @@ def update(root=None, recurse=False, force=False, clean=True):
         common.show()
         count = config.install_deps(recurse=recurse, force=force, clean=clean)
         common.dedent(level=0)
-        common.show("Recording installed versions...", log=False)
-        common.show()
-        config.lock_deps()
+        if lock:
+            common.show("Recording installed versions...", log=False)
+            common.show()
+            config.lock_deps()
 
     _display_result("update", "updated", count)
 

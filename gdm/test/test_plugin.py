@@ -26,7 +26,8 @@ class TestMain:
         plugin.main(['--update', '--clean'])
 
         assert [
-            call.update(root=None, clean=True, force=False, recurse=False),
+            call.update(root=None,
+                        clean=True, force=False, recurse=False, lock=True),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
@@ -36,7 +37,19 @@ class TestMain:
         plugin.main(['--update', '--all'])
 
         assert [
-            call.update(root=None, clean=False, force=False, recurse=True),
+            call.update(root=None,
+                        clean=False, force=False, recurse=True, lock=True),
+            call.update().__bool__(),  # command status check
+        ] == mock_commands.mock_calls
+
+    @patch('gdm.cli.commands')
+    def test_update_no_lock(self, mock_commands):
+        """Verify 'update' can be called without locking."""
+        plugin.main(['--update', '--no-lock'])
+
+        assert [
+            call.update(root=None,
+                        clean=False, force=False, recurse=False, lock=False),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
