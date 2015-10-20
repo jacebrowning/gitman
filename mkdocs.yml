@@ -11,6 +11,7 @@ pages:
 - Interfaces:
     - Command Line: interfaces/cli.md
     - Git Plugin: interfaces/plugin.md
+    - Package API: interfaces/api.md
 - 'Use Cases':
   - 'Replacing Submodules': 'use-cases/submodules.md'
   - 'Tracking Branches': 'use-cases/branches.md'
