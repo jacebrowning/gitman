@@ -19,7 +19,7 @@ To get the same behavior using GDM, first delete the `.gitmodules` file and crea
 ```yaml
 location: .gdm
 sources:
-- repo: <URL of my_dependenc's repository>
+- repo: <URL of my_dependency's repository>
   dir: my_dependency
   rev: a5fe3d
   link: vendor/my_depenendy
