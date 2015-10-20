@@ -30,7 +30,7 @@ If any of the dependencies track a branch (rather than a specific commit), the c
 gdm update
 ```
 
-This will also record the exact versions that were checked out. Disable this by behavior by running:
+This will also record the exact versions that were checked out. Disable this behavior by instead running:
 
 ```sh
 gdm update --no-lock
