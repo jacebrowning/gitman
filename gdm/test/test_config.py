@@ -137,6 +137,21 @@ class TestConfig:
         assert 'https://github.com/jacebrowning/gdm-demo' == deps[6][1]
         assert '2da24fca34af3748e3cab61db81a2ae8b35aec94' == deps[6][2]
 
+    @pytest.mark.integration
+    def test_install_with_dirs(self):
+        """Verify the dependency list can be filtered."""
+        config = Config(FILES)
+
+        count = config.install_deps('gdm_2', 'gdm_3')
+        assert 2 == count
+
+    def test_install_with_dirs_unknown(self):
+        """Verify zero dependencies are installed with an unknown dependency."""
+        config = Config(FILES)
+
+        count = config.install_deps('foobar')
+        assert 0 == count
+
 
 class TestLoad:
 

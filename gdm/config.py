@@ -146,19 +146,26 @@ class Config(ShellMixin):
         """Get the full path to the sources location."""
         return os.path.join(self.root, self.location)
 
-    def install_deps(self, update=True, recurse=False, force=False, clean=True):
+    def install_deps(self, *names,
+                     update=True, recurse=False, force=False, clean=True):
         """Get all sources."""
         if not os.path.isdir(self.location_path):
             self.mkdir(self.location_path)
         self.cd(self.location_path)
 
         sources = self._get_sources(update)
+        dirs = list(names) if names else [source.dir for source in sources]
         common.show()
         common.indent()
 
         count = 0
         for source in sources:
-            count += 1
+            if source.dir in dirs:
+                dirs.remove(source.dir)
+                count += 1
+            else:
+                log.info("Skipped dependency: %s", source.dir)
+                continue
 
             source.update_files(force=force, clean=clean)
             source.create_link(self.root, force=force)
@@ -176,6 +183,9 @@ class Config(ShellMixin):
             self.cd(self.location_path, visible=False)
 
         common.dedent()
+        if dirs:
+            log.error("No such dependency: %s", ' '.join(dirs))
+            return 0
 
         return count
 

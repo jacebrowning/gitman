@@ -8,9 +8,11 @@ from .config import load
 log = common.logger(__name__)
 
 
-def install(root=None, force=False, clean=True):
+def install(*names, root=None, force=False, clean=True):
     """Install dependencies for a project."""
-    log.info("%sinstalling dependencies...", 'force-' if force else '')
+    log.info("%sInstalling dependencies: %s",
+             'force-' if force else '',
+             ', '.join(names) if names else '<all>')
     count = None
 
     root = _find_root(root)
@@ -19,18 +21,21 @@ def install(root=None, force=False, clean=True):
     if config:
         common.show("Installing dependencies...", log=False)
         common.show()
-        count = config.install_deps(force=force, clean=clean, update=False)
+        count = config.install_deps(*names,
+                                    force=force, clean=clean, update=False)
 
     _display_result("install", "installed", count)
 
     return count
 
 
-def update(root=None, recurse=False, force=False, clean=True, lock=True):
+def update(*names,
+           root=None, recurse=False, force=False, clean=True, lock=True):
     """Update dependencies for a project."""
-    log.info("%supdating dependencies%s...",
+    log.info("%supdating dependencies%s: %s",
              'force-' if force else '',
-             ', recursively' if recurse else '')
+             ', recursively' if recurse else '',
+             ', '.join(names) if names else '<all>')
     count = None
 
     root = _find_root(root)
@@ -39,9 +44,10 @@ def update(root=None, recurse=False, force=False, clean=True, lock=True):
     if config:
         common.show("Updating dependencies...", log=False)
         common.show()
-        count = config.install_deps(recurse=recurse, force=force, clean=clean)
+        count = config.install_deps(*names,
+                                    recurse=recurse, force=force, clean=clean)
         common.dedent(level=0)
-        if lock:
+        if count and lock:
             common.show("Recording installed versions...", log=False)
             common.show()
             config.lock_deps()

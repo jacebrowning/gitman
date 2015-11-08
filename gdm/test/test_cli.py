@@ -88,6 +88,14 @@ class TestInstall:
                                              force=False,
                                              clean=True)
 
+    @patch('gdm.commands.install')
+    def test_install_specific_sources(self, mock_install):
+        """Verify individual dependencies can be installed."""
+        cli.main(['install', 'foo', 'bar'])
+        mock_install.assert_called_once_with(
+            'foo', 'bar',
+            root=None, force=False, clean=False)
+
 
 class TestUpdate:
 
@@ -107,11 +115,8 @@ class TestUpdate:
     def test_update_recursive(self, mock_update):
         """Verify the 'update' command can be run recursively."""
         cli.main(['update', '--all'])
-        mock_update.assert_called_once_with(root=None,
-                                            force=False,
-                                            clean=False,
-                                            recurse=True,
-                                            lock=True)
+        mock_update.assert_called_once_with(
+            root=None, force=False, clean=False, recurse=True, lock=True)
 
     @patch('gdm.commands.update')
     def test_update_no_lock(self, mock_update):
@@ -122,6 +127,14 @@ class TestUpdate:
                                             clean=False,
                                             recurse=False,
                                             lock=False)
+
+    @patch('gdm.commands.update')
+    def test_update_specific_sources(self, mock_install):
+        """Verify individual dependencies can be installed."""
+        cli.main(['update', 'foo', 'bar'])
+        mock_install.assert_called_once_with(
+            'foo', 'bar',
+            root=None, force=False, clean=False, recurse=False, lock=True)
 
 
 class TestUninstall:
