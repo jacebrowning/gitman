@@ -1,16 +1,16 @@
-# pylint: disable=protected-access
 # pylint: disable=attribute-defined-outside-init
 
 from unittest.mock import Mock, call
 
 from gdm import common
+from gdm.common import _Config
 
 
 class TestShowConsole:
 
     def setup_method(self, _):
-        common._indent_level = 0
-        common.verbosity = 0
+        _Config.indent_level = 0
+        _Config.verbosity = 0
         self.file = Mock()
 
     def test_show(self):
@@ -45,8 +45,8 @@ class TestShowConsole:
 class TestShowLog:
 
     def setup_method(self, _):
-        common._indent_level = 0
-        common.verbosity = 1
+        _Config.indent_level = 0
+        _Config.verbosity = 1
         self.log = Mock()
 
     def test_show(self):
@@ -78,8 +78,8 @@ class TestShowLog:
 class TestShowQuiet:
 
     def setup_method(self, _):
-        common._indent_level = 0
-        common.verbosity = -1
+        _Config.indent_level = 0
+        _Config.verbosity = -1
         self.file = Mock()
         self.log = Mock()
 

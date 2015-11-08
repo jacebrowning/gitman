@@ -4,12 +4,13 @@
 
 import sys
 import argparse
+import logging
 
 from . import CLI, VERSION, DESCRIPTION
 from . import common
 from . import commands
 
-log = common.logger(__name__)
+log = logging.getLogger(__name__)
 
 
 def main(args=None, function=None):
@@ -118,23 +119,19 @@ def _get_command(function, namespace):
 def _run_command(function, args, kwargs, exit_msg):
     success = False
     try:
-        log.debug("running command...")
+        log.debug("Running %r command...", function.__name__)
         success = function(*args, **kwargs)
     except KeyboardInterrupt:
-        msg = "command canceled"
-        if common.verbosity == common.MAX_VERBOSITY:
-            log.exception(msg)
-        else:
-            log.debug(msg)
+        log.debug("Command canceled")
         exit_msg = ""
     except RuntimeError as exc:
         exit_msg = str(exc) + exit_msg
     else:
         exit_msg = ""
     if success:
-        log.debug("command succeeded")
+        log.debug("Command succeeded")
     else:
-        log.debug("command failed")
+        log.debug("Command failed")
         sys.exit(exit_msg or 1)
 
 

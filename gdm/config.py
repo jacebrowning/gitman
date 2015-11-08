@@ -8,8 +8,7 @@ import yorm
 from . import common
 from .shell import ShellMixin, GitMixin
 
-logging.getLogger('yorm').setLevel(logging.INFO)
-log = common.logger(__name__)
+log = logging.getLogger(__name__)
 
 
 @yorm.attr(repo=yorm.converters.String)
@@ -44,17 +43,17 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
 
     def update_files(self, force=False, clean=True):
         """Ensure the source matches the specified revision."""
-        log.info("updating source files...")
+        log.info("Updating source files...")
 
         # Enter the working tree
         if not os.path.exists(self.dir):
-            log.debug("creating a new repository...")
+            log.debug("Creating a new repository...")
             self.git_clone(self.repo, self.dir)
         self.cd(self.dir)
 
         # Check for uncommitted changes
         if not force:
-            log.debug("confirming there are no uncommitted changes...")
+            log.debug("Confirming there are no uncommitted changes...")
             if self.git_changes():
                 common.show()
                 msg = "Uncommitted changes: {}".format(os.getcwd())
@@ -69,7 +68,7 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
     def create_link(self, root, force=False):
         """Create a link from the target name to the current directory."""
         if self.link:
-            log.info("creating a symbolic link...")
+            log.info("Creating a symbolic link...")
             target = os.path.join(root, self.link)
             source = os.path.relpath(os.getcwd(), os.path.dirname(target))
             if os.path.islink(target):
@@ -237,7 +236,7 @@ class Config(ShellMixin):
         elif self.sources_locked:
             return self.sources_locked
         else:
-            log.info("no locked sources available, installing latest...")
+            log.info("No locked sources available, installing latest...")
             return self.sources
 
 
@@ -249,8 +248,8 @@ def load(root=None):
     for filename in os.listdir(root):
         if filename.lower() in Config.FILENAMES:
             config = Config(root, filename)
-            log.debug("loaded config: %s", config.path)
+            log.debug("Loaded config: %s", config.path)
             return config
 
-    log.debug("no config found in: %s", root)
+    log.debug("No config found in: %s", root)
     return None

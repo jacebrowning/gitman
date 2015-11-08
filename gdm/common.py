@@ -7,12 +7,6 @@ import logging
 from . import settings
 
 
-MAX_VERBOSITY = 4
-
-logger = logging.getLogger
-verbosity = 0
-
-
 class CallException(Exception):
     """Exception raised when a program call has a non-zero return code."""
 
@@ -42,9 +36,18 @@ class WarningFormatter(logging.Formatter):
         return super().format(record)
 
 
+class _Config:
+    """Share configuration options."""
+
+    MAX_VERBOSITY = 4
+
+    verbosity = 0
+    indent_level = 0
+
+
 def configure_logging(count=0):
     """Configure logging using the provided verbosity count."""
-    assert MAX_VERBOSITY == 4
+    assert _Config.MAX_VERBOSITY == 4
 
     if count == -1:
         level = settings.QUIET_LOGGING_LEVEL
@@ -78,35 +81,33 @@ def configure_logging(count=0):
                                  datefmt=settings.LOGGING_DATEFMT)
     logging.root.handlers[0].setFormatter(formatter)
     logging.getLogger('yorm').setLevel(max(level, settings.YORM_LOGGING_LEVEL))
+    logging.getLogger('sh').setLevel(max(level, settings.SH_LOGGING_LEVEL))
 
     # Warn about excessive verbosity
-    global verbosity  # pylint: disable=W0603
-    if count > MAX_VERBOSITY:
-        msg = "maximum verbosity level is {}".format(MAX_VERBOSITY)
+    if count > _Config.MAX_VERBOSITY:
+        msg = "maximum verbosity level is {}".format(_Config.MAX_VERBOSITY)
         logging.warn(msg)
-        verbosity = MAX_VERBOSITY
+        _Config.verbosity = _Config.MAX_VERBOSITY
     else:
-        verbosity = count
-
-
-_indent_level = 0
+        _Config.verbosity = count
 
 
 def indent():
-    global _indent_level
-    _indent_level += 1
+    _Config.indent_level += 1
 
 
 def dedent(level=None):
-    global _indent_level
-    _indent_level = max(0, _indent_level - 1) if level is None else level
+    if level is None:
+        _Config.indent_level = max(0, _Config.indent_level - 1)
+    else:
+        _Config.indent_level = level
 
 
-def show(message="", file=sys.stdout, log=logger(__name__)):
+def show(message="", file=sys.stdout, log=logging.getLogger(__name__)):
     """Write to standard output or error if enabled."""
-    if verbosity == 0:
-        print("  " * _indent_level + message, file=file)
-    elif verbosity >= 1:
+    if _Config.verbosity == 0:
+        print("  " * _Config.indent_level + message, file=file)
+    elif _Config.verbosity >= 1:
         message = message.strip()
         if message and log:
             log.info(message)

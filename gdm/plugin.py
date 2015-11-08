@@ -3,6 +3,7 @@
 """Plugin for Git."""
 
 import argparse
+import logging
 
 from . import PLUGIN, __version__
 from . import common
@@ -11,7 +12,7 @@ from .cli import _get_command, _run_command
 PROG = 'git ' + PLUGIN
 DESCRIPTION = "Use GDM (v{}) to manage source dependencies.".format(__version__)
 
-log = common.logger(__name__)
+log = logging.getLogger(__name__)
 
 
 def main(args=None):
