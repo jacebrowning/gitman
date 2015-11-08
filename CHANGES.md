@@ -1,16 +1,21 @@
 Revision History
 ================
 
+0.6 (unreleased)
+----------------
+
+- Added the ability to filter the dependency list on `install` and `update`
+
 0.5 (2015/10/20)
 ----------------
 
 - Added Git plugin support via: `git deps`.
-- Removed '--no-clean' option (now the default) on 'install' and 'update'.
-- Added '--clean' option to delete ignored files on 'install' and 'update'.
-- Switched to 'install' rather than 'update' of nested dependencies.
-- Added '--all' option on 'update' to update all nested dependencies.
-- Disabled warnings when running 'install' without locked sources.
-- Added '--no-lock' option to disable version recording.
+- Removed `--no-clean` option (now the default) on `install` and `update`.
+- Added `--clean` option to delete ignored files on `install` and `update`.
+- Switched to `install` rather than `update` of nested dependencies.
+- Added `--all` option on `update` to update all nested dependencies.
+- Disabled warnings when running `install` without locked sources.
+- Added `--no-lock` option to disable version recording.
 
 0.4.2 (2015/10/18)
 ------------------
@@ -25,11 +30,11 @@ Revision History
 0.4 (2015/09/18)
 ----------------
 
-- Replaced 'install' command with 'update'.
-- Updated 'install' command to use locked dependency versions.
-- Now sorting sources after a successful 'update'.
-- Now requiring '--force' to 'uninstall' with uncommitted changes.
-- Updated 'list' command to show full shell commands.
+- Replaced `install` command with `update`.
+- Updated `install` command to use locked dependency versions.
+- Now sorting sources after a successful `update`.
+- Now requiring `--force` to `uninstall` with uncommitted changes.
+- Updated `list` command to show full shell commands.
 
 0.3.1 (2015/09/09)
 ------------------
@@ -39,13 +44,13 @@ Revision History
 0.3 (2015/06/26)
 ----------------
 
-- Added '--no-clean' option to disable removing untracked files.
+- Added `--no-clean` option to disable removing untracked files.
 - Added support for `rev-parse` dates as the dependency `rev`.
 
 0.2.5 (2015/06/15)
 ------------------
 
-- Added '--quiet' option to hide warnings.
+- Added `--quiet` option to hide warnings.
 
 0.2.4 (2015/05/19)
 ------------------
@@ -66,12 +71,12 @@ Revision History
 ------------------
 
 - Added automatic remote branch tracking in dependencies.
-- Now requiring '--force' when there are untracked files.
+- Now requiring `--force` when there are untracked files.
 
 0.2 (2015/03/10)
 ----------------
 
-- Added 'list' command to display current URLs/SHAs.
+- Added `list` command to display current URLs/SHAs.
 
 0.1.4 (2014/02/27)
 ------------------
@@ -86,10 +91,10 @@ Revision History
 0.1.2 (2014/02/27)
 ------------------
 
-- Added '--force' argument to:
+- Added `--force` argument to:
     - overwrite uncommitted changes
     - create symbolic links in place of directories
-- Added live shell command output with '-vv' argument.
+- Added live shell command output with `-vv` argument.
 
 0.1 (2014/02/24)
 ----------------

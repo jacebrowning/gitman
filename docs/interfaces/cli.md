@@ -10,13 +10,19 @@ To clone/checkout the specified dependencies, run:
 gdm install
 ```
 
+or filter the dependency list by directory name:
+
+```sh
+gdm install <dir1> <dir2> <etc.>
+```
+
 Delete all untracked files in dependencies by instead running:
 
 ```sh
 gdm install --clean
 ```
 
-GDM will exit with an error if there are any uncommitted changes in dependencies. To overwrite all changes, run:
+The program will exit with an error if there are any uncommitted changes in dependencies. To overwrite all changes, run:
 
 ```sh
 gdm install --force
@@ -30,13 +36,19 @@ If any of the dependencies track a branch (rather than a specific commit), the c
 gdm update
 ```
 
+or filter the dependency list by directory name:
+
+```sh
+gdm update <dir1> <dir2> <etc.>
+```
+
 This will also record the exact versions that were checked out. Disable this behavior by instead running:
 
 ```sh
 gdm update --no-lock
 ```
 
-Or, to additionally get the latest versions of all nested dependencies, run:
+or to additionally get the latest versions of all nested dependencies, run:
 
 ```sh
 gdm update --all
@@ -56,7 +68,7 @@ To display the currently checked out dependencies, run:
 gdm list
 ```
 
-Exit with an error if there are any uncommitted changes by instead running:
+or exit with an error if there are any uncommitted changes:
 
 ```sh
 gdm list --no-dirty
