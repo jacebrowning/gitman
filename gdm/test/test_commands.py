@@ -18,7 +18,7 @@ class TestCommands:
 
         assert not install()
         assert not update()
-        assert display()
+        assert not display()
         assert not delete()
 
 

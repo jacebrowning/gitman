@@ -8,8 +8,10 @@ from sh import Command, ErrorReturnCode
 
 from . import common
 
-logging.getLogger('sh').setLevel(logging.WARNING)
-log = common.logger(__name__)
+CMD_PREFIX = "$ "
+OUT_PREFIX = "> "
+
+log = logging.getLogger(__name__)
 
 
 def _call(name, *args, ignore=False, catch=True, capture=False):
@@ -20,14 +22,16 @@ def _call(name, *args, ignore=False, catch=True, capture=False):
         try:
             program = Command(name)
             if capture:
-                return program(*args).strip()
+                line = program(*args).strip()
+                log.debug(OUT_PREFIX + line)
+                return line
             else:
                 for line in program(*args, _iter='err'):
-                    log.debug(line.strip())
+                    log.debug(OUT_PREFIX + line.strip())
         except ErrorReturnCode as exc:
             msg = "\n  IN: '{}'{}".format(os.getcwd(), exc)
             if ignore:
-                log.debug("ignored error from call to '%s'", name)
+                log.debug("Ignored error from call to '%s'", name)
             elif catch:
                 sys.exit(msg)
             else:
@@ -39,9 +43,11 @@ class _Base:
 
     @staticmethod
     def _call(*args, visible=True, catch=True, ignore=False, capture=False):
+        msg = CMD_PREFIX + ' '.join(args)
         if visible:
-            common.show("$ {}".format(' '.join(args)))
-        log.debug("running: %s", ' '.join(args))
+            common.show(msg)
+        else:
+            log.debug(msg)
         return _call(*args, catch=catch, ignore=ignore, capture=capture)
 
 
@@ -102,7 +108,7 @@ class GitMixin(_Base):
         else:
             filenames = output.splitlines()
             for filename in filenames:
-                log.debug("new file: %s", filename)
+                log.debug("New file: %s", filename)
             return bool(filenames)
 
     def git_update(self, rev, clean=True):

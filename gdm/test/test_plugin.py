@@ -13,6 +13,8 @@ class TestMain:
     @patch('gdm.cli.commands')
     def test_install(self, mock_commands):
         """Verify 'install' is the default command."""
+        mock_commands.install.__name__ = 'mock'
+
         plugin.main([])
 
         assert [
@@ -23,6 +25,8 @@ class TestMain:
     @patch('gdm.cli.commands')
     def test_update(self, mock_commands):
         """Verify 'update' can be called with cleaning."""
+        mock_commands.update.__name__ = 'mock'
+
         plugin.main(['--update', '--clean'])
 
         assert [
@@ -34,6 +38,8 @@ class TestMain:
     @patch('gdm.cli.commands')
     def test_update_recursive(self, mock_commands):
         """Verify 'update' can be called recursively."""
+        mock_commands.update.__name__ = 'mock'
+
         plugin.main(['--update', '--all'])
 
         assert [
@@ -45,6 +51,8 @@ class TestMain:
     @patch('gdm.cli.commands')
     def test_update_no_lock(self, mock_commands):
         """Verify 'update' can be called without locking."""
+        mock_commands.update.__name__ = 'mock'
+
         plugin.main(['--update', '--no-lock'])
 
         assert [
@@ -56,6 +64,8 @@ class TestMain:
     @patch('gdm.cli.commands')
     def test_list(self, mock_commands):
         """Verify 'list' can be called."""
+        mock_commands.display.__name__ = 'mock'
+
         plugin.main(['--list'])
 
         assert [
@@ -66,6 +76,8 @@ class TestMain:
     @patch('gdm.cli.commands')
     def test_uninstall(self, mock_commands):
         """Verify 'clean' can be called with force."""
+        mock_commands.delete.__name__ = 'mock'
+
         plugin.main(['--uninstall', '--force'])
 
         assert [

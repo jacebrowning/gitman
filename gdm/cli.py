@@ -4,12 +4,13 @@
 
 import sys
 import argparse
+import logging
 
 from . import CLI, VERSION, DESCRIPTION
 from . import common
 from . import commands
 
-log = common.logger(__name__)
+log = logging.getLogger(__name__)
 
 
 def main(args=None, function=None):
@@ -39,6 +40,8 @@ def main(args=None, function=None):
     info = "get the specified versions of all dependencies"
     sub = subs.add_parser('install', description=info.capitalize() + '.',
                           help=info, **shared)
+    sub.add_argument('name', nargs='*',
+                     help="list of dependencies (`dir` values) to install")
     sub.add_argument('-f', '--force', action='store_true',
                      help="overwrite uncommitted changes in dependencies")
     sub.add_argument('-c', '--clean', action='store_true',
@@ -48,6 +51,8 @@ def main(args=None, function=None):
     info = "update dependencies to the latest versions"
     sub = subs.add_parser('update', description=info.capitalize() + '.',
                           help=info, **shared)
+    sub.add_argument('name', nargs='*',
+                     help="list of dependencies (`dir` values) to update")
     # TODO: share force and clean with 'install'
     sub.add_argument('-f', '--force', action='store_true',
                      help="overwrite uncommitted changes in dependencies")
@@ -75,60 +80,58 @@ def main(args=None, function=None):
                      help="delete uncommitted changes in dependencies")
 
     # Parse arguments
-    args = parser.parse_args(args=args)
+    namespace = parser.parse_args(args=args)
 
     # Configure logging
-    common.configure_logging(args.verbose)
+    common.configure_logging(namespace.verbose)
 
     # Run the program
-    function, kwargs, exit_msg = _get_command(function, args)
+    function, args, kwargs, exit_msg = _get_command(function, namespace)
     if function is None:
         parser.print_help()
         sys.exit(1)
-    _run_command(function, kwargs, exit_msg)
+    _run_command(function, args, kwargs, exit_msg)
 
 
-def _get_command(function, args):
-    kwargs = dict(root=args.root)
+def _get_command(function, namespace):
+    args = []
+    kwargs = dict(root=namespace.root)
     exit_msg = ""
 
-    if args.command in ('install', 'update'):
-        function = getattr(commands, args.command)
-        kwargs.update(force=args.force, clean=args.clean)
-        if args.command == 'update':
-            kwargs.update(recurse=args.recurse, lock=args.lock)
+    if namespace.command in ('install', 'update'):
+        function = getattr(commands, namespace.command)
+        args = namespace.name
+        kwargs.update(force=namespace.force, clean=namespace.clean)
+        if namespace.command == 'update':
+            kwargs.update(recurse=namespace.recurse, lock=namespace.lock)
         exit_msg = "\n" + "Run again with '--force' to overwrite"
-    elif args.command == 'list':
+    elif namespace.command == 'list':
         function = commands.display
-        kwargs.update(dict(allow_dirty=args.allow_dirty))
-    elif args.command == 'uninstall':
+        kwargs.update(dict(allow_dirty=namespace.allow_dirty))
+    elif namespace.command == 'uninstall':
         function = commands.delete
-        kwargs.update(force=args.force)
+        kwargs.update(force=namespace.force)
         exit_msg = "\n" + "Run again with '--force' to ignore"
 
-    return function, kwargs, exit_msg
+    return function, args, kwargs, exit_msg
 
 
-def _run_command(function, kwargs, exit_msg):
+def _run_command(function, args, kwargs, exit_msg):
     success = False
     try:
-        log.debug("running command...")
-        success = function(**kwargs)
+        log.debug("Running %r command...", function.__name__)
+        success = function(*args, **kwargs)
     except KeyboardInterrupt:
-        msg = "command canceled"
-        if common.verbosity == common.MAX_VERBOSITY:
-            log.exception(msg)
-        else:
-            log.debug(msg)
+        log.debug("Command canceled")
         exit_msg = ""
     except RuntimeError as exc:
         exit_msg = str(exc) + exit_msg
     else:
         exit_msg = ""
     if success:
-        log.debug("command succeeded")
+        log.debug("Command succeeded")
     else:
-        log.debug("command failed")
+        log.debug("Command failed")
         sys.exit(exit_msg or 1)
 
 

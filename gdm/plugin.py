@@ -3,6 +3,7 @@
 """Plugin for Git."""
 
 import argparse
+import logging
 
 from . import PLUGIN, __version__
 from . import common
@@ -11,7 +12,7 @@ from .cli import _get_command, _run_command
 PROG = 'git ' + PLUGIN
 DESCRIPTION = "Use GDM (v{}) to manage source dependencies.".format(__version__)
 
-log = common.logger(__name__)
+log = logging.getLogger(__name__)
 
 
 def main(args=None):
@@ -56,20 +57,21 @@ def main(args=None):
     )
 
     # Parse arguments
-    args = parser.parse_args(args=args)
+    namespace = parser.parse_args(args=args)
 
     # Modify arguments to match CLI interface
-    if not args.command:
-        args.command = 'install'
-    args.root = None
-    args.allow_dirty = True
+    if not namespace.command:
+        namespace.command = 'install'
+    namespace.name = []
+    namespace.root = None
+    namespace.allow_dirty = True
 
     # Configure logging
     common.configure_logging()
 
     # Run the program
-    function, kwargs, exit_msg = _get_command(None, args)
-    _run_command(function, kwargs, exit_msg)
+    function, args, kwargs, exit_msg = _get_command(None, namespace)
+    _run_command(function, args, kwargs, exit_msg)
 
 
 if __name__ == '__main__':  # pragma: no cover (manual test)
