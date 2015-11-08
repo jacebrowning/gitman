@@ -120,6 +120,21 @@ def _find_root(root, cwd=None):
 
 
 def _display_result(present, past, count, allow_zero=False):
+    """Convert a command's dependency count to a return status.
+
+    >>> _display_result("sample", "Sampled", 1)
+    True
+
+    >>> _display_result("sample", "Sampled", None)
+    False
+
+    >>> _display_result("sample", "Sampled", 0)
+    False
+
+    >>> _display_result("sample", "Sampled", 0, allow_zero=True)
+    True
+
+    """
     if count is None:
         log.warn("No dependencies to %s", present)
     elif count == 1:
