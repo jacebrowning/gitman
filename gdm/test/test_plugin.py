@@ -18,7 +18,8 @@ class TestMain:
         plugin.main([])
 
         assert [
-            call.install(root=None, clean=False, force=False),
+            call.install(root=None, depth=None,
+                         clean=False, force=False),
             call.install().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
@@ -30,7 +31,7 @@ class TestMain:
         plugin.main(['--update', '--clean'])
 
         assert [
-            call.update(root=None,
+            call.update(root=None, depth=None,
                         clean=True, force=False, recurse=False, lock=True),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
@@ -43,7 +44,7 @@ class TestMain:
         plugin.main(['--update', '--all'])
 
         assert [
-            call.update(root=None,
+            call.update(root=None, depth=None,
                         clean=False, force=False, recurse=True, lock=True),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
@@ -56,7 +57,7 @@ class TestMain:
         plugin.main(['--update', '--no-lock'])
 
         assert [
-            call.update(root=None,
+            call.update(root=None, depth=None,
                         clean=False, force=False, recurse=False, lock=False),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
@@ -69,7 +70,8 @@ class TestMain:
         plugin.main(['--list'])
 
         assert [
-            call.display(root=None, allow_dirty=True),
+            call.display(root=None, depth=None,
+                         allow_dirty=True),
             call.display().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 

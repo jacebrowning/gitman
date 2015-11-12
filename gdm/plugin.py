@@ -64,6 +64,7 @@ def main(args=None):
         namespace.command = 'install'
     namespace.name = []
     namespace.root = None
+    namespace.depth = None
     namespace.allow_dirty = True
 
     # Configure logging

@@ -58,9 +58,8 @@ class TestInstall:
 
         cli.main(['install'])
 
-        mock_install.assert_called_once_with(root=None,
-                                             force=False,
-                                             clean=False)
+        mock_install.assert_called_once_with(
+            root=None, depth=None, force=False, clean=False)
 
     @patch('gdm.commands.install')
     def test_install_root(self, mock_install):
@@ -69,9 +68,8 @@ class TestInstall:
 
         cli.main(['install', '--root', 'mock/path/to/root'])
 
-        mock_install.assert_called_once_with(root='mock/path/to/root',
-                                             force=False,
-                                             clean=False)
+        mock_install.assert_called_once_with(
+            root='mock/path/to/root', depth=None, force=False, clean=False)
 
     @patch('gdm.commands.install')
     def test_install_force(self, mock_install):
@@ -80,9 +78,8 @@ class TestInstall:
 
         cli.main(['install', '--force'])
 
-        mock_install.assert_called_once_with(root=None,
-                                             force=True,
-                                             clean=False)
+        mock_install.assert_called_once_with(
+            root=None, depth=None, force=True, clean=False)
 
     @patch('gdm.commands.install')
     def test_install_clean(self, mock_install):
@@ -91,9 +88,8 @@ class TestInstall:
 
         cli.main(['install', '--clean'])
 
-        mock_install.assert_called_once_with(root=None,
-                                             force=False,
-                                             clean=True)
+        mock_install.assert_called_once_with(
+            root=None, depth=None, force=False, clean=True)
 
     @patch('gdm.commands.install')
     def test_install_specific_sources(self, mock_install):
@@ -103,8 +99,18 @@ class TestInstall:
         cli.main(['install', 'foo', 'bar'])
 
         mock_install.assert_called_once_with(
-            'foo', 'bar',
-            root=None, force=False, clean=False)
+            'foo', 'bar', root=None, depth=None,
+            force=False, clean=False)
+
+    @patch('gdm.commands.install')
+    def test_install_with_depth(self, mock_update):
+        """Verify the 'install' command can be limited by depth."""
+        mock_update.__name__ = 'mock'
+
+        cli.main(['install', '--depth', '5'])
+
+        mock_update.assert_called_once_with(
+            root=None, depth=5, force=False, clean=False)
 
 
 class TestUpdate:
@@ -118,11 +124,9 @@ class TestUpdate:
 
         cli.main(['update'])
 
-        mock_update.assert_called_once_with(root=None,
-                                            force=False,
-                                            clean=False,
-                                            recurse=False,
-                                            lock=True)
+        mock_update.assert_called_once_with(
+            root=None, depth=None,
+            force=False, clean=False, recurse=False, lock=True)
 
     @patch('gdm.commands.update')
     def test_update_recursive(self, mock_update):
@@ -132,7 +136,8 @@ class TestUpdate:
         cli.main(['update', '--all'])
 
         mock_update.assert_called_once_with(
-            root=None, force=False, clean=False, recurse=True, lock=True)
+            root=None, depth=None,
+            force=False, clean=False, recurse=True, lock=True)
 
     @patch('gdm.commands.update')
     def test_update_no_lock(self, mock_update):
@@ -141,11 +146,9 @@ class TestUpdate:
 
         cli.main(['update', '--no-lock'])
 
-        mock_update.assert_called_once_with(root=None,
-                                            force=False,
-                                            clean=False,
-                                            recurse=False,
-                                            lock=False)
+        mock_update.assert_called_once_with(
+            root=None, depth=None,
+            force=False, clean=False, recurse=False, lock=False)
 
     @patch('gdm.commands.update')
     def test_update_specific_sources(self, mock_install):
@@ -155,8 +158,19 @@ class TestUpdate:
         cli.main(['update', 'foo', 'bar'])
 
         mock_install.assert_called_once_with(
-            'foo', 'bar',
-            root=None, force=False, clean=False, recurse=False, lock=True)
+            'foo', 'bar', root=None, depth=None,
+            force=False, clean=False, recurse=False, lock=True)
+
+    @patch('gdm.commands.update')
+    def test_update_with_depth(self, mock_update):
+        """Verify the 'update' command can be limited by depth."""
+        mock_update.__name__ = 'mock'
+
+        cli.main(['update', '--depth', '5'])
+
+        mock_update.assert_called_once_with(
+            root=None, depth=5,
+            force=False, clean=False, recurse=False, lock=True)
 
 
 class TestUninstall:
@@ -170,7 +184,8 @@ class TestUninstall:
 
         cli.main(['uninstall'])
 
-        mock_uninstall.assert_called_once_with(root=None, force=False)
+        mock_uninstall.assert_called_once_with(
+            root=None, force=False)
 
     @patch('gdm.commands.delete')
     def test_uninstall_root(self, mock_uninstall):
@@ -179,8 +194,8 @@ class TestUninstall:
 
         cli.main(['uninstall', '--root', 'mock/path/to/root'])
 
-        mock_uninstall.assert_called_once_with(root='mock/path/to/root',
-                                               force=False)
+        mock_uninstall.assert_called_once_with(
+            root='mock/path/to/root', force=False)
 
     @patch('gdm.commands.delete')
     def test_uninstall_force(self, mock_uninstall):
@@ -189,7 +204,8 @@ class TestUninstall:
 
         cli.main(['uninstall', '--force'])
 
-        mock_uninstall.assert_called_once_with(root=None, force=True)
+        mock_uninstall.assert_called_once_with(
+            root=None, force=True)
 
 
 class TestList:
@@ -203,7 +219,8 @@ class TestList:
 
         cli.main(['list'])
 
-        mock_display.assert_called_once_with(root=None, allow_dirty=True)
+        mock_display.assert_called_once_with(
+            root=None, depth=None, allow_dirty=True)
 
     @patch('gdm.commands.display')
     def test_list_root(self, mock_display):
@@ -212,8 +229,8 @@ class TestList:
 
         cli.main(['list', '--root', 'mock/path/to/root'])
 
-        mock_display.assert_called_once_with(root='mock/path/to/root',
-                                             allow_dirty=True)
+        mock_display.assert_called_once_with(
+            root='mock/path/to/root', depth=None, allow_dirty=True)
 
     @patch('gdm.commands.display')
     def test_list_no_dirty(self, mock_display):
@@ -222,7 +239,18 @@ class TestList:
 
         cli.main(['list', '--no-dirty'])
 
-        mock_display.assert_called_once_with(root=None, allow_dirty=False)
+        mock_display.assert_called_once_with(
+            root=None, depth=None, allow_dirty=False)
+
+    @patch('gdm.commands.display')
+    def test_update_with_depth(self, mock_update):
+        """Verify the 'list' command can be limited by depth."""
+        mock_update.__name__ = 'mock'
+
+        cli.main(['list', '--depth', '5'])
+
+        mock_update.assert_called_once_with(
+            root=None, depth=5, allow_dirty=True)
 
 
 class TestLogging:

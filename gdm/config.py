@@ -145,7 +145,7 @@ class Config(ShellMixin):
         """Get the full path to the sources location."""
         return os.path.join(self.root, self.location)
 
-    def install_deps(self, *names,
+    def install_deps(self, *names, depth=None,
                      update=True, recurse=False, force=False, clean=True):
         """Get all sources."""
         if not os.path.isdir(self.location_path):
@@ -161,7 +161,11 @@ class Config(ShellMixin):
         for source in sources:
             if source.dir in dirs:
                 dirs.remove(source.dir)
-                count += 1
+                if depth == 0:
+                    log.info("Skipped dependency: %s", source.dir)
+                    continue
+                else:
+                    count += 1
             else:
                 log.info("Skipped dependency: %s", source.dir)
                 continue
@@ -173,10 +177,13 @@ class Config(ShellMixin):
             config = load()
             if config:
                 common.indent()
-                count += config.install_deps(update=update and recurse,
-                                             recurse=recurse,
-                                             force=force,
-                                             clean=clean)
+                count += config.install_deps(
+                    depth=None if depth is None else max(0, depth - 1),
+                    update=update and recurse,
+                    recurse=recurse,
+                    force=force,
+                    clean=clean,
+                )
                 common.dedent()
 
             self.cd(self.location_path, visible=False)
@@ -206,7 +213,7 @@ class Config(ShellMixin):
         self.rm(self.location_path)
         common.show()
 
-    def get_deps(self, allow_dirty=True):
+    def get_deps(self, depth=None, allow_dirty=True):
         """Yield the path, repository URL, and hash of each dependency."""
         if os.path.exists(self.location_path):
             self.cd(self.location_path)
@@ -217,13 +224,20 @@ class Config(ShellMixin):
 
         for source in self.sources:
 
+            if depth == 0:
+                log.info("Skipped dependency: %s", source.dir)
+                continue
+
             yield source.identify(allow_dirty=allow_dirty)
             common.show()
 
             config = load()
             if config:
                 common.indent()
-                yield from config.get_deps(allow_dirty=allow_dirty)
+                yield from config.get_deps(
+                    depth=None if depth is None else max(0, depth - 1),
+                    allow_dirty=allow_dirty,
+                )
                 common.dedent()
 
             self.cd(self.location_path, visible=False)
