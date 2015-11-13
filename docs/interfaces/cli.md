@@ -16,6 +16,12 @@ or filter the dependency list by directory name:
 gdm install <dir1> <dir2> <etc.>
 ```
 
+or limit the traversal of nested dependencies:
+
+```sh
+gdm install --depth=<count>
+```
+
 Delete all untracked files in dependencies by instead running:
 
 ```sh
@@ -40,6 +46,12 @@ or filter the dependency list by directory name:
 
 ```sh
 gdm update <dir1> <dir2> <etc.>
+```
+
+or limit the traversal of nested dependencies:
+
+```sh
+gdm update --depth=<count>
 ```
 
 This will also record the exact versions that were checked out. Disable this behavior by instead running:
