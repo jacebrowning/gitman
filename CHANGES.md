@@ -1,7 +1,7 @@
 Revision History
 ================
 
-0.6 (unreleased)
+0.6 (2015/11/13)
 ----------------
 
 - Added the ability to filter the dependency list on `install` and `update`
