@@ -36,6 +36,14 @@ class WarningFormatter(logging.Formatter):
         return super().format(record)
 
 
+def positive_int(value):
+    """Custom `int` that must be positive."""
+    value = int(value)
+    if value < 1:
+        raise TypeError("tbd")
+    return value
+
+
 class _Config:
     """Share configuration options."""
 

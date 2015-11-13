@@ -9,8 +9,18 @@ from .config import load
 log = logging.getLogger(__name__)
 
 
-def install(*names, root=None, force=False, clean=True):
-    """Install dependencies for a project."""
+def install(*names, root=None, depth=None, force=False, clean=True):
+    """Install dependencies for a project.
+
+    Optional arguments:
+
+    - `*names`: optional list of dependency directory names to filter on
+    - `root`: specifies the path to the root working tree
+    - `depth`: number of levels of dependencies to traverse
+    - `force`: indicates uncommitted changes can be overwritten
+    - `clean`: indicates untracked files should be deleted from dependencies
+
+    """
     log.info("%sInstalling dependencies: %s",
              'force-' if force else '',
              ', '.join(names) if names else '<all>')
@@ -22,15 +32,27 @@ def install(*names, root=None, force=False, clean=True):
     if config:
         common.show("Installing dependencies...", log=False)
         common.show()
-        count = config.install_deps(*names,
-                                    force=force, clean=clean, update=False)
+        count = config.install_deps(
+            *names, update=False, depth=depth, force=force, clean=clean)
 
     return _display_result("install", "Installed", count)
 
 
-def update(*names,
-           root=None, recurse=False, force=False, clean=True, lock=True):
-    """Update dependencies for a project."""
+def update(*names, root=None, depth=None,
+           recurse=False, force=False, clean=True, lock=True):
+    """Update dependencies for a project.
+
+    Optional arguments:
+
+    - `*names`: optional list of dependency directory names to filter on
+    - `root`: specifies the path to the root working tree
+    - `depth`: number of levels of dependencies to traverse
+    - `recurse`: indicates nested dependencies should also be updated
+    - `force`: indicates uncommitted changes can be overwritten
+    - `clean`: indicates untracked files should be deleted from dependencies
+    - `lock`: indicates actual dependency versions should be recorded
+
+    """
     log.info("%s dependencies%s: %s",
              'Force updating' if force else 'Updating',
              ', recursively' if recurse else '',
@@ -43,8 +65,9 @@ def update(*names,
     if config:
         common.show("Updating dependencies...", log=False)
         common.show()
-        count = config.install_deps(*names,
-                                    recurse=recurse, force=force, clean=clean)
+        count = config.install_deps(
+            *names, update=True, depth=depth,
+            recurse=recurse, force=force, clean=clean)
         common.dedent(level=0)
         if count and lock:
             common.show("Recording installed versions...", log=False)
@@ -54,8 +77,16 @@ def update(*names,
     return _display_result("update", "Updated", count)
 
 
-def display(root=None, allow_dirty=True):
-    """Display installed dependencies for a project."""
+def display(root=None, depth=None, allow_dirty=True):
+    """Display installed dependencies for a project.
+
+    Optional arguments:
+
+    - `root`: specifies the path to the root working tree
+    - `depth`: number of levels of dependencies to traverse
+    - `allow_dirty`: causes uncommitted changes to be ignored
+
+    """
     log.info("Displaying dependencies...")
     count = None
 
@@ -65,13 +96,20 @@ def display(root=None, allow_dirty=True):
     if config:
         common.show("Displaying current dependency versions...", log=False)
         common.show()
-        count = len(list(config.get_deps(allow_dirty=allow_dirty)))
+        count = len(list(config.get_deps(depth=depth, allow_dirty=allow_dirty)))
 
     return _display_result("display", "Displayed", count)
 
 
 def delete(root=None, force=False):
-    """Delete dependencies for a project."""
+    """Delete dependencies for a project.
+
+    Optional arguments:
+
+    - `root`: specifies the path to the root working tree
+    - `force`: indicates uncommitted changes can be overwritten
+
+    """
     log.info("Deleting dependencies...")
     count = None
 

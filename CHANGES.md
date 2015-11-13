@@ -5,6 +5,7 @@ Revision History
 ----------------
 
 - Added the ability to filter the dependency list on `install` and `update`
+- Added `--depth` option to limit dependency traversal on `install`, `update`, and `list`
 
 0.5 (2015/10/20)
 ----------------
