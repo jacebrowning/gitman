@@ -112,6 +112,16 @@ class TestInstall:
         mock_update.assert_called_once_with(
             root=None, depth=5, force=False, clean=False)
 
+    @patch('gdm.commands.install')
+    def test_install_with_depth_invalid(self, mock_update):
+        """Verify depths below 1 are rejected."""
+        mock_update.__name__ = 'mock'
+
+        with pytest.raises(SystemExit):
+            cli.main(['install', '--depth', '0'])
+        with pytest.raises(SystemExit):
+            cli.main(['install', '--depth', '-1'])
+
 
 class TestUpdate:
 

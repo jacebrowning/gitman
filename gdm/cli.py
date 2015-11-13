@@ -28,7 +28,8 @@ def main(args=None, function=None):
     project.add_argument('-r', '--root', metavar='PATH',
                          help="root directory of the project")
     depth = argparse.ArgumentParser(add_help=False)
-    depth.add_argument('-d', '--depth', type=int, default=None, metavar="NUM",
+    depth.add_argument('-d', '--depth', type=common.positive_int,
+                       default=None, metavar="NUM",
                        help="limit the number of dependency levels")
     options = argparse.ArgumentParser(add_help=False)
     options.add_argument('-f', '--force', action='store_true',
