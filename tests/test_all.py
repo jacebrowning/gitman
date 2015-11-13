@@ -27,7 +27,7 @@ class TestCommands:
         assert not os.path.exists(config.location)
 
         # install sources
-        assert gdm.install(FILES)
+        assert gdm.install(root=FILES)
         assert 'gdm_1' in os.listdir(config.location)
         assert 'gdm_2' in os.listdir(config.location)
 
@@ -35,15 +35,15 @@ class TestCommands:
         assert gdm.list(FILES)
 
         # update sources
-        assert gdm.update(FILES)
+        assert gdm.update(root=FILES)
         assert 'gdm_1' in os.listdir(config.location)
         assert 'gdm_2' in os.listdir(config.location)
 
         # install locked sources
-        assert gdm.install(FILES)
+        assert gdm.install(root=FILES)
         assert 'gdm_1' in os.listdir(config.location)
         assert 'gdm_2' in os.listdir(config.location)
 
         # uninstall sources
-        assert gdm.uninstall(FILES)
+        assert gdm.uninstall(root=FILES)
         assert not os.path.isdir(config.location)

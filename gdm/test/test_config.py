@@ -137,6 +137,50 @@ class TestConfig:
         assert 'https://github.com/jacebrowning/gdm-demo' == deps[6][1]
         assert '2da24fca34af3748e3cab61db81a2ae8b35aec94' == deps[6][2]
 
+        assert 5 == len(list(config.get_deps(depth=2)))
+
+        assert 3 == len(list(config.get_deps(depth=1)))
+
+        assert 0 == len(list(config.get_deps(depth=0)))
+
+    @pytest.mark.integration
+    def test_install_with_dirs(self):
+        """Verify the dependency list can be filtered."""
+        config = Config(FILES)
+
+        count = config.install_deps('gdm_2', 'gdm_3')
+        assert 2 == count
+
+    def test_install_with_dirs_unknown(self):
+        """Verify zero dependencies are installed with an unknown dependency."""
+        config = Config(FILES)
+
+        count = config.install_deps('foobar')
+        assert 0 == count
+
+    def test_install_with_depth_0(self):
+        """Verify an install depth of 0 installs nothing."""
+        config = Config(FILES)
+
+        count = config.install_deps(depth=0)
+        assert 0 == count
+
+    @pytest.mark.integration
+    def test_install_with_depth_1(self):
+        """Verify an install depth of 1 installs the direct dependencies."""
+        config = Config(FILES)
+
+        count = config.install_deps(depth=1)
+        assert 3 == count
+
+    @pytest.mark.integration
+    def test_install_with_depth_2(self):
+        """Verify an install depth of 2 installs 1 level of nesting."""
+        config = Config(FILES)
+
+        count = config.install_deps(depth=2)
+        assert 5 == count
+
 
 class TestLoad:
 

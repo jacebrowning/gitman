@@ -4,12 +4,13 @@
 
 import sys
 import argparse
+import logging
 
 from . import CLI, VERSION, DESCRIPTION
 from . import common
 from . import commands
 
-log = common.logger(__name__)
+log = logging.getLogger(__name__)
 
 
 def main(args=None, function=None):
@@ -26,33 +27,38 @@ def main(args=None, function=None):
     project = argparse.ArgumentParser(add_help=False)
     project.add_argument('-r', '--root', metavar='PATH',
                          help="root directory of the project")
-    shared = {'formatter_class': common.WideHelpFormatter,
-              'parents': [project, debug]}
+    depth = argparse.ArgumentParser(add_help=False)
+    depth.add_argument('-d', '--depth', type=common.positive_int,
+                       default=None, metavar="NUM",
+                       help="limit the number of dependency levels")
+    options = argparse.ArgumentParser(add_help=False)
+    options.add_argument('-f', '--force', action='store_true',
+                         help="overwrite uncommitted changes in dependencies")
+    options.add_argument('-c', '--clean', action='store_true',
+                         help="keep ignored files in dependencies")
+    shared = {'formatter_class': common.WideHelpFormatter}
 
     # Main parser
     parser = argparse.ArgumentParser(prog=CLI, description=DESCRIPTION,
-                                     **shared)
+                                     parents=[debug, project], **shared)
 
     subs = parser.add_subparsers(help="", dest='command', metavar="<command>")
 
     # Install parser
     info = "get the specified versions of all dependencies"
     sub = subs.add_parser('install', description=info.capitalize() + '.',
-                          help=info, **shared)
-    sub.add_argument('-f', '--force', action='store_true',
-                     help="overwrite uncommitted changes in dependencies")
-    sub.add_argument('-c', '--clean', action='store_true',
-                     help="keep ignored files in dependencies")
+                          help=info, parents=[debug, project, depth, options],
+                          **shared)
+    sub.add_argument('name', nargs='*',
+                     help="list of dependencies (`dir` values) to install")
 
     # Update parser
     info = "update dependencies to the latest versions"
     sub = subs.add_parser('update', description=info.capitalize() + '.',
-                          help=info, **shared)
-    # TODO: share force and clean with 'install'
-    sub.add_argument('-f', '--force', action='store_true',
-                     help="overwrite uncommitted changes in dependencies")
-    sub.add_argument('-c', '--clean', action='store_true',
-                     help="keep ignored files in dependencies")
+                          help=info, parents=[debug, project, depth, options],
+                          **shared)
+    sub.add_argument('name', nargs='*',
+                     help="list of dependencies (`dir` values) to update")
     sub.add_argument('-a', '--all', action='store_true', dest='recurse',
                      help="update all nested dependencies, recursively")
     sub.add_argument('-L', '--no-lock',
@@ -62,7 +68,7 @@ def main(args=None, function=None):
     # Display parser
     info = "display the current version of each dependency"
     sub = subs.add_parser('list', description=info.capitalize() + '.',
-                          help=info, **shared)
+                          help=info, parents=[debug, project, depth], **shared)
     sub.add_argument('-D', '--no-dirty', action='store_false',
                      dest='allow_dirty',
                      help="fail if a source has uncommitted changes")
@@ -70,65 +76,67 @@ def main(args=None, function=None):
     # Uninstall parser
     info = "delete all installed dependencies"
     sub = subs.add_parser('uninstall', description=info.capitalize() + '.',
-                          help=info, **shared)
+                          help=info, parents=[debug, project], **shared)
     sub.add_argument('-f', '--force', action='store_true',
                      help="delete uncommitted changes in dependencies")
 
     # Parse arguments
-    args = parser.parse_args(args=args)
+    namespace = parser.parse_args(args=args)
 
     # Configure logging
-    common.configure_logging(args.verbose)
+    common.configure_logging(namespace.verbose)
 
     # Run the program
-    function, kwargs, exit_msg = _get_command(function, args)
+    function, args, kwargs, exit_msg = _get_command(function, namespace)
     if function is None:
         parser.print_help()
         sys.exit(1)
-    _run_command(function, kwargs, exit_msg)
+    _run_command(function, args, kwargs, exit_msg)
 
 
-def _get_command(function, args):
-    kwargs = dict(root=args.root)
+def _get_command(function, namespace):
+    args = []
+    kwargs = dict(root=namespace.root)
     exit_msg = ""
 
-    if args.command in ('install', 'update'):
-        function = getattr(commands, args.command)
-        kwargs.update(force=args.force, clean=args.clean)
-        if args.command == 'update':
-            kwargs.update(recurse=args.recurse, lock=args.lock)
+    if namespace.command in ('install', 'update'):
+        function = getattr(commands, namespace.command)
+        args = namespace.name
+        kwargs.update(depth=namespace.depth,
+                      force=namespace.force,
+                      clean=namespace.clean)
+        if namespace.command == 'update':
+            kwargs.update(recurse=namespace.recurse,
+                          lock=namespace.lock)
         exit_msg = "\n" + "Run again with '--force' to overwrite"
-    elif args.command == 'list':
+    elif namespace.command == 'list':
         function = commands.display
-        kwargs.update(dict(allow_dirty=args.allow_dirty))
-    elif args.command == 'uninstall':
+        kwargs.update(dict(depth=namespace.depth,
+                           allow_dirty=namespace.allow_dirty))
+    elif namespace.command == 'uninstall':
         function = commands.delete
-        kwargs.update(force=args.force)
+        kwargs.update(force=namespace.force)
         exit_msg = "\n" + "Run again with '--force' to ignore"
 
-    return function, kwargs, exit_msg
+    return function, args, kwargs, exit_msg
 
 
-def _run_command(function, kwargs, exit_msg):
+def _run_command(function, args, kwargs, exit_msg):
     success = False
     try:
-        log.debug("running command...")
-        success = function(**kwargs)
+        log.debug("Running %r command...", function.__name__)
+        success = function(*args, **kwargs)
     except KeyboardInterrupt:
-        msg = "command canceled"
-        if common.verbosity == common.MAX_VERBOSITY:
-            log.exception(msg)
-        else:
-            log.debug(msg)
+        log.debug("Command canceled")
         exit_msg = ""
     except RuntimeError as exc:
         exit_msg = str(exc) + exit_msg
     else:
         exit_msg = ""
     if success:
-        log.debug("command succeeded")
+        log.debug("Command succeeded")
     else:
-        log.debug("command failed")
+        log.debug("Command failed")
         sys.exit(exit_msg or 1)
 
 
