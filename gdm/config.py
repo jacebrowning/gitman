@@ -148,6 +148,10 @@ class Config(ShellMixin):
     def install_deps(self, *names, depth=None,
                      update=True, recurse=False, force=False, clean=True):
         """Get all sources."""
+        if depth == 0:
+            log.info("Skipped directory: %s", self.location_path)
+            return 0
+
         if not os.path.isdir(self.location_path):
             self.mkdir(self.location_path)
         self.cd(self.location_path)
@@ -161,11 +165,7 @@ class Config(ShellMixin):
         for source in sources:
             if source.dir in dirs:
                 dirs.remove(source.dir)
-                if depth == 0:
-                    log.info("Skipped dependency: %s", source.dir)
-                    continue
-                else:
-                    count += 1
+                count += 1
             else:
                 log.info("Skipped dependency: %s", source.dir)
                 continue
