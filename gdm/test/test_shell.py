@@ -6,7 +6,7 @@ from unittest.mock import patch, Mock
 import pytest
 
 from gdm.common import CallException
-from gdm.shell import _call, ShellMixin, GitMixin
+from gdm.shell import call, ShellMixin, GitMixin
 
 
 class TestCall:
@@ -16,32 +16,32 @@ class TestCall:
     @patch('os.chdir')
     def test_cd(self, mock_chdir):
         """Verify directories are changed correctly."""
-        _call('cd', 'mock/dir')
+        call('cd', 'mock/dir')
         mock_chdir.assert_called_once_with('mock/dir')
 
     @patch('gdm.shell.Command')
     def test_other(self, mock_command):
         """Verify directories are changed correctly."""
-        _call('mock_program')
+        call('mock_program')
         mock_command.assert_called_once_with('mock_program')
 
     def test_other_error(self):
         """Verify program errors are handled."""
         with pytest.raises(SystemExit):
-            _call('git', '--invalid-git-argument')
+            call('git', '--invalid-git-argument')
 
     def test_other_error_uncaught(self):
         """Verify program errors can be left uncaught."""
         with pytest.raises(CallException):
-            _call('git', '--invalid-git-argument', catch=False)
+            call('git', '--invalid-git-argument', catch=False)
 
     def test_other_error_ignored(self):
         """Verify program errors can be ignored."""
-        _call('git', '--invalid-git-argument', ignore=True)
+        call('git', '--invalid-git-argument', ignore=True)
 
     def test_other_capture(self):
         """Verify a program's output can be captured."""
-        stdout = _call('echo', 'Hello, world!\n', capture=True)
+        stdout = call('echo', 'Hello, world!\n', capture=True)
         assert "Hello, world!" == stdout
 
 
@@ -56,7 +56,7 @@ class _BaseTestCalls:
         assert expected == actual
 
 
-@patch('gdm.shell._call')
+@patch('gdm.shell.call')
 class TestShell(_BaseTestCalls):
 
     """Tests for calls to shell utilities."""
@@ -92,7 +92,7 @@ class TestShell(_BaseTestCalls):
         self.assert_calls(mock_call, ["rm -rf mock/dir/path"])
 
 
-@patch('gdm.shell._call')
+@patch('gdm.shell.call')
 class TestGit(_BaseTestCalls):
 
     """Tests for calls to Git."""
@@ -152,17 +152,17 @@ class TestGit(_BaseTestCalls):
 
     def test_changes_false(self, _):
         """Verify the absence of changes can be detected."""
-        with patch('gdm.shell._call', Mock(return_value="")):
+        with patch('gdm.shell.call', Mock(return_value="")):
             assert False is self.shell.git_changes()
 
     def test_changes_true_untracked(self, _):
         """Verify untracked files can be detected."""
-        with patch('gdm.shell._call', Mock(return_value="file_1")):
+        with patch('gdm.shell.call', Mock(return_value="file_1")):
             assert True is self.shell.git_changes()
 
     def test_changes_true_uncommitted(self, _):
         """Verify uncommitted changes can be detected."""
-        with patch('gdm.shell._call', Mock(side_effect=CallException)):
+        with patch('gdm.shell.call', Mock(side_effect=CallException)):
             assert True is self.shell.git_changes()
 
     def test_update(self, mock_call):

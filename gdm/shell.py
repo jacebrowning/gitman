@@ -14,8 +14,14 @@ OUT_PREFIX = "> "
 log = logging.getLogger(__name__)
 
 
-def _call(name, *args, ignore=False, catch=True, capture=False):
+def call(name, *args, ignore=False, catch=True, capture=False, visible=True):
     """Call a shell program with arguments."""
+    msg = CMD_PREFIX + ' '.join([name] + list(args))
+    if visible:
+        common.show(msg)
+    else:
+        log.debug(msg)
+
     if name == 'cd' and len(args) == 1:
         os.chdir(args[0])
     else:
@@ -38,39 +44,29 @@ def _call(name, *args, ignore=False, catch=True, capture=False):
                 raise common.CallException(msg)
 
 
-class _Base:
-    """Functions to call shell commands."""
-
-    @staticmethod
-    def _call(*args, visible=True, catch=True, ignore=False, capture=False):
-        msg = CMD_PREFIX + ' '.join(args)
-        if visible:
-            common.show(msg)
-        else:
-            log.debug(msg)
-        return _call(*args, catch=catch, ignore=ignore, capture=capture)
-
-
-class ShellMixin(_Base):
+class ShellMixin:
     """Provides classes with shell utilities."""
 
-    def mkdir(self, path):
-        self._call('mkdir', '-p', path)
+    @staticmethod
+    def mkdir(path):
+        call('mkdir', '-p', path)
 
-    def cd(self, path, visible=True):
-        self._call('cd', path, visible=visible)
+    @staticmethod
+    def cd(path, visible=True):
+        call('cd', path, visible=visible)
 
     def ln(self, source, target):
         dirpath = os.path.dirname(target)
         if not os.path.isdir(dirpath):
             self.mkdir(dirpath)
-        self._call('ln', '-s', source, target)
+        call('ln', '-s', source, target)
 
-    def rm(self, path):
-        self._call('rm', '-rf', path)
+    @staticmethod
+    def rm(path):
+        call('rm', '-rf', path)
 
 
-class GitMixin(_Base):
+class GitMixin:
     """Provides classes with Git utilities."""
 
     def git_clone(self, repo, path):
@@ -142,5 +138,6 @@ class GitMixin(_Base):
                             branch, visible=False, capture=True)
         return rev
 
-    def _git(self, *args, **kwargs):
-        return self._call('git', *args, **kwargs)
+    @staticmethod
+    def _git(*args, **kwargs):
+        return call('git', *args, **kwargs)

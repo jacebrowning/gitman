@@ -1,9 +1,10 @@
 """Unit tests for the 'cli' module."""
 # pylint: disable=no-self-use
 
-import pytest
 from unittest.mock import Mock, patch
 import logging
+
+import pytest
 
 from gdm import cli
 from gdm.common import _Config

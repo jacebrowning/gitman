@@ -174,7 +174,7 @@ def _display_result(present, past, count, allow_zero=False):
 
     """
     if count is None:
-        log.warn("No dependencies to %s", present)
+        log.warning("No dependencies to %s", present)
     elif count == 1:
         log.info("%s 1 dependency", past)
     else:
