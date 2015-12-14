@@ -75,7 +75,7 @@ class GitMixin:
 
     def git_fetch(self, repo, rev=None):
         """Fetch the latest changes from the remote repository."""
-        self._git('remote', 'remove', 'origin', visible=False, ignore=True)
+        self._git('remote', 'rm', 'origin', visible=False, ignore=True)
         self._git('remote', 'add', 'origin', repo)
         args = ['fetch', '--tags', '--force', '--prune', 'origin']
         if rev:
