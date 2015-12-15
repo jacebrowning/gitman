@@ -38,6 +38,12 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
             fmt += " <- '{s}'"
         return fmt.format(r=self.repo, v=self.rev, d=self.dir, s=self.link)
 
+    def __eq__(self, other):
+        return self.dir == other.dir
+
+    def __ne__(self, other):
+        return self.dir != other.dir
+
     def __lt__(self, other):
         return self.dir < other.dir
 
@@ -195,15 +201,27 @@ class Config(ShellMixin):
 
         return count
 
-    def lock_deps(self):
+    def lock_deps(self, *names):
         """Lock down the immediate dependency versions."""
         self.cd(self.location_path)
         common.show()
         common.indent()
 
-        self.sources_locked = []
-        for source in self.sources:
-            self.sources_locked.append(source.lock())
+        sources = self.sources_locked.copy()
+        dirs = list(names) if names else [source.dir for source in sources]
+
+        for source in sources:
+            if source.dir not in dirs:
+                log.info("Skipped dependency: %s", source.dir)
+                continue
+
+            try:
+                index = self.sources_locked.index(source)
+            except ValueError:
+                self.sources_locked.append(source.lock())
+            else:
+                self.sources_locked[index] = source.lock()
+
             common.show()
 
             self.cd(self.location_path, visible=False)

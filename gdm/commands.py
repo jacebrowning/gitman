@@ -72,7 +72,7 @@ def update(*names, root=None, depth=None,
         if count and lock:
             common.show("Recording installed versions...", log=False)
             common.show()
-            config.lock_deps()
+            config.lock_deps(*names)
 
     return _display_result("update", "Updated", count)
 
