@@ -4,9 +4,11 @@ PACKAGE := gdm
 SOURCES := Makefile setup.py $(shell find $(PACKAGE) -name '*.py')
 EGG_INFO := $(subst -,_,$(PROJECT)).egg-info
 
-# Python settings
-PYTHON_MAJOR ?= 3
-PYTHON_MINOR ?= 5
+# Python
+ifndef TRAVIS
+	PYTHON_MAJOR ?= 3
+	PYTHON_MINOR ?= 5
+endif
 
 # Test settings
 UNIT_TEST_COVERAGE := 72
