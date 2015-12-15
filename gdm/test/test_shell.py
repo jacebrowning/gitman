@@ -103,7 +103,7 @@ class TestGit:
         """Verify the commands to fetch from a Git repository."""
         self.shell.git_fetch('mock.git')
         assert_calls(mock_call, [
-            "git remote remove origin",
+            "git remote rm origin",
             "git remote add origin mock.git",
             "git fetch --tags --force --prune origin",
         ])
@@ -112,7 +112,7 @@ class TestGit:
         """Verify the commands to fetch from a Git repository w/ rev."""
         self.shell.git_fetch('mock.git', 'mock-rev')
         assert_calls(mock_call, [
-            "git remote remove origin",
+            "git remote rm origin",
             "git remote add origin mock.git",
             "git fetch --tags --force --prune origin mock-rev",
         ])
@@ -121,7 +121,7 @@ class TestGit:
         """Verify the commands to fetch from a Git repository w/ SHA."""
         self.shell.git_fetch('mock.git', 'abcdef1234' * 4)
         assert_calls(mock_call, [
-            "git remote remove origin",
+            "git remote rm origin",
             "git remote add origin mock.git",
             "git fetch --tags --force --prune origin",
         ])
@@ -130,7 +130,7 @@ class TestGit:
         """Verify the commands to fetch from a Git repository w/ rev-parse."""
         self.shell.git_fetch('mock.git', 'master@{2015-02-12 18:30:00}')
         assert_calls(mock_call, [
-            "git remote remove origin",
+            "git remote rm origin",
             "git remote add origin mock.git",
             "git fetch --tags --force --prune origin",
         ])
