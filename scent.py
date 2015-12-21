@@ -67,7 +67,7 @@ def run(command, title, count, retry):
     show_coverage()
 
     if failure and retry:
-        _rerun_args = command, title, count
+        _rerun_args = command, title, count, retry
 
     return not failure
 

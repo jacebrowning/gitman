@@ -73,6 +73,13 @@ def main(args=None, function=None):
                      dest='allow_dirty',
                      help="fail if a source has uncommitted changes")
 
+    # Lock parser
+    info = "lock the current version of each dependency"
+    sub = subs.add_parser('lock', description=info.capitalize() + '.',
+                          help=info, parents=[debug, project], **shared)
+    sub.add_argument('name', nargs='*',
+                     help="list of dependencies (`dir` values) to lock")
+
     # Uninstall parser
     info = "delete all installed dependencies"
     sub = subs.add_parser('uninstall', description=info.capitalize() + '.',
@@ -113,6 +120,9 @@ def _get_command(function, namespace):
         function = commands.display
         kwargs.update(dict(depth=namespace.depth,
                            allow_dirty=namespace.allow_dirty))
+    elif namespace.command == 'lock':
+        function = getattr(commands, namespace.command)
+        args = namespace.name
     elif namespace.command == 'uninstall':
         function = commands.delete
         kwargs.update(force=namespace.force)
@@ -124,7 +134,7 @@ def _get_command(function, namespace):
 def _run_command(function, args, kwargs, exit_msg):
     success = False
     try:
-        log.debug("Running %r command...", function.__name__)
+        log.debug("Running %r command...", getattr(function, '__name__', 'a'))
         success = function(*args, **kwargs)
     except KeyboardInterrupt:
         log.debug("Command canceled")

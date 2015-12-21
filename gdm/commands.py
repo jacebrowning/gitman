@@ -1,6 +1,7 @@
 """Functions to manage the installation of dependencies."""
 
 import os
+import functools
 import logging
 
 from . import common
@@ -9,6 +10,17 @@ from .config import load
 log = logging.getLogger(__name__)
 
 
+def restore_cwd(func):
+    @functools.wraps(func)
+    def wrapped(*args, **kwargs):
+        cwd = os.getcwd()
+        result = func(*args, **kwargs)
+        os.chdir(cwd)
+        return result
+    return wrapped
+
+
+@restore_cwd
 def install(*names, root=None, depth=None, force=False, clean=True):
     """Install dependencies for a project.
 
@@ -38,8 +50,9 @@ def install(*names, root=None, depth=None, force=False, clean=True):
     return _display_result("install", "Installed", count)
 
 
+@restore_cwd
 def update(*names, root=None, depth=None,
-           recurse=False, force=False, clean=True, lock=True):
+           recurse=False, force=False, clean=True, lock=True):  # pylint: disable=redefined-outer-name
     """Update dependencies for a project.
 
     Optional arguments:
@@ -77,6 +90,7 @@ def update(*names, root=None, depth=None,
     return _display_result("update", "Updated", count)
 
 
+@restore_cwd
 def display(root=None, depth=None, allow_dirty=True):
     """Display installed dependencies for a project.
 
@@ -101,6 +115,32 @@ def display(root=None, depth=None, allow_dirty=True):
     return _display_result("display", "Displayed", count)
 
 
+@restore_cwd
+def lock(*names, root=None):
+    """Lock current dependency versions for a project.
+
+    Optional arguments:
+
+    - `*names`: optional list of dependency directory names to filter on
+    - `root`: specifies the path to the root working tree
+
+    """
+    log.info("Locking dependencies...")
+    count = None
+
+    root = _find_root(root)
+    config = load(root)
+
+    if config:
+        common.show("Locking dependencies...", log=False)
+        common.show()
+        count = config.lock_deps(*names, obey_existing=False)
+        common.dedent(level=0)
+
+    return _display_result("lock", "Locked", count)
+
+
+@restore_cwd
 def delete(root=None, force=False):
     """Delete dependencies for a project.
 
@@ -131,6 +171,7 @@ def delete(root=None, force=False):
 def _find_root(root, cwd=None):
     if cwd is None:
         cwd = os.getcwd()
+        log.info("Current directory: %s", cwd)
 
     if root:
         root = os.path.abspath(root)
@@ -141,7 +182,7 @@ def _find_root(root, cwd=None):
 
         log.info("Searching for root...")
         while path != prev:
-            log.debug("Path: %s", path)
+            log.debug("Checking path: %s", path)
             if '.git' in os.listdir(path):
                 root = path
                 break
