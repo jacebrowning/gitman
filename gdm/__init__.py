@@ -3,7 +3,7 @@
 import sys
 
 __project__ = 'GDM'
-__version__ = '0.7.dev1'
+__version__ = '0.7.dev2'
 
 CLI = 'gdm'
 PLUGIN = 'deps'
@@ -20,6 +20,7 @@ try:
     from .commands import install
     from .commands import update
     from .commands import display as list  # pylint: disable=redefined-builtin
+    from .commands import lock
     from .commands import delete as uninstall
 except ImportError:  # pragma: no cover (manual test)
     pass

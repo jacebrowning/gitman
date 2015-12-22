@@ -12,7 +12,7 @@ Git Dependency Manager (GDM) is a language-agnostic "dependency manager" using G
 Requirements
 ------------
 
-* Python 3.3+
+* Python 3.4+
 * Latest version of Git (with [stored credentials](http://stackoverflow.com/questions/7773181))
 * OSX/Linux (with a decent shell for Git)
 
@@ -22,7 +22,7 @@ Installation
 GDM can be installed with pip:
 
 ```sh
-$ pip3 install gdm
+$ pip install gdm
 ```
 
 or directly from the source code:
@@ -30,7 +30,7 @@ or directly from the source code:
 ```sh
 $ git clone https://github.com/jacebrowning/gdm.git
 $ cd gdm
-$ python3 setup.py install
+$ python setup.py install
 ```
 
 Setup

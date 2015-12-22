@@ -162,7 +162,7 @@ class Config(ShellMixin):
             self.mkdir(self.location_path)
         self.cd(self.location_path)
 
-        sources = self._get_sources(update)
+        sources = self._get_sources(use_locked=False if update else None)
         dirs = list(names) if names else [source.dir for source in sources]
         common.show()
         common.indent()
@@ -171,13 +171,14 @@ class Config(ShellMixin):
         for source in sources:
             if source.dir in dirs:
                 dirs.remove(source.dir)
-                count += 1
             else:
                 log.info("Skipped dependency: %s", source.dir)
                 continue
 
             source.update_files(force=force, clean=clean)
             source.create_link(self.root, force=force)
+            count += 1
+
             common.show()
 
             config = load()
@@ -201,15 +202,16 @@ class Config(ShellMixin):
 
         return count
 
-    def lock_deps(self, *names):
+    def lock_deps(self, *names, obey_existing=True):
         """Lock down the immediate dependency versions."""
         self.cd(self.location_path)
         common.show()
         common.indent()
 
-        sources = self.sources_locked.copy()
+        sources = self._get_sources(use_locked=obey_existing).copy()
         dirs = list(names) if names else [source.dir for source in sources]
 
+        count = 0
         for source in sources:
             if source.dir not in dirs:
                 log.info("Skipped dependency: %s", source.dir)
@@ -221,10 +223,15 @@ class Config(ShellMixin):
                 self.sources_locked.append(source.lock())
             else:
                 self.sources_locked[index] = source.lock()
+            count += 1
 
             common.show()
 
             self.cd(self.location_path, visible=False)
+
+        if count:
+            yorm.update_file(self)
+        return count
 
     def uninstall_deps(self):
         """Remove the sources location."""
@@ -262,14 +269,22 @@ class Config(ShellMixin):
 
         common.dedent()
 
-    def _get_sources(self, update):
-        if update:
+    def _get_sources(self, *, use_locked=None):
+        if use_locked is True:
+            if self.sources_locked:
+                return self.sources_locked
+            else:
+                log.info("No locked sources, defaulting to none...")
+                return []
+        elif use_locked is False:
             return self.sources
-        elif self.sources_locked:
-            return self.sources_locked
         else:
-            log.info("No locked sources available, installing latest...")
-            return self.sources
+            if self.sources_locked:
+                log.info("Defalting to locked sources...")
+                return self.sources_locked
+            else:
+                log.info("No locked sources, using latest...")
+                return self.sources
 
 
 def load(root=None):

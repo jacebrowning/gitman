@@ -1,7 +1,7 @@
-"""pytest configuration."""
-# pylint:disable=E1101
+"""Unit test configuration."""
 
 import os
+import logging
 
 import pytest
 import yorm
@@ -15,7 +15,14 @@ FILES = os.path.join(ROOT, 'files')
 
 
 def pytest_configure(config):
-    """Silence verbose test runner output."""
+    """Conigure logging and silence verbose test runner output."""
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="[%(levelname)-8s] (%(name)s @%(lineno)4d) %(message)s",
+    )
+    logging.getLogger('yorm').setLevel(logging.WARNING)
+    logging.getLogger('sh').setLevel(logging.WARNING)
+
     terminal = config.pluginmanager.getplugin('terminal')
 
     class QuietReporter(terminal.TerminalReporter):

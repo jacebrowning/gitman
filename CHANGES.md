@@ -7,6 +7,7 @@ Revision History
 - Fixed `git remote rm` command (@hdnivara).
 - Now applying the `update` dependency filter to locking as well.
 - Now only locking previous locked dependencies.
+- Added `lock` command to manually save all dependency versions.
 
 0.6 (2015/11/13)
 ----------------

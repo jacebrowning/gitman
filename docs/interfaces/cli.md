@@ -86,6 +86,19 @@ or exit with an error if there are any uncommitted changes:
 gdm list --no-dirty
 ```
 
+## Lock
+
+To manually record the exact version of each dependency, run:
+
+```sh
+gdm lock
+```
+or lock down specific dependencies:
+
+```sh
+gdm lock <dir1> <dir2> <etc.>
+```
+
 ## Uninstall
 
 To delete all source dependencies, run:

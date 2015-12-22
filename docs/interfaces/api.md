@@ -50,6 +50,19 @@ with optional arguments:
 - `depth`: number of levels of dependencies to traverse
 - `allow_dirty`: causes uncommitted changes to be ignored
 
+## Lock
+
+To record the exact versions of currently checked out dependencies, call:
+
+```python
+gdm.lock(*names, root=None)
+```
+
+with optional arguments:
+
+- `*names`: optional list of dependency directory names to filter on
+- `root`: specifies the path to the root working tree
+
 ## Uninstall
 
 To delete all source dependencies, call:
