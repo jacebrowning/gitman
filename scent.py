@@ -24,14 +24,14 @@ def py_files(filename):
 @runnable
 def python(*_):
 
-    for count, (command, title) in enumerate((
-        (('make', 'test'), "Unit Tests"),
-        (('make', 'tests'), "Integration Tests"),
-        (('make', 'check'), "Static Analysis"),
-        (('make', 'doc'), None),
+    for count, (command, title, retry) in enumerate((
+        (('make', 'test'), "Unit Tests", True),
+        (('make', 'tests'), "Integration Tests", False),
+        (('make', 'check'), "Static Analysis", True),
+        (('make', 'doc'), None, True),
     ), start=1):
 
-        if not run(command, title, count):
+        if not run(command, title, count, retry):
             return False
 
     return True
@@ -43,7 +43,7 @@ _show_coverage = True
 _rerun_args = None
 
 
-def run(command, title, count):
+def run(command, title, count, retry):
     global _rerun_args
 
     if _rerun_args:
@@ -66,8 +66,8 @@ def run(command, title, count):
 
     show_coverage()
 
-    if failure:
-        _rerun_args = command, title, count
+    if failure and retry:
+        _rerun_args = command, title, count, retry
 
     return not failure
 

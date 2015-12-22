@@ -23,7 +23,7 @@ with optional arguments:
 If any of the dependencies track a branch (rather than a specific commit), the current upstream version of that branch can be checked out by calling:
 
 ```python
-gdm.update(*names, root=None, depth=None, recurse=False, force=False, clean=True, lock=True)
+gdm.update(*names, root=None, depth=None, recurse=False, force=False, clean=True, lock=None)
 ```
 
 with optional arguments:
@@ -49,6 +49,19 @@ with optional arguments:
 - `root`: specifies the path to the root working tree
 - `depth`: number of levels of dependencies to traverse
 - `allow_dirty`: causes uncommitted changes to be ignored
+
+## Lock
+
+To record the exact versions of currently checked out dependencies, call:
+
+```python
+gdm.lock(*names, root=None)
+```
+
+with optional arguments:
+
+- `*names`: optional list of dependency directory names to filter on
+- `root`: specifies the path to the root working tree
 
 ## Uninstall
 

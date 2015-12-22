@@ -19,7 +19,7 @@ setuptools.setup(
     version=__version__,
 
     description=DESCRIPTION,
-    url='https://github.com/jacebrowning/gdm',
+    url='http://git-dependency-manager.info',
     author='Jace Browning',
     author_email='jacebrowning@gmail.com',
 
@@ -42,7 +42,6 @@ setuptools.setup(
         'Operating System :: POSIX',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Topic :: Software Development',

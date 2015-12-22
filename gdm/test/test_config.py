@@ -2,6 +2,7 @@
 # pylint: disable=no-self-use,redefined-outer-name
 
 from unittest.mock import patch, Mock
+from copy import copy
 
 import pytest
 
@@ -55,7 +56,14 @@ class TestSource:
 
         assert "<source 'repo' @ 'rev' in 'dir'>" == repr(source)
 
-    def test_sorting(self):
+    def test_eq(self, source):
+        source2 = copy(source)
+        assert source == source2
+
+        source2.dir = "dir2"
+        assert source != source2
+
+    def test_lt(self):
         sources = [
             Source('zzz', '123'),
             Source('bbb', '456'),

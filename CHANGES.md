@@ -1,11 +1,20 @@
 Revision History
 ================
 
+0.7 (2015/12/22)
+----------------
+
+- Fixed `git remote rm` command (@hdnivara).
+- Now applying the `update` dependency filter to locking as well.
+- Now only locking previous locked dependencies.
+- Added `lock` command to manually save all dependency versions.
+- Now requiring `--lock` option on `update` to explicitly lock dependencies.
+
 0.6 (2015/11/13)
 ----------------
 
-- Added the ability to filter the dependency list on `install` and `update`
-- Added `--depth` option to limit dependency traversal on `install`, `update`, and `list`
+- Added the ability to filter the dependency list on `install` and `update`.
+- Added `--depth` option to limit dependency traversal on `install`, `update`, and `list`.
 
 0.5 (2015/10/20)
 ----------------

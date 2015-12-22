@@ -4,9 +4,11 @@ PACKAGE := gdm
 SOURCES := Makefile setup.py $(shell find $(PACKAGE) -name '*.py')
 EGG_INFO := $(subst -,_,$(PROJECT)).egg-info
 
-# Python settings
-PYTHON_MAJOR ?= 3
-PYTHON_MINOR ?= 4
+# Python
+ifndef TRAVIS
+	PYTHON_MAJOR ?= 3
+	PYTHON_MINOR ?= 5
+endif
 
 # Test settings
 UNIT_TEST_COVERAGE := 72
@@ -108,7 +110,7 @@ depends: depends-ci depends-dev
 .PHONY: depends-ci
 depends-ci: env Makefile $(DEPENDS_CI_FLAG)
 $(DEPENDS_CI_FLAG): Makefile
-	$(PIP) install --upgrade pep8 pep257 pylint coverage pytest pytest-cov pytest-random pytest-runfailed mkdocs
+	$(PIP) install --upgrade pep8 pep257 pylint coverage pytest pytest-describe pytest-cov pytest-random pytest-runfailed mkdocs
 	@ touch $(DEPENDS_CI_FLAG)  # flag to indicate dependencies are installed
 
 .PHONY: depends-dev
@@ -118,7 +120,7 @@ $(DEPENDS_DEV_FLAG): Makefile
 ifdef WINDOWS
 	$(PIP) install --upgrade pywin32
 else ifdef MAC
-	$(PIP) install --upgrade pync MacFSEvents
+	$(PIP) install --upgrade pync MacFSEvents==0.4
 else ifdef LINUX
 	$(PIP) install --upgrade pyinotify
 endif
@@ -205,7 +207,7 @@ fix: depends-dev
 
 RANDOM_SEED ?= $(shell date +%s)
 
-PYTEST_CORE_OPTS := --doctest-modules --verbose -r X --maxfail=3
+PYTEST_CORE_OPTS := --verbose -r xXw --maxfail=3
 PYTEST_COV_OPTS := --cov=$(PACKAGE) --cov-report=term-missing --no-cov-on-fail
 PYTEST_RANDOM_OPTS := --random --random-seed=$(RANDOM_SEED)
 
@@ -217,7 +219,6 @@ FAILED_FLAG := .pytest/failed
 .PHONY: test test-unit
 test: test-unit
 test-unit: depends-ci
-	@ if test -e $(FAILED_FLAG); then $(MAKE) test-all; fi
 	@ $(COVERAGE) erase
 	$(PYTEST) $(PYTEST_OPTS) $(PACKAGE)
 ifndef TRAVIS
