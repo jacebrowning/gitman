@@ -23,7 +23,7 @@ with optional arguments:
 If any of the dependencies track a branch (rather than a specific commit), the current upstream version of that branch can be checked out by calling:
 
 ```python
-gdm.update(*names, root=None, depth=None, recurse=False, force=False, clean=True, lock=True)
+gdm.update(*names, root=None, depth=None, recurse=False, force=False, clean=True, lock=None)
 ```
 
 with optional arguments:

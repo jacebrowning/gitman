@@ -121,7 +121,7 @@ class TestUpdate:
 
         mock_update.assert_called_once_with(
             root=None, depth=None,
-            force=False, clean=False, recurse=False, lock=True)
+            force=False, clean=False, recurse=False, lock=None)
 
     @patch('gdm.commands.update')
     def test_update_recursive(self, mock_update):
@@ -130,16 +130,30 @@ class TestUpdate:
 
         mock_update.assert_called_once_with(
             root=None, depth=None,
-            force=False, clean=False, recurse=True, lock=True)
+            force=False, clean=False, recurse=True, lock=None)
 
     @patch('gdm.commands.update')
     def test_update_no_lock(self, mock_update):
-        """Verify the 'update' command can be run without locking."""
+        """Verify the 'update' command can disable locking."""
         cli.main(['update', '--no-lock'])
 
         mock_update.assert_called_once_with(
             root=None, depth=None,
             force=False, clean=False, recurse=False, lock=False)
+
+    @patch('gdm.commands.update')
+    def test_update_lock(self, mock_update):
+        """Verify the 'update' command can enable locking."""
+        cli.main(['update', '--lock'])
+
+        mock_update.assert_called_once_with(
+            root=None, depth=None,
+            force=False, clean=False, recurse=False, lock=True)
+
+    def test_update_lock_conflict(self):
+        """Verify the 'update' command cannot specify both locking options."""
+        with pytest.raises(SystemExit):
+            cli.main(['update', '--lock', '--no-lock'])
 
     @patch('gdm.commands.update')
     def test_update_specific_sources(self, mock_install):
@@ -148,7 +162,7 @@ class TestUpdate:
 
         mock_install.assert_called_once_with(
             'foo', 'bar', root=None, depth=None,
-            force=False, clean=False, recurse=False, lock=True)
+            force=False, clean=False, recurse=False, lock=None)
 
     @patch('gdm.commands.update')
     def test_update_with_depth(self, mock_update):
@@ -157,7 +171,7 @@ class TestUpdate:
 
         mock_update.assert_called_once_with(
             root=None, depth=5,
-            force=False, clean=False, recurse=False, lock=True)
+            force=False, clean=False, recurse=False, lock=None)
 
 
 class TestList:

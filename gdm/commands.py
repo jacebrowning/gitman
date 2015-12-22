@@ -52,7 +52,7 @@ def install(*names, root=None, depth=None, force=False, clean=True):
 
 @restore_cwd
 def update(*names, root=None, depth=None,
-           recurse=False, force=False, clean=True, lock=True):  # pylint: disable=redefined-outer-name
+           recurse=False, force=False, clean=True, lock=None):  # pylint: disable=redefined-outer-name
     """Update dependencies for a project.
 
     Optional arguments:
@@ -82,10 +82,10 @@ def update(*names, root=None, depth=None,
             *names, update=True, depth=depth,
             recurse=recurse, force=force, clean=clean)
         common.dedent(level=0)
-        if count and lock:
+        if count and lock is not False:
             common.show("Recording installed versions...", log=False)
             common.show()
-            config.lock_deps(*names)
+            config.lock_deps(*names, obey_existing=lock is None)
 
     return _display_result("update", "Updated", count)
 
