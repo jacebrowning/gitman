@@ -108,6 +108,103 @@ def describe_update():
 
         assert CONFIG == config.__mapper__.text
 
+    def it_should_lock_previously_locked_dependnecies(config):
+        config.__mapper__.text = strip("""
+        location: deps
+        sources:
+        - dir: gdm_1
+          link: ''
+          repo: https://github.com/jacebrowning/gdm-demo
+          rev: example-branch
+        - dir: gdm_2
+          link: ''
+          repo: https://github.com/jacebrowning/gdm-demo
+          rev: example-tag
+        sources_locked:
+        - dir: gdm_2
+          link: ''
+          repo: https://github.com/jacebrowning/gdm-demo
+          rev: (old revision)
+        """)
+
+        gdm.update(depth=1)
+
+        assert strip("""
+        location: deps
+        sources:
+        - dir: gdm_1
+          link: ''
+          repo: https://github.com/jacebrowning/gdm-demo
+          rev: example-branch
+        - dir: gdm_2
+          link: ''
+          repo: https://github.com/jacebrowning/gdm-demo
+          rev: example-tag
+        sources_locked:
+        - dir: gdm_2
+          link: ''
+          repo: https://github.com/jacebrowning/gdm-demo
+          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+        """) == config.__mapper__.text
+
+    def it_should_not_lock_dependnecies_when_disabled(config):
+        config.__mapper__.text = strip("""
+        location: deps
+        sources:
+        - dir: gdm_1
+          link: ''
+          repo: https://github.com/jacebrowning/gdm-demo
+          rev: example-branch
+        - dir: gdm_2
+          link: ''
+          repo: https://github.com/jacebrowning/gdm-demo
+          rev: example-tag
+        sources_locked:
+        - dir: gdm_2
+          link: ''
+          repo: https://github.com/jacebrowning/gdm-demo
+          rev: (old revision)
+        """)
+
+        gdm.update(depth=1, lock=False)
+
+        assert strip("""
+        location: deps
+        sources:
+        - dir: gdm_1
+          link: ''
+          repo: https://github.com/jacebrowning/gdm-demo
+          rev: example-branch
+        - dir: gdm_2
+          link: ''
+          repo: https://github.com/jacebrowning/gdm-demo
+          rev: example-tag
+        sources_locked:
+        - dir: gdm_2
+          link: ''
+          repo: https://github.com/jacebrowning/gdm-demo
+          rev: (old revision)
+        """) == config.__mapper__.text
+
+    def it_should_lock_all_when_enabled(config):
+        gdm.update(depth=1, lock=True)
+
+        assert CONFIG + strip("""
+        sources_locked:
+        - dir: gdm_1
+          link: ''
+          repo: https://github.com/jacebrowning/gdm-demo
+          rev: eb37743011a398b208dd9f9ef79a408c0fc10d48
+        - dir: gdm_2
+          link: ''
+          repo: https://github.com/jacebrowning/gdm-demo
+          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+        - dir: gdm_3
+          link: ''
+          repo: https://github.com/jacebrowning/gdm-demo
+          rev: 9bf18e16b956041f0267c21baad555a23237b52e
+        """) == config.__mapper__.text
+
 
 def describe_lock():
 

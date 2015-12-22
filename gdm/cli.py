@@ -61,9 +61,13 @@ def main(args=None, function=None):
                      help="list of dependencies (`dir` values) to update")
     sub.add_argument('-a', '--all', action='store_true', dest='recurse',
                      help="update all nested dependencies, recursively")
-    sub.add_argument('-L', '--no-lock',
-                     action='store_false', dest='lock', default=True,
-                     help="skip recording of versions for later reinstall")
+    group = sub.add_mutually_exclusive_group()
+    group.add_argument('-l', '--lock',
+                       action='store_true', dest='lock', default=None,
+                       help="enable recording of versions for later reinstall")
+    group.add_argument('-L', '--no-lock',
+                       action='store_false', dest='lock', default=None,
+                       help="disable recording of versions for later reinstall")
 
     # Display parser
     info = "display the current version of each dependency"
