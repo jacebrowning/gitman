@@ -8,6 +8,7 @@ Revision History
 - Now applying the `update` dependency filter to locking as well.
 - Now only locking previous locked dependencies.
 - Added `lock` command to manually save all dependency versions.
+- Now requiring `--lock` option on `update` to explicitly lock dependencies.
 
 0.6 (2015/11/13)
 ----------------

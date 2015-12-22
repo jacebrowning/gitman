@@ -54,7 +54,7 @@ or limit the traversal of nested dependencies:
 gdm update --depth=<count>
 ```
 
-This will also record the exact versions that were checked out. Disable this behavior by instead running:
+This will also record the exact versions of any previously locked dependencies. Disable this behavior by instead running:
 
 ```sh
 gdm update --no-lock
@@ -64,12 +64,6 @@ or to additionally get the latest versions of all nested dependencies, run:
 
 ```sh
 gdm update --all
-```
-
-To restore the exact versions previously checked out, run:
-
-```sh
-gdm install
 ```
 
 ## List
@@ -93,10 +87,23 @@ To manually record the exact version of each dependency, run:
 ```sh
 gdm lock
 ```
+
 or lock down specific dependencies:
 
 ```sh
 gdm lock <dir1> <dir2> <etc.>
+```
+
+This can be combined with updating dependencies by running:
+
+```sh
+gdm update --lock
+```
+
+To restore the exact versions previously checked out, run:
+
+```sh
+gdm install
 ```
 
 ## Uninstall
