@@ -281,6 +281,7 @@ class Config(ShellMixin):
         else:
             if self.sources_locked:
                 log.info("Defalting to locked sources...")
+                return self.sources_locked
             else:
                 log.info("No locked sources, using latest...")
                 return self.sources
