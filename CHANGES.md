@@ -1,7 +1,7 @@
 Revision History
 ================
 
-0.7 (unreleased)
+0.7 (2015/12/22)
 ----------------
 
 - Fixed `git remote rm` command (@hdnivara).

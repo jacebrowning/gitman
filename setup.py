@@ -19,7 +19,7 @@ setuptools.setup(
     version=__version__,
 
     description=DESCRIPTION,
-    url='https://github.com/jacebrowning/gdm',
+    url='http://git-dependency-manager.info',
     author='Jace Browning',
     author_email='jacebrowning@gmail.com',
 
