@@ -116,4 +116,4 @@ $ gdm uninstall
 Advanced Options
 ================
 
-See the full documentation at http://git-dependency-manager.info/.
+See the full documentation at [git-dependency-manager.info](http://git-dependency-manager.info/interfaces/cli/).
