@@ -1,6 +1,13 @@
 Revision History
 ================
 
+0.8 (unreleased)
+----------------
+
+- Switched to using repository mirrors to speed up cloning.
+- Disabled automatic fetching on install.
+- Added `--fetch` option on `install` to always fetch.
+
 0.7 (2015/12/22)
 ----------------
 
