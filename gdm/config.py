@@ -155,7 +155,8 @@ class Config(ShellMixin):
         return os.path.join(self.root, self.location)
 
     def install_deps(self, *names, depth=None,
-                     update=True, recurse=False, force=False, clean=True):
+                     update=True, recurse=False,
+                     force=False, fetch=False, clean=True):
         """Get all sources."""
         if depth == 0:
             log.info("Skipped directory: %s", self.location_path)
@@ -178,7 +179,7 @@ class Config(ShellMixin):
                 log.info("Skipped dependency: %s", source.dir)
                 continue
 
-            source.update_files(force=force, fetch=update, clean=clean)
+            source.update_files(force=force, fetch=fetch, clean=clean)
             source.create_link(self.root, force=force)
             count += 1
 
@@ -192,6 +193,7 @@ class Config(ShellMixin):
                     update=update and recurse,
                     recurse=recurse,
                     force=force,
+                    fetch=fetch,
                     clean=clean,
                 )
                 common.dedent()
