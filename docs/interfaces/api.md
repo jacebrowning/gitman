@@ -7,7 +7,7 @@ All of the [command-line interface](cli.md) functionality is available from the 
 To clone/checkout the specified dependencies, call:
 
 ```python
-gdm.install(*names, root=None, depth=None, force=False, clean=True)
+gdm.install(*names, root=None, depth=None, force=False, fetch=False, clean=True)
 ```
 
 with optional arguments:
@@ -16,6 +16,7 @@ with optional arguments:
 - `root`: specifies the path to the root working tree
 - `depth`: number of levels of dependencies to traverse
 - `force`: indicates uncommitted changes can be overwritten
+- `fetch`: indicates the latest branches should always be fetched
 - `clean`: indicates untracked files should be deleted from dependencies
 
 ## Update

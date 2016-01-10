@@ -19,7 +19,7 @@ class TestMain:
 
         assert [
             call.install(root=None, depth=None,
-                         clean=False, force=False),
+                         clean=False, fetch=True, force=False),
             call.install().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 

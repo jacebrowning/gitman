@@ -126,16 +126,25 @@ class GitMixin:
             self._git('clean', '--force', '-d', '-x', visible=False)
         self._git('checkout', '--force', rev)
         self._git('branch', '--set-upstream-to', 'origin/' + rev, **hide)
-        self._git('pull', '--ff-only', '--no-rebase', **hide)
 
     def git_get_url(self):
         """Get the current repository's URL."""
         return self._git('config', '--get', 'remote.origin.url',
                          visible=False, capture=True)
 
-    def git_get_sha(self):
+    def git_get_hash(self, visible=False):
         """Get the current working tree's hash."""
-        return self._git('rev-parse', 'HEAD', capture=True)
+        return self._git('rev-parse', 'HEAD', visible=visible, capture=True)
+
+    def git_get_tag(self):
+        """Get the current working tree's tag (if on a tag)."""
+        return self._git('describe', '--tags', '--exact-match',
+                         visible=False, ignore=True, capture=True)
+
+    def git_get_branch(self):
+        """Get the current working tree's branch."""
+        return self._git('rev-parse', '--abbrev-ref', 'HEAD',
+                         visible=False, capture=True)
 
     def _git_get_sha_from_rev(self, rev):
         """Get a rev-parse string's hash."""

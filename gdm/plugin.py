@@ -66,6 +66,7 @@ def main(args=None):
     namespace.root = None
     namespace.depth = None
     namespace.allow_dirty = True
+    namespace.fetch = True
 
     # Configure logging
     common.configure_logging()

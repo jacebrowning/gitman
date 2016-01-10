@@ -22,13 +22,19 @@ or limit the traversal of nested dependencies:
 gdm install --depth=<count>
 ```
 
-Delete all untracked files in dependencies by instead running:
+It will leave untracked files alone. To delete them, run:
 
 ```sh
 gdm install --clean
 ```
 
-The program will exit with an error if there are any uncommitted changes in dependencies. To overwrite all changes, run:
+It will only fetch from the repository if needed. To always fetch, run:
+
+```sh
+gdm install --fetch
+```
+
+It will exit with an error if there are any uncommitted changes in dependencies. To overwrite all changes, run:
 
 ```sh
 gdm install --force

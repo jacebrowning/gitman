@@ -21,7 +21,8 @@ def restore_cwd(func):
 
 
 @restore_cwd
-def install(*names, root=None, depth=None, force=False, clean=True):
+def install(*names, root=None, depth=None,
+            force=False, fetch=False, clean=True):
     """Install dependencies for a project.
 
     Optional arguments:
@@ -30,6 +31,7 @@ def install(*names, root=None, depth=None, force=False, clean=True):
     - `root`: specifies the path to the root working tree
     - `depth`: number of levels of dependencies to traverse
     - `force`: indicates uncommitted changes can be overwritten
+    - `fetch`: indicates the latest branches should always be fetched
     - `clean`: indicates untracked files should be deleted from dependencies
 
     """
@@ -44,8 +46,8 @@ def install(*names, root=None, depth=None, force=False, clean=True):
     if config:
         common.show("Installing dependencies...", log=False)
         common.show()
-        count = config.install_deps(
-            *names, update=False, depth=depth, force=force, clean=clean)
+        count = config.install_deps(*names, update=False, depth=depth,
+                                    force=force, fetch=fetch, clean=clean)
 
     return _display_result("install", "Installed", count)
 
@@ -80,7 +82,7 @@ def update(*names, root=None, depth=None,
         common.show()
         count = config.install_deps(
             *names, update=True, depth=depth,
-            recurse=recurse, force=force, clean=clean)
+            recurse=recurse, force=force, fetch=True, clean=clean)
         common.dedent(level=0)
         if count and lock is not False:
             common.show("Recording installed versions...", log=False)

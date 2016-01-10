@@ -51,6 +51,8 @@ def main(args=None, function=None):
                           **shared)
     sub.add_argument('name', nargs='*',
                      help="list of dependencies (`dir` values) to install")
+    sub.add_argument('-e', '--fetch', action='store_true',
+                     help="always fetch the latest branches")
 
     # Update parser
     info = "update dependencies to the latest versions"
@@ -116,6 +118,8 @@ def _get_command(function, namespace):
         kwargs.update(depth=namespace.depth,
                       force=namespace.force,
                       clean=namespace.clean)
+        if namespace.command == 'install':
+            kwargs.update(fetch=namespace.fetch)
         if namespace.command == 'update':
             kwargs.update(recurse=namespace.recurse,
                           lock=namespace.lock)
@@ -138,7 +142,7 @@ def _get_command(function, namespace):
 def _run_command(function, args, kwargs, exit_msg):
     success = False
     try:
-        log.debug("Running %r command...", getattr(function, '__name__', 'a'))
+        log.debug("Running %s command...", getattr(function, '__name__', 'a'))
         success = function(*args, **kwargs)
     except KeyboardInterrupt:
         log.debug("Command canceled")
