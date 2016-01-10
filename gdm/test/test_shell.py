@@ -179,7 +179,6 @@ class TestGit:
             "git clean --force -d -x",
             "git checkout --force mock_rev",
             "git branch --set-upstream-to origin/mock_rev",
-            "git pull --ff-only --no-rebase",
         ])
 
     def test_update_no_clean(self, mock_call):
@@ -188,7 +187,6 @@ class TestGit:
             "git stash",
             "git checkout --force mock_rev",
             "git branch --set-upstream-to origin/mock_rev",
-            "git pull --ff-only --no-rebase",
         ])
 
     def test_update_revparse(self, mock_call):
@@ -202,7 +200,6 @@ class TestGit:
             "git clean --force -d -x",
             "git checkout --force abc123",
             "git branch --set-upstream-to origin/abc123",
-            "git pull --ff-only --no-rebase",
         ])
 
     def test_get_url(self, mock_call):
@@ -210,7 +207,17 @@ class TestGit:
         self.shell.git_get_url()
         assert_calls(mock_call, ["git config --get remote.origin.url"])
 
-    def test_get_sha(self, mock_call):
-        """Verify the commands to get the working tree's SHA."""
-        self.shell.git_get_sha()
+    def test_get_hash(self, mock_call):
+        """Verify the commands to get the working tree's hash."""
+        self.shell.git_get_hash()
         assert_calls(mock_call, ["git rev-parse HEAD"])
+
+    def test_get_tag(self, mock_call):
+        """Verify the commands to get the working tree's tag."""
+        self.shell.git_get_tag()
+        assert_calls(mock_call, ["git describe --tags --exact-match"])
+
+    def test_get_branch(self, mock_call):
+        """Verify the commands to get the working tree's branch."""
+        self.shell.git_get_branch()
+        assert_calls(mock_call, ["git rev-parse --abbrev-ref HEAD"])

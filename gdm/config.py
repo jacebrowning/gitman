@@ -47,7 +47,7 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
     def __lt__(self, other):
         return self.dir < other.dir
 
-    def update_files(self, force=False, clean=True):
+    def update_files(self, force=False, fetch=False, clean=True):
         """Ensure the source matches the specified revision."""
         log.info("Updating source files...")
 
@@ -66,7 +66,10 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
                 raise RuntimeError(msg)
 
         # Fetch the desired revision
-        self.git_fetch(self.repo, self.rev)
+        if fetch or self.rev not in (self.git_get_branch(),
+                                     self.git_get_hash(),
+                                     self.git_get_tag()):
+            self.git_fetch(self.repo, self.rev)
 
         # Update the working tree to the desired revision
         self.git_update(self.rev, clean=clean)
@@ -103,7 +106,7 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
                     msg = "Uncommitted changes: {}".format(os.getcwd())
                     raise RuntimeError(msg)
             else:
-                revision = self.git_get_sha()
+                revision = self.git_get_hash(visible=True)
             common.show(revision, log=False)
 
             return path, url, revision
@@ -114,8 +117,8 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
 
     def lock(self):
         """Return a locked version of the current source."""
-        _, _, sha = self.identify()
-        source = self.__class__(self.repo, self.dir, sha, self.link)
+        _, _, revision = self.identify()
+        source = self.__class__(self.repo, self.dir, revision, self.link)
         return source
 
 
@@ -175,7 +178,7 @@ class Config(ShellMixin):
                 log.info("Skipped dependency: %s", source.dir)
                 continue
 
-            source.update_files(force=force, clean=clean)
+            source.update_files(force=force, fetch=update, clean=clean)
             source.create_link(self.root, force=force)
             count += 1
 
