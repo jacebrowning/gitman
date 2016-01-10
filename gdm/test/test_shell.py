@@ -47,6 +47,7 @@ class TestCall:
 
 def assert_calls(mock_call, expected):
     """Confirm the expected list of calls matches the mock call."""
+    __tracebackhide__ = True  # pylint: disable=unused-variable
     actual = [' '.join(args[0]) for args in mock_call.call_args_list]
     assert expected == actual
 
@@ -94,10 +95,20 @@ class TestGit:
 
     shell = GitMixin()
 
+    @patch('os.path.isdir', Mock(return_value=False))
     def test_clone(self, mock_call):
-        """Verify the commands to clone a new Git repository."""
-        self.shell.git_clone('mock.git', 'mock/path')
-        assert_calls(mock_call, ["git clone mock.git mock/path"])
+        """Verify the commands to set up a new reference repository."""
+        self.shell.git_clone('mock.git', 'mock/path', cache='cache')
+        assert_calls(mock_call, [
+            "git clone --mirror mock.git cache/mock.reference",
+            "git clone --reference cache/mock.reference mock.git mock/path"])
+
+    @patch('os.path.isdir', Mock(return_value=True))
+    def test_clone_from_reference(self, mock_call):
+        """Verify the commands to clone a Git repository from a reference."""
+        self.shell.git_clone('mock.git', 'mock/path', cache='cache')
+        assert_calls(mock_call, [
+            "git clone --reference cache/mock.reference mock.git mock/path"])
 
     def test_fetch(self, mock_call):
         """Verify the commands to fetch from a Git repository."""

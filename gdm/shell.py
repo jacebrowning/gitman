@@ -69,9 +69,19 @@ class ShellMixin:
 class GitMixin:
     """Provides classes with Git utilities."""
 
-    def git_clone(self, repo, path):
+    def git_clone(self, repo, path, *, cache=None):
         """Clone a new Git repository."""
-        self._git('clone', repo, path)
+        cache = cache or os.path.expanduser("~/.gitcache")
+
+        name = repo.split('/')[-1]
+        if name.endswith(".git"):
+            name = name[:-4]
+
+        reference = os.path.join(cache, name + ".reference")
+        if not os.path.isdir(reference):
+            self._git('clone', '--mirror', repo, reference)
+
+        self._git('clone', '--reference', reference, repo, path)
 
     def git_fetch(self, repo, rev=None):
         """Fetch the latest changes from the remote repository."""
