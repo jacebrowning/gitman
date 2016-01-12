@@ -72,7 +72,7 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
             self.git_fetch(self.repo, self.rev)
 
         # Update the working tree to the desired revision
-        self.git_update(self.rev, clean=clean)
+        self.git_update(self.rev, fetch=fetch, clean=clean)
 
     def create_link(self, root, force=False):
         """Create a link from the target name to the current directory."""

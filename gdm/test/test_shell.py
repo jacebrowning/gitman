@@ -181,6 +181,17 @@ class TestGit:
             "git branch --set-upstream-to origin/mock_rev",
         ])
 
+    def test_update_branch(self, mock_call):
+        """Verify the commands to update a working tree to a branch."""
+        self.shell.git_update('mock_branch', fetch=True)
+        assert_calls(mock_call, [
+            "git stash",
+            "git clean --force -d -x",
+            "git checkout --force mock_branch",
+            "git branch --set-upstream-to origin/mock_branch",
+            "git pull --ff-only --no-rebase",
+        ])
+
     def test_update_no_clean(self, mock_call):
         self.shell.git_update('mock_rev', clean=False)
         assert_calls(mock_call, [
@@ -194,10 +205,10 @@ class TestGit:
         mock_call.return_value = "abc123"
         self.shell.git_update('mock_branch@{2015-02-12 18:30:00}')
         assert_calls(mock_call, [
-            "git checkout --force mock_branch",
-            "git rev-list -n 1 --before='2015-02-12 18:30:00' mock_branch",
             "git stash",
             "git clean --force -d -x",
+            "git checkout --force mock_branch",
+            "git rev-list -n 1 --before='2015-02-12 18:30:00' mock_branch",
             "git checkout --force abc123",
             "git branch --set-upstream-to origin/abc123",
         ])

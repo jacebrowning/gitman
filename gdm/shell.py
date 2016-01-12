@@ -117,15 +117,21 @@ class GitMixin:
                 log.debug("New file: %s", filename)
             return bool(filenames)
 
-    def git_update(self, rev, clean=True):
+    def git_update(self, rev, *, clean=True, fetch=False):
         """Update the working tree to the specified revision."""
         hide = {'visible': False, 'ignore': True}
-        rev = self._git_get_sha_from_rev(rev)
+
         self._git('stash', **hide)
         if clean:
             self._git('clean', '--force', '-d', '-x', visible=False)
+
+        rev = self._git_get_sha_from_rev(rev)
         self._git('checkout', '--force', rev)
         self._git('branch', '--set-upstream-to', 'origin/' + rev, **hide)
+
+        if fetch:
+            # if `rev` was a branch it might be tracking something older
+            self._git('pull', '--ff-only', '--no-rebase', **hide)
 
     def git_get_url(self):
         """Get the current repository's URL."""
