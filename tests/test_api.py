@@ -1,4 +1,3 @@
-"""Integration tests for the `gdm` package."""
 # pylint: disable=no-self-use,redefined-outer-name,unused-variable
 
 import os

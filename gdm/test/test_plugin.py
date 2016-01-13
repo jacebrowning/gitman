@@ -1,4 +1,3 @@
-"""Unit tests for the 'plugin' module."""
 # pylint: disable=no-self-use
 
 from unittest.mock import patch, call

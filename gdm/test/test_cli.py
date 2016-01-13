@@ -1,4 +1,3 @@
-"""Unit tests for the 'cli' module."""
 # pylint: disable=no-self-use
 
 from unittest.mock import Mock, patch
