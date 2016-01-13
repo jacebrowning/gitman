@@ -7,6 +7,7 @@ Revision History
 - Switched to using repository mirrors to speed up cloning.
 - Disabled automatic fetching on install.
 - Added `--fetch` option on `install` to always fetch.
+- Now displaying `git status` output when there are changes.
 
 0.7 (2015/12/22)
 ----------------

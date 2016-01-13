@@ -62,7 +62,7 @@ class Source(yorm.converters.AttributeDictionary):
         # Check for uncommitted changes
         if not force:
             log.debug("Confirming there are no uncommitted changes...")
-            if git.changes():
+            if git.changes(include_untracked=clean):
                 common.show()
                 msg = "Uncommitted changes: {}".format(os.getcwd())
                 raise RuntimeError(msg)

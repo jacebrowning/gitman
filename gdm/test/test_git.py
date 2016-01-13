@@ -8,6 +8,13 @@ from gdm import git
 from . import assert_calls
 
 
+def _git_with_changes(*args, **_):
+    if 'status' in args:
+        return "abc\n123\n"
+    else:
+        raise CallException
+
+
 @patch('gdm.git.call')
 class TestGit:
 
@@ -66,12 +73,13 @@ class TestGit:
 
     def test_changes(self, mock_call):
         """Verify the commands to check for uncommitted changes."""
-        git.changes()
+        git.changes(include_untracked=True)
         assert_calls(mock_call, [
             # based on: http://stackoverflow.com/questions/3878624
             "git update-index -q --refresh",
             "git diff-index --quiet HEAD",
             "git ls-files --others --exclude-standard",
+            "git status",  # used for displaying the overall status
         ])
 
     def test_changes_false(self, _):
@@ -79,14 +87,19 @@ class TestGit:
         with patch('gdm.git.call', Mock(return_value="")):
             assert False is git.changes()
 
-    def test_changes_true_untracked(self, _):
+    def test_changes_false_with_untracked(self, _):
         """Verify untracked files can be detected."""
         with patch('gdm.git.call', Mock(return_value="file_1")):
-            assert True is git.changes()
+            assert False is git.changes()
 
-    def test_changes_true_uncommitted(self, _):
+    def test_changes_true_when_untracked_included(self, _):
+        """Verify untracked files can be detected."""
+        with patch('gdm.git.call', Mock(return_value="file_1")):
+            assert True is git.changes(include_untracked=True)
+
+    def test_changes_true_when_uncommitted(self, _):
         """Verify uncommitted changes can be detected."""
-        with patch('gdm.git.call', Mock(side_effect=CallException)):
+        with patch('gdm.git.call', _git_with_changes):
             assert True is git.changes()
 
     def test_update(self, mock_call):

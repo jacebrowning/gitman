@@ -44,10 +44,11 @@ def fetch(repo, rev=None):
     git(*args)
 
 
-def changes(_show=False):
+def changes(include_untracked=False, _show=False):
     """Determine if there are changes in the working tree."""
-    try:
+    status = False
 
+    try:
         # refresh changes
         git('update-index', '-q', '--refresh', _show=False)
 
@@ -59,13 +60,16 @@ def changes(_show=False):
                      _show=_show, _capture=True)
 
     except common.CallException:
-        return True
+        status = True
 
     else:
-        filenames = output.splitlines()
-        for filename in filenames:
-            log.debug("New file: %s", filename)
-        return bool(filenames)
+        status = bool(output.splitlines()) and include_untracked
+
+    if status:
+        for line in git('status', _show=True, _capture=True).splitlines():
+            common.show(line)
+
+    return status
 
 
 def update(rev, *, clean=True, fetch=False):  # pylint: disable=redefined-outer-name
