@@ -6,7 +6,9 @@ import logging
 import yorm
 
 from . import common
-from .shell import ShellMixin, GitMixin
+from . import git
+from . import shell
+
 
 log = logging.getLogger(__name__)
 
@@ -15,7 +17,7 @@ log = logging.getLogger(__name__)
 @yorm.attr(dir=yorm.converters.String)
 @yorm.attr(rev=yorm.converters.String)
 @yorm.attr(link=yorm.converters.String)
-class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
+class Source(yorm.converters.AttributeDictionary):
     """A dictionary of `git` and `ln` arguments."""
 
     def __init__(self, repo, name, rev='master', link=None):
@@ -54,25 +56,25 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
         # Enter the working tree
         if not os.path.exists(self.dir):
             log.debug("Creating a new repository...")
-            self.git_clone(self.repo, self.dir)
-        self.cd(self.dir)
+            git.clone(self.repo, self.dir)
+        shell.cd(self.dir)
 
         # Check for uncommitted changes
         if not force:
             log.debug("Confirming there are no uncommitted changes...")
-            if self.git_changes():
+            if git.changes(include_untracked=clean):
                 common.show()
                 msg = "Uncommitted changes: {}".format(os.getcwd())
                 raise RuntimeError(msg)
 
         # Fetch the desired revision
-        if fetch or self.rev not in (self.git_get_branch(),
-                                     self.git_get_hash(),
-                                     self.git_get_tag()):
-            self.git_fetch(self.repo, self.rev)
+        if fetch or self.rev not in (git.get_branch(),
+                                     git.get_hash(),
+                                     git.get_tag()):
+            git.fetch(self.repo, self.rev)
 
         # Update the working tree to the desired revision
-        self.git_update(self.rev, fetch=fetch, clean=clean)
+        git.update(self.rev, fetch=fetch, clean=clean)
 
     def create_link(self, root, force=False):
         """Create a link from the target name to the current directory."""
@@ -89,24 +91,24 @@ class Source(yorm.converters.AttributeDictionary, ShellMixin, GitMixin):
                     common.show()
                     msg = "Preexisting link location: {}".format(target)
                     raise RuntimeError(msg)
-            self.ln(source, target)
+            shell.ln(source, target)
 
     def identify(self, allow_dirty=True):
         """Get the path and current repository URL and hash."""
         if os.path.isdir(self.dir):
 
-            self.cd(self.dir)
+            shell.cd(self.dir)
 
             path = os.getcwd()
-            url = self.git_get_url()
-            if self.git_changes(visible=True):
+            url = git.get_url()
+            if git.changes(_show=True):
                 revision = '<dirty>'
                 if not allow_dirty:
                     common.show()
                     msg = "Uncommitted changes: {}".format(os.getcwd())
                     raise RuntimeError(msg)
             else:
-                revision = self.git_get_hash(visible=True)
+                revision = git.get_hash(_show=True)
             common.show(revision, log=False)
 
             return path, url, revision

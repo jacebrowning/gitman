@@ -6,7 +6,7 @@ import logging
 import yorm
 
 from . import common
-from .shell import ShellMixin
+from . import shell
 from .source import Source
 
 log = logging.getLogger(__name__)
@@ -21,7 +21,7 @@ class Sources(yorm.converters.SortedList):
 @yorm.attr(sources=Sources)
 @yorm.attr(sources_locked=Sources)
 @yorm.sync("{self.root}/{self.filename}")
-class Config(ShellMixin):
+class Config:
     """A dictionary of dependency configuration options."""
 
     FILENAMES = ('gdm.yml', 'gdm.yaml', '.gdm.yml', '.gdm.yaml')
@@ -53,8 +53,8 @@ class Config(ShellMixin):
             return 0
 
         if not os.path.isdir(self.location_path):
-            self.mkdir(self.location_path)
-        self.cd(self.location_path)
+            shell.mkdir(self.location_path)
+        shell.cd(self.location_path)
 
         sources = self._get_sources(use_locked=False if update else None)
         dirs = list(names) if names else [source.dir for source in sources]
@@ -88,7 +88,7 @@ class Config(ShellMixin):
                 )
                 common.dedent()
 
-            self.cd(self.location_path, visible=False)
+            shell.cd(self.location_path, _show=False)
 
         common.dedent()
         if dirs:
@@ -99,7 +99,7 @@ class Config(ShellMixin):
 
     def lock_deps(self, *names, obey_existing=True):
         """Lock down the immediate dependency versions."""
-        self.cd(self.location_path)
+        shell.cd(self.location_path)
         common.show()
         common.indent()
 
@@ -122,7 +122,7 @@ class Config(ShellMixin):
 
             common.show()
 
-            self.cd(self.location_path, visible=False)
+            shell.cd(self.location_path, _show=False)
 
         if count:
             yorm.update_file(self)
@@ -130,13 +130,13 @@ class Config(ShellMixin):
 
     def uninstall_deps(self):
         """Remove the sources location."""
-        self.rm(self.location_path)
+        shell.rm(self.location_path)
         common.show()
 
     def get_deps(self, depth=None, allow_dirty=True):
         """Yield the path, repository URL, and hash of each dependency."""
         if os.path.exists(self.location_path):
-            self.cd(self.location_path)
+            shell.cd(self.location_path)
             common.show()
             common.indent()
         else:
@@ -160,7 +160,7 @@ class Config(ShellMixin):
                 )
                 common.dedent()
 
-            self.cd(self.location_path, visible=False)
+            shell.cd(self.location_path, _show=False)
 
         common.dedent()
 
