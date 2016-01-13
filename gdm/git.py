@@ -44,7 +44,7 @@ def fetch(repo, rev=None):
     git(*args)
 
 
-def changes(include_untracked=False, _show=False):
+def changes(include_untracked=False, display_status=True, _show=False):
     """Determine if there are changes in the working tree."""
     status = False
 
@@ -65,7 +65,7 @@ def changes(include_untracked=False, _show=False):
     else:
         status = bool(output.splitlines()) and include_untracked
 
-    if status:
+    if status and display_status:
         for line in git('status', _show=True, _capture=True).splitlines():
             common.show(line)
 

@@ -8,13 +8,6 @@ from gdm import git
 from . import assert_calls
 
 
-def _git_with_changes(*args, **_):
-    if 'status' in args:
-        return "abc\n123\n"
-    else:
-        raise CallException
-
-
 @patch('gdm.git.call')
 class TestGit:
 
@@ -99,8 +92,8 @@ class TestGit:
 
     def test_changes_true_when_uncommitted(self, _):
         """Verify uncommitted changes can be detected."""
-        with patch('gdm.git.call', _git_with_changes):
-            assert True is git.changes()
+        with patch('gdm.git.call', Mock(side_effect=CallException)):
+            assert True is git.changes(display_status=False)
 
     def test_update(self, mock_call):
         """Verify the commands to update a working tree to a revision."""

@@ -101,7 +101,7 @@ class Source(yorm.converters.AttributeDictionary):
 
             path = os.getcwd()
             url = git.get_url()
-            if git.changes(_show=True):
+            if git.changes(display_status=not allow_dirty, _show=True):
                 revision = '<dirty>'
                 if not allow_dirty:
                     common.show()
