@@ -1,7 +1,6 @@
 """Utilities to call shell programs."""
 
 import os
-import sys
 import logging
 
 from sh import Command, ErrorReturnCode
@@ -14,10 +13,10 @@ OUT_PREFIX = "> "
 log = logging.getLogger(__name__)
 
 
-def call(name, *args, ignore=False, catch=True, capture=False, visible=True):
+def call(name, *args, _show=True, _capture=False, _ignore=False):
     """Call a shell program with arguments."""
     msg = CMD_PREFIX + ' '.join([name] + list(args))
-    if visible:
+    if _show:
         common.show(msg)
     else:
         log.debug(msg)
@@ -27,7 +26,7 @@ def call(name, *args, ignore=False, catch=True, capture=False, visible=True):
 
     try:
         program = Command(name)
-        if capture:
+        if _capture:
             line = program(*args).strip()
             log.debug(OUT_PREFIX + line)
             return line
@@ -36,10 +35,8 @@ def call(name, *args, ignore=False, catch=True, capture=False, visible=True):
                 log.debug(OUT_PREFIX + line.strip())
     except ErrorReturnCode as exc:
         msg = "\n  IN: '{}'{}".format(os.getcwd(), exc)
-        if ignore:
+        if _ignore:
             log.debug("Ignored error from call to '%s'", name)
-        elif catch:
-            sys.exit(msg)
         else:
             raise common.CallException(msg)
 
@@ -48,8 +45,8 @@ def mkdir(path):
     call('mkdir', '-p', path)
 
 
-def cd(path, visible=True):
-    call('cd', path, visible=visible)
+def cd(path, _show=True):
+    call('cd', path, _show=_show)
 
 
 def ln(source, target):

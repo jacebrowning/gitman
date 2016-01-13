@@ -31,7 +31,7 @@ def clone(repo, path, *, cache=None):
 
 def fetch(repo, rev=None):
     """Fetch the latest changes from the remote repository."""
-    git('remote', 'rm', 'origin', visible=False, ignore=True)
+    git('remote', 'rm', 'origin', _show=False, _ignore=True)
     git('remote', 'add', 'origin', repo)
     args = ['fetch', '--tags', '--force', '--prune', 'origin']
     if rev:
@@ -44,21 +44,19 @@ def fetch(repo, rev=None):
     git(*args)
 
 
-def changes(visible=False):
+def changes(_show=False):
     """Determine if there are changes in the working tree."""
     try:
 
         # refresh changes
-        git('update-index', '-q', '--refresh',
-            visible=False, catch=False)
+        git('update-index', '-q', '--refresh', _show=False)
 
         # check for uncommitted changes
-        git('diff-index', '--quiet', 'HEAD',
-            visible=visible, catch=False)
+        git('diff-index', '--quiet', 'HEAD', _show=_show)
 
         # check for untracked files
         output = git('ls-files', '--others', '--exclude-standard',
-                     visible=visible, catch=False, capture=True)
+                     _show=_show, _capture=True)
 
     except common.CallException:
         return True
@@ -72,11 +70,11 @@ def changes(visible=False):
 
 def update(rev, *, clean=True, fetch=False):  # pylint: disable=redefined-outer-name
     """Update the working tree to the specified revision."""
-    hide = {'visible': False, 'ignore': True}
+    hide = {'_show': False, '_ignore': True}
 
     git('stash', **hide)
     if clean:
-        git('clean', '--force', '-d', '-x', visible=False)
+        git('clean', '--force', '-d', '-x', _show=False)
 
     rev = _get_sha_from_rev(rev)
     git('checkout', '--force', rev)
@@ -90,24 +88,24 @@ def update(rev, *, clean=True, fetch=False):  # pylint: disable=redefined-outer-
 def get_url():
     """Get the current repository's URL."""
     return git('config', '--get', 'remote.origin.url',
-               visible=False, capture=True)
+               _show=False, _capture=True)
 
 
-def get_hash(visible=False):
+def get_hash(_show=False):
     """Get the current working tree's hash."""
-    return git('rev-parse', 'HEAD', visible=visible, capture=True)
+    return git('rev-parse', 'HEAD', _show=_show, _capture=True)
 
 
 def get_tag():
     """Get the current working tree's tag (if on a tag)."""
     return git('describe', '--tags', '--exact-match',
-               visible=False, ignore=True, capture=True)
+               _show=False, _ignore=True, _capture=True)
 
 
 def get_branch():
     """Get the current working tree's branch."""
     return git('rev-parse', '--abbrev-ref', 'HEAD',
-               visible=False, capture=True)
+               _show=False, _capture=True)
 
 
 def _get_sha_from_rev(rev):
@@ -116,7 +114,7 @@ def _get_sha_from_rev(rev):
         parts = rev.split('@')
         branch = parts[0]
         date = parts[1].strip("{}")
-        git('checkout', '--force', branch, visible=False)
+        git('checkout', '--force', branch, _show=False)
         rev = git('rev-list', '-n', '1', '--before={!r}'.format(date),
-                  branch, visible=False, capture=True)
+                  branch, _show=False, _capture=True)
     return rev

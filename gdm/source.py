@@ -101,14 +101,14 @@ class Source(yorm.converters.AttributeDictionary):
 
             path = os.getcwd()
             url = git.get_url()
-            if git.changes(visible=True):
+            if git.changes(_show=True):
                 revision = '<dirty>'
                 if not allow_dirty:
                     common.show()
                     msg = "Uncommitted changes: {}".format(os.getcwd())
                     raise RuntimeError(msg)
             else:
-                revision = git.get_hash(visible=True)
+                revision = git.get_hash(_show=True)
             common.show(revision, log=False)
 
             return path, url, revision

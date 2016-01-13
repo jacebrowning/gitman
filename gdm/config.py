@@ -88,7 +88,7 @@ class Config:
                 )
                 common.dedent()
 
-            shell.cd(self.location_path, visible=False)
+            shell.cd(self.location_path, _show=False)
 
         common.dedent()
         if dirs:
@@ -122,7 +122,7 @@ class Config:
 
             common.show()
 
-            shell.cd(self.location_path, visible=False)
+            shell.cd(self.location_path, _show=False)
 
         if count:
             yorm.update_file(self)
@@ -160,7 +160,7 @@ class Config:
                 )
                 common.dedent()
 
-            shell.cd(self.location_path, visible=False)
+            shell.cd(self.location_path, _show=False)
 
         common.dedent()
 

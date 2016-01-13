@@ -26,23 +26,18 @@ class TestCall:
         shell.call('mock_program')
         mock_command.assert_called_once_with('mock_program')
 
-    def test_other_error(self):
-        """Verify program errors are handled."""
-        with pytest.raises(SystemExit):
-            shell.call('git', '--invalid-git-argument')
-
     def test_other_error_uncaught(self):
-        """Verify program errors can be left uncaught."""
+        """Verify program errors raise exceptions."""
         with pytest.raises(CallException):
-            shell.call('git', '--invalid-git-argument', catch=False)
+            shell.call('git', '--invalid-git-argument')
 
     def test_other_error_ignored(self):
         """Verify program errors can be ignored."""
-        shell.call('git', '--invalid-git-argument', ignore=True)
+        shell.call('git', '--invalid-git-argument', _ignore=True)
 
     def test_other_capture(self):
         """Verify a program's output can be captured."""
-        stdout = shell.call('echo', 'Hello, world!\n', capture=True)
+        stdout = shell.call('echo', 'Hello, world!\n', _capture=True)
         assert "Hello, world!" == stdout
 
 
