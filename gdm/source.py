@@ -86,7 +86,7 @@ class Source(yorm.converters.AttributeDictionary):
                 os.remove(target)
             elif os.path.exists(target):
                 if force:
-                    self.rm(target)
+                    shell.rm(target)
                 else:
                     common.show()
                     msg = "Preexisting link location: {}".format(target)
