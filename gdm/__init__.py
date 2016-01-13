@@ -7,6 +7,7 @@ __version__ = '0.8.dev3'
 
 CLI = 'gdm'
 PLUGIN = 'deps'
+NAME = "Git Dependency Manager"
 VERSION = __project__ + ' v' + __version__
 DESCRIPTION = "A language-agnostic \"dependency manager\" using Git."
 
