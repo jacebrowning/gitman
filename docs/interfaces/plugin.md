@@ -1,6 +1,6 @@
 # Git Plugin
 
-GDM offers a simplified version of the [command-line interface](cli.md) in the form of a plugin for Git.
+`gdm` offers a simplified version of the [command-line interface](cli.md) in the form of a plugin for Git.
 
 ## Install
 
@@ -69,5 +69,3 @@ If any dependencies contain uncommitted changes, instead run:
 ```sh
 git deps --uninstall --force
 ```
-
-

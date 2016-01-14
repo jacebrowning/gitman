@@ -8,6 +8,8 @@ theme: mkdocs
 
 pages:
 - Home: 'index.md'
+- Setup:
+    - Git: 'setup/git.md'
 - Interfaces:
     - Command Line: interfaces/cli.md
     - Git Plugin: interfaces/plugin.md

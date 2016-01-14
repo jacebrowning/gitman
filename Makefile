@@ -133,6 +133,18 @@ URL := "git-dependency-manager.info"
 .PHONY: doc
 doc: readme verify-readme uml apidocs mkdocs
 
+.PHONY: doc-live
+doc-live: doc
+	eval "sleep 3; open http://127.0.0.1:8000" &
+	$(MKDOCS) serve
+
+.PHONY: read
+read: doc
+	$(OPEN) site/index.html
+	$(OPEN) apidocs/$(PACKAGE)/index.html
+	$(OPEN) README-pypi.html
+	$(OPEN) README-github.html
+
 .PHONY: readme
 readme: depends-dev README-github.html README-pypi.html
 README-github.html: README.md
@@ -165,18 +177,6 @@ mkdocs: depends-ci site/index.html
 site/index.html: mkdocs.yml docs/*.md
 	$(MKDOCS) build --clean --strict
 	echo $(URL) > site/CNAME
-
-.PHONY: mkdocs-live
-mkdocs-live: mkdocs
-	eval "sleep 3; open http://127.0.0.1:8000" &
-	$(MKDOCS) serve
-
-.PHONY: read
-read: doc
-	$(OPEN) site/index.html
-	$(OPEN) apidocs/$(PACKAGE)/index.html
-	$(OPEN) README-pypi.html
-	$(OPEN) README-github.html
 
 # Static Analysis ##############################################################
 
