@@ -1,7 +1,7 @@
 Revision History
 ================
 
-0.8 (unreleased)
+0.8 (2015/10/13)
 ----------------
 
 - Switched to using repository mirrors to speed up cloning.
