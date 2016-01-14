@@ -78,9 +78,9 @@ which will essentially:
 
 1. create a working tree at _root_/`location`/`dir`
 2. fetch from `repo` and checkout the specified `rev`
-3. symbolically link each `location`/`dir` from _root_/`link` (optional)
+3. symbolically link each `location`/`dir` from _root_/`link` (if specified)
 4. repeat for all nested working trees containing a configuration file
-5. record the actual commit SHAs that were checked out
+5. record the actual commit SHAs that were checked out (with `--lock` option)
 
 where `rev` can be:
 
@@ -116,4 +116,4 @@ $ gdm uninstall
 Advanced Options
 ================
 
-See the full documentation at http://git-dependency-manager.info/.
+See the full documentation at [git-dependency-manager.info](http://git-dependency-manager.info/interfaces/cli/).

@@ -1,4 +1,3 @@
-"""Unit tests for the 'cli' module."""
 # pylint: disable=no-self-use
 
 from unittest.mock import Mock, patch
@@ -58,7 +57,7 @@ class TestInstall:
         cli.main(['install'])
 
         mock_install.assert_called_once_with(
-            root=None, depth=None, force=False, clean=False)
+            root=None, depth=None, force=False, fetch=False, clean=False)
 
     @patch('gdm.commands.install')
     def test_install_root(self, mock_install):
@@ -66,7 +65,8 @@ class TestInstall:
         cli.main(['install', '--root', 'mock/path/to/root'])
 
         mock_install.assert_called_once_with(
-            root='mock/path/to/root', depth=None, force=False, clean=False)
+            root='mock/path/to/root', depth=None,
+            force=False, fetch=False, clean=False)
 
     @patch('gdm.commands.install')
     def test_install_force(self, mock_install):
@@ -74,7 +74,15 @@ class TestInstall:
         cli.main(['install', '--force'])
 
         mock_install.assert_called_once_with(
-            root=None, depth=None, force=True, clean=False)
+            root=None, depth=None, force=True, fetch=False, clean=False)
+
+    @patch('gdm.commands.install')
+    def test_install_fetch(self, mock_install):
+        """Verify fetching can be enabled."""
+        cli.main(['install', '--fetch'])
+
+        mock_install.assert_called_once_with(
+            root=None, depth=None, force=False, fetch=True, clean=False)
 
     @patch('gdm.commands.install')
     def test_install_clean(self, mock_install):
@@ -82,7 +90,7 @@ class TestInstall:
         cli.main(['install', '--clean'])
 
         mock_install.assert_called_once_with(
-            root=None, depth=None, force=False, clean=True)
+            root=None, depth=None, force=False, fetch=False, clean=True)
 
     @patch('gdm.commands.install')
     def test_install_specific_sources(self, mock_install):
@@ -91,7 +99,7 @@ class TestInstall:
 
         mock_install.assert_called_once_with(
             'foo', 'bar', root=None, depth=None,
-            force=False, clean=False)
+            force=False, fetch=False, clean=False)
 
     @patch('gdm.commands.install')
     def test_install_with_depth(self, mock_update):
@@ -99,7 +107,7 @@ class TestInstall:
         cli.main(['install', '--depth', '5'])
 
         mock_update.assert_called_once_with(
-            root=None, depth=5, force=False, clean=False)
+            root=None, depth=5, force=False, fetch=False, clean=False)
 
     @patch('gdm.commands.install', Mock())
     def test_install_with_depth_invalid(self):

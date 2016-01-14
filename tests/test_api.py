@@ -1,5 +1,4 @@
-"""Integration tests for the `gdm` package."""
-# pylint: disable=no-self-use,redefined-outer-name,unused-variable
+# pylint: disable=no-self-use,redefined-outer-name,unused-variable,unused-argument
 
 import os
 import shutil
@@ -83,6 +82,37 @@ def describe_install():
         assert gdm.install(depth=1)
 
         assert ['gdm_2'] == os.listdir(config.location)
+
+    def describe_links():
+
+        @pytest.fixture
+        def config_with_link(config):
+            config.__mapper__.text = strip("""
+            location: deps
+            sources:
+            - dir: gdm_1
+              link: my_link
+              repo: https://github.com/jacebrowning/gdm-demo
+              rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+            """)
+
+            return config
+
+        def it_should_create(config_with_link):
+            assert gdm.install(depth=1)
+
+            assert 'my_link' in os.listdir()
+
+        def it_should_not_overwrite(config_with_link):
+            os.system("touch my_link")
+
+            with pytest.raises(RuntimeError):
+                gdm.install(depth=1)
+
+        def it_should_overwrite_with_force(config_with_link):
+            os.system("touch my_link")
+
+            assert gdm.install(depth=1, force=True)
 
 
 def describe_uninstall():

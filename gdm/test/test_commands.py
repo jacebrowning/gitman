@@ -1,4 +1,3 @@
-"""Unit tests for the `commands` module."""
 # pylint: disable=no-self-use
 
 import os
