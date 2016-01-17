@@ -4,8 +4,8 @@ from unittest.mock import patch, Mock
 
 import pytest
 
-from gdm.common import CallException
 from gdm import shell
+from gdm.exceptions import ShellError
 
 from . import assert_calls
 
@@ -28,7 +28,7 @@ class TestCall:
 
     def test_other_error_uncaught(self):
         """Verify program errors raise exceptions."""
-        with pytest.raises(CallException):
+        with pytest.raises(ShellError):
             shell.call('git', '--invalid-git-argument')
 
     def test_other_error_ignored(self):

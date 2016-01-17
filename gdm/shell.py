@@ -6,6 +6,7 @@ import logging
 from sh import Command, ErrorReturnCode
 
 from . import common
+from .exceptions import ShellError
 
 CMD_PREFIX = "$ "
 OUT_PREFIX = "> "
@@ -38,7 +39,7 @@ def call(name, *args, _show=True, _capture=False, _ignore=False):
         if _ignore:
             log.debug("Ignored error from call to '%s'", name)
         else:
-            raise common.CallException(msg)
+            raise ShellError(msg)
 
 
 def mkdir(path):

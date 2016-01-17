@@ -7,10 +7,6 @@ import logging
 from . import settings
 
 
-class CallException(Exception):
-    """Exception raised when a program call has a non-zero return code."""
-
-
 class WideHelpFormatter(argparse.HelpFormatter):
     """Command-line help text formatter with wider help text."""
 
@@ -40,7 +36,7 @@ def positive_int(value):
     """Custom `int` that must be positive."""
     value = int(value)
     if value < 1:
-        raise TypeError("tbd")
+        raise TypeError
     return value
 
 
