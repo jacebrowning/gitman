@@ -6,7 +6,7 @@ Revision History
 
 - Added an error message when attempting to lock invalid repositories.
 
-0.8 (2015/10/13)
+0.8 (2016/01/13)
 ----------------
 
 - Switched to using repository mirrors to speed up cloning.
