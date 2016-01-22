@@ -2,8 +2,8 @@
 
 from unittest.mock import patch, Mock
 
-from gdm.common import CallException
 from gdm import git
+from gdm.exceptions import ShellError
 
 from . import assert_calls
 
@@ -92,7 +92,7 @@ class TestGit:
 
     def test_changes_true_when_uncommitted(self, _):
         """Verify uncommitted changes can be detected."""
-        with patch('gdm.git.call', Mock(side_effect=CallException)):
+        with patch('gdm.git.call', Mock(side_effect=ShellError)):
             assert True is git.changes(display_status=False)
 
     def test_update(self, mock_call):

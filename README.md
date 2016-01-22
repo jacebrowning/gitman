@@ -7,7 +7,7 @@
 Getting Started
 ===============
 
-Git Dependency Manager (GDM) is a language-agnostic "dependency manager" using Git. It aims to serve as a submodules replacement and provides advanced options for managing versions of nested Git repositories.
+Git Dependency Manager (`gdm`) is a language-agnostic "dependency manager" using Git. It aims to serve as a submodules replacement and provides advanced options for managing versions of nested Git repositories.
 
 Requirements
 ------------
@@ -19,7 +19,7 @@ Requirements
 Installation
 ------------
 
-GDM can be installed with pip:
+`gdm` can be installed with pip:
 
 ```sh
 $ pip install gdm
@@ -36,7 +36,7 @@ $ python setup.py install
 Setup
 -----
 
-Create a GDM configuration file (`gdm.yml` or `.gdm.yml`) in the root of your working tree:
+Create a configuration file (`gdm.yml` or `.gdm.yml`) in the root of your working tree:
 
 ```yaml
 location: .gdm
@@ -50,7 +50,7 @@ sources:
   link: Tools/XcodeCoverage
 ```
 
-Ignore GDM's dependency storage location:
+Ignore the dependency storage location:
 
 ```sh
 $ echo .gdm >> .gitignore

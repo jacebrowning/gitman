@@ -14,7 +14,7 @@ Using Git in the outer working tree will essentially ignore the contents of the 
 
 ## Mimicking Submodules
 
-To get the same behavior using GDM, first delete the `.gitmodules` file and create a new `.gdm.yml`:
+To get the same behavior using `gdm`, first delete the `.gitmodules` file and create a new `.gdm.yml`:
 
 ```yaml
 location: .gdm
@@ -39,4 +39,4 @@ In other working trees, simply run `$ gdm install` to check out the source depen
 
 ### Modifying Dependencies
 
-To include a different version of a dependency, modify the `rev` value in the GDM configuration file.
+To include a different version of a dependency, modify the `rev` value in the configuration file.

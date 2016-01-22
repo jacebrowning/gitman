@@ -5,6 +5,7 @@ import logging
 
 from . import common
 from .shell import call
+from .exceptions import ShellError
 
 
 log = logging.getLogger(__name__)
@@ -59,7 +60,7 @@ def changes(include_untracked=False, display_status=True, _show=False):
         output = git('ls-files', '--others', '--exclude-standard',
                      _show=_show, _capture=True)
 
-    except common.CallException:
+    except ShellError:
         status = True
 
     else:

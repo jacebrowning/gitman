@@ -8,6 +8,7 @@ import yorm
 from . import common
 from . import git
 from . import shell
+from .exceptions import InvalidConfig, InvalidRepository, UncommittedChanges
 
 
 log = logging.getLogger(__name__)
@@ -20,6 +21,9 @@ log = logging.getLogger(__name__)
 class Source(yorm.converters.AttributeDictionary):
     """A dictionary of `git` and `ln` arguments."""
 
+    DIRTY = '<dirty>'
+    UNKNOWN = '<unknown>'
+
     def __init__(self, repo, name, rev='master', link=None):
         super().__init__()
         self.repo = repo
@@ -27,9 +31,9 @@ class Source(yorm.converters.AttributeDictionary):
         self.rev = rev
         self.link = link
         if not self.repo:
-            raise ValueError("'repo' missing on {}".format(repr(self)))
+            raise InvalidConfig("'repo' missing on {}".format(repr(self)))
         if not self.dir:
-            raise ValueError("'dir' missing on {}".format(repr(self)))
+            raise InvalidConfig("'dir' missing on {}".format(repr(self)))
 
     def __repr__(self):
         return "<source {}>".format(self)
@@ -65,7 +69,7 @@ class Source(yorm.converters.AttributeDictionary):
             if git.changes(include_untracked=clean):
                 common.show()
                 msg = "Uncommitted changes: {}".format(os.getcwd())
-                raise RuntimeError(msg)
+                raise UncommittedChanges(msg)
 
         # Fetch the desired revision
         if fetch or self.rev not in (git.get_branch(),
@@ -90,10 +94,10 @@ class Source(yorm.converters.AttributeDictionary):
                 else:
                     common.show()
                     msg = "Preexisting link location: {}".format(target)
-                    raise RuntimeError(msg)
+                    raise UncommittedChanges(msg)
             shell.ln(source, target)
 
-    def identify(self, allow_dirty=True):
+    def identify(self, allow_dirty=True, allow_missing=True):
         """Get the path and current repository URL and hash."""
         if os.path.isdir(self.dir):
 
@@ -102,23 +106,29 @@ class Source(yorm.converters.AttributeDictionary):
             path = os.getcwd()
             url = git.get_url()
             if git.changes(display_status=not allow_dirty, _show=True):
-                revision = '<dirty>'
+                revision = self.DIRTY
                 if not allow_dirty:
                     common.show()
                     msg = "Uncommitted changes: {}".format(os.getcwd())
-                    raise RuntimeError(msg)
+                    raise UncommittedChanges(msg)
             else:
                 revision = git.get_hash(_show=True)
             common.show(revision, log=False)
 
             return path, url, revision
 
+        elif allow_missing:
+
+            return os.getcwd(), '<missing>', self.UNKNOWN
+
         else:
 
-            return os.getcwd(), '<missing>', '<unknown>'
+            path = os.path.join(os.getcwd(), self.dir)
+            msg = "Not a valid repository: {}".format(path)
+            raise InvalidRepository(msg)
 
     def lock(self):
         """Return a locked version of the current source."""
-        _, _, revision = self.identify()
+        _, _, revision = self.identify(allow_missing=False)
         source = self.__class__(self.repo, self.dir, revision, self.link)
         return source

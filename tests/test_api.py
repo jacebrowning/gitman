@@ -10,6 +10,7 @@ from yorm.test import strip
 
 import gdm
 from gdm.config import Config
+from gdm.exceptions import InvalidRepository
 
 
 CONFIG = """
@@ -273,3 +274,11 @@ def describe_lock():
           repo: https://github.com/jacebrowning/gdm-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
         """) == config.__mapper__.text
+
+    def it_should_fail_on_invalid_repositories(config):
+        os.system("mkdir deps && touch deps/gdm_1")
+
+        with pytest.raises(InvalidRepository):
+            gdm.lock()
+
+        assert "<unknown>" not in config.__mapper__.text
