@@ -45,5 +45,5 @@ $ git clone git://github.com/<owner>/<repo>.git
 Finally, the repository URL itself can contain an OAuth token (for [GitHub](https://github.com/blog/1270-easier-builds-and-deployments-using-git-over-https-and-oauth)):
 
 ```shell
-$ git clone git://<token>@github.com/<owner>/<repo>.git
+$ git clone https://<token>@github.com/<owner>/<repo>.git
 ```
