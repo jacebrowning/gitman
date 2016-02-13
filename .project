@@ -3,7 +3,7 @@
 	<name>GDM</name>
 	<comment></comment>
 	<projects>
-		<project>YORM</project>
+		<project>GDM</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
