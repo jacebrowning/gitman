@@ -14,11 +14,11 @@ from .exceptions import InvalidConfig, InvalidRepository, UncommittedChanges
 log = logging.getLogger(__name__)
 
 
-@yorm.attr(repo=yorm.converters.String)
-@yorm.attr(dir=yorm.converters.String)
-@yorm.attr(rev=yorm.converters.String)
-@yorm.attr(link=yorm.converters.String)
-class Source(yorm.converters.AttributeDictionary):
+@yorm.attr(repo=yorm.types.String)
+@yorm.attr(dir=yorm.types.String)
+@yorm.attr(rev=yorm.types.String)
+@yorm.attr(link=yorm.types.String)
+class Source(yorm.types.AttributeDictionary):
     """A dictionary of `git` and `ln` arguments."""
 
     DIRTY = '<dirty>'

@@ -6,11 +6,12 @@ from contextlib import suppress
 import logging
 
 import pytest
-from yorm.test import strip
 
 import gdm
 from gdm.config import Config
 from gdm.exceptions import InvalidRepository
+
+from .utilities import strip
 
 
 CONFIG = """
