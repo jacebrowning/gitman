@@ -13,11 +13,11 @@ log = logging.getLogger(__name__)
 
 
 @yorm.attr(all=Source)
-class Sources(yorm.converters.SortedList):
+class Sources(yorm.types.SortedList):
     """A list of source dependencies."""
 
 
-@yorm.attr(location=yorm.converters.String)
+@yorm.attr(location=yorm.types.String)
 @yorm.attr(sources=Sources)
 @yorm.attr(sources_locked=Sources)
 @yorm.sync("{self.root}/{self.filename}")
