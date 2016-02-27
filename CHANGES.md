@@ -1,6 +1,11 @@
 Revision History
 ================
 
+0.9 (unreleased)
+----------------
+
+- Added `edit` command to launch the configuration file.
+
 0.8.2 (2016/02/24)
 ------------------
 
