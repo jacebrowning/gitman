@@ -93,6 +93,11 @@ def main(args=None, function=None):
     sub.add_argument('-f', '--force', action='store_true',
                      help="delete uncommitted changes in dependencies")
 
+    # Edit parser
+    info = "open the configuration file in the default editor"
+    sub = subs.add_parser('edit', description=info.capitalize() + '.',
+                          help=info, parents=[debug, project], **shared)
+
     # Parse arguments
     namespace = parser.parse_args(args=args)
 
@@ -135,6 +140,8 @@ def _get_command(function, namespace):
         function = commands.delete
         kwargs.update(force=namespace.force)
         exit_msg = "\n" + "Run again with '--force' to ignore"
+    elif namespace.command == 'edit':
+        function = commands.edit
 
     return function, args, kwargs, exit_msg
 

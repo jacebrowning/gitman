@@ -4,7 +4,7 @@ import os
 import functools
 import logging
 
-from . import common
+from . import common, system
 from .config import load
 
 log = logging.getLogger(__name__)
@@ -168,6 +168,26 @@ def delete(root=None, force=False):
         config.uninstall_deps()
 
     return _display_result("delete", "Deleted", count, allow_zero=True)
+
+
+@restore_cwd
+def edit(root=None):
+    """Open the confuration file for a project.
+
+    Optional arguments:
+
+    - `root`: specifies the path to the root working tree
+
+    """
+    log.info("Launching configuration...")
+
+    root = _find_root(root)
+    config = load(root)
+
+    if config:
+        return system.launch(config.path)
+    else:
+        return False
 
 
 def _find_root(root, cwd=None):
