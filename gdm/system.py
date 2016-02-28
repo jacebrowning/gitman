@@ -8,7 +8,7 @@ import logging
 log = logging.getLogger(__name__)
 
 
-def launch(path):  # pragma: no cover (manual test)
+def launch(path):
     """Open a file with its default program."""
     name = platform.system()
     log.info("Opening %s", path)
@@ -19,7 +19,7 @@ def launch(path):  # pragma: no cover (manual test)
             'Linux': _launch_linux,
         }[name]
     except KeyError:
-        raise AssertionError("Unknown OS: {}".format(name))
+        raise RuntimeError("Unrecognized platform: {}".format(name)) from None
     else:
         return function(path)
 

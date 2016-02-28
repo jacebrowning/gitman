@@ -187,6 +187,7 @@ def edit(root=None):
     if config:
         return system.launch(config.path)
     else:
+        log.error("No configuration found")
         return False
 
 
