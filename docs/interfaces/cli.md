@@ -131,5 +131,5 @@ gitman uninstall --force
 To open the existing configuration file:
 
 ```sh
-gdm edit
+gitman edit
 ```

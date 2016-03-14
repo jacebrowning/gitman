@@ -4,13 +4,13 @@ from unittest.mock import patch, call, Mock
 
 from expecter import expect
 
-from gdm import system
+from gitman import system
 
 
 def describe_launch():
 
     @patch('platform.system', Mock(return_value="Windows"))
-    @patch('gdm.system._launch_windows')
+    @patch('gitman.system._launch_windows')
     def it_opens_files(startfile):
         system.launch("fake/path")
         expect(startfile.mock_calls) == [call("fake/path")]

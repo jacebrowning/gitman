@@ -3,7 +3,7 @@
 	<name>GitMan</name>
 	<comment></comment>
 	<projects>
-		<project>GDM</project>
+		<project>GitMan</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
