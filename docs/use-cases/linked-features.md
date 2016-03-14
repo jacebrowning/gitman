@@ -8,7 +8,7 @@ Another use case of `gitman` is to test experimental versions of related product
 By manually modifying the `sources_locked` section, a particular version of the API can be checked out to help finish the complete feature in the web app:
 
 ```yaml
-location: gitman_sources
+location: vendor
 sources:
 - dir: api
   link: ''
