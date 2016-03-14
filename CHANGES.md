@@ -5,6 +5,7 @@ Revision History
 ----------------
 
 - Added `edit` command to launch the configuration file.
+
 0.8.3 (2016/03/14)
 ------------------
 
