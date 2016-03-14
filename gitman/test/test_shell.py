@@ -4,8 +4,8 @@ from unittest.mock import patch, Mock
 
 import pytest
 
-from gdm import shell
-from gdm.exceptions import ShellError
+from gitman import shell
+from gitman.exceptions import ShellError
 
 from . import assert_calls
 
@@ -20,7 +20,7 @@ class TestCall:
         shell.call('cd', 'mock/dir')
         mock_chdir.assert_called_once_with('mock/dir')
 
-    @patch('gdm.shell.Command')
+    @patch('gitman.shell.Command')
     def test_other(self, mock_command):
         """Verify directories are changed correctly."""
         shell.call('mock_program')
@@ -41,7 +41,7 @@ class TestCall:
         assert "Hello, world!" == stdout
 
 
-@patch('gdm.shell.call')
+@patch('gitman.shell.call')
 class TestPrograms:
 
     """Tests for calls to shell programs."""

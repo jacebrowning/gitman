@@ -5,6 +5,10 @@ Revision History
 ----------------
 
 - Added `edit` command to launch the configuration file.
+0.8.3 (2016/03/14)
+------------------
+
+- Renamed to GitMan.
 
 0.8.2 (2016/02/24)
 ------------------

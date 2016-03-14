@@ -5,8 +5,8 @@ import logging
 
 import pytest
 
-from gdm import cli
-from gdm.common import _Config
+from gitman import cli
+from gitman.common import _Config
 
 
 class TestMain:
@@ -51,7 +51,7 @@ class TestInstall:
 
     """Unit tests for the `install` command."""
 
-    @patch('gdm.commands.install')
+    @patch('gitman.commands.install')
     def test_install(self, mock_install):
         """Verify the 'install' command can be run."""
         cli.main(['install'])
@@ -59,7 +59,7 @@ class TestInstall:
         mock_install.assert_called_once_with(
             root=None, depth=None, force=False, fetch=False, clean=False)
 
-    @patch('gdm.commands.install')
+    @patch('gitman.commands.install')
     def test_install_root(self, mock_install):
         """Verify the project's root can be specified."""
         cli.main(['install', '--root', 'mock/path/to/root'])
@@ -68,7 +68,7 @@ class TestInstall:
             root='mock/path/to/root', depth=None,
             force=False, fetch=False, clean=False)
 
-    @patch('gdm.commands.install')
+    @patch('gitman.commands.install')
     def test_install_force(self, mock_install):
         """Verify dependencies can be force-installed."""
         cli.main(['install', '--force'])
@@ -76,7 +76,7 @@ class TestInstall:
         mock_install.assert_called_once_with(
             root=None, depth=None, force=True, fetch=False, clean=False)
 
-    @patch('gdm.commands.install')
+    @patch('gitman.commands.install')
     def test_install_fetch(self, mock_install):
         """Verify fetching can be enabled."""
         cli.main(['install', '--fetch'])
@@ -84,7 +84,7 @@ class TestInstall:
         mock_install.assert_called_once_with(
             root=None, depth=None, force=False, fetch=True, clean=False)
 
-    @patch('gdm.commands.install')
+    @patch('gitman.commands.install')
     def test_install_clean(self, mock_install):
         """Verify dependency cleaning can be enabled."""
         cli.main(['install', '--clean'])
@@ -92,7 +92,7 @@ class TestInstall:
         mock_install.assert_called_once_with(
             root=None, depth=None, force=False, fetch=False, clean=True)
 
-    @patch('gdm.commands.install')
+    @patch('gitman.commands.install')
     def test_install_specific_sources(self, mock_install):
         """Verify individual dependencies can be installed."""
         cli.main(['install', 'foo', 'bar'])
@@ -101,7 +101,7 @@ class TestInstall:
             'foo', 'bar', root=None, depth=None,
             force=False, fetch=False, clean=False)
 
-    @patch('gdm.commands.install')
+    @patch('gitman.commands.install')
     def test_install_with_depth(self, mock_update):
         """Verify the 'install' command can be limited by depth."""
         cli.main(['install', '--depth', '5'])
@@ -109,7 +109,7 @@ class TestInstall:
         mock_update.assert_called_once_with(
             root=None, depth=5, force=False, fetch=False, clean=False)
 
-    @patch('gdm.commands.install', Mock())
+    @patch('gitman.commands.install', Mock())
     def test_install_with_depth_invalid(self):
         """Verify depths below 1 are rejected."""
         with pytest.raises(SystemExit):
@@ -122,7 +122,7 @@ class TestUpdate:
 
     """Unit tests for the `update` command."""
 
-    @patch('gdm.commands.update')
+    @patch('gitman.commands.update')
     def test_update(self, mock_update):
         """Verify the 'update' command can be run."""
         cli.main(['update'])
@@ -131,7 +131,7 @@ class TestUpdate:
             root=None, depth=None,
             force=False, clean=False, recurse=False, lock=None)
 
-    @patch('gdm.commands.update')
+    @patch('gitman.commands.update')
     def test_update_recursive(self, mock_update):
         """Verify the 'update' command can be run recursively."""
         cli.main(['update', '--all'])
@@ -140,7 +140,7 @@ class TestUpdate:
             root=None, depth=None,
             force=False, clean=False, recurse=True, lock=None)
 
-    @patch('gdm.commands.update')
+    @patch('gitman.commands.update')
     def test_update_no_lock(self, mock_update):
         """Verify the 'update' command can disable locking."""
         cli.main(['update', '--no-lock'])
@@ -149,7 +149,7 @@ class TestUpdate:
             root=None, depth=None,
             force=False, clean=False, recurse=False, lock=False)
 
-    @patch('gdm.commands.update')
+    @patch('gitman.commands.update')
     def test_update_lock(self, mock_update):
         """Verify the 'update' command can enable locking."""
         cli.main(['update', '--lock'])
@@ -163,7 +163,7 @@ class TestUpdate:
         with pytest.raises(SystemExit):
             cli.main(['update', '--lock', '--no-lock'])
 
-    @patch('gdm.commands.update')
+    @patch('gitman.commands.update')
     def test_update_specific_sources(self, mock_install):
         """Verify individual dependencies can be installed."""
         cli.main(['update', 'foo', 'bar'])
@@ -172,7 +172,7 @@ class TestUpdate:
             'foo', 'bar', root=None, depth=None,
             force=False, clean=False, recurse=False, lock=None)
 
-    @patch('gdm.commands.update')
+    @patch('gitman.commands.update')
     def test_update_with_depth(self, mock_update):
         """Verify the 'update' command can be limited by depth."""
         cli.main(['update', '--depth', '5'])
@@ -186,7 +186,7 @@ class TestList:
 
     """Unit tests for the `list` command."""
 
-    @patch('gdm.commands.display')
+    @patch('gitman.commands.display')
     def test_list(self, mock_display):
         """Verify the 'list' command can be run."""
         cli.main(['list'])
@@ -194,7 +194,7 @@ class TestList:
         mock_display.assert_called_once_with(
             root=None, depth=None, allow_dirty=True)
 
-    @patch('gdm.commands.display')
+    @patch('gitman.commands.display')
     def test_list_root(self, mock_display):
         """Verify the project's root can be specified."""
         cli.main(['list', '--root', 'mock/path/to/root'])
@@ -202,7 +202,7 @@ class TestList:
         mock_display.assert_called_once_with(
             root='mock/path/to/root', depth=None, allow_dirty=True)
 
-    @patch('gdm.commands.display')
+    @patch('gitman.commands.display')
     def test_list_no_dirty(self, mock_display):
         """Verify the 'list' command can be set to fail when dirty."""
         cli.main(['list', '--no-dirty'])
@@ -210,7 +210,7 @@ class TestList:
         mock_display.assert_called_once_with(
             root=None, depth=None, allow_dirty=False)
 
-    @patch('gdm.commands.display')
+    @patch('gitman.commands.display')
     def test_update_with_depth(self, mock_update):
         """Verify the 'list' command can be limited by depth."""
         cli.main(['list', '--depth', '5'])
@@ -222,12 +222,12 @@ class TestList:
 def describe_lock():
     # pylint: disable=unused-variable
 
-    @patch('gdm.commands.lock')
+    @patch('gitman.commands.lock')
     def with_no_arguments(lock):
         cli.main(['lock'])
         lock.assert_called_once_with(root=None)
 
-    @patch('gdm.commands.lock')
+    @patch('gitman.commands.lock')
     def with_dependencies(lock):
         cli.main(['lock', 'foo', 'bar'])
         lock.assert_called_once_with('foo', 'bar', root=None)
@@ -237,7 +237,7 @@ class TestUninstall:
 
     """Unit tests for the `uninstall` command."""
 
-    @patch('gdm.commands.delete')
+    @patch('gitman.commands.delete')
     def test_uninstall(self, mock_uninstall):
         """Verify the 'uninstall' command can be run."""
         cli.main(['uninstall'])
@@ -245,7 +245,7 @@ class TestUninstall:
         mock_uninstall.assert_called_once_with(
             root=None, force=False)
 
-    @patch('gdm.commands.delete')
+    @patch('gitman.commands.delete')
     def test_uninstall_root(self, mock_uninstall):
         """Verify the project's root can be specified."""
         cli.main(['uninstall', '--root', 'mock/path/to/root'])
@@ -253,7 +253,7 @@ class TestUninstall:
         mock_uninstall.assert_called_once_with(
             root='mock/path/to/root', force=False)
 
-    @patch('gdm.commands.delete')
+    @patch('gitman.commands.delete')
     def test_uninstall_force(self, mock_uninstall):
         """Verify the 'uninstall' command can be forced."""
         cli.main(['uninstall', '--force'])

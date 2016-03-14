@@ -1,6 +1,6 @@
 # Project settings
-PROJECT := GDM
-PACKAGE := gdm
+PROJECT := GitMan
+PACKAGE := gitman
 SOURCES := Makefile setup.py $(shell find $(PACKAGE) -name '*.py')
 EGG_INFO := $(subst -,_,$(PROJECT)).egg-info
 

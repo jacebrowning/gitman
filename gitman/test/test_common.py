@@ -2,8 +2,8 @@
 
 from unittest.mock import Mock, call
 
-from gdm import common
-from gdm.common import _Config
+from gitman import common
+from gitman.common import _Config
 
 
 class TestShowConsole:

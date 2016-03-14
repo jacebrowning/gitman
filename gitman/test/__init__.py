@@ -1,4 +1,4 @@
-"""Unit tests for the `gdm` package."""
+"""Unit tests for the `gitman` package."""
 
 
 def assert_calls(mock_call, expected):

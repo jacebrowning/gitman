@@ -1,0 +1,10 @@
+location: dependencies
+sources:
+- repo: https://github.com/jacebrowning/gitman
+  dir: gitman_1
+  rev: fb693447579235391a45ca170959b5583c5042d8
+  link: src/gitman_a
+- repo: https://github.com/jacebrowning/gitman
+  dir: gitman_2
+  rev: master
+  link: src/gitman_b

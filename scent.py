@@ -11,7 +11,7 @@ else:
     notify = Notifier.notify
 
 
-watch_paths = ['gdm/', 'tests/']
+watch_paths = ['gitman/', 'tests/']
 
 
 @select_runnable('python')

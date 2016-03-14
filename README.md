@@ -1,13 +1,13 @@
-[![Build Status](https://travis-ci.org/jacebrowning/gdm.svg?branch=develop)](https://travis-ci.org/jacebrowning/gdm)
-[![Coverage Status](http://img.shields.io/coveralls/jacebrowning/gdm/master.svg)](https://coveralls.io/r/jacebrowning/gdm)
-[![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/jacebrowning/gdm.svg)](https://scrutinizer-ci.com/g/jacebrowning/gdm/?branch=master)
-[![PyPI Version](http://img.shields.io/pypi/v/GDM.svg)](https://pypi.python.org/pypi/GDM)
-[![PyPI Downloads](http://img.shields.io/pypi/dm/GDM.svg)](https://pypi.python.org/pypi/GDM)
+[![Build Status](https://travis-ci.org/jacebrowning/gitman.svg?branch=develop)](https://travis-ci.org/jacebrowning/gitman)
+[![Coverage Status](http://img.shields.io/coveralls/jacebrowning/gitman/master.svg)](https://coveralls.io/r/jacebrowning/gitman)
+[![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/jacebrowning/gitman.svg)](https://scrutinizer-ci.com/g/jacebrowning/gitman/?branch=master)
+[![PyPI Version](http://img.shields.io/pypi/v/GitMan.svg)](https://pypi.python.org/pypi/GitMan)
+[![PyPI Downloads](http://img.shields.io/pypi/dm/GitMan.svg)](https://pypi.python.org/pypi/GitMan)
 
 Getting Started
 ===============
 
-Git Dependency Manager (`gdm`) is a language-agnostic "dependency manager" using Git. It aims to serve as a submodules replacement and provides advanced options for managing versions of nested Git repositories.
+GitMan is a language-agnostic "dependency manager" using Git. It aims to serve as a submodules replacement and provides advanced options for managing versions of nested Git repositories.
 
 Requirements
 ------------
@@ -19,27 +19,27 @@ Requirements
 Installation
 ------------
 
-`gdm` can be installed with pip:
+GitMan can be installed with pip:
 
 ```sh
-$ pip install gdm
+$ pip install gitman
 ```
 
 or directly from the source code:
 
 ```sh
-$ git clone https://github.com/jacebrowning/gdm.git
-$ cd gdm
+$ git clone https://github.com/jacebrowning/gitman.git
+$ cd gitman
 $ python setup.py install
 ```
 
 Setup
 -----
 
-Create a configuration file (`gdm.yml` or `.gdm.yml`) in the root of your working tree:
+Create a configuration file (`gitman.yml` or `.gitman.yml`) in the root of your working tree:
 
 ```yaml
-location: .gdm
+location: vendor
 sources:
 - repo: https://github.com/kstenerud/iOS-Universal-Framework
   dir: framework
@@ -53,7 +53,7 @@ sources:
 Ignore the dependency storage location:
 
 ```sh
-$ echo .gdm >> .gitignore
+$ echo .gitman >> .gitignore
 ```
 
 Basic Usage
@@ -62,7 +62,7 @@ Basic Usage
 See the available commands:
 
 ```sh
-$ gdm --help
+$ gitman --help
 ```
 
 Updating Dependencies
@@ -71,7 +71,7 @@ Updating Dependencies
 Get the latest versions of all dependencies:
 
 ```sh
-$ gdm update
+$ gitman update
 ```
 
 which will essentially:
@@ -95,13 +95,13 @@ Restoring Previous Versions
 Display the specific revisions that are currently installed:
 
 ```sh
-$ gdm list
+$ gitman list
 ```
 
 Reinstall these specific versions at a later time:
 
 ```sh
-$ gdm install
+$ gitman install
 ```
 
 Deleting Dependencies
@@ -110,7 +110,7 @@ Deleting Dependencies
 Remove all installed dependencies:
 
 ```sh
-$ gdm uninstall
+$ gitman uninstall
 ```
 
 Advanced Options

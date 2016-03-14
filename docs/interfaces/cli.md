@@ -1,43 +1,43 @@
 # Command-line Interface
 
-After setting up `gdm` with a [configuration file](../index.md#setup), various commands can be run to manage these Git-controlled source dependencies.
+After setting up `gitman` with a [configuration file](../index.md#setup), various commands can be run to manage these Git-controlled source dependencies.
 
 ## Install
 
 To clone/checkout the specified dependencies, run:
 
 ```sh
-gdm install
+gitman install
 ```
 
 or filter the dependency list by directory name:
 
 ```sh
-gdm install <dir1> <dir2> <etc.>
+gitman install <dir1> <dir2> <etc.>
 ```
 
 or limit the traversal of nested dependencies:
 
 ```sh
-gdm install --depth=<count>
+gitman install --depth=<count>
 ```
 
 It will leave untracked files alone. To delete them, run:
 
 ```sh
-gdm install --clean
+gitman install --clean
 ```
 
 It will only fetch from the repository if needed. To always fetch, run:
 
 ```sh
-gdm install --fetch
+gitman install --fetch
 ```
 
 It will exit with an error if there are any uncommitted changes in dependencies. To overwrite all changes, run:
 
 ```sh
-gdm install --force
+gitman install --force
 ```
 
 ## Update
@@ -45,31 +45,31 @@ gdm install --force
 If any of the dependencies track a branch (rather than a specific commit), the current upstream version of that branch can be checked out by running:
 
 ```sh
-gdm update
+gitman update
 ```
 
 or filter the dependency list by directory name:
 
 ```sh
-gdm update <dir1> <dir2> <etc.>
+gitman update <dir1> <dir2> <etc.>
 ```
 
 or limit the traversal of nested dependencies:
 
 ```sh
-gdm update --depth=<count>
+gitman update --depth=<count>
 ```
 
 This will also record the exact versions of any previously locked dependencies. Disable this behavior by instead running:
 
 ```sh
-gdm update --no-lock
+gitman update --no-lock
 ```
 
 or to additionally get the latest versions of all nested dependencies, run:
 
 ```sh
-gdm update --all
+gitman update --all
 ```
 
 ## List
@@ -77,13 +77,13 @@ gdm update --all
 To display the currently checked out dependencies, run:
 
 ```sh
-gdm list
+gitman list
 ```
 
 or exit with an error if there are any uncommitted changes:
 
 ```sh
-gdm list --no-dirty
+gitman list --no-dirty
 ```
 
 ## Lock
@@ -91,25 +91,25 @@ gdm list --no-dirty
 To manually record the exact version of each dependency, run:
 
 ```sh
-gdm lock
+gitman lock
 ```
 
 or lock down specific dependencies:
 
 ```sh
-gdm lock <dir1> <dir2> <etc.>
+gitman lock <dir1> <dir2> <etc.>
 ```
 
 This can be combined with updating dependencies by running:
 
 ```sh
-gdm update --lock
+gitman update --lock
 ```
 
 To restore the exact versions previously checked out, run:
 
 ```sh
-gdm install
+gitman install
 ```
 
 ## Uninstall
@@ -117,13 +117,13 @@ gdm install
 To delete all source dependencies, run:
 
 ```sh
-gdm uninstall
+gitman uninstall
 ```
 
 If any dependencies contain uncommitted changes, instead run:
 
 ```sh
-gdm uninstall --force
+gitman uninstall --force
 ```
 
 ## Edit
