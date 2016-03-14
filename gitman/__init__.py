@@ -6,7 +6,7 @@ __project__ = 'GitMan'
 __version__ = '0.8.3.dev2'
 
 CLI = 'gitman'
-PLUGIN = 'man'
+PLUGIN = 'deps'
 NAME = "Git Dependency Manager"
 VERSION = __project__ + ' v' + __version__
 DESCRIPTION = "A language-agnostic dependency manager using Git."

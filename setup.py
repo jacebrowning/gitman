@@ -30,7 +30,6 @@ setuptools.setup(
         'git-' + PLUGIN + ' = gitman.plugin:main',
         # Legacy entry points:
         'gdm = gitman.cli:main',
-        'git-deps = gitman.plugin:main',
     ]},
 
     long_description=(README + '\n' + CHANGES),
