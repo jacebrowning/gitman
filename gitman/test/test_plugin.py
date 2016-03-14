@@ -2,14 +2,14 @@
 
 from unittest.mock import patch, call
 
-from gdm import plugin
+from gitman import plugin
 
 
 class TestMain:
 
     """Unit tests for the top-level arguments."""
 
-    @patch('gdm.cli.commands')
+    @patch('gitman.cli.commands')
     def test_install(self, mock_commands):
         """Verify 'install' is the default command."""
         mock_commands.install.__name__ = 'mock'
@@ -22,7 +22,7 @@ class TestMain:
             call.install().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
-    @patch('gdm.cli.commands')
+    @patch('gitman.cli.commands')
     def test_update(self, mock_commands):
         """Verify 'update' can be called with cleaning."""
         mock_commands.update.__name__ = 'mock'
@@ -35,7 +35,7 @@ class TestMain:
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
-    @patch('gdm.cli.commands')
+    @patch('gitman.cli.commands')
     def test_update_recursive(self, mock_commands):
         """Verify 'update' can be called recursively."""
         mock_commands.update.__name__ = 'mock'
@@ -48,7 +48,7 @@ class TestMain:
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
-    @patch('gdm.cli.commands')
+    @patch('gitman.cli.commands')
     def test_update_no_lock(self, mock_commands):
         """Verify 'update' can be called without locking."""
         mock_commands.update.__name__ = 'mock'
@@ -61,7 +61,7 @@ class TestMain:
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
-    @patch('gdm.cli.commands')
+    @patch('gitman.cli.commands')
     def test_list(self, mock_commands):
         """Verify 'list' can be called."""
         mock_commands.display.__name__ = 'mock'
@@ -74,7 +74,7 @@ class TestMain:
             call.display().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
-    @patch('gdm.cli.commands')
+    @patch('gitman.cli.commands')
     def test_uninstall(self, mock_commands):
         """Verify 'clean' can be called with force."""
         mock_commands.delete.__name__ = 'mock'

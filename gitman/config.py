@@ -24,9 +24,7 @@ class Sources(yorm.types.SortedList):
 class Config:
     """A dictionary of dependency configuration options."""
 
-    FILENAMES = ('gdm.yml', 'gdm.yaml', '.gdm.yml', '.gdm.yaml')
-
-    def __init__(self, root, filename=FILENAMES[0], location='gdm_sources'):
+    def __init__(self, root, filename="gitman.yml", location="gdm_sources"):
         super().__init__()
         self.root = root
         self.filename = filename
@@ -188,10 +186,17 @@ def load(root=None):
         root = os.getcwd()
 
     for filename in os.listdir(root):
-        if filename.lower() in Config.FILENAMES:
+        if _valid_filename(filename):
             config = Config(root, filename)
             log.debug("Loaded config: %s", config.path)
             return config
 
     log.debug("No config found in: %s", root)
     return None
+
+
+def _valid_filename(filename):
+    name, ext = os.path.splitext(filename.lower())
+    if name.startswith('.'):
+        name = name[1:]
+    return name in ('gitman', 'gdm') and ext in ('.yml', '.yaml')

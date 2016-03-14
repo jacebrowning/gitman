@@ -2,7 +2,7 @@
 
 import pytest
 
-from gdm.config import Config, load
+from gitman.config import Config, load
 
 from .conftest import FILES
 
@@ -14,7 +14,7 @@ class TestConfig:
         config = Config('mock/root')
 
         assert 'mock/root' == config.root
-        assert 'gdm.yml' == config.filename
+        assert 'gitman.yml' == config.filename
         assert 'gdm_sources' == config.location
         assert [] == config.sources
 
@@ -27,16 +27,16 @@ class TestConfig:
 
     def test_init_location(self):
         """Verify the location can be customized."""
-        config = Config('mock/root', location='.gdm')
+        config = Config('mock/root', location='.gitman')
 
-        assert 'gdm.yml' == config.filename
-        assert '.gdm' == config.location
+        assert 'gitman.yml' == config.filename
+        assert '.gitman' == config.location
 
     def test_path(self):
         """Verify a configuration's path is correct."""
         config = Config('mock/root')
 
-        assert "mock/root/gdm.yml" == config.path
+        assert "mock/root/gitman.yml" == config.path
 
     @pytest.mark.integration
     def test_install_and_list(self):
@@ -48,19 +48,12 @@ class TestConfig:
 
         deps = list(config.get_deps())
         assert 7 == len(deps)
-        assert 'https://github.com/jacebrowning/gdm-demo' == deps[0][1]
         assert 'eb37743011a398b208dd9f9ef79a408c0fc10d48' == deps[0][2]
-        assert 'https://github.com/jacebrowning/gdm-demo' == deps[1][1]
         assert 'ddbe17ef173538d1fda29bd99a14bab3c5d86e78' == deps[1][2]
-        assert 'https://github.com/jacebrowning/gdm-demo' == deps[2][1]
         assert 'fb693447579235391a45ca170959b5583c5042d8' == deps[2][2]
-        assert 'https://github.com/jacebrowning/gdm-demo' == deps[3][1]
         # master branch always changes --------------------- deps[3][2]
-        assert 'https://github.com/jacebrowning/gdm-demo' == deps[4][1]
         # master branch always changes --------------------- deps[4][2]
-        assert 'https://github.com/jacebrowning/gdm-demo' == deps[5][1]
         assert '7bd138fe7359561a8c2ff9d195dff238794ccc04' == deps[5][2]
-        assert 'https://github.com/jacebrowning/gdm-demo' == deps[6][1]
         assert '2da24fca34af3748e3cab61db81a2ae8b35aec94' == deps[6][2]
 
         assert 5 == len(list(config.get_deps(depth=2)))
@@ -74,7 +67,7 @@ class TestConfig:
         """Verify the dependency list can be filtered."""
         config = Config(FILES)
 
-        count = config.install_deps('gdm_2', 'gdm_3')
+        count = config.install_deps('gitman_2', 'gitman_3')
         assert 2 == count
 
     def test_install_with_dirs_unknown(self):

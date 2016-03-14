@@ -1,6 +1,6 @@
 # Git Setup
 
-In order for `gdm` to interact with Git, it must be configured to store your credentials for private repository access.
+In order for `gitman` to interact with Git, it must be configured to store your credentials for private repository access.
 
 To test, trying cloning one of your private repositories:
 

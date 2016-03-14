@@ -14,10 +14,10 @@ Using Git in the outer working tree will essentially ignore the contents of the 
 
 ## Mimicking Submodules
 
-To get the same behavior using `gdm`, first delete the `.gitmodules` file and create a new `.gdm.yml`:
+To get the same behavior using `gitman`, first delete the `.gitmodules` file and create a new `.gitman.yml`:
 
 ```yaml
-location: .gdm
+location: .gitman
 sources:
 - repo: <URL of my_dependency's repository>
   dir: my_dependency
@@ -25,17 +25,17 @@ sources:
   link: vendor/my_depenendy
 ```
 
-Add `.gdm` to your `.gitignore` file and overwrite the old submodule location by running:
+Add `.gitman` to your `.gitignore` file and overwrite the old submodule location by running:
 
 ```sh
-gdm install --force
+gitman install --force
 ```
 
 Now `<root>/vendor/my_dependency` will be a symbolic link that points to an ignored working tree of `my_dependency` at revision `a943a7`.
 
 ### Getting Dependencies
 
-In other working trees, simply run `$ gdm install` to check out the source dependencies of your project.
+In other working trees, simply run `$ gitman install` to check out the source dependencies of your project.
 
 ### Modifying Dependencies
 

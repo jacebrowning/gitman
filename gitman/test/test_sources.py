@@ -5,7 +5,7 @@ from copy import copy
 
 import pytest
 
-from gdm.config import Source
+from gitman.config import Source
 
 
 @pytest.fixture

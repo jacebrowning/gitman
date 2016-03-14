@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-"""Setup script for GDM."""
+"""Setup script for GitMan."""
 
 import setuptools
 
-from gdm import __project__, __version__, CLI, PLUGIN, DESCRIPTION
+from gitman import __project__, __version__, CLI, PLUGIN, DESCRIPTION
 
 import os
 if os.path.exists('README.rst'):
@@ -26,8 +26,11 @@ setuptools.setup(
     packages=setuptools.find_packages(),
 
     entry_points={'console_scripts': [
-        CLI + ' = gdm.cli:main',
-        'git-' + PLUGIN + ' = gdm.plugin:main',
+        CLI + ' = gitman.cli:main',
+        'git-' + PLUGIN + ' = gitman.plugin:main',
+        # Legacy entry points:
+        'gdm = gitman.cli:main',
+        'git-deps = gitman.plugin:main',
     ]},
 
     long_description=(README + '\n' + CHANGES),

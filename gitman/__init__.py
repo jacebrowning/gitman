@@ -1,15 +1,15 @@
-"""Package for GDM."""
+"""Package for GitMan."""
 
 import sys
 
-__project__ = 'GDM'
-__version__ = '0.8.2'
+__project__ = 'GitMan'
+__version__ = '0.8.3.dev2'
 
-CLI = 'gdm'
-PLUGIN = 'deps'
+CLI = 'gitman'
+PLUGIN = 'man'
 NAME = "Git Dependency Manager"
 VERSION = __project__ + ' v' + __version__
-DESCRIPTION = "A language-agnostic \"dependency manager\" using Git."
+DESCRIPTION = "A language-agnostic dependency manager using Git."
 
 PYTHON_VERSION = 3, 4
 

@@ -1,7 +1,7 @@
-site_name: GDM
+site_name: GitMan
 site_description: A language-agnostic "dependency manager" using Git.
 site_author: Jace Browning
-repo_url: https://github.com/jacebrowning/gdm
+repo_url: https://github.com/jacebrowning/gitman
 google_analytics: ['UA-6468614-11', 'git-dependency-manager.info']
 
 theme: mkdocs
