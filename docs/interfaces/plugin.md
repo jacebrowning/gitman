@@ -1,6 +1,6 @@
 # Git Plugin
 
-`gdm` offers a simplified version of the [command-line interface](cli.md) in the form of a plugin for Git.
+`gitman` offers a simplified version of the [command-line interface](cli.md) in the form of a plugin for Git.
 
 ## Install
 

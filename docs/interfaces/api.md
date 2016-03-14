@@ -1,13 +1,13 @@
 # Package API
 
-All of the [command-line interface](cli.md) functionality is available from the Python package by importing `gdm`.
+All of the [command-line interface](cli.md) functionality is available from the Python package by importing `gitman`.
 
 ## Install
 
 To clone/checkout the specified dependencies, call:
 
 ```python
-gdm.install(*names, root=None, depth=None, force=False, fetch=False, clean=True)
+gitman.install(*names, root=None, depth=None, force=False, fetch=False, clean=True)
 ```
 
 with optional arguments:
@@ -24,7 +24,7 @@ with optional arguments:
 If any of the dependencies track a branch (rather than a specific commit), the current upstream version of that branch can be checked out by calling:
 
 ```python
-gdm.update(*names, root=None, depth=None, recurse=False, force=False, clean=True, lock=None)
+gitman.update(*names, root=None, depth=None, recurse=False, force=False, clean=True, lock=None)
 ```
 
 with optional arguments:
@@ -42,7 +42,7 @@ with optional arguments:
 To display the currently checked out dependencies, call:
 
 ```python
-gdm.list(root=None, depth=None, allow_dirty=True)
+gitman.list(root=None, depth=None, allow_dirty=True)
 ```
 
 with optional arguments:
@@ -56,7 +56,7 @@ with optional arguments:
 To record the exact versions of currently checked out dependencies, call:
 
 ```python
-gdm.lock(*names, root=None)
+gitman.lock(*names, root=None)
 ```
 
 with optional arguments:
@@ -69,7 +69,7 @@ with optional arguments:
 To delete all source dependencies, call:
 
 ```python
-gdm.uninstall(root=None, force=False)
+gitman.uninstall(root=None, force=False)
 ```
 
 with optional arguments:

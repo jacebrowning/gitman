@@ -1,6 +1,6 @@
 # Git Dependency Manager
 
-Git Dependency Manager (`gdm`) is a language-agnostic "dependency manager" using Git. It aims to serve as a submodules replacement and provides advanced options for managing versions of nested Git repositories.
+GitMan is a language-agnostic "dependency manager" using Git. It aims to serve as a submodules replacement and provides advanced options for managing versions of nested Git repositories.
 
 ## Requirements
 
@@ -10,26 +10,26 @@ Git Dependency Manager (`gdm`) is a language-agnostic "dependency manager" using
 
 ## Installation
 
-`gdm` can be installed with pip:
+GitMan can be installed with pip:
 
 ```sh
-$ pip install gdm
+$ pip install gitman
 ```
 
 or directly from the source code:
 
 ```sh
-$ git clone https://github.com/jacebrowning/gdm.git
-$ cd gdm
+$ git clone https://github.com/jacebrowning/gitman.git
+$ cd gitman
 $ python setup.py install
 ```
 
 ## Setup
 
-Create a configuration file (`gdm.yml` or `.gdm.yml`) in the root of your working tree:
+Create a configuration file (`gitman.yml` or `.gitman.yml`) in the root of your working tree:
 
 ```yaml
-location: .gdm
+location: vendor
 sources:
 - repo: https://github.com/kstenerud/iOS-Universal-Framework
   dir: framework
@@ -43,7 +43,7 @@ sources:
 Ignore the dependency storage location:
 
 ```sh
-$ echo .gdm >> .gitignore
+$ echo vendor >> .gitignore
 ```
 
 Basic Usage
@@ -52,7 +52,7 @@ Basic Usage
 Get all dependencies:
 
 ```sh
-$ gdm install
+$ gitman install
 ```
 
 which will essentially:

@@ -1,0 +1,5 @@
+location: gitman_modules
+sources:
+- repo: https://github.com/jacebrowning/gitman
+  dir: gitman_1
+  rev: fb693447579235391a45ca170959b5583c5042d8

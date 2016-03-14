@@ -2,13 +2,13 @@
 
 from unittest.mock import patch, Mock
 
-from gdm import git
-from gdm.exceptions import ShellError
+from gitman import git
+from gitman.exceptions import ShellError
 
 from . import assert_calls
 
 
-@patch('gdm.git.call')
+@patch('gitman.git.call')
 class TestGit:
 
     """Tests for calls to Git."""
@@ -77,22 +77,22 @@ class TestGit:
 
     def test_changes_false(self, _):
         """Verify the absence of changes can be detected."""
-        with patch('gdm.git.call', Mock(return_value="")):
+        with patch('gitman.git.call', Mock(return_value="")):
             assert False is git.changes()
 
     def test_changes_false_with_untracked(self, _):
         """Verify untracked files can be detected."""
-        with patch('gdm.git.call', Mock(return_value="file_1")):
+        with patch('gitman.git.call', Mock(return_value="file_1")):
             assert False is git.changes()
 
     def test_changes_true_when_untracked_included(self, _):
         """Verify untracked files can be detected."""
-        with patch('gdm.git.call', Mock(return_value="file_1")):
+        with patch('gitman.git.call', Mock(return_value="file_1")):
             assert True is git.changes(include_untracked=True)
 
     def test_changes_true_when_uncommitted(self, _):
         """Verify uncommitted changes can be detected."""
-        with patch('gdm.git.call', Mock(side_effect=ShellError)):
+        with patch('gitman.git.call', Mock(side_effect=ShellError)):
             assert True is git.changes(display_status=False)
 
     def test_update(self, mock_call):
