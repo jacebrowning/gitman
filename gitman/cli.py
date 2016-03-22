@@ -29,7 +29,7 @@ def main(args=None, function=None):
                          help="root directory of the project")
     depth = argparse.ArgumentParser(add_help=False)
     depth.add_argument('-d', '--depth', type=common.positive_int,
-                       default=None, metavar="NUM",
+                       default=5, metavar="NUM",
                        help="limit the number of dependency levels")
     options = argparse.ArgumentParser(add_help=False)
     options.add_argument('-f', '--force', action='store_true',
