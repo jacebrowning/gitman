@@ -47,3 +47,5 @@ Finally, the repository URL itself can contain an OAuth token (for [GitHub](http
 ```shell
 $ git clone https://<token>@github.com/<owner>/<repo>.git
 ```
+
+The token can also be written to `.netrc` during builds, see the guide for [Travis CI](https://docs.travis-ci.com/user/private-dependencies/#API-Token).
