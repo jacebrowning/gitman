@@ -24,7 +24,7 @@ class WarningFormatter(logging.Formatter):
 
     def format(self, record):
         """A hack to change the formatting style dynamically."""
-        # pylint: disable=W0212
+        # pylint: disable=protected-access
         if record.levelno > logging.INFO:
             self._style._fmt = self.verbose_format
         else:
