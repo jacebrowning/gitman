@@ -9,7 +9,7 @@ import pytest
 from expecter import expect
 
 import gitman
-from gitman.config import Config
+from gitman.models import Config
 from gitman.exceptions import InvalidRepository
 
 from .utilities import strip

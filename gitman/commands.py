@@ -5,7 +5,7 @@ import functools
 import logging
 
 from . import common, system
-from .config import load
+from .models import load_config
 
 log = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ def install(*names, root=None, depth=None,
     count = None
 
     root = _find_root(root)
-    config = load(root)
+    config = load_config(root)
 
     if config:
         common.show("Installing dependencies...", log=False)
@@ -75,7 +75,7 @@ def update(*names, root=None, depth=None,
     count = None
 
     root = _find_root(root)
-    config = load(root)
+    config = load_config(root)
 
     if config:
         common.show("Updating dependencies...", log=False)
@@ -107,7 +107,7 @@ def display(root=None, depth=None, allow_dirty=True):
     count = None
 
     root = _find_root(root)
-    config = load(root)
+    config = load_config(root)
 
     if config:
         common.show("Displaying current dependency versions...", log=False)
@@ -131,7 +131,7 @@ def lock(*names, root=None):
     count = None
 
     root = _find_root(root)
-    config = load(root)
+    config = load_config(root)
 
     if config:
         common.show("Locking dependencies...", log=False)
@@ -156,7 +156,7 @@ def delete(root=None, force=False):
     count = None
 
     root = _find_root(root)
-    config = load(root)
+    config = load_config(root)
 
     if config:
         common.show("Checking for uncommitted changes...", log=False)
@@ -182,7 +182,7 @@ def edit(root=None):
     log.info("Launching configuration...")
 
     root = _find_root(root)
-    config = load(root)
+    config = load_config(root)
 
     if config:
         return system.launch(config.path)

@@ -6,10 +6,10 @@ import logging
 import yorm
 from yorm.types import String, AttributeDictionary
 
-from . import common
-from . import git
-from . import shell
-from .exceptions import InvalidConfig, InvalidRepository, UncommittedChanges
+from .. import common
+from .. import git
+from .. import shell
+from ..exceptions import InvalidConfig, InvalidRepository, UncommittedChanges
 
 
 log = logging.getLogger(__name__)

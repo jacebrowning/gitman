@@ -2,7 +2,7 @@
 
 import pytest
 
-from gitman.config import Config, load
+from gitman.models import Config, load_config
 
 from .conftest import FILES
 
@@ -104,13 +104,13 @@ class TestConfig:
 class TestLoad:
 
     def test_load_from_directory_with_config_file(self):
-        config = load(FILES)
+        config = load_config(FILES)
 
         assert None is not config
 
     def test_load_from_directory_without_config_file(self, tmpdir):
         tmpdir.chdir()
 
-        config = load()
+        config = load_config()
 
         assert None is config

@@ -6,9 +6,9 @@ import logging
 import yorm
 from yorm.types import String, SortedList
 
-from . import common
-from . import shell
-from .source import Source
+from .. import common
+from .. import shell
+from . import Source
 
 log = logging.getLogger(__name__)
 
@@ -69,7 +69,7 @@ class Config:
 
             common.show()
 
-            config = load()
+            config = load_config()
             if config:
                 common.indent()
                 count += config.install_deps(
@@ -145,7 +145,7 @@ class Config:
             yield source.identify(allow_dirty=allow_dirty)
             common.show()
 
-            config = load()
+            config = load_config()
             if config:
                 common.indent()
                 yield from config.get_deps(
@@ -187,7 +187,7 @@ class Config:
         return sources + extras
 
 
-def load(root=None):
+def load_config(root=None):
     """Load the configuration for the current project."""
     if root is None:
         root = os.getcwd()
