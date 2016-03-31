@@ -16,8 +16,8 @@ log = logging.getLogger(__name__)
 
 
 @yorm.attr(dir=String)
-@yorm.attr(repo=String)
 @yorm.attr(link=String)
+@yorm.attr(repo=String)
 @yorm.attr(rev=String)
 class Source(AttributeDictionary):
     """A dictionary of `git` and `ln` arguments."""

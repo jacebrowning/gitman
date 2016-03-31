@@ -46,8 +46,7 @@ Ignore the dependency storage location:
 $ echo vendor >> .gitignore
 ```
 
-Basic Usage
------------
+## Basic Usage
 
 Get all dependencies:
 
