@@ -4,6 +4,7 @@ import os
 import logging
 
 import yorm
+from yorm.types import String, SortedList
 
 from . import common
 from . import shell
@@ -12,14 +13,9 @@ from .source import Source
 log = logging.getLogger(__name__)
 
 
-@yorm.attr(all=Source)
-class Sources(yorm.types.SortedList):
-    """A list of source dependencies."""
-
-
-@yorm.attr(location=yorm.types.String)
-@yorm.attr(sources=Sources)
-@yorm.attr(sources_locked=Sources)
+@yorm.attr(location=String)
+@yorm.attr(sources=SortedList.of_type(Source))
+@yorm.attr(sources_locked=SortedList.of_type(Source))
 @yorm.sync("{self.root}/{self.filename}")
 class Config:
     """A dictionary of dependency configuration options."""
