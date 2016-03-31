@@ -4,21 +4,22 @@ import os
 import logging
 
 import yorm
+from yorm.types import String, AttributeDictionary
 
-from . import common
-from . import git
-from . import shell
-from .exceptions import InvalidConfig, InvalidRepository, UncommittedChanges
+from .. import common
+from .. import git
+from .. import shell
+from ..exceptions import InvalidConfig, InvalidRepository, UncommittedChanges
 
 
 log = logging.getLogger(__name__)
 
 
-@yorm.attr(repo=yorm.types.String)
-@yorm.attr(dir=yorm.types.String)
-@yorm.attr(rev=yorm.types.String)
-@yorm.attr(link=yorm.types.String)
-class Source(yorm.types.AttributeDictionary):
+@yorm.attr(dir=String)
+@yorm.attr(repo=String)
+@yorm.attr(link=String)
+@yorm.attr(rev=String)
+class Source(AttributeDictionary):
     """A dictionary of `git` and `ln` arguments."""
 
     DIRTY = '<dirty>'

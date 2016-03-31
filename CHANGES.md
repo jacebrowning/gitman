@@ -6,6 +6,7 @@ Revision History
 
 - Added `edit` command to launch the configuration file.
 - Depth now defaults to 5 to prevent infinite recursion.
+- Fixed handling of source lists containing different dependencies.
 
 0.8.3 (2016/03/14)
 ------------------
