@@ -4,8 +4,8 @@ import os
 import functools
 import logging
 
-from . import common
-from .config import load
+from . import common, system
+from .models import load_config
 
 log = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ def install(*names, root=None, depth=None,
     count = None
 
     root = _find_root(root)
-    config = load(root)
+    config = load_config(root)
 
     if config:
         common.show("Installing dependencies...", log=False)
@@ -75,7 +75,7 @@ def update(*names, root=None, depth=None,
     count = None
 
     root = _find_root(root)
-    config = load(root)
+    config = load_config(root)
 
     if config:
         common.show("Updating dependencies...", log=False)
@@ -107,7 +107,7 @@ def display(root=None, depth=None, allow_dirty=True):
     count = None
 
     root = _find_root(root)
-    config = load(root)
+    config = load_config(root)
 
     if config:
         common.show("Displaying current dependency versions...", log=False)
@@ -131,7 +131,7 @@ def lock(*names, root=None):
     count = None
 
     root = _find_root(root)
-    config = load(root)
+    config = load_config(root)
 
     if config:
         common.show("Locking dependencies...", log=False)
@@ -156,7 +156,7 @@ def delete(root=None, force=False):
     count = None
 
     root = _find_root(root)
-    config = load(root)
+    config = load_config(root)
 
     if config:
         common.show("Checking for uncommitted changes...", log=False)
@@ -168,6 +168,27 @@ def delete(root=None, force=False):
         config.uninstall_deps()
 
     return _display_result("delete", "Deleted", count, allow_zero=True)
+
+
+@restore_cwd
+def edit(root=None):
+    """Open the confuration file for a project.
+
+    Optional arguments:
+
+    - `root`: specifies the path to the root working tree
+
+    """
+    log.info("Launching configuration...")
+
+    root = _find_root(root)
+    config = load_config(root)
+
+    if config:
+        return system.launch(config.path)
+    else:
+        log.error("No configuration found")
+        return False
 
 
 def _find_root(root, cwd=None):

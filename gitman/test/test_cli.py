@@ -57,7 +57,7 @@ class TestInstall:
         cli.main(['install'])
 
         mock_install.assert_called_once_with(
-            root=None, depth=None, force=False, fetch=False, clean=False)
+            root=None, depth=5, force=False, fetch=False, clean=False)
 
     @patch('gitman.commands.install')
     def test_install_root(self, mock_install):
@@ -65,7 +65,7 @@ class TestInstall:
         cli.main(['install', '--root', 'mock/path/to/root'])
 
         mock_install.assert_called_once_with(
-            root='mock/path/to/root', depth=None,
+            root='mock/path/to/root', depth=5,
             force=False, fetch=False, clean=False)
 
     @patch('gitman.commands.install')
@@ -74,7 +74,7 @@ class TestInstall:
         cli.main(['install', '--force'])
 
         mock_install.assert_called_once_with(
-            root=None, depth=None, force=True, fetch=False, clean=False)
+            root=None, depth=5, force=True, fetch=False, clean=False)
 
     @patch('gitman.commands.install')
     def test_install_fetch(self, mock_install):
@@ -82,7 +82,7 @@ class TestInstall:
         cli.main(['install', '--fetch'])
 
         mock_install.assert_called_once_with(
-            root=None, depth=None, force=False, fetch=True, clean=False)
+            root=None, depth=5, force=False, fetch=True, clean=False)
 
     @patch('gitman.commands.install')
     def test_install_clean(self, mock_install):
@@ -90,7 +90,7 @@ class TestInstall:
         cli.main(['install', '--clean'])
 
         mock_install.assert_called_once_with(
-            root=None, depth=None, force=False, fetch=False, clean=True)
+            root=None, depth=5, force=False, fetch=False, clean=True)
 
     @patch('gitman.commands.install')
     def test_install_specific_sources(self, mock_install):
@@ -98,16 +98,16 @@ class TestInstall:
         cli.main(['install', 'foo', 'bar'])
 
         mock_install.assert_called_once_with(
-            'foo', 'bar', root=None, depth=None,
+            'foo', 'bar', root=None, depth=5,
             force=False, fetch=False, clean=False)
 
     @patch('gitman.commands.install')
     def test_install_with_depth(self, mock_update):
         """Verify the 'install' command can be limited by depth."""
-        cli.main(['install', '--depth', '5'])
+        cli.main(['install', '--depth', '10'])
 
         mock_update.assert_called_once_with(
-            root=None, depth=5, force=False, fetch=False, clean=False)
+            root=None, depth=10, force=False, fetch=False, clean=False)
 
     @patch('gitman.commands.install', Mock())
     def test_install_with_depth_invalid(self):
@@ -128,7 +128,7 @@ class TestUpdate:
         cli.main(['update'])
 
         mock_update.assert_called_once_with(
-            root=None, depth=None,
+            root=None, depth=5,
             force=False, clean=False, recurse=False, lock=None)
 
     @patch('gitman.commands.update')
@@ -137,7 +137,7 @@ class TestUpdate:
         cli.main(['update', '--all'])
 
         mock_update.assert_called_once_with(
-            root=None, depth=None,
+            root=None, depth=5,
             force=False, clean=False, recurse=True, lock=None)
 
     @patch('gitman.commands.update')
@@ -146,7 +146,7 @@ class TestUpdate:
         cli.main(['update', '--no-lock'])
 
         mock_update.assert_called_once_with(
-            root=None, depth=None,
+            root=None, depth=5,
             force=False, clean=False, recurse=False, lock=False)
 
     @patch('gitman.commands.update')
@@ -155,7 +155,7 @@ class TestUpdate:
         cli.main(['update', '--lock'])
 
         mock_update.assert_called_once_with(
-            root=None, depth=None,
+            root=None, depth=5,
             force=False, clean=False, recurse=False, lock=True)
 
     def test_update_lock_conflict(self):
@@ -169,16 +169,16 @@ class TestUpdate:
         cli.main(['update', 'foo', 'bar'])
 
         mock_install.assert_called_once_with(
-            'foo', 'bar', root=None, depth=None,
+            'foo', 'bar', root=None, depth=5,
             force=False, clean=False, recurse=False, lock=None)
 
     @patch('gitman.commands.update')
     def test_update_with_depth(self, mock_update):
         """Verify the 'update' command can be limited by depth."""
-        cli.main(['update', '--depth', '5'])
+        cli.main(['update', '--depth', '10'])
 
         mock_update.assert_called_once_with(
-            root=None, depth=5,
+            root=None, depth=10,
             force=False, clean=False, recurse=False, lock=None)
 
 
@@ -192,7 +192,7 @@ class TestList:
         cli.main(['list'])
 
         mock_display.assert_called_once_with(
-            root=None, depth=None, allow_dirty=True)
+            root=None, depth=5, allow_dirty=True)
 
     @patch('gitman.commands.display')
     def test_list_root(self, mock_display):
@@ -200,7 +200,7 @@ class TestList:
         cli.main(['list', '--root', 'mock/path/to/root'])
 
         mock_display.assert_called_once_with(
-            root='mock/path/to/root', depth=None, allow_dirty=True)
+            root='mock/path/to/root', depth=5, allow_dirty=True)
 
     @patch('gitman.commands.display')
     def test_list_no_dirty(self, mock_display):
@@ -208,15 +208,15 @@ class TestList:
         cli.main(['list', '--no-dirty'])
 
         mock_display.assert_called_once_with(
-            root=None, depth=None, allow_dirty=False)
+            root=None, depth=5, allow_dirty=False)
 
     @patch('gitman.commands.display')
     def test_update_with_depth(self, mock_update):
         """Verify the 'list' command can be limited by depth."""
-        cli.main(['list', '--depth', '5'])
+        cli.main(['list', '--depth', '10'])
 
         mock_update.assert_called_once_with(
-            root=None, depth=5, allow_dirty=True)
+            root=None, depth=10, allow_dirty=True)
 
 
 def describe_lock():

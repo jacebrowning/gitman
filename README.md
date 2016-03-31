@@ -1,23 +1,20 @@
 [![Build Status](https://travis-ci.org/jacebrowning/gitman.svg?branch=develop)](https://travis-ci.org/jacebrowning/gitman)
-[![Coverage Status](http://img.shields.io/coveralls/jacebrowning/gitman/master.svg)](https://coveralls.io/r/jacebrowning/gitman)
+[![Coverage Status](https://coveralls.io/repos/github/jacebrowning/gitman/badge.svg?branch=develop)](https://coveralls.io/github/jacebrowning/gitman?branch=develop)
 [![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/jacebrowning/gitman.svg)](https://scrutinizer-ci.com/g/jacebrowning/gitman/?branch=master)
 [![PyPI Version](http://img.shields.io/pypi/v/GitMan.svg)](https://pypi.python.org/pypi/GitMan)
 [![PyPI Downloads](http://img.shields.io/pypi/dm/GitMan.svg)](https://pypi.python.org/pypi/GitMan)
 
-Getting Started
-===============
+# Getting Started
 
 GitMan is a language-agnostic "dependency manager" using Git. It aims to serve as a submodules replacement and provides advanced options for managing versions of nested Git repositories.
 
-Requirements
-------------
+## Requirements
 
 * Python 3.4+
-* Latest version of Git (with [stored credentials](http://stackoverflow.com/questions/7773181))
+* Latest version of Git (with [stored credentials](http://git-dependency-manager.info/setup/git/))
 * OSX/Linux (with a decent shell for Git)
 
-Installation
-------------
+## Installation
 
 GitMan can be installed with pip:
 
@@ -33,8 +30,7 @@ $ cd gitman
 $ python setup.py install
 ```
 
-Setup
------
+## Setup
 
 Create a configuration file (`gitman.yml` or `.gitman.yml`) in the root of your working tree:
 
@@ -53,11 +49,10 @@ sources:
 Ignore the dependency storage location:
 
 ```sh
-$ echo .gitman >> .gitignore
+$ echo vendor >> .gitignore
 ```
 
-Basic Usage
-===========
+# Basic Usage
 
 See the available commands:
 
@@ -65,8 +60,7 @@ See the available commands:
 $ gitman --help
 ```
 
-Updating Dependencies
----------------------
+## Updating Dependencies
 
 Get the latest versions of all dependencies:
 
@@ -89,8 +83,7 @@ where `rev` can be:
 * a branch: `master`
 * a `rev-parse` date: `'develop@{2015-06-18 10:30:59}'`
 
-Restoring Previous Versions
----------------------------
+## Restoring Previous Versions
 
 Display the specific revisions that are currently installed:
 
@@ -104,8 +97,7 @@ Reinstall these specific versions at a later time:
 $ gitman install
 ```
 
-Deleting Dependencies
----------------------
+## Deleting Dependencies
 
 Remove all installed dependencies:
 
@@ -113,7 +105,6 @@ Remove all installed dependencies:
 $ gitman uninstall
 ```
 
-Advanced Options
-================
+# Advanced Options
 
 See the full documentation at [git-dependency-manager.info](http://git-dependency-manager.info/interfaces/cli/).

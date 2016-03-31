@@ -1,6 +1,13 @@
 Revision History
 ================
 
+0.9 (2016/03/31)
+----------------
+
+- Added `edit` command to launch the configuration file.
+- Depth now defaults to 5 to prevent infinite recursion.
+- Fixed handling of source lists containing different dependencies.
+
 0.8.3 (2016/03/14)
 ------------------
 
@@ -16,7 +23,7 @@ Revision History
 
 - Added an error message when attempting to lock invalid repositories.
 
-0.8 (2015/10/13)
+0.8 (2016/01/13)
 ----------------
 
 - Switched to using repository mirrors to speed up cloning.

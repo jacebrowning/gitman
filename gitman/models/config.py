@@ -4,22 +4,18 @@ import os
 import logging
 
 import yorm
+from yorm.types import String, SortedList
 
-from . import common
-from . import shell
-from .source import Source
+from .. import common
+from .. import shell
+from . import Source
 
 log = logging.getLogger(__name__)
 
 
-@yorm.attr(all=Source)
-class Sources(yorm.types.SortedList):
-    """A list of source dependencies."""
-
-
-@yorm.attr(location=yorm.types.String)
-@yorm.attr(sources=Sources)
-@yorm.attr(sources_locked=Sources)
+@yorm.attr(location=String)
+@yorm.attr(sources=SortedList.of_type(Source))
+@yorm.attr(sources_locked=SortedList.of_type(Source))
 @yorm.sync("{self.root}/{self.filename}")
 class Config:
     """A dictionary of dependency configuration options."""
@@ -73,7 +69,7 @@ class Config:
 
             common.show()
 
-            config = load()
+            config = load_config()
             if config:
                 common.indent()
                 count += config.install_deps(
@@ -133,12 +129,12 @@ class Config:
 
     def get_deps(self, depth=None, allow_dirty=True):
         """Yield the path, repository URL, and hash of each dependency."""
-        if os.path.exists(self.location_path):
-            shell.cd(self.location_path)
-            common.show()
-            common.indent()
-        else:
+        if not os.path.exists(self.location_path):
             return
+
+        shell.cd(self.location_path)
+        common.show()
+        common.indent()
 
         for source in self.sources:
 
@@ -149,7 +145,7 @@ class Config:
             yield source.identify(allow_dirty=allow_dirty)
             common.show()
 
-            config = load()
+            config = load_config()
             if config:
                 common.indent()
                 yield from config.get_deps(
@@ -163,24 +159,35 @@ class Config:
         common.dedent()
 
     def _get_sources(self, *, use_locked=None):
+        """Merge source lists using requested section as the base."""
         if use_locked is True:
             if self.sources_locked:
                 return self.sources_locked
             else:
                 log.info("No locked sources, defaulting to none...")
                 return []
-        elif use_locked is False:
-            return self.sources
+
+        sources = []
+        if use_locked is False:
+            sources = self.sources
         else:
             if self.sources_locked:
                 log.info("Defalting to locked sources...")
-                return self.sources_locked
+                sources = self.sources_locked
             else:
                 log.info("No locked sources, using latest...")
-                return self.sources
+                sources = self.sources
+
+        extras = []
+        for source in self.sources + self.sources_locked:
+            if source not in sources:
+                log.info("Source %r missing from selected section", source.dir)
+                extras.append(source)
+
+        return sources + extras
 
 
-def load(root=None):
+def load_config(root=None):
     """Load the configuration for the current project."""
     if root is None:
         root = os.getcwd()

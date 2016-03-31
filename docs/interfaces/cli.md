@@ -125,3 +125,11 @@ If any dependencies contain uncommitted changes, instead run:
 ```sh
 gitman uninstall --force
 ```
+
+## Edit
+
+To open the existing configuration file:
+
+```sh
+gitman edit
+```

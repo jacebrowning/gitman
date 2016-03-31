@@ -1,4 +1,4 @@
-# pylint: disable=no-self-use,redefined-outer-name,unused-variable,unused-argument
+# pylint: disable=redefined-outer-name,unused-argument,unused-variable,singleton-comparison,expression-not-assigned
 
 import os
 import shutil
@@ -6,9 +6,10 @@ from contextlib import suppress
 import logging
 
 import pytest
+from expecter import expect
 
 import gitman
-from gitman.config import Config
+from gitman.models import Config
 from gitman.exceptions import InvalidRepository
 
 from .utilities import strip
@@ -55,18 +56,41 @@ def config(root="/tmp/gitman-shared"):
 def describe_install():
 
     def it_should_create_missing_directories(config):
-        assert not os.path.isdir(config.location)
+        expect(os.path.isdir(config.location)) == False
 
-        assert gitman.install('gitman_1', depth=1)
+        expect(gitman.install('gitman_1', depth=1)) == True
 
-        assert ['gitman_1'] == os.listdir(config.location)
+        expect(os.listdir(config.location)) == ['gitman_1']
 
     def it_should_not_modify_config(config):
-        assert gitman.install('gitman_1', depth=1)
+        expect(gitman.install('gitman_1', depth=1)) == True
 
-        assert CONFIG == config.__mapper__.text
+        expect(config.__mapper__.text) == CONFIG
 
-    def it_should_use_locked_sources_if_available(config):
+    def it_should_merge_sources(config):
+        config.__mapper__.text = strip("""
+        location: deps
+        sources:
+        - dir: gitman_1
+          link: ''
+          repo: https://github.com/jacebrowning/gitman-demo
+          rev: example-branch
+        sources_locked:
+        - dir: gitman_2
+          link: ''
+          repo: https://github.com/jacebrowning/gitman-demo
+          rev: example-branch
+        - dir: gitman_3
+          link: ''
+          repo: https://github.com/jacebrowning/gitman-demo
+          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+        """)
+
+        expect(gitman.install(depth=1)) == True
+
+        expect(len(os.listdir(config.location))) == 3
+
+    def it_can_handle_missing_locked_sources(config):
         config.__mapper__.text = strip("""
         location: deps
         sources:
@@ -81,9 +105,9 @@ def describe_install():
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
         """)
 
-        assert gitman.install(depth=1)
+        expect(gitman.install('gitman_1', depth=1)) == True
 
-        assert ['gitman_2'] == os.listdir(config.location)
+        expect(os.listdir(config.location)) == ['gitman_1']
 
     def describe_links():
 
@@ -101,9 +125,9 @@ def describe_install():
             return config
 
         def it_should_create(config_with_link):
-            assert gitman.install(depth=1)
+            expect(gitman.install(depth=1)) == True
 
-            assert 'my_link' in os.listdir()
+            expect(os.listdir()).contains('my_link')
 
         def it_should_not_overwrite(config_with_link):
             os.system("touch my_link")
@@ -114,23 +138,23 @@ def describe_install():
         def it_should_overwrite_with_force(config_with_link):
             os.system("touch my_link")
 
-            assert gitman.install(depth=1, force=True)
+            expect(gitman.install(depth=1, force=True)) == True
 
 
 def describe_uninstall():
 
     def it_should_delete_dependencies_when_they_exist(config):
         gitman.install('gitman_1', depth=1)
-        assert os.path.isdir(config.location)
+        expect(os.path.isdir(config.location)) == True
 
-        assert gitman.uninstall()
+        expect(gitman.uninstall()) == True
 
-        assert not os.path.exists(config.location)
+        expect(os.path.exists(config.location)) == False
 
     def it_should_not_fail_when_no_dependnecies_exist(config):
-        assert not os.path.isdir(config.location)
+        expect(os.path.isdir(config.location)) == False
 
-        assert gitman.uninstall()
+        expect(gitman.uninstall()) == True
 
 
 def describe_update():
@@ -138,7 +162,7 @@ def describe_update():
     def it_should_not_modify_config(config):
         gitman.update('gitman_1', depth=1)
 
-        assert CONFIG == config.__mapper__.text
+        expect(config.__mapper__.text) == CONFIG
 
     def it_should_lock_previously_locked_dependnecies(config):
         config.__mapper__.text = strip("""
@@ -161,7 +185,7 @@ def describe_update():
 
         gitman.update(depth=1)
 
-        assert strip("""
+        expect(config.__mapper__.text) == strip("""
         location: deps
         sources:
         - dir: gitman_1
@@ -177,7 +201,7 @@ def describe_update():
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-        """) == config.__mapper__.text
+        """)
 
     def it_should_not_lock_dependnecies_when_disabled(config):
         config.__mapper__.text = strip("""
@@ -200,7 +224,7 @@ def describe_update():
 
         gitman.update(depth=1, lock=False)
 
-        assert strip("""
+        expect(config.__mapper__.text) == strip("""
         location: deps
         sources:
         - dir: gitman_1
@@ -216,12 +240,12 @@ def describe_update():
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: (old revision)
-        """) == config.__mapper__.text
+        """)
 
     def it_should_lock_all_when_enabled(config):
         gitman.update(depth=1, lock=True)
 
-        assert CONFIG + strip("""
+        expect(config.__mapper__.text) == CONFIG + strip("""
         sources_locked:
         - dir: gitman_1
           link: ''
@@ -235,16 +259,16 @@ def describe_update():
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
-        """) == config.__mapper__.text
+        """)
 
 
 def describe_lock():
 
     def it_should_record_all_versions_when_no_arguments(config):
-        assert gitman.update(depth=1, lock=False)
-        assert gitman.lock()
+        expect(gitman.update(depth=1, lock=False)) == True
+        expect(gitman.lock()) == True
 
-        assert CONFIG + strip("""
+        expect(config.__mapper__.text) == CONFIG + strip("""
         sources_locked:
         - dir: gitman_1
           link: ''
@@ -261,10 +285,10 @@ def describe_lock():
         """) == config.__mapper__.text
 
     def it_should_record_specified_dependencies(config):
-        assert gitman.update(depth=1, lock=False)
-        assert gitman.lock('gitman_1', 'gitman_3')
+        expect(gitman.update(depth=1, lock=False)) == True
+        expect(gitman.lock('gitman_1', 'gitman_3')) == True
 
-        assert CONFIG + strip("""
+        expect(config.__mapper__.text) == CONFIG + strip("""
         sources_locked:
         - dir: gitman_1
           link: ''
@@ -282,4 +306,4 @@ def describe_lock():
         with pytest.raises(InvalidRepository):
             gitman.lock()
 
-        assert "<unknown>" not in config.__mapper__.text
+        expect(config.__mapper__.text).does_not_contain("<unknown>")
