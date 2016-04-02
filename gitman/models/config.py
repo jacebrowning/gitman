@@ -1,6 +1,7 @@
 """Wrappers for the dependency configuration files."""
 
 import os
+import datetime
 import logging
 
 import yorm
@@ -20,6 +21,8 @@ log = logging.getLogger(__name__)
 class Config:
     """A dictionary of dependency configuration options."""
 
+    LOG = "gitman.log"
+
     def __init__(self, root, filename="gitman.yml", location="gdm_sources"):
         super().__init__()
         self.root = root
@@ -29,14 +32,32 @@ class Config:
         self.sources_locked = []
 
     @property
-    def path(self):
+    def config_path(self):
         """Get the full path to the configuration file."""
         return os.path.join(self.root, self.filename)
+    path = config_path
+
+    @property
+    def log_path(self):
+        """Get the full path to the log file."""
+        return os.path.join(self.location_path, self.LOG)
 
     @property
     def location_path(self):
         """Get the full path to the sources location."""
         return os.path.join(self.root, self.location)
+
+    def get_path(self, name=None):
+        """Get the full path to a dependency or internal file."""
+        base = self.location_path
+        if name == '__config__':
+            return self.path
+        elif name == '__log__':
+            return self.log_path
+        elif name:
+            return os.path.join(base, name)
+        else:
+            return base
 
     def install_deps(self, *names, depth=None,
                      update=True, recurse=False,
@@ -157,6 +178,12 @@ class Config:
             shell.cd(self.location_path, _show=False)
 
         common.dedent()
+
+    def log(self, message, *args):
+        """Append a message to the log file."""
+        stamp = datetime.datetime.now().strftime("+%F %T")
+        with open(self.log_path, 'a') as outfile:
+            outfile.write("{}: {}\n".format(stamp, message % args))
 
     def _get_sources(self, *, use_locked=None):
         """Merge source lists using requested section as the base."""

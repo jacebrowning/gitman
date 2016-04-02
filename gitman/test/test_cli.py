@@ -1,4 +1,4 @@
-# pylint: disable=no-self-use
+# pylint: disable=no-self-use,unused-variable
 
 from unittest.mock import Mock, patch
 import logging
@@ -10,7 +10,6 @@ from gitman.common import _Config
 
 
 class TestMain:
-
     """Unit tests for the top-level arguments."""
 
     def test_main(self):
@@ -48,7 +47,6 @@ class TestMain:
 
 
 class TestInstall:
-
     """Unit tests for the `install` command."""
 
     @patch('gitman.commands.install')
@@ -119,7 +117,6 @@ class TestInstall:
 
 
 class TestUpdate:
-
     """Unit tests for the `update` command."""
 
     @patch('gitman.commands.update')
@@ -183,7 +180,6 @@ class TestUpdate:
 
 
 class TestList:
-
     """Unit tests for the `list` command."""
 
     @patch('gitman.commands.display')
@@ -220,7 +216,6 @@ class TestList:
 
 
 def describe_lock():
-    # pylint: disable=unused-variable
 
     @patch('gitman.commands.lock')
     def with_no_arguments(lock):
@@ -234,7 +229,6 @@ def describe_lock():
 
 
 class TestUninstall:
-
     """Unit tests for the `uninstall` command."""
 
     @patch('gitman.commands.delete')
@@ -263,7 +257,6 @@ class TestUninstall:
 
 
 class TestLogging:
-
     """Unit tests for logging."""
 
     arg_verbosity = [

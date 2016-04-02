@@ -93,7 +93,7 @@ def update(*names, root=None, depth=None,
 
 
 @restore_cwd
-def display(root=None, depth=None, allow_dirty=True):
+def display(*, root=None, depth=None, allow_dirty=True):
     """Display installed dependencies for a project.
 
     Optional arguments:
@@ -143,7 +143,7 @@ def lock(*names, root=None):
 
 
 @restore_cwd
-def delete(root=None, force=False):
+def delete(*, root=None, force=False):
     """Delete dependencies for a project.
 
     Optional arguments:
@@ -170,8 +170,25 @@ def delete(root=None, force=False):
     return _display_result("delete", "Deleted", count, allow_zero=True)
 
 
-@restore_cwd
-def edit(root=None):
+def show(*names, root=None):
+    """Display the path of an installed dependency or internal file.
+
+    - `name`: dependency name or internal file keyword
+    - `root`: specifies the path to the root working tree
+
+    """
+    log.info("Finding paths...")
+
+    root = _find_root(root)
+    config = load_config(root)
+
+    for name in names or [None]:
+        common.show(config.get_path(name))
+
+    return True
+
+
+def edit(*, root=None):
     """Open the confuration file for a project.
 
     Optional arguments:
