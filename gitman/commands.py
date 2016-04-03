@@ -2,6 +2,7 @@
 
 import os
 import functools
+import datetime
 import logging
 
 from . import common, system
@@ -112,7 +113,12 @@ def display(*, root=None, depth=None, allow_dirty=True):
     if config:
         common.show("Displaying current dependency versions...", log=False)
         common.show()
-        count = len(list(config.get_deps(depth=depth, allow_dirty=allow_dirty)))
+        config.log(datetime.datetime.now().strftime("%F %T"))
+        count = 0
+        for identity in config.get_deps(depth=depth, allow_dirty=allow_dirty):
+            count += 1
+            config.log("{}: {} @ {}", *identity)
+        config.log()
 
     return _display_result("display", "Displayed", count)
 

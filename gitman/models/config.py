@@ -1,7 +1,6 @@
 """Wrappers for the dependency configuration files."""
 
 import os
-import datetime
 import logging
 
 import yorm
@@ -179,11 +178,10 @@ class Config:
 
         common.dedent()
 
-    def log(self, message, *args):
+    def log(self, message="", *args):
         """Append a message to the log file."""
-        stamp = datetime.datetime.now().strftime("+%F %T")
         with open(self.log_path, 'a') as outfile:
-            outfile.write("{}: {}\n".format(stamp, message % args))
+            outfile.write(message.format(*args) + '\n')
 
     def _get_sources(self, *, use_locked=None):
         """Merge source lists using requested section as the base."""
