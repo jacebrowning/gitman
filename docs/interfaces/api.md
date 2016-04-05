@@ -66,7 +66,7 @@ with optional arguments:
 
 ## Uninstall
 
-To delete all source dependencies, call:
+To delete all dependencies, call:
 
 ```python
 gitman.uninstall(root=None, force=False)
