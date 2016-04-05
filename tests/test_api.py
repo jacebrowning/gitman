@@ -56,7 +56,7 @@ def config(root="/tmp/gitman-shared"):
 
 def describe_install():
 
-    def it_should_create_missing_directories(config):
+    def it_creates_missing_directories(config):
         expect(os.path.isdir(config.location)) == False
 
         expect(gitman.install('gitman_1', depth=1)) == True
@@ -68,7 +68,7 @@ def describe_install():
 
         expect(config.__mapper__.text) == CONFIG
 
-    def it_should_merge_sources(config):
+    def it_merges_sources(config):
         config.__mapper__.text = strip("""
         location: deps
         sources:
@@ -125,18 +125,18 @@ def describe_install():
 
             return config
 
-        def it_should_create(config_with_link):
+        def it_should_create_links(config_with_link):
             expect(gitman.install(depth=1)) == True
 
             expect(os.listdir()).contains('my_link')
 
-        def it_should_not_overwrite(config_with_link):
+        def it_should_not_overwrite_files(config_with_link):
             os.system("touch my_link")
 
             with pytest.raises(RuntimeError):
                 gitman.install(depth=1)
 
-        def it_should_overwrite_with_force(config_with_link):
+        def it_overwrites_files_with_force(config_with_link):
             os.system("touch my_link")
 
             expect(gitman.install(depth=1, force=True)) == True
@@ -144,7 +144,7 @@ def describe_install():
 
 def describe_uninstall():
 
-    def it_should_delete_dependencies_when_they_exist(config):
+    def it_deletes_dependencies_when_they_exist(config):
         gitman.install('gitman_1', depth=1)
         expect(os.path.isdir(config.location)) == True
 
@@ -157,6 +157,14 @@ def describe_uninstall():
 
         expect(gitman.uninstall()) == True
 
+    def it_deletes_the_log_file(config):
+        gitman.install('gitman_1', depth=1)
+        gitman.list()
+        expect(os.path.exists(config.log_path)) == True
+
+        gitman.uninstall()
+        expect(os.path.exists(config.log_path)) == False
+
 
 def describe_update():
 
@@ -165,7 +173,7 @@ def describe_update():
 
         expect(config.__mapper__.text) == CONFIG
 
-    def it_should_lock_previously_locked_dependnecies(config):
+    def it_locks_previously_locked_dependnecies(config):
         config.__mapper__.text = strip("""
         location: deps
         sources:
@@ -243,7 +251,7 @@ def describe_update():
           rev: (old revision)
         """)
 
-    def it_should_lock_all_when_enabled(config):
+    def it_should_lock_all_dependencies_when_enabled(config):
         gitman.update(depth=1, lock=True)
 
         expect(config.__mapper__.text) == CONFIG + strip("""
@@ -283,7 +291,7 @@ def describe_list():
 
 def describe_lock():
 
-    def it_should_record_all_versions_when_no_arguments(config):
+    def it_records_all_versions_when_no_arguments(config):
         expect(gitman.update(depth=1, lock=False)) == True
         expect(gitman.lock()) == True
 
@@ -303,7 +311,7 @@ def describe_lock():
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
         """) == config.__mapper__.text
 
-    def it_should_record_specified_dependencies(config):
+    def it_records_specified_dependencies(config):
         expect(gitman.update(depth=1, lock=False)) == True
         expect(gitman.lock('gitman_1', 'gitman_3')) == True
 
