@@ -277,15 +277,17 @@ def describe_list():
     def it_updates_the_log(config):
         gitman.install()
         gitman.list()
-        expect(open(config.log_path).read()) == strip("""
+        with open(config.log_path) as fin:
+            contents = fin.read().replace("/private", "")
+        expect(contents) == strip("""
         2012-01-14 12:00:01
-        /private/tmp/gitman-shared/deps/gitman_1: https://github.com/jacebrowning/gitman-demo @ eb37743011a398b208dd9f9ef79a408c0fc10d48
-        /private/tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_3: https://github.com/jacebrowning/gdm-demo @ ddbe17ef173538d1fda29bd99a14bab3c5d86e78
-        /private/tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_3/gdm_sources/gdm_3: https://github.com/jacebrowning/gdm-demo @ fb693447579235391a45ca170959b5583c5042d8
-        /private/tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_3/gdm_sources/gdm_4: https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5
-        /private/tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_4: https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5
-        /private/tmp/gitman-shared/deps/gitman_2: https://github.com/jacebrowning/gitman-demo @ 7bd138fe7359561a8c2ff9d195dff238794ccc04
-        /private/tmp/gitman-shared/deps/gitman_3: https://github.com/jacebrowning/gitman-demo @ 9bf18e16b956041f0267c21baad555a23237b52e
+        /tmp/gitman-shared/deps/gitman_1: https://github.com/jacebrowning/gitman-demo @ eb37743011a398b208dd9f9ef79a408c0fc10d48
+        /tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_3: https://github.com/jacebrowning/gdm-demo @ ddbe17ef173538d1fda29bd99a14bab3c5d86e78
+        /tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_3/gdm_sources/gdm_3: https://github.com/jacebrowning/gdm-demo @ fb693447579235391a45ca170959b5583c5042d8
+        /tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_3/gdm_sources/gdm_4: https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5
+        /tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_4: https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5
+        /tmp/gitman-shared/deps/gitman_2: https://github.com/jacebrowning/gitman-demo @ 7bd138fe7359561a8c2ff9d195dff238794ccc04
+        /tmp/gitman-shared/deps/gitman_3: https://github.com/jacebrowning/gitman-demo @ 9bf18e16b956041f0267c21baad555a23237b52e
         """, end='\n\n')
 
 
