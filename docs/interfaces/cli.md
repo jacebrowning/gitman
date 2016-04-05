@@ -13,7 +13,7 @@ gitman install
 or filter the dependency list by directory name:
 
 ```sh
-gitman install <dir1> <dir2> <etc.>
+gitman install <name1> <name2> <etc.>
 ```
 
 or limit the traversal of nested dependencies:
@@ -51,7 +51,7 @@ gitman update
 or filter the dependency list by directory name:
 
 ```sh
-gitman update <dir1> <dir2> <etc.>
+gitman update <name1> <name2> <etc.>
 ```
 
 or limit the traversal of nested dependencies:
@@ -86,6 +86,8 @@ or exit with an error if there are any uncommitted changes:
 gitman list --no-dirty
 ```
 
+The `list` command will also record versions in the log file.
+
 ## Lock
 
 To manually record the exact version of each dependency, run:
@@ -97,7 +99,7 @@ gitman lock
 or lock down specific dependencies:
 
 ```sh
-gitman lock <dir1> <dir2> <etc.>
+gitman lock <name1> <name2> <etc.>
 ```
 
 This can be combined with updating dependencies by running:
@@ -114,7 +116,7 @@ gitman install
 
 ## Uninstall
 
-To delete all source dependencies, run:
+To delete all dependencies, run:
 
 ```sh
 gitman uninstall
@@ -124,6 +126,32 @@ If any dependencies contain uncommitted changes, instead run:
 
 ```sh
 gitman uninstall --force
+```
+
+## Show
+
+To display the path to the dependency storage location:
+
+```sh
+gitman show
+```
+
+To display the path to a dependency:
+
+```sh
+gitman show <name>
+```
+
+To display the path to the configuration file:
+
+```sh
+gitman show --config
+```
+
+To display the path to the log file:
+
+```sh
+gitman show --log
 ```
 
 ## Edit

@@ -1,6 +1,11 @@
 Revision History
 ================
 
+0.10 (unreleased)
+-----------------
+
+- Added `show` command to display dependency and internal paths.
+
 0.9 (2016/03/31)
 ----------------
 
