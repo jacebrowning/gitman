@@ -40,8 +40,7 @@ def main(args=None, function=None):
 
     # Main parser
     parser = argparse.ArgumentParser(prog=CLI, description=DESCRIPTION,
-                                     parents=[debug, project], **shared)
-
+                                     parents=[debug], **shared)
     subs = parser.add_subparsers(help="", dest='command', metavar="<command>")
 
     # Install parser
@@ -125,13 +124,14 @@ def main(args=None, function=None):
 
 def _get_command(function, namespace):
     args = []
-    kwargs = dict(root=namespace.root)
+    kwargs = {}
     exit_msg = ""
 
     if namespace.command in ['install', 'update']:
         function = getattr(commands, namespace.command)
         args = namespace.name
-        kwargs.update(depth=namespace.depth,
+        kwargs.update(root=namespace.root,
+                      depth=namespace.depth,
                       force=namespace.force,
                       clean=namespace.clean)
         if namespace.command == 'install':
@@ -140,26 +140,36 @@ def _get_command(function, namespace):
             kwargs.update(recurse=namespace.recurse,
                           lock=namespace.lock)
         exit_msg = "\n" + "Run again with '--force' to overwrite"
+
     elif namespace.command == 'list':
         function = commands.display
-        kwargs.update(dict(depth=namespace.depth,
-                           allow_dirty=namespace.allow_dirty))
+        kwargs.update(root=namespace.root,
+                      depth=namespace.depth,
+                      allow_dirty=namespace.allow_dirty)
+
     elif namespace.command == 'lock':
         function = getattr(commands, namespace.command)
         args = namespace.name
+        kwargs.update(root=namespace.root)
+
     elif namespace.command == 'uninstall':
         function = commands.delete
-        kwargs.update(force=namespace.force)
+        kwargs.update(root=namespace.root,
+                      force=namespace.force)
         exit_msg = "\n" + "Run again with '--force' to ignore"
+
     elif namespace.command == 'show':
         function = commands.show
         args = namespace.name
+        kwargs.update(root=namespace.root)
         if namespace.config:
             args.append('__config__')
         if namespace.log:
             args.append('__log__')
+
     elif namespace.command == 'edit':
         function = commands.edit
+        kwargs.update(root=namespace.root)
 
     return function, args, kwargs, exit_msg
 

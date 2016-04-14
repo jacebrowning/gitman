@@ -40,6 +40,12 @@ def describe_show():
 
         expect(show.mock_calls) == [call(os.path.join(location, "bar"))]
 
+    def it_exits_when_no_config_found(tmpdir):
+        tmpdir.chdir()
+
+        with expect.raises(SystemExit):
+            cli.main(['show'])
+
 
 def describe_edit():
 
