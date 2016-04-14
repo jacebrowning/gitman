@@ -1,16 +1,16 @@
-# pylint: disable=no-self-use
+# pylint: disable=no-self-use,unused-variable,expression-not-assigned
 
 from unittest.mock import Mock, patch
 import logging
 
 import pytest
+from expecter import expect
 
 from gitman import cli
 from gitman.common import _Config
 
 
 class TestMain:
-
     """Unit tests for the top-level arguments."""
 
     def test_main(self):
@@ -19,7 +19,7 @@ class TestMain:
 
         cli.main([], mock_function)
 
-        mock_function.assert_called_once_with(root=None)
+        mock_function.assert_called_once_with()
 
     def test_main_fail(self):
         """Verify error in commands are detected."""
@@ -48,7 +48,6 @@ class TestMain:
 
 
 class TestInstall:
-
     """Unit tests for the `install` command."""
 
     @patch('gitman.commands.install')
@@ -119,7 +118,6 @@ class TestInstall:
 
 
 class TestUpdate:
-
     """Unit tests for the `update` command."""
 
     @patch('gitman.commands.update')
@@ -183,7 +181,6 @@ class TestUpdate:
 
 
 class TestList:
-
     """Unit tests for the `list` command."""
 
     @patch('gitman.commands.display')
@@ -220,7 +217,6 @@ class TestList:
 
 
 def describe_lock():
-    # pylint: disable=unused-variable
 
     @patch('gitman.commands.lock')
     def with_no_arguments(lock):
@@ -234,7 +230,6 @@ def describe_lock():
 
 
 class TestUninstall:
-
     """Unit tests for the `uninstall` command."""
 
     @patch('gitman.commands.delete')
@@ -262,12 +257,51 @@ class TestUninstall:
             root=None, force=True)
 
 
-class TestLogging:
+def describe_show():
 
-    """Unit tests for logging."""
+    @patch('gitman.commands.show')
+    def with_no_arguments(show):
+        cli.main(['show'])
+        show.assert_called_once_with(root=None)
 
-    arg_verbosity = [
-        ('', 0),
+    @patch('gitman.commands.show')
+    def with_root(show):
+        cli.main(['show', '--root', "mock/root"])
+        show.assert_called_once_with(root="mock/root")
+
+    @patch('gitman.commands.show')
+    def with_names(show):
+        cli.main(['show', 'foo', 'bar'])
+        show.assert_called_once_with('foo', 'bar', root=None)
+
+    @patch('gitman.commands.show')
+    def with_config(show):
+        cli.main(['show', '--config'])
+        show.assert_called_once_with('__config__', root=None)
+
+    @patch('gitman.commands.show')
+    def with_log(show):
+        cli.main(['show', '--log'])
+        show.assert_called_once_with('__log__', root=None)
+
+
+def describe_edit():
+
+    @patch('gitman.commands.edit')
+    def with_no_arguments(edit):
+        cli.main(['edit'])
+        edit.assert_called_once_with(root=None)
+
+    @patch('gitman.commands.edit')
+    def with_root(edit):
+        cli.main(['edit', '--root', "mock/root"])
+        edit.assert_called_once_with(root="mock/root")
+
+
+def describe_logging():
+
+    argument_verbosity = [
+        (None, 0),
         ('-v', 1),
         ('-vv', 2),
         ('-vvv', 3),
@@ -276,17 +310,15 @@ class TestLogging:
         ('-q', -1),
     ]
 
-    @staticmethod
-    def mock_function(*args, **kwargs):
-        """Placeholder logic for logging tests."""
-        logging.debug(args)
-        logging.debug(kwargs)
-        logging.warning("warning")
-        logging.error("error")
-        return True
+    @pytest.mark.parametrize("argument,verbosity", argument_verbosity)
+    def at_each_level(argument, verbosity):
 
-    @pytest.mark.parametrize("arg,verbosity", arg_verbosity)
-    def test_level(self, arg, verbosity):
-        """Verify verbose level can be set."""
-        cli.main([arg] if arg else [], self.mock_function)
-        assert verbosity == _Config.verbosity
+        def function(*args, **kwargs):
+            logging.debug(args)
+            logging.debug(kwargs)
+            logging.warning("warning")
+            logging.error("error")
+            return True
+
+        cli.main([argument] if argument else [], function)
+        expect(_Config.verbosity) == verbosity

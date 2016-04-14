@@ -7,6 +7,7 @@ import logging
 
 import pytest
 from expecter import expect
+from freezegun import freeze_time
 
 import gitman
 from gitman.models import Config
@@ -55,7 +56,7 @@ def config(root="/tmp/gitman-shared"):
 
 def describe_install():
 
-    def it_should_create_missing_directories(config):
+    def it_creates_missing_directories(config):
         expect(os.path.isdir(config.location)) == False
 
         expect(gitman.install('gitman_1', depth=1)) == True
@@ -67,7 +68,7 @@ def describe_install():
 
         expect(config.__mapper__.text) == CONFIG
 
-    def it_should_merge_sources(config):
+    def it_merges_sources(config):
         config.__mapper__.text = strip("""
         location: deps
         sources:
@@ -124,18 +125,18 @@ def describe_install():
 
             return config
 
-        def it_should_create(config_with_link):
+        def it_should_create_links(config_with_link):
             expect(gitman.install(depth=1)) == True
 
             expect(os.listdir()).contains('my_link')
 
-        def it_should_not_overwrite(config_with_link):
+        def it_should_not_overwrite_files(config_with_link):
             os.system("touch my_link")
 
             with pytest.raises(RuntimeError):
                 gitman.install(depth=1)
 
-        def it_should_overwrite_with_force(config_with_link):
+        def it_overwrites_files_with_force(config_with_link):
             os.system("touch my_link")
 
             expect(gitman.install(depth=1, force=True)) == True
@@ -143,7 +144,7 @@ def describe_install():
 
 def describe_uninstall():
 
-    def it_should_delete_dependencies_when_they_exist(config):
+    def it_deletes_dependencies_when_they_exist(config):
         gitman.install('gitman_1', depth=1)
         expect(os.path.isdir(config.location)) == True
 
@@ -156,6 +157,14 @@ def describe_uninstall():
 
         expect(gitman.uninstall()) == True
 
+    def it_deletes_the_log_file(config):
+        gitman.install('gitman_1', depth=1)
+        gitman.list()
+        expect(os.path.exists(config.log_path)) == True
+
+        gitman.uninstall()
+        expect(os.path.exists(config.log_path)) == False
+
 
 def describe_update():
 
@@ -164,7 +173,7 @@ def describe_update():
 
         expect(config.__mapper__.text) == CONFIG
 
-    def it_should_lock_previously_locked_dependnecies(config):
+    def it_locks_previously_locked_dependnecies(config):
         config.__mapper__.text = strip("""
         location: deps
         sources:
@@ -242,7 +251,7 @@ def describe_update():
           rev: (old revision)
         """)
 
-    def it_should_lock_all_when_enabled(config):
+    def it_should_lock_all_dependencies_when_enabled(config):
         gitman.update(depth=1, lock=True)
 
         expect(config.__mapper__.text) == CONFIG + strip("""
@@ -262,9 +271,29 @@ def describe_update():
         """)
 
 
+def describe_list():
+
+    @freeze_time("2012-01-14 12:00:01")
+    def it_updates_the_log(config):
+        gitman.install()
+        gitman.list()
+        with open(config.log_path) as fin:
+            contents = fin.read().replace("/private", "")
+        expect(contents) == strip("""
+        2012-01-14 12:00:01
+        /tmp/gitman-shared/deps/gitman_1: https://github.com/jacebrowning/gitman-demo @ eb37743011a398b208dd9f9ef79a408c0fc10d48
+        /tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_3: https://github.com/jacebrowning/gdm-demo @ ddbe17ef173538d1fda29bd99a14bab3c5d86e78
+        /tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_3/gdm_sources/gdm_3: https://github.com/jacebrowning/gdm-demo @ fb693447579235391a45ca170959b5583c5042d8
+        /tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_3/gdm_sources/gdm_4: https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5
+        /tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_4: https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5
+        /tmp/gitman-shared/deps/gitman_2: https://github.com/jacebrowning/gitman-demo @ 7bd138fe7359561a8c2ff9d195dff238794ccc04
+        /tmp/gitman-shared/deps/gitman_3: https://github.com/jacebrowning/gitman-demo @ 9bf18e16b956041f0267c21baad555a23237b52e
+        """, end='\n\n')
+
+
 def describe_lock():
 
-    def it_should_record_all_versions_when_no_arguments(config):
+    def it_records_all_versions_when_no_arguments(config):
         expect(gitman.update(depth=1, lock=False)) == True
         expect(gitman.lock()) == True
 
@@ -284,7 +313,7 @@ def describe_lock():
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
         """) == config.__mapper__.text
 
-    def it_should_record_specified_dependencies(config):
+    def it_records_specified_dependencies(config):
         expect(gitman.update(depth=1, lock=False)) == True
         expect(gitman.lock('gitman_1', 'gitman_3')) == True
 

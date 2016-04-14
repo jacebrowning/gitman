@@ -11,7 +11,7 @@ endif
 
 # Test settings
 UNIT_TEST_COVERAGE := 73
-INTEGRATION_TEST_COVERAGE := 52
+INTEGRATION_TEST_COVERAGE := 79
 COMBINED_TEST_COVERAGE := 97
 
 # System paths
@@ -119,7 +119,7 @@ depends: depends-ci depends-doc depends-dev
 .PHONY: depends-ci
 depends-ci: env Makefile $(DEPENDS_CI_FLAG)
 $(DEPENDS_CI_FLAG): Makefile
-	$(PIP) install --upgrade pep8 pep257 pylint coverage pytest pytest-describe pytest-expecter pytest-cov pytest-random
+	$(PIP) install --upgrade pep8 pep257 pylint coverage pytest pytest-describe pytest-expecter pytest-cov pytest-random freezegun
 	@ touch $(DEPENDS_CI_FLAG)  # flag to indicate dependencies are installed
 
 .PHONY: depends-doc

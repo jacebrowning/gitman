@@ -3,7 +3,7 @@
 import sys
 
 __project__ = 'GitMan'
-__version__ = '0.9'
+__version__ = '0.10'
 
 CLI = 'gitman'
 PLUGIN = 'deps'
@@ -14,7 +14,7 @@ DESCRIPTION = "A language-agnostic dependency manager using Git."
 PYTHON_VERSION = 3, 4
 
 if sys.version_info < PYTHON_VERSION:  # pragma: no cover (manual test)
-    exit("Python {}.{}+ is required.".format(*PYTHON_VERSION))
+    sys.exit("Python {}.{}+ is required.".format(*PYTHON_VERSION))
 
 try:
     # pylint: disable=wrong-import-position

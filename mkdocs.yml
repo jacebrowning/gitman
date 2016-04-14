@@ -18,6 +18,7 @@ pages:
   - 'Replacing Submodules': 'use-cases/submodules.md'
   - 'Tracking Branches': 'use-cases/branch-tracking.md'
   - 'Linking Feature Branches': 'use-cases/linked-features.md'
+  - 'Build System Integration': 'use-cases/build-integration.md'
 - About:
   - 'Release Notes': 'about/changes.md'
   - Contributing: 'about/contributing.md'
