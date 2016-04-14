@@ -3,7 +3,7 @@
 import sys
 
 __project__ = 'GitMan'
-__version__ = '0.10.dev1'
+__version__ = '0.10'
 
 CLI = 'gitman'
 PLUGIN = 'deps'

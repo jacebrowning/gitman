@@ -19,7 +19,7 @@ class TestMain:
 
         cli.main([], mock_function)
 
-        mock_function.assert_called_once_with(root=None)
+        mock_function.assert_called_once_with()
 
     def test_main_fail(self):
         """Verify error in commands are detected."""

@@ -187,6 +187,9 @@ def show(*names, root=None):
 
     root = _find_root(root)
     config = load_config(root)
+    if not config:
+        log.error("No configuration found")
+        return False
 
     for name in names or [None]:
         common.show(config.get_path(name))
@@ -206,27 +209,27 @@ def edit(*, root=None):
 
     root = _find_root(root)
     config = load_config(root)
-
-    if config:
-        return system.launch(config.path)
-    else:
+    if not config:
         log.error("No configuration found")
         return False
 
+    return system.launch(config.path)
 
-def _find_root(root, cwd=None):
+
+def _find_root(base, cwd=None):
     if cwd is None:
         cwd = os.getcwd()
         log.info("Current directory: %s", cwd)
 
-    if root:
-        root = os.path.abspath(root)
+    if base:
+        root = os.path.abspath(base)
         log.info("Specified root: %s", root)
+
     else:
+        log.info("Searching for root...")
         path = cwd
         prev = None
-
-        log.info("Searching for root...")
+        root = None
         while path != prev:
             log.debug("Checking path: %s", path)
             if '.git' in os.listdir(path):
