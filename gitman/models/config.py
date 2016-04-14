@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 @yorm.attr(location=String)
 @yorm.attr(sources=SortedList.of_type(Source))
 @yorm.attr(sources_locked=SortedList.of_type(Source))
-@yorm.sync("{self.root}/{self.filename}")
+@yorm.sync("{self.root}/{self.filename}", auto_save=False)
 class Config:
     """A dictionary of dependency configuration options."""
 
@@ -139,7 +139,8 @@ class Config:
             shell.cd(self.location_path, _show=False)
 
         if count:
-            yorm.update_file(self)
+            yorm.save(self)
+
         return count
 
     def uninstall_deps(self):
