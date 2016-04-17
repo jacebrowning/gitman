@@ -9,11 +9,6 @@ ifndef TRAVIS
 	PYTHON_MINOR ?= 5
 endif
 
-# Test settings
-UNIT_TEST_COVERAGE := 73
-INTEGRATION_TEST_COVERAGE := 79
-COMBINED_TEST_COVERAGE := 97
-
 # System paths
 PLATFORM := $(shell python -c 'import sys; print(sys.platform)')
 ifneq ($(findstring win32, $(PLATFORM)), )
@@ -68,6 +63,7 @@ PYREVERSE := $(BIN_)pyreverse
 NOSE := $(BIN_)nosetests
 PYTEST := $(BIN_)py.test
 COVERAGE := $(BIN_)coverage
+COVERAGE_SPACE := $(BIN_)coverage.space
 SNIFFER := $(BIN_)sniffer
 HONCHO := $(ACTIVATE) && honcho
 
@@ -119,7 +115,7 @@ depends: depends-ci depends-doc depends-dev
 .PHONY: depends-ci
 depends-ci: env Makefile $(DEPENDS_CI_FLAG)
 $(DEPENDS_CI_FLAG): Makefile
-	$(PIP) install --upgrade pep8 pep257 pylint coverage pytest pytest-describe pytest-expecter pytest-cov pytest-random freezegun
+	$(PIP) install --upgrade pep8 pep257 pylint coverage coverage.space pytest pytest-describe pytest-expecter pytest-cov pytest-random freezegun
 	@ touch $(DEPENDS_CI_FLAG)  # flag to indicate dependencies are installed
 
 .PHONY: depends-doc
@@ -219,11 +215,11 @@ fix: depends-dev
 RANDOM_SEED ?= $(shell date +%s)
 
 PYTEST_CORE_OPTS := --verbose -r xXw --maxfail=3
-PYTEST_COV_OPTS := --cov=$(PACKAGE) --no-cov-on-fail --cov-report=term-missing
+PYTEST_COV_OPTS := --cov=$(PACKAGE) --no-cov-on-fail --cov-report=term-missing --cov-report=html
 PYTEST_RANDOM_OPTS := --random --random-seed=$(RANDOM_SEED)
 
 PYTEST_OPTS := $(PYTEST_CORE_OPTS) $(PYTEST_COV_OPTS) $(PYTEST_RANDOM_OPTS)
-PYTEST_OPTS_FAILFAST := $(PYTEST_OPTS) --failed --exitfirst
+PYTEST_OPTS_FAILFAST := $(PYTEST_OPTS) --last-failed --exitfirst
 
 FAILURES := .cache/v/cache/lastfailed
 
@@ -234,7 +230,7 @@ test-unit: depends-ci
 	$(PYTEST) $(PYTEST_OPTS) $(PACKAGE)
 	@- mv $(FAILURES).bak $(FAILURES)
 ifndef TRAVIS
-	$(COVERAGE) html --directory htmlcov --fail-under=$(UNIT_TEST_COVERAGE)
+	$(COVERAGE_SPACE) jacebrowning/gitman unit
 endif
 
 .PHONY: test-int
@@ -242,7 +238,7 @@ test-int: depends-ci
 	@ if test -e $(FAILURES); then $(PYTEST) $(PYTEST_OPTS_FAILFAST) tests; fi
 	$(PYTEST) $(PYTEST_OPTS) tests
 ifndef TRAVIS
-	$(COVERAGE) html --directory htmlcov --fail-under=$(INTEGRATION_TEST_COVERAGE)
+	$(COVERAGE_SPACE) jacebrowning/gitman integration
 endif
 
 .PHONY: tests test-all
@@ -251,7 +247,7 @@ test-all: depends-ci
 	@ if test -e $(FAILURES); then $(PYTEST) $(PYTEST_OPTS_FAILFAST) $(PACKAGE) tests; fi
 	$(PYTEST) $(PYTEST_OPTS) $(PACKAGE) tests
 ifndef TRAVIS
-	$(COVERAGE) html --directory htmlcov --fail-under=$(COMBINED_TEST_COVERAGE)
+	$(COVERAGE_SPACE) jacebrowning/gitman overall
 endif
 
 .PHONY: read-coverage
