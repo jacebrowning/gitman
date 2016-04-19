@@ -1,6 +1,11 @@
 Revision History
 ================
 
+0.11 (unreleased)
+-----------------
+
+- Removed dependency on `sh` for preliminary Windows support.
+
 0.10 (2016/04/14)
 -----------------
 

@@ -1,9 +1,8 @@
 """Utilities to call shell programs."""
 
 import os
+import subprocess
 import logging
-
-from sh import Command, ErrorReturnCode
 
 from . import common
 from .exceptions import ShellError
@@ -14,32 +13,31 @@ OUT_PREFIX = "> "
 log = logging.getLogger(__name__)
 
 
-def call(name, *args, _show=True, _capture=False, _ignore=False):
+def call(program, *args, _show=True, _ignore=False):
     """Call a shell program with arguments."""
-    msg = CMD_PREFIX + ' '.join([name] + list(args))
+    msg = CMD_PREFIX + ' '.join([program, *args])
     if _show:
         common.show(msg)
     else:
         log.debug(msg)
 
-    if name == 'cd' and len(args) == 1:
+    if program == 'cd':
+        assert len(args) == 1, "'cd' takes a single argument"
         return os.chdir(args[0])
 
-    try:
-        program = Command(name)
-        if _capture:
-            line = program(*args).strip()
-            log.debug(OUT_PREFIX + line)
-            return line
-        else:
-            for line in program(*args, _iter='err'):
-                log.debug(OUT_PREFIX + line.strip())
-    except ErrorReturnCode as exc:
-        msg = "\n  IN: '{}'{}".format(os.getcwd(), exc)
-        if _ignore:
-            log.debug("Ignored error from call to '%s'", name)
-        else:
-            raise ShellError(msg)
+    command = subprocess.run([program, *args], universal_newlines=True,
+                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    for line in command.stdout.splitlines():
+        log.debug(OUT_PREFIX + line.strip())
+
+    if command.returncode == 0:
+        return command.stdout.strip()
+
+    elif _ignore:
+        log.debug("Ignored error from call to '%s'", program)
+
+    else:
+        raise ShellError("TODO: create an error message similar to 'sh'")
 
 
 def mkdir(path):
@@ -47,6 +45,7 @@ def mkdir(path):
 
 
 def cd(path, _show=True):
+
     call('cd', path, _show=_show)
 
 

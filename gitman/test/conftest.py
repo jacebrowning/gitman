@@ -21,7 +21,6 @@ def pytest_configure(config):
         format="[%(levelname)-8s] (%(name)s @%(lineno)4d) %(message)s",
     )
     logging.getLogger('yorm').setLevel(logging.WARNING)
-    logging.getLogger('sh').setLevel(logging.WARNING)
 
     terminal = config.pluginmanager.getplugin('terminal')
 
