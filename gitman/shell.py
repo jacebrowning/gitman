@@ -13,20 +13,23 @@ OUT_PREFIX = "> "
 log = logging.getLogger(__name__)
 
 
-def call(program, *args, _show=True, _ignore=False):
+def call(name, *args, _show=True, _ignore=False):
     """Call a shell program with arguments."""
-    msg = CMD_PREFIX + ' '.join([program, *args])
+    program = CMD_PREFIX + ' '.join([name, *args])
     if _show:
-        common.show(msg)
+        common.show(program)
     else:
-        log.debug(msg)
+        log.debug(program)
 
-    if program == 'cd':
+    if name == 'cd':
         assert len(args) == 1, "'cd' takes a single argument"
         return os.chdir(args[0])
 
-    command = subprocess.run([program, *args], universal_newlines=True,
-                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    command = subprocess.run(
+        [name, *args],
+        stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        universal_newlines=True,
+    )
     for line in command.stdout.splitlines():
         log.debug(OUT_PREFIX + line.strip())
 
@@ -37,7 +40,14 @@ def call(program, *args, _show=True, _ignore=False):
         log.debug("Ignored error from call to '%s'", program)
 
     else:
-        raise ShellError("TODO: create an error message similar to 'sh'")
+        msg = (
+            "An external program call failed." + "\n\n"
+            "In worikng directory: " + os.getcwd() + "\n\n"
+            "Execution produced a non-zero return code:" + "\n\n" +
+            program + "\n" +
+            command.stdout
+        )
+        raise ShellError(msg)
 
 
 def mkdir(path):
