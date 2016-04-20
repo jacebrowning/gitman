@@ -5,6 +5,7 @@ Revision History
 -----------------
 
 - Removed dependency on `sh` for preliminary Windows support.
+- Dropped Python 3.4 support for `subprocess` and `*args` improvements.
 
 0.10 (2016/04/14)
 -----------------
