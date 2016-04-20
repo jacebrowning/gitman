@@ -85,7 +85,6 @@ def configure_logging(count=0):
                                  datefmt=settings.LOGGING_DATEFMT)
     logging.root.handlers[0].setFormatter(formatter)
     logging.getLogger('yorm').setLevel(max(level, settings.YORM_LOGGING_LEVEL))
-    logging.getLogger('sh').setLevel(max(level, settings.SH_LOGGING_LEVEL))
 
     # Warn about excessive verbosity
     if count > _Config.MAX_VERBOSITY:

@@ -20,12 +20,6 @@ class TestCall:
         shell.call('cd', 'mock/dir')
         mock_chdir.assert_called_once_with('mock/dir')
 
-    @patch('gitman.shell.Command')
-    def test_other(self, mock_command):
-        """Verify directories are changed correctly."""
-        shell.call('mock_program')
-        mock_command.assert_called_once_with('mock_program')
-
     def test_other_error_uncaught(self):
         """Verify program errors raise exceptions."""
         with pytest.raises(ShellError):
@@ -37,7 +31,7 @@ class TestCall:
 
     def test_other_capture(self):
         """Verify a program's output can be captured."""
-        stdout = shell.call('echo', 'Hello, world!\n', _capture=True)
+        stdout = shell.call('echo', 'Hello, world!\n')
         assert "Hello, world!" == stdout
 
 
