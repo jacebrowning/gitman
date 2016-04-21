@@ -10,12 +10,12 @@ By manually modifying the `sources_locked` section, a particular version of the 
 ```yaml
 location: vendor
 sources:
-- dir: api
+- name: api
   link: ''
   repo: https://github.com/example/api
   rev: develop
 sources_locked:
-- dir: api
+- name: api
   link: ''
   repo: https://github.com/example/api
   rev: feature/authenticate-with-github  # related feature branch in the API

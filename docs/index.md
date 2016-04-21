@@ -32,10 +32,10 @@ Create a configuration file (`gitman.yml` or `.gitman.yml`) in the root of your 
 location: vendor
 sources:
 - repo: https://github.com/kstenerud/iOS-Universal-Framework
-  dir: framework
+  name: framework
   rev: Mk5-end-of-life
 - repo: https://github.com/jonreid/XcodeCoverage
-  dir: coverage
+  name: coverage
   rev: master
   link: Tools/XcodeCoverage
 ```
@@ -56,9 +56,9 @@ $ gitman install
 
 which will essentially:
 
-1. create a working tree at _root_/`location`/`dir`
+1. create a working tree at _root_/`location`/`name`
 2. fetch from `repo` and checkout the specified `rev`
-3. symbolically link each `location`/`dir` from _root_/`link` (if specified)
+3. symbolically link each `location`/`name` from _root_/`link` (if specified)
 4. repeat for all nested working trees containing a configuration file
 
 where `rev` can be:

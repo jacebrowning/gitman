@@ -19,15 +19,15 @@ from .utilities import strip
 CONFIG = """
 location: deps
 sources:
-- dir: gitman_1
+- name: gitman_1
   link: ''
   repo: https://github.com/jacebrowning/gitman-demo
   rev: example-branch
-- dir: gitman_2
+- name: gitman_2
   link: ''
   repo: https://github.com/jacebrowning/gitman-demo
   rev: example-tag
-- dir: gitman_3
+- name: gitman_3
   link: ''
   repo: https://github.com/jacebrowning/gitman-demo
   rev: 9bf18e16b956041f0267c21baad555a23237b52e
@@ -72,16 +72,16 @@ def describe_install():
         config.__mapper__.text = strip("""
         location: deps
         sources:
-        - dir: gitman_1
+        - name: gitman_1
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
         sources_locked:
-        - dir: gitman_2
+        - name: gitman_2
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
-        - dir: gitman_3
+        - name: gitman_3
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
@@ -95,12 +95,12 @@ def describe_install():
         config.__mapper__.text = strip("""
         location: deps
         sources:
-        - dir: gitman_1
+        - name: gitman_1
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
         sources_locked:
-        - dir: gitman_2
+        - name: gitman_2
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
@@ -117,7 +117,7 @@ def describe_install():
             config.__mapper__.text = strip("""
             location: deps
             sources:
-            - dir: gitman_1
+            - name: gitman_1
               link: my_link
               repo: https://github.com/jacebrowning/gitman-demo
               rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
@@ -177,16 +177,16 @@ def describe_update():
         config.__mapper__.text = strip("""
         location: deps
         sources:
-        - dir: gitman_1
+        - name: gitman_1
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
-        - dir: gitman_2
+        - name: gitman_2
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
         sources_locked:
-        - dir: gitman_2
+        - name: gitman_2
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: (old revision)
@@ -197,16 +197,16 @@ def describe_update():
         expect(config.__mapper__.text) == strip("""
         location: deps
         sources:
-        - dir: gitman_1
+        - name: gitman_1
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
-        - dir: gitman_2
+        - name: gitman_2
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
         sources_locked:
-        - dir: gitman_2
+        - name: gitman_2
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
@@ -216,16 +216,16 @@ def describe_update():
         config.__mapper__.text = strip("""
         location: deps
         sources:
-        - dir: gitman_1
+        - name: gitman_1
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
-        - dir: gitman_2
+        - name: gitman_2
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
         sources_locked:
-        - dir: gitman_2
+        - name: gitman_2
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: (old revision)
@@ -236,16 +236,16 @@ def describe_update():
         expect(config.__mapper__.text) == strip("""
         location: deps
         sources:
-        - dir: gitman_1
+        - name: gitman_1
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
-        - dir: gitman_2
+        - name: gitman_2
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
         sources_locked:
-        - dir: gitman_2
+        - name: gitman_2
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: (old revision)
@@ -256,15 +256,15 @@ def describe_update():
 
         expect(config.__mapper__.text) == CONFIG + strip("""
         sources_locked:
-        - dir: gitman_1
+        - name: gitman_1
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: eb37743011a398b208dd9f9ef79a408c0fc10d48
-        - dir: gitman_2
+        - name: gitman_2
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-        - dir: gitman_3
+        - name: gitman_3
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
@@ -299,15 +299,15 @@ def describe_lock():
 
         expect(config.__mapper__.text) == CONFIG + strip("""
         sources_locked:
-        - dir: gitman_1
+        - name: gitman_1
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: eb37743011a398b208dd9f9ef79a408c0fc10d48
-        - dir: gitman_2
+        - name: gitman_2
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-        - dir: gitman_3
+        - name: gitman_3
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
@@ -319,11 +319,11 @@ def describe_lock():
 
         expect(config.__mapper__.text) == CONFIG + strip("""
         sources_locked:
-        - dir: gitman_1
+        - name: gitman_1
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: eb37743011a398b208dd9f9ef79a408c0fc10d48
-        - dir: gitman_3
+        - name: gitman_3
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e

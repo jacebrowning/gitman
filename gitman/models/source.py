@@ -15,7 +15,7 @@ from ..exceptions import InvalidConfig, InvalidRepository, UncommittedChanges
 log = logging.getLogger(__name__)
 
 
-@yorm.attr(dir=String)
+@yorm.attr(name=String)
 @yorm.attr(link=String)
 @yorm.attr(repo=String)
 @yorm.attr(rev=String)
@@ -28,13 +28,13 @@ class Source(AttributeDictionary):
     def __init__(self, repo, name, rev='master', link=None):
         super().__init__()
         self.repo = repo
-        self.dir = name
+        self.name = name
         self.rev = rev
         self.link = link
         if not self.repo:
             raise InvalidConfig("'repo' missing on {}".format(repr(self)))
-        if not self.dir:
-            raise InvalidConfig("'dir' missing on {}".format(repr(self)))
+        if not self.name:
+            raise InvalidConfig("'name' missing on {}".format(repr(self)))
 
     def __repr__(self):
         return "<source {}>".format(self)
@@ -43,26 +43,26 @@ class Source(AttributeDictionary):
         fmt = "'{r}' @ '{v}' in '{d}'"
         if self.link:
             fmt += " <- '{s}'"
-        return fmt.format(r=self.repo, v=self.rev, d=self.dir, s=self.link)
+        return fmt.format(r=self.repo, v=self.rev, d=self.name, s=self.link)
 
     def __eq__(self, other):
-        return self.dir == other.dir
+        return self.name == other.name
 
     def __ne__(self, other):
-        return self.dir != other.dir
+        return self.name != other.name
 
     def __lt__(self, other):
-        return self.dir < other.dir
+        return self.name < other.name
 
     def update_files(self, force=False, fetch=False, clean=True):
         """Ensure the source matches the specified revision."""
         log.info("Updating source files...")
 
         # Enter the working tree
-        if not os.path.exists(self.dir):
+        if not os.path.exists(self.name):
             log.debug("Creating a new repository...")
-            git.clone(self.repo, self.dir)
-        shell.cd(self.dir)
+            git.clone(self.repo, self.name)
+        shell.cd(self.name)
 
         # Check for uncommitted changes
         if not force:
@@ -100,9 +100,9 @@ class Source(AttributeDictionary):
 
     def identify(self, allow_dirty=True, allow_missing=True):
         """Get the path and current repository URL and hash."""
-        if os.path.isdir(self.dir):
+        if os.path.isdir(self.name):
 
-            shell.cd(self.dir)
+            shell.cd(self.name)
 
             path = os.getcwd()
             url = git.get_url()
@@ -124,12 +124,12 @@ class Source(AttributeDictionary):
 
         else:
 
-            path = os.path.join(os.getcwd(), self.dir)
+            path = os.path.join(os.getcwd(), self.name)
             msg = "Not a valid repository: {}".format(path)
             raise InvalidRepository(msg)
 
     def lock(self):
         """Return a locked version of the current source."""
         _, _, revision = self.identify(allow_missing=False)
-        source = self.__class__(self.repo, self.dir, revision, self.link)
+        source = self.__class__(self.repo, self.name, revision, self.link)
         return source
