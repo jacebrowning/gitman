@@ -259,7 +259,7 @@ def describe_update():
         - name: gitman_1
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
-          rev: eb37743011a398b208dd9f9ef79a408c0fc10d48
+          rev: 32642694f6b230cb2d841d9444b892f2579e7a41
         - name: gitman_2
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
@@ -281,8 +281,8 @@ def describe_list():
             contents = fin.read().replace("/private", "")
         expect(contents) == strip("""
         2012-01-14 12:00:01
-        /tmp/gitman-shared/deps/gitman_1: https://github.com/jacebrowning/gitman-demo @ eb37743011a398b208dd9f9ef79a408c0fc10d48
-        /tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_3: https://github.com/jacebrowning/gdm-demo @ ddbe17ef173538d1fda29bd99a14bab3c5d86e78
+        /tmp/gitman-shared/deps/gitman_1: https://github.com/jacebrowning/gitman-demo @ 32642694f6b230cb2d841d9444b892f2579e7a41
+        /tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_3: https://github.com/jacebrowning/gdm-demo @ b6bed7e791a9f6ceadfda823a3d6b490d6b4bc0b
         /tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_3/gdm_sources/gdm_3: https://github.com/jacebrowning/gdm-demo @ fb693447579235391a45ca170959b5583c5042d8
         /tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_3/gdm_sources/gdm_4: https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5
         /tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_4: https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5
@@ -302,7 +302,7 @@ def describe_lock():
         - name: gitman_1
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
-          rev: eb37743011a398b208dd9f9ef79a408c0fc10d48
+          rev: 32642694f6b230cb2d841d9444b892f2579e7a41
         - name: gitman_2
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
@@ -322,7 +322,7 @@ def describe_lock():
         - name: gitman_1
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
-          rev: eb37743011a398b208dd9f9ef79a408c0fc10d48
+          rev: 32642694f6b230cb2d841d9444b892f2579e7a41
         - name: gitman_3
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
