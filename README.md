@@ -37,11 +37,11 @@ Create a configuration file (`gitman.yml` or `.gitman.yml`) in the root of your 
 ```yaml
 location: vendor
 sources:
-- repo: https://github.com/kstenerud/iOS-Universal-Framework
-  name: framework
+- name: framework
+  repo: https://github.com/kstenerud/iOS-Universal-Framework
   rev: Mk5-end-of-life
-- repo: https://github.com/jonreid/XcodeCoverage
-  name: coverage
+- name: coverage
+  repo: https://github.com/jonreid/XcodeCoverage
   rev: master
   link: Tools/XcodeCoverage
 ```

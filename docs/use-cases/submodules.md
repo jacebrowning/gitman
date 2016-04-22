@@ -19,8 +19,8 @@ To get the same behavior using `gitman`, first delete the `.gitmodules` file and
 ```yaml
 location: .gitman
 sources:
-- repo: <URL of my_dependency's repository>
-  name: my_dependency
+- name: my_dependency
+  repo: <URL of my_dependency's repository>
   rev: a943a702d06f34599aee1f8da8ef9f7296031d69
   link: vendor/my_depenendy
 ```

@@ -11,12 +11,10 @@ By manually modifying the `sources_locked` section, a particular version of the 
 location: vendor
 sources:
 - name: api
-  link: ''
   repo: https://github.com/example/api
   rev: develop
 sources_locked:
 - name: api
-  link: ''
   repo: https://github.com/example/api
   rev: feature/authenticate-with-github  # related feature branch in the API
 ```
