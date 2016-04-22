@@ -17,8 +17,8 @@ class TestCall:
     @patch('os.chdir')
     def test_cd(self, mock_chdir):
         """Verify directories are changed correctly."""
-        shell.call('cd', 'mock/dir')
-        mock_chdir.assert_called_once_with('mock/dir')
+        shell.call('cd', 'mock/name')
+        mock_chdir.assert_called_once_with('mock/name')
 
     def test_other_error_uncaught(self):
         """Verify program errors raise exceptions."""
@@ -42,13 +42,13 @@ class TestPrograms:
 
     def test_mkdir(self, mock_call):
         """Verify the commands to create directories."""
-        shell.mkdir('mock/dir/path')
-        assert_calls(mock_call, ["mkdir -p mock/dir/path"])
+        shell.mkdir('mock/name/path')
+        assert_calls(mock_call, ["mkdir -p mock/name/path"])
 
     def test_cd(self, mock_call):
         """Verify the commands to change directories."""
-        shell.cd('mock/dir/path')
-        assert_calls(mock_call, ["cd mock/dir/path"])
+        shell.cd('mock/name/path')
+        assert_calls(mock_call, ["cd mock/name/path"])
 
     @patch('os.path.isdir', Mock(return_value=True))
     def test_ln(self, mock_call):
@@ -65,5 +65,5 @@ class TestPrograms:
 
     def test_rm(self, mock_call):
         """Verify the commands to delete files/folders."""
-        shell.rm('mock/dir/path')
-        assert_calls(mock_call, ["rm -rf mock/dir/path"])
+        shell.rm('mock/name/path')
+        assert_calls(mock_call, ["rm -rf mock/name/path"])

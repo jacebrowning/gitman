@@ -4,6 +4,7 @@
 
 - Removed dependency on `sh` to support Cygwin/MinGW/etc. on Windows.
 - Dropped Python 3.4 support for `subprocess` and `*args` improvements.
+- **BREAKING**: Renamed config file key `dir` to `name`.
 
 ## 0.10 (2016/04/14)
 
