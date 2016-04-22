@@ -16,7 +16,7 @@ class TestConfig:
 
         assert 'mock/root' == config.root
         assert 'gitman.yml' == config.filename
-        assert 'gdm_sources' == config.location
+        assert 'gitman_sources' == config.location
         assert [] == config.sources
 
     def test_init_filename(self):
@@ -24,7 +24,7 @@ class TestConfig:
         config = Config('mock/root', 'mock.custom')
 
         assert 'mock.custom' == config.filename
-        assert 'gdm_sources' == config.location
+        assert 'gitman_sources' == config.location
 
     def test_init_location(self):
         """Verify the location can be customized."""

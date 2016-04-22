@@ -259,7 +259,7 @@ def describe_update():
         - name: gitman_1
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
-          rev: 32642694f6b230cb2d841d9444b892f2579e7a41
+          rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
         - name: gitman_2
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
@@ -277,15 +277,15 @@ def describe_list():
     def it_updates_the_log(config):
         gitman.install()
         gitman.list()
-        with open(config.log_path) as fin:
-            contents = fin.read().replace("/private", "")
+        with open(config.log_path) as stream:
+            contents = stream.read().replace("/private", "")
         expect(contents) == strip("""
         2012-01-14 12:00:01
-        /tmp/gitman-shared/deps/gitman_1: https://github.com/jacebrowning/gitman-demo @ 32642694f6b230cb2d841d9444b892f2579e7a41
-        /tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_3: https://github.com/jacebrowning/gdm-demo @ b6bed7e791a9f6ceadfda823a3d6b490d6b4bc0b
-        /tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_3/gdm_sources/gdm_3: https://github.com/jacebrowning/gdm-demo @ fb693447579235391a45ca170959b5583c5042d8
-        /tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_3/gdm_sources/gdm_4: https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5
-        /tmp/gitman-shared/deps/gitman_1/gdm_sources/gdm_4: https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5
+        /tmp/gitman-shared/deps/gitman_1: https://github.com/jacebrowning/gitman-demo @ 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
+        /tmp/gitman-shared/deps/gitman_1/gitman_sources/gdm_3: https://github.com/jacebrowning/gdm-demo @ 050290bca3f14e13fd616604202b579853e7bfb0
+        /tmp/gitman-shared/deps/gitman_1/gitman_sources/gdm_3/gitman_sources/gdm_3: https://github.com/jacebrowning/gdm-demo @ fb693447579235391a45ca170959b5583c5042d8
+        /tmp/gitman-shared/deps/gitman_1/gitman_sources/gdm_3/gitman_sources/gdm_4: https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5
+        /tmp/gitman-shared/deps/gitman_1/gitman_sources/gdm_4: https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5
         /tmp/gitman-shared/deps/gitman_2: https://github.com/jacebrowning/gitman-demo @ 7bd138fe7359561a8c2ff9d195dff238794ccc04
         /tmp/gitman-shared/deps/gitman_3: https://github.com/jacebrowning/gitman-demo @ 9bf18e16b956041f0267c21baad555a23237b52e
         """, end='\n\n')
@@ -302,7 +302,7 @@ def describe_lock():
         - name: gitman_1
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
-          rev: 32642694f6b230cb2d841d9444b892f2579e7a41
+          rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
         - name: gitman_2
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
@@ -322,7 +322,7 @@ def describe_lock():
         - name: gitman_1
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
-          rev: 32642694f6b230cb2d841d9444b892f2579e7a41
+          rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
         - name: gitman_3
           link: ''
           repo: https://github.com/jacebrowning/gitman-demo
