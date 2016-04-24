@@ -22,7 +22,7 @@ class Config:
 
     LOG = "gitman.log"
 
-    def __init__(self, root, filename="gitman.yml", location="gdm_sources"):
+    def __init__(self, root, filename="gitman.yml", location="gitman_sources"):
         super().__init__()
         self.root = root
         self.filename = filename
@@ -232,4 +232,4 @@ def _valid_filename(filename):
     name, ext = os.path.splitext(filename.lower())
     if name.startswith('.'):
         name = name[1:]
-    return name in ('gitman', 'gdm') and ext in ('.yml', '.yaml')
+    return name in ['gitman', 'gdm'] and ext in ['.yml', '.yaml']
