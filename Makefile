@@ -105,7 +105,9 @@ $(INSTALLED_FLAG): Makefile setup.py requirements.txt
 
 $(PIP):
 	$(SYS_PYTHON) -m venv --clear $(ENV)
+ifndef APPVEYOR
 	$(PIP) install --upgrade pip setuptools
+endif
 
 # Tools Installation ###########################################################
 

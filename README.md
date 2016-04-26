@@ -1,7 +1,6 @@
-[![Build Status](https://travis-ci.org/jacebrowning/gitman.svg?branch=develop)](https://travis-ci.org/jacebrowning/gitman)
-[![Coverage Status](https://coveralls.io/repos/github/jacebrowning/gitman/badge.svg?branch=develop)](https://coveralls.io/github/jacebrowning/gitman?branch=develop)
-[![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/jacebrowning/gitman.svg)](https://scrutinizer-ci.com/g/jacebrowning/gitman/?branch=master)
-[![PyPI Version](http://img.shields.io/pypi/v/GitMan.svg)](https://pypi.python.org/pypi/GitMan)
+Unix: [![Unix Build Status](http://img.shields.io/travis/jacebrowning/gitman/master.svg)](https://travis-ci.org/jacebrowning/gitman)
+Windows: [![Windows Build Status](https://img.shields.io/appveyor/ci/jacebrowning/gitman.svg)](https://ci.appveyor.com/project/jacebrowning/gitman)<br>Metrics: [![Coverage Status](http://img.shields.io/coveralls/jacebrowning/gitman/master.svg)](https://coveralls.io/r/jacebrowning/gitman)
+[![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/jacebrowning/gitman.svg)](https://scrutinizer-ci.com/g/jacebrowning/gitman/?branch=master)<br>Usage: [![PyPI Version](http://img.shields.io/pypi/v/GitMan.svg)](https://pypi.python.org/pypi/GitMan)
 [![PyPI Downloads](http://img.shields.io/pypi/dm/GitMan.svg)](https://pypi.python.org/pypi/GitMan)
 
 # Getting Started
