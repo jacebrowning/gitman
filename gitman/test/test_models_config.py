@@ -1,5 +1,7 @@
 # pylint: disable=no-self-use,redefined-outer-name,unused-variable,expression-not-assigned
 
+from pathlib import Path
+
 import pytest
 from expecter import expect
 
@@ -37,7 +39,7 @@ class TestConfig:
         """Verify a configuration's path is correct."""
         config = Config('mock/root')
 
-        assert "mock/root/gitman.yml" == config.path
+        expect(config.path) == Path("mock/root/gitman.yml")
 
     @pytest.mark.integration
     def test_install_and_list(self):
@@ -111,16 +113,18 @@ def describe_config():
     def describe_get_path():
 
         def it_defaults_to_sources_location(config):
-            expect(config.get_path()) == "m/root/m/location"
+            expect(config.get_path()) == Path("m/root", "m/location")
 
         def it_can_get_the_config_path(config):
-            expect(config.get_path('__config__')) == "m/root/m.ext"
+            expect(config.get_path('__config__')) == Path("m/root", "m.ext")
 
         def it_can_get_log_path(config):
-            expect(config.get_path('__log__')) == "m/root/m/location/gitman.log"
+            expect(config.get_path('__log__')) == \
+                Path("m/root", "m/location", "gitman.log")
 
         def it_can_get_dependency_path(config):
-            expect(config.get_path('foobar')) == "m/root/m/location/foobar"
+            expect(config.get_path('foobar')) == \
+                Path("m/root", "m/location", "foobar")
 
 
 class TestLoad:

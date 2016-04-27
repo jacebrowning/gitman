@@ -1,37 +1,38 @@
-# pylint: disable=no-self-use
+# pylint: disable=no-self-use,expression-not-assigned,singleton-comparison
 
 import os
+
+from expecter import expect
 
 from .conftest import ROOT, FILES
 
 from gitman.commands import _find_root, install, update, display, delete
 
-PROJECT_ROOT = os.path.dirname(os.path.dirname(ROOT))
-PROJECT_PARENT = os.path.dirname(PROJECT_ROOT)
+PROJECT_ROOT = ROOT.parents[1]
+PROJECT_PARENT = PROJECT_ROOT.parent
 
 
 class TestCommands:
 
     def test_commands_can_be_run_without_project(self, tmpdir):
         tmpdir.chdir()
-
-        assert not install()
-        assert not update()
-        assert not display()
-        assert not delete()
+        expect(install()) == False
+        expect(update()) == False
+        expect(display()) == False
+        expect(delete()) == False
 
 
 class TestFindRoot:
 
     def test_specified(self):
-        os.chdir(PROJECT_PARENT)
-        assert FILES == _find_root(FILES)
+        os.chdir(str(PROJECT_PARENT))
+        expect(_find_root(FILES)) == FILES
 
     def test_none(self):
-        assert PROJECT_ROOT == _find_root(None, cwd=ROOT)
+        expect(_find_root(None, cwd=ROOT)) == PROJECT_ROOT
 
     def test_current(self):
-        assert PROJECT_ROOT == _find_root(PROJECT_ROOT, cwd=ROOT)
+        expect(_find_root(PROJECT_ROOT, cwd=ROOT)) == PROJECT_ROOT
 
     def test_missing(self):
-        assert PROJECT_PARENT == _find_root(None, cwd=PROJECT_PARENT)
+        expect(_find_root(None, cwd=PROJECT_PARENT)) == PROJECT_PARENT
