@@ -1,6 +1,6 @@
 # Revision History
 
-## 0.11 (unreleased)
+## 0.11 (2016/05/10)
 
 - Removed dependency on `sh` to support Cygwin/MinGW/etc. on Windows.
 - Dropped Python 3.4 support for `subprocess` and `*args` improvements.
