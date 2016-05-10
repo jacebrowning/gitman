@@ -20,6 +20,6 @@ pages:
   - 'Linking Feature Branches': 'use-cases/linked-features.md'
   - 'Build System Integration': 'use-cases/build-integration.md'
 - About:
-  - 'Release Notes': 'about/changes.md'
+  - 'Release Notes': 'about/changelog.md'
   - Contributing: 'about/contributing.md'
   - License: 'about/license.md'

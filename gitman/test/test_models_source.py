@@ -20,7 +20,7 @@ class TestSource:
         source = Source('http://mock.git', 'mock_dir')
 
         assert 'http://mock.git' == source.repo
-        assert 'mock_dir' == source.dir
+        assert 'mock_dir' == source.name
         assert 'master' == source.rev
         assert None is source.link
 
@@ -57,7 +57,7 @@ class TestSource:
         source2 = copy(source)
         assert source == source2
 
-        source2.dir = "dir2"
+        source2.name = "dir2"
         assert source != source2
 
     def test_lt(self):
@@ -83,4 +83,4 @@ class TestSource:
         source2 = source.lock()
 
         assert 'abc123' == source2.rev
-        assert 'name' == source2.dir
+        assert 'name' == source2.name

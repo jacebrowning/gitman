@@ -9,13 +9,11 @@ A web app's `gitman.yml` might look something like:
 ```yaml
 location: vendor
 sources:
-- dir: api
-  link: ''
+- name: api
   repo: https://github.com/example/api
   rev: develop
 sources_locked:
-- dir: api
-  link: ''
+- name: api
   repo: https://github.com/example/api
   rev: b2730855c9efaaa7448b25b82e5a4363785c83ed
 ```

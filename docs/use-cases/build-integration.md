@@ -26,19 +26,19 @@ clean:
 using a configuration file similar to:
 
 ```yaml
-location: sources
+location: vendor
 sources:
-- dir: lib_foo
+- name: lib_foo
   repo: https://github.com/example/lib_foo
   rev: develop
-- dir: lib_bar
+- name: lib_bar
   repo: https://github.com/example/lib_bar
   rev: master
 sources_locked:
-- dir: lib_foo
+- name: lib_foo
   repo: https://github.com/example/lib_foo
   rev: 73cb3668d4c9c3388fb21de16c9c3f6217cc0e1c
-- dir: lib_bar
+- name: lib_bar
   repo: https://github.com/example/lib_bar
   rev: 560ea99953a4b3e393e170e07895d14904eb032c
 ```

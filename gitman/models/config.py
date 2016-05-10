@@ -22,7 +22,7 @@ class Config:
 
     LOG = "gitman.log"
 
-    def __init__(self, root, filename="gitman.yml", location="gdm_sources"):
+    def __init__(self, root, filename="gitman.yml", location="gitman_sources"):
         super().__init__()
         self.root = root
         self.filename = filename
@@ -71,16 +71,16 @@ class Config:
         shell.cd(self.location_path)
 
         sources = self._get_sources(use_locked=False if update else None)
-        dirs = list(names) if names else [source.dir for source in sources]
+        dirs = list(names) if names else [source.name for source in sources]
         common.show()
         common.indent()
 
         count = 0
         for source in sources:
-            if source.dir in dirs:
-                dirs.remove(source.dir)
+            if source.name in dirs:
+                dirs.remove(source.name)
             else:
-                log.info("Skipped dependency: %s", source.dir)
+                log.info("Skipped dependency: %s", source.name)
                 continue
 
             source.update_files(force=force, fetch=fetch, clean=clean)
@@ -118,12 +118,12 @@ class Config:
         common.indent()
 
         sources = self._get_sources(use_locked=obey_existing).copy()
-        dirs = list(names) if names else [source.dir for source in sources]
+        dirs = list(names) if names else [source.name for source in sources]
 
         count = 0
         for source in sources:
-            if source.dir not in dirs:
-                log.info("Skipped dependency: %s", source.dir)
+            if source.name not in dirs:
+                log.info("Skipped dependency: %s", source.name)
                 continue
 
             try:
@@ -160,7 +160,7 @@ class Config:
         for source in self.sources:
 
             if depth == 0:
-                log.info("Skipped dependency: %s", source.dir)
+                log.info("Skipped dependency: %s", source.name)
                 continue
 
             yield source.identify(allow_dirty=allow_dirty)
@@ -207,7 +207,7 @@ class Config:
         extras = []
         for source in self.sources + self.sources_locked:
             if source not in sources:
-                log.info("Source %r missing from selected section", source.dir)
+                log.info("Source %r missing from selected section", source.name)
                 extras.append(source)
 
         return sources + extras
@@ -232,4 +232,4 @@ def _valid_filename(filename):
     name, ext = os.path.splitext(filename.lower())
     if name.startswith('.'):
         name = name[1:]
-    return name in ('gitman', 'gdm') and ext in ('.yml', '.yaml')
+    return name in ['gitman', 'gdm'] and ext in ['.yml', '.yaml']
