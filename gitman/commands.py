@@ -234,7 +234,7 @@ def _find_root(base, cwd=None):
         while path != prev:
             log.debug("Checking path: %s", path)
             if path.joinpath('.git').exists():  # pylint: disable=no-member
-                root = path
+                root = path  # pylint: disable=redefined-variable-type
                 break
             prev = path
             path = path.parent  # pylint: disable=redefined-variable-type
