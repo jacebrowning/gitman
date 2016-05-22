@@ -1,5 +1,9 @@
 # Revision History
 
+## 1.0 (2016/05/22)
+
+- Initial stable release.
+
 ## 0.11 (2016/05/10)
 
 - Removed dependency on `sh` to support Cygwin/MinGW/etc. on Windows.
