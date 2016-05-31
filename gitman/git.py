@@ -32,8 +32,7 @@ def clone(repo, path, *, cache=None):
 
 def fetch(repo, rev=None):
     """Fetch the latest changes from the remote repository."""
-    git('remote', 'rm', 'origin', _show=False, _ignore=True)
-    git('remote', 'add', 'origin', repo)
+    git('remote', 'set-url', 'origin', repo)
     args = ['fetch', '--tags', '--force', '--prune', 'origin']
     if rev:
         if len(rev) == 40:
