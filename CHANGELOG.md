@@ -1,5 +1,9 @@
 # Revision History
 
+## 1.0.1 (2016/05/31)
+
+- Replaced calls to `git remote add origin` with `git remote set-url origin`.
+
 ## 1.0 (2016/05/22)
 
 - Initial stable release.
