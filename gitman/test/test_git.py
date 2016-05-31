@@ -10,7 +10,6 @@ from . import assert_calls
 
 @patch('gitman.git.call')
 class TestGit:
-
     """Tests for calls to Git."""
 
     @patch('os.path.isdir', Mock(return_value=False))
@@ -32,8 +31,7 @@ class TestGit:
         """Verify the commands to fetch from a Git repository."""
         git.fetch('mock.git')
         assert_calls(mock_call, [
-            "git remote rm origin",
-            "git remote add origin mock.git",
+            "git remote set-url origin mock.git",
             "git fetch --tags --force --prune origin",
         ])
 
@@ -41,8 +39,7 @@ class TestGit:
         """Verify the commands to fetch from a Git repository w/ rev."""
         git.fetch('mock.git', 'mock-rev')
         assert_calls(mock_call, [
-            "git remote rm origin",
-            "git remote add origin mock.git",
+            "git remote set-url origin mock.git",
             "git fetch --tags --force --prune origin mock-rev",
         ])
 
@@ -50,8 +47,7 @@ class TestGit:
         """Verify the commands to fetch from a Git repository w/ SHA."""
         git.fetch('mock.git', 'abcdef1234' * 4)
         assert_calls(mock_call, [
-            "git remote rm origin",
-            "git remote add origin mock.git",
+            "git remote set-url origin mock.git",
             "git fetch --tags --force --prune origin",
         ])
 
@@ -59,8 +55,7 @@ class TestGit:
         """Verify the commands to fetch from a Git repository w/ rev-parse."""
         git.fetch('mock.git', 'master@{2015-02-12 18:30:00}')
         assert_calls(mock_call, [
-            "git remote rm origin",
-            "git remote add origin mock.git",
+            "git remote set-url origin mock.git",
             "git fetch --tags --force --prune origin",
         ])
 
