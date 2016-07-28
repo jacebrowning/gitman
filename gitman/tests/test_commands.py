@@ -2,9 +2,9 @@
 
 import os
 
-from .conftest import ROOT, FILES
-
 from gitman.commands import _find_root, install, update, display, delete
+
+from .conftest import ROOT, FILES
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(ROOT))
 PROJECT_PARENT = os.path.dirname(PROJECT_ROOT)

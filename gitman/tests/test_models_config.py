@@ -1,4 +1,4 @@
-# pylint: disable=no-self-use,redefined-outer-name,unused-variable,expression-not-assigned
+# pylint: disable=no-self-use,redefined-outer-name,unused-variable,expression-not-assigned,misplaced-comparison-constant
 
 import pytest
 from expecter import expect

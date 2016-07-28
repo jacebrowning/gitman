@@ -4,9 +4,11 @@
 [![PyPI Version](http://img.shields.io/pypi/v/GitMan.svg)](https://pypi.python.org/pypi/GitMan)
 [![PyPI Downloads](http://img.shields.io/pypi/dm/GitMan.svg)](https://pypi.python.org/pypi/GitMan)
 
-# Getting Started
+# Overview
 
 GitMan is a language-agnostic "dependency manager" using Git. It aims to serve as a submodules replacement and provides advanced options for managing versions of nested Git repositories.
+
+# Setup
 
 ## Requirements
 
@@ -52,7 +54,7 @@ Ignore the dependency storage location:
 $ echo vendor >> .gitignore
 ```
 
-# Basic Usage
+# Usage
 
 See the available commands:
 
@@ -104,7 +106,3 @@ Remove all installed dependencies:
 ```sh
 $ gitman uninstall
 ```
-
-# Advanced Options
-
-See the full documentation at [git-dependency-manager.info](http://git-dependency-manager.info/interfaces/cli/).
