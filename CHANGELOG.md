@@ -1,5 +1,9 @@
 # Revision History
 
+## 1.0.2 (2016/07/28)
+
+- Moved documentation to http://gitman.readthedocs.io/.
+
 ## 1.0.1 (2016/05/31)
 
 - Replaced calls to `git remote add origin` with `git remote set-url origin`.
