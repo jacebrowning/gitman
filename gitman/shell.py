@@ -48,7 +48,7 @@ def call(name, *args, _show=True, _ignore=False):
     else:
         message = (
             "An external program call failed." + "\n\n"
-            "In worikng directory: " + os.getcwd() + "\n\n"
+            "In working directory: " + os.getcwd() + "\n\n"
             "The following command produced a non-zero return code:" + "\n\n" +
             program + "\n" +
             command.stdout

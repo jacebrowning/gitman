@@ -1,4 +1,4 @@
-# pylint: disable=no-self-use
+# pylint: disable=no-self-use,misplaced-comparison-constant
 
 from unittest.mock import patch, Mock
 

@@ -1,0 +1,17 @@
+# Linters
+pep8
+pep257
+pylint
+
+# Testing
+pytest
+pytest-describe
+pytest-expecter
+pytest-cov
+pytest-random
+expecter
+freezegun
+
+# Coverage
+coverage
+coverage.space
