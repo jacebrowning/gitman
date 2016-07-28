@@ -35,7 +35,7 @@ def main(args=None, function=None):
     options.add_argument('-f', '--force', action='store_true',
                          help="overwrite uncommitted changes in dependencies")
     options.add_argument('-c', '--clean', action='store_true',
-                         help="keep ignored files in dependencies")
+                         help="delete ignored files in dependencies")
     shared = {'formatter_class': common.WideHelpFormatter}
 
     # Main parser

@@ -26,7 +26,7 @@ def main(args=None):
     )
     parser.add_argument(
         '-c', '--clean', action='store_true',
-        help="keep ignored files when updating dependencies",
+        help="delete ignored files when updating dependencies",
     )
 
     # Options group
