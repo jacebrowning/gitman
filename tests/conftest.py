@@ -5,7 +5,7 @@ import os
 
 import yorm
 
-from gitman.test.conftest import pytest_configure  # pylint: disable=unused-import
+from gitman.tests.conftest import pytest_configure  # pylint: disable=unused-import
 
 
 # TODO: delete if unused (and files)

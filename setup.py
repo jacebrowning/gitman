@@ -19,7 +19,7 @@ setuptools.setup(
     version=__version__,
 
     description=DESCRIPTION,
-    url='http://git-dependency-manager.info',
+    url='https://jacebrowning/gitman',
     author='Jace Browning',
     author_email='jacebrowning@gmail.com',
 
@@ -51,5 +51,5 @@ setuptools.setup(
         'Topic :: System :: Software Distribution',
     ],
 
-    install_requires=open('requirements.txt').readlines(),
+    install_requires=open("requirements.txt").readlines(),
 )

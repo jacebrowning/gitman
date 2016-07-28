@@ -2,24 +2,23 @@ site_name: GitMan
 site_description: A language-agnostic "dependency manager" using Git.
 site_author: Jace Browning
 repo_url: https://github.com/jacebrowning/gitman
-google_analytics: ['UA-6468614-11', 'git-dependency-manager.info']
 
-theme: mkdocs
+theme: readthedocs
 
 pages:
-- Home: 'index.md'
+- Home: index.md
 - Setup:
-    - Git: 'setup/git.md'
+    - Git: setup/git.md
 - Interfaces:
     - Command Line: interfaces/cli.md
     - Git Plugin: interfaces/plugin.md
     - Package API: interfaces/api.md
-- 'Use Cases':
-  - 'Replacing Submodules': 'use-cases/submodules.md'
-  - 'Tracking Branches': 'use-cases/branch-tracking.md'
-  - 'Linking Feature Branches': 'use-cases/linked-features.md'
-  - 'Build System Integration': 'use-cases/build-integration.md'
+- Use Cases:
+  - Replacing Submodules: use-cases/submodules.md
+  - Tracking Branches: use-cases/branch-tracking.md
+  - Linking Feature Branches: use-cases/linked-features.md
+  - Build System Integration: use-cases/build-integration.md
 - About:
-  - 'Release Notes': 'about/changelog.md'
-  - Contributing: 'about/contributing.md'
-  - License: 'about/license.md'
+  - Release Notes: about/changelog.md
+  - Contributing: about/contributing.md
+  - License: about/license.md
