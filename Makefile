@@ -84,11 +84,7 @@ $(ALL_FLAG): $(SOURCES)
 	touch $(ALL_FLAG)  # flag to indicate all setup steps were successful
 
 .PHONY: ci
-ifdef TRAVIS
 ci: check test tests
-else
-ci: doc check test tests
-endif
 
 .PHONY: watch
 watch: depends .clean-test
@@ -105,7 +101,7 @@ $(INSTALLED_FLAG): Makefile setup.py requirements.txt
 
 $(PIP):
 	$(SYS_PYTHON) -m venv --clear $(ENV)
-	$(PIP) install --upgrade pip setuptools
+	$(PYTHON) -m pip install --upgrade pip setuptools
 
 # Tools Installation ###########################################################
 
@@ -214,7 +210,7 @@ fix: depends-dev
 
 RANDOM_SEED ?= $(shell date +%s)
 
-PYTEST_CORE_OPTS := --verbose -r xXw --maxfail=3
+PYTEST_CORE_OPTS := --verbose -r xXw
 PYTEST_COV_OPTS := --cov=$(PACKAGE) --no-cov-on-fail --cov-report=term-missing --cov-report=html
 PYTEST_RANDOM_OPTS := --random --random-seed=$(RANDOM_SEED)
 
@@ -230,7 +226,9 @@ test-unit: depends-ci
 	$(PYTEST) $(PYTEST_OPTS) $(PACKAGE)
 	@- mv $(FAILURES).bak $(FAILURES)
 ifndef TRAVIS
+ifndef APPVEYOR
 	$(COVERAGE_SPACE) jacebrowning/gitman unit
+endif
 endif
 
 .PHONY: test-int
@@ -238,7 +236,9 @@ test-int: depends-ci
 	@ if test -e $(FAILURES); then $(PYTEST) $(PYTEST_OPTS_FAILFAST) tests; fi
 	$(PYTEST) $(PYTEST_OPTS) tests
 ifndef TRAVIS
+ifndef APPVEYOR
 	$(COVERAGE_SPACE) jacebrowning/gitman integration
+endif
 endif
 
 .PHONY: tests test-all
@@ -247,7 +247,9 @@ test-all: depends-ci
 	@ if test -e $(FAILURES); then $(PYTEST) $(PYTEST_OPTS_FAILFAST) $(PACKAGE) tests; fi
 	$(PYTEST) $(PYTEST_OPTS) $(PACKAGE) tests
 ifndef TRAVIS
+ifndef APPVEYOR
 	$(COVERAGE_SPACE) jacebrowning/gitman overall
+endif
 endif
 
 .PHONY: read-coverage

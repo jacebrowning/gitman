@@ -3,6 +3,7 @@
 import os
 import functools
 import datetime
+from pathlib import Path
 import logging
 
 from . import common, system
@@ -218,11 +219,11 @@ def edit(*, root=None):
 
 def _find_root(base, cwd=None):
     if cwd is None:
-        cwd = os.getcwd()
+        cwd = Path.cwd()
         log.info("Current directory: %s", cwd)
 
     if base:
-        root = os.path.abspath(base)
+        root = Path(base).resolve()
         log.info("Specified root: %s", root)
 
     else:
@@ -232,11 +233,11 @@ def _find_root(base, cwd=None):
         root = None
         while path != prev:
             log.debug("Checking path: %s", path)
-            if '.git' in os.listdir(path):
-                root = path
+            if path.joinpath('.git').exists():  # pylint: disable=no-member
+                root = path  # pylint: disable=redefined-variable-type
                 break
             prev = path
-            path = os.path.dirname(path)
+            path = path.parent  # pylint: disable=redefined-variable-type
 
         if root:
             log.info("Found root: %s", root)

@@ -1,6 +1,6 @@
 """Utilities to call Git commands."""
 
-import os
+from pathlib import Path
 import logging
 
 from . import common
@@ -17,14 +17,14 @@ def git(*args, **kwargs):
 
 def clone(repo, path, *, cache=None):
     """Clone a new Git repository."""
-    cache = cache or os.path.expanduser("~/.gitcache")
+    cache = cache or Path.home().joinpath(".gitcache")
 
     name = repo.split('/')[-1]
     if name.endswith(".git"):
         name = name[:-4]
 
-    reference = os.path.join(cache, name + ".reference")
-    if not os.path.isdir(reference):
+    reference = Path(cache, name + ".reference")
+    if not reference.is_dir():
         git('clone', '--mirror', repo, reference)
 
     git('clone', '--reference', reference, repo, path)

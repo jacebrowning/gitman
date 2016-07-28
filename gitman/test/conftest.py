@@ -1,6 +1,7 @@
 """Unit test configuration."""
 
 import os
+from pathlib import Path
 import logging
 
 import pytest
@@ -10,8 +11,8 @@ import yorm
 ENV = 'TEST_INTEGRATION'  # environment variable to enable integration tests
 REASON = "'{0}' variable not set".format(ENV)
 
-ROOT = os.path.dirname(__file__)
-FILES = os.path.join(ROOT, 'files')
+ROOT = Path(__file__).parent
+FILES = ROOT.joinpath('files')
 
 
 def pytest_configure(config):

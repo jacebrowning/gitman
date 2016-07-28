@@ -12,7 +12,7 @@ from . import assert_calls
 class TestGit:
     """Tests for calls to Git."""
 
-    @patch('os.path.isdir', Mock(return_value=False))
+    @patch('pathlib.Path.is_dir', Mock(return_value=False))
     def test_clone(self, mock_call):
         """Verify the commands to set up a new reference repository."""
         git.clone('mock.git', 'mock/path', cache='cache')
@@ -20,7 +20,7 @@ class TestGit:
             "git clone --mirror mock.git cache/mock.reference",
             "git clone --reference cache/mock.reference mock.git mock/path"])
 
-    @patch('os.path.isdir', Mock(return_value=True))
+    @patch('pathlib.Path.is_dir', Mock(return_value=True))
     def test_clone_from_reference(self, mock_call):
         """Verify the commands to clone a Git repository from a reference."""
         git.clone('mock.git', 'mock/path', cache='cache')

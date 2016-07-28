@@ -1,6 +1,7 @@
 """Wrappers for the dependency configuration files."""
 
 import os
+from pathlib import Path
 import logging
 
 import yorm
@@ -59,7 +60,7 @@ class Source(AttributeDictionary):
         log.info("Updating source files...")
 
         # Enter the working tree
-        if not os.path.exists(self.name):
+        if not Path(self.name).exists():
             log.debug("Creating a new repository...")
             git.clone(self.repo, self.name)
         shell.cd(self.name)
@@ -85,11 +86,11 @@ class Source(AttributeDictionary):
         """Create a link from the target name to the current directory."""
         if self.link:
             log.info("Creating a symbolic link...")
-            target = os.path.join(root, self.link)
-            source = os.path.relpath(os.getcwd(), os.path.dirname(target))
-            if os.path.islink(target):
-                os.remove(target)
-            elif os.path.exists(target):
+            target = Path(root, self.link)
+            source = Path.cwd()
+            if target.is_symlink():
+                target.unlink()
+            elif target.exists():
                 if force:
                     shell.rm(target)
                 else:
@@ -100,11 +101,11 @@ class Source(AttributeDictionary):
 
     def identify(self, allow_dirty=True, allow_missing=True):
         """Get the path and current repository URL and hash."""
-        if os.path.isdir(self.name):
+        if Path(self.name).is_dir():
 
             shell.cd(self.name)
 
-            path = os.getcwd()
+            path = Path.cwd()
             url = git.get_url()
             if git.changes(display_status=not allow_dirty, _show=True):
                 revision = self.DIRTY
@@ -120,11 +121,11 @@ class Source(AttributeDictionary):
 
         elif allow_missing:
 
-            return os.getcwd(), '<missing>', self.UNKNOWN
+            return Path.cwd(), '<missing>', self.UNKNOWN
 
         else:
 
-            path = os.path.join(os.getcwd(), self.name)
+            path = Path.cwd().joinpath(self.name)  # pylint: disable=redefined-variable-type
             msg = "Not a valid repository: {}".format(path)
             raise InvalidRepository(msg)
 

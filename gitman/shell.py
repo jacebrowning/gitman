@@ -2,6 +2,7 @@
 
 import os
 import subprocess
+from pathlib import Path
 import logging
 
 from . import common
@@ -22,6 +23,7 @@ def call(name, *args, _show=True, _ignore=False):
     :param _ignore: ignore non-zero return codes
 
     """
+    args = [str(arg) for arg in args]  # convert Path objects to strings
     program = CMD_PREFIX + ' '.join([name, *args])
     if _show:
         common.show(program)
@@ -57,19 +59,23 @@ def call(name, *args, _show=True, _ignore=False):
 
 
 def mkdir(path):
+    assert path, "'mkdir' requires a path"
     call('mkdir', '-p', path)
 
 
 def cd(path, _show=True):
+    assert path, "'cd' requires a path"
     call('cd', path, _show=_show)
 
 
 def ln(source, target):
-    dirpath = os.path.dirname(target)
-    if not os.path.isdir(dirpath):
-        mkdir(dirpath)
+    parent = Path(target).parent
+    if not parent.is_dir():  # pylint: disable=no-member
+        mkdir(parent)
+    assert source and target, "'ln' requires two paths"
     call('ln', '-s', source, target)
 
 
 def rm(path):
+    assert path, "'rm' requires a path"
     call('rm', '-rf', path)

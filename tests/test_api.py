@@ -3,6 +3,7 @@
 import os
 import shutil
 from contextlib import suppress
+from pathlib import Path
 import logging
 
 import pytest
@@ -57,11 +58,11 @@ def config(root="/tmp/gitman-shared"):
 def describe_install():
 
     def it_creates_missing_directories(config):
-        expect(os.path.isdir(config.location)) == False
+        expect(config.location_path.is_dir()) == False
 
         expect(gitman.install('gitman_1', depth=1)) == True
 
-        expect(os.listdir(config.location)) == ['gitman_1']
+        expect(filenames_in(config.location_path)) == ['gitman_1']
 
     def it_should_not_modify_config(config):
         expect(gitman.install('gitman_1', depth=1)) == True
@@ -89,7 +90,7 @@ def describe_install():
 
         expect(gitman.install(depth=1)) == True
 
-        expect(len(os.listdir(config.location))) == 3
+        expect(len(filenames_in(config.location_path))) == 3
 
     def it_can_handle_missing_locked_sources(config):
         config.__mapper__.text = strip("""
@@ -108,7 +109,7 @@ def describe_install():
 
         expect(gitman.install('gitman_1', depth=1)) == True
 
-        expect(os.listdir(config.location)) == ['gitman_1']
+        expect(filenames_in(config.location_path)) == ['gitman_1']
 
     def describe_links():
 
@@ -128,7 +129,7 @@ def describe_install():
         def it_should_create_links(config_with_link):
             expect(gitman.install(depth=1)) == True
 
-            expect(os.listdir()).contains('my_link')
+            expect(filenames_in(Path.cwd())).contains('my_link')
 
         def it_should_not_overwrite_files(config_with_link):
             os.system("touch my_link")
@@ -146,24 +147,24 @@ def describe_uninstall():
 
     def it_deletes_dependencies_when_they_exist(config):
         gitman.install('gitman_1', depth=1)
-        expect(os.path.isdir(config.location)) == True
+        expect(config.location_path.is_dir()) == True
 
         expect(gitman.uninstall()) == True
 
-        expect(os.path.exists(config.location)) == False
+        expect(config.location_path.exists()) == False
 
     def it_should_not_fail_when_no_dependnecies_exist(config):
-        expect(os.path.isdir(config.location)) == False
+        expect(config.location_path.is_dir()) == False
 
         expect(gitman.uninstall()) == True
 
     def it_deletes_the_log_file(config):
         gitman.install('gitman_1', depth=1)
         gitman.list()
-        expect(os.path.exists(config.log_path)) == True
+        expect(config.log_path.exists()) == True
 
         gitman.uninstall()
-        expect(os.path.exists(config.log_path)) == False
+        expect(config.log_path.exists()) == False
 
 
 def describe_update():
@@ -277,7 +278,7 @@ def describe_list():
     def it_updates_the_log(config):
         gitman.install()
         gitman.list()
-        with open(config.log_path) as stream:
+        with open(str(config.log_path)) as stream:
             contents = stream.read().replace("/private", "")
         expect(contents) == strip("""
         2012-01-14 12:00:01
@@ -336,3 +337,8 @@ def describe_lock():
             gitman.lock()
 
         expect(config.__mapper__.text).does_not_contain("<unknown>")
+
+
+def filenames_in(path):
+    """Return a list of all filenames in a given directory `Path`."""
+    return [p.name for p in path.iterdir()]

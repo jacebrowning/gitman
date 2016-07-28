@@ -1,9 +1,11 @@
-# pylint: disable=no-self-use,redefined-outer-name
+# pylint: disable=no-self-use,redefined-outer-name,expression-not-assigned
 
 from unittest.mock import patch, Mock
 from copy import copy
+from pathlib import Path
 
 import pytest
+from expecter import expect
 
 from gitman.models import Source
 
@@ -74,8 +76,9 @@ class TestSource:
     def test_identify_missing(self, source, tmpdir):
         """Verify a missing source identifies as unknown."""
         tmpdir.chdir()
-        with patch('os.path.isdir', Mock(return_value=False)):
-            assert (str(tmpdir), '<missing>', '<unknown>') == source.identify()
+        path = Path(str(tmpdir))
+        with patch('pathlib.Path.is_dir', Mock(return_value=False)):
+            expect(source.identify()) == (path, '<missing>', '<unknown>')
 
     def test_lock_uses_the_identity_rev(self, source):
         source.identify = Mock(return_value=('path2', 'dir2', 'abc123'))

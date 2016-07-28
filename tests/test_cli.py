@@ -1,7 +1,7 @@
 # pylint: disable=unused-variable,redefined-outer-name,expression-not-assigned
 
-import os
 from unittest.mock import patch, call
+from pathlib import Path
 
 import pytest
 from expecter import expect
@@ -32,13 +32,13 @@ def describe_show():
     def it_prints_location_by_default(show, location):
         cli.main(['show'])
 
-        expect(show.mock_calls) == [call(location)]
+        expect(show.mock_calls) == [call(Path(location))]
 
     @patch('gitman.common.show')
     def it_can_print_a_depenendcy_path(show, location):
         cli.main(['show', 'bar'])
 
-        expect(show.mock_calls) == [call(os.path.join(location, "bar"))]
+        expect(show.mock_calls) == [call(Path(location, "bar"))]
 
     def it_exits_when_no_config_found(tmpdir):
         tmpdir.chdir()
@@ -53,7 +53,7 @@ def describe_edit():
     def it_launches_the_config(launch, config):
         cli.main(['edit'])
 
-        expect(launch.mock_calls) == [call(config), call().__bool__()]
+        expect(launch.mock_calls) == [call(Path(config)), call().__bool__()]
 
     def it_exits_when_no_config_found(tmpdir):
         tmpdir.chdir()

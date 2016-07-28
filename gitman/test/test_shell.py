@@ -1,6 +1,7 @@
 # pylint: disable=no-self-use
 
 from unittest.mock import patch, Mock
+from pathlib import Path
 
 import pytest
 
@@ -50,16 +51,16 @@ class TestPrograms:
         shell.cd('mock/name/path')
         assert_calls(mock_call, ["cd mock/name/path"])
 
-    @patch('os.path.isdir', Mock(return_value=True))
+    @patch('pathlib.Path.is_dir', Mock(return_value=True))
     def test_ln(self, mock_call):
         """Verify the commands to create symbolic links."""
         shell.ln('mock/target', 'mock/source')
         assert_calls(mock_call, ["ln -s mock/target mock/source"])
 
-    @patch('os.path.isdir', Mock(return_value=False))
+    @patch('pathlib.Path.is_dir', Mock(return_value=False))
     def test_ln_missing_parent(self, mock_call):
         """Verify the commands to create symbolic links (missing parent)."""
-        shell.ln('mock/target', 'mock/source')
+        shell.ln(Path('mock/target'), Path('mock/source'))
         assert_calls(mock_call, ["mkdir -p mock",
                                  "ln -s mock/target mock/source"])
 

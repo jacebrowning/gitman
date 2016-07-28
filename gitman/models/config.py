@@ -1,6 +1,6 @@
 """Wrappers for the dependency configuration files."""
 
-import os
+from pathlib import Path
 import logging
 
 import yorm
@@ -33,18 +33,18 @@ class Config:
     @property
     def config_path(self):
         """Get the full path to the configuration file."""
-        return os.path.join(self.root, self.filename)
+        return Path(self.root, self.filename)
     path = config_path
 
     @property
     def log_path(self):
         """Get the full path to the log file."""
-        return os.path.join(self.location_path, self.LOG)
+        return Path(self.location_path, self.LOG)
 
     @property
     def location_path(self):
         """Get the full path to the sources location."""
-        return os.path.join(self.root, self.location)
+        return Path(self.root, self.location)
 
     def get_path(self, name=None):
         """Get the full path to a dependency or internal file."""
@@ -54,7 +54,7 @@ class Config:
         elif name == '__log__':
             return self.log_path
         elif name:
-            return os.path.join(base, name)
+            return Path(base, name)
         else:
             return base
 
@@ -66,7 +66,7 @@ class Config:
             log.info("Skipped directory: %s", self.location_path)
             return 0
 
-        if not os.path.isdir(self.location_path):
+        if not self.location_path.is_dir():
             shell.mkdir(self.location_path)
         shell.cd(self.location_path)
 
@@ -150,7 +150,7 @@ class Config:
 
     def get_deps(self, depth=None, allow_dirty=True):
         """Yield the path, repository URL, and hash of each dependency."""
-        if not os.path.exists(self.location_path):
+        if not self.location_path.exists():
             return
 
         shell.cd(self.location_path)
@@ -181,8 +181,8 @@ class Config:
 
     def log(self, message="", *args):
         """Append a message to the log file."""
-        with open(self.log_path, 'a') as outfile:
-            outfile.write(message.format(*args) + '\n')
+        with open(str(self.log_path), 'a') as stream:
+            stream.write(message.format(*args) + '\n')
 
     def _get_sources(self, *, use_locked=None):
         """Merge source lists using requested section as the base."""
@@ -216,11 +216,11 @@ class Config:
 def load_config(root=None):
     """Load the configuration for the current project."""
     if root is None:
-        root = os.getcwd()
+        root = Path.cwd()
 
-    for filename in os.listdir(root):
-        if _valid_filename(filename):
-            config = Config(root, filename)
+    for path in root.iterdir():
+        if _valid_config_filename(path):
+            config = Config(root, path.name)
             log.debug("Loaded config: %s", config.path)
             return config
 
@@ -228,8 +228,14 @@ def load_config(root=None):
     return None
 
 
-def _valid_filename(filename):
-    name, ext = os.path.splitext(filename.lower())
+def _valid_config_filename(path):
+    name = path.stem.lower()
     if name.startswith('.'):
         name = name[1:]
-    return name in ['gitman', 'gdm'] and ext in ['.yml', '.yaml']
+
+    ext = path.suffix.lower()
+
+    return all([
+        name in ['gitman', 'gdm'],
+        ext in ['.yml', '.yaml'],
+    ])
