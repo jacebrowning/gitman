@@ -72,9 +72,9 @@ $ gitman update
 
 which will essentially:
 
-1. create a working tree at _root_/`location`/`name`
+1. create a working tree at _(root)_/`<location>`/`<name>`
 2. fetch from `repo` and checkout the specified `rev`
-3. symbolically link each `location`/`name` from _root_/`link` (if specified)
+3. symbolically link each `<location>`/`<name>` from _(root)_/`<link>` (if specified)
 4. repeat for all nested working trees containing a configuration file
 5. record the actual commit SHAs that were checked out (with `--lock` option)
 
