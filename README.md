@@ -18,7 +18,7 @@ GitMan is a language-agnostic "dependency manager" using Git. It aims to serve a
 
 ## Installation
 
-GitMan can be installed with pip:
+Install GitMan with pip:
 
 ```sh
 $ pip install gitman

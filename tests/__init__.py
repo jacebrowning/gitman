@@ -1,1 +1,1 @@
-"""Integration tests for the `gitman` package."""
+"""Integration tests for the package."""
