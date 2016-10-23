@@ -13,7 +13,7 @@ GitMan is a language-agnostic "dependency manager" using Git. It aims to serve a
 ## Requirements
 
 * Python 3.5+
-* Git 2.8+ (with [stored credentials](http://git-dependency-manager.info/setup/git/))
+* Git 2.8+ (with [stored credentials](http://gitman.readthedocs.io/en/latest/setup/git/))
 * Unix shell (or Cygwin/MinGW/etc. on Windows)
 
 ## Installation
