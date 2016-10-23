@@ -13,4 +13,4 @@ freezegun
 
 # Coverage
 coverage
-coverage.space >= 0.6.1
+coverage.space >= 0.6.2
