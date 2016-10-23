@@ -12,6 +12,13 @@ cli = python
 version = Python 3.5.
 
 
+[Git]
+
+cli = git
+
+version = 2.
+
+
 [virtualenv]
 
 cli = virtualenv
