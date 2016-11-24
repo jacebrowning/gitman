@@ -85,11 +85,6 @@ def main(args=None, function=None):
     sub.add_argument('name', nargs='*',
                      help="list of dependency names to lock")
 
-    # Unlock parser
-    info = "unlock the current version of each dependency"
-    sub = subs.add_parser('unlock', description=info.capitalize() + '.',
-                          help=info, parents=[debug, project], **shared)
-   
     # Uninstall parser
     info = "delete all installed dependencies"
     sub = subs.add_parser('uninstall', description=info.capitalize() + '.',
@@ -155,10 +150,6 @@ def _get_command(function, namespace):
     elif namespace.command == 'lock':
         function = getattr(commands, namespace.command)
         args = namespace.name
-        kwargs.update(root=namespace.root)
-
-    elif namespace.command == 'unlock':
-        function = commands.unlock
         kwargs.update(root=namespace.root)
 
     elif namespace.command == 'uninstall':

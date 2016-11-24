@@ -147,28 +147,6 @@ def lock(*names, root=None):
 
     return _display_result("lock", "Locked", count)
 
-@restore_cwd
-def unlock(*names, root=None):
-    """Unlock current dependency versions for a project.
-
-    Optional arguments:
-
-    - `root`: specifies the path to the root working tree
-
-    """
-    log.info("Unlocking dependencies...")
-    count = None
-
-    root = _find_root(root)
-    config = load_config(root)
-
-    if config:
-        common.show("Unlocking dependencies...", log=False)
-        common.show()
-        count = config.unlock_deps(*names, obey_existing=False)
-        common.dedent(level=0)
-
-    return _display_result("unlock", "Unlocked", count, allow_zero=True)
 
 @restore_cwd
 def delete(*, root=None, force=False):
