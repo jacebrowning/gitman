@@ -143,6 +143,20 @@ class Config:
 
         return count
 
+    def unlock_deps(self, *names, obey_existing=True):
+        """Unlock down the immediate dependency versions."""
+
+        count = self.sources_locked.__len__()
+    
+        self.sources_locked.clear();
+
+        common.show()
+    
+        yorm.save(self)
+
+        return count
+       
+
     def uninstall_deps(self):
         """Remove the sources location."""
         shell.rm(self.location_path)
