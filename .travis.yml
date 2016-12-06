@@ -5,7 +5,7 @@ python:
 cache:
   pip: true
   directories:
-    - ~/virtualenv
+    - ~/virtualenv/python3.5.*
 
 env:
   global:
