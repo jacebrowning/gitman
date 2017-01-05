@@ -24,7 +24,7 @@ def call(name, *args, _show=True, _ignore=False):
     """
     program = CMD_PREFIX + ' '.join([name, *args])
     if _show:
-        common.show(program)
+        common.show(program, color='shell')
     else:
         log.debug(program)
 

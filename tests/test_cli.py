@@ -32,13 +32,15 @@ def describe_show():
     def it_prints_location_by_default(show, location):
         cli.main(['show'])
 
-        expect(show.mock_calls) == [call(location)]
+        expect(show.mock_calls) == [call(location, color='path')]
 
     @patch('gitman.common.show')
     def it_can_print_a_depenendcy_path(show, location):
         cli.main(['show', 'bar'])
 
-        expect(show.mock_calls) == [call(os.path.join(location, "bar"))]
+        expect(show.mock_calls) == [
+            call(os.path.join(location, "bar"), color='path'),
+        ]
 
     def it_exits_when_no_config_found(tmpdir):
         tmpdir.chdir()
