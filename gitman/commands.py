@@ -45,7 +45,8 @@ def install(*names, root=None, depth=None,
     config = load_config(root)
 
     if config:
-        common.show("Installing dependencies...", log=False)
+        common.show()
+        common.show("Installing dependencies...", color='message', log=False)
         common.show()
         count = config.install_deps(*names, update=False, depth=depth,
                                     force=force, fetch=fetch, clean=clean)
@@ -79,14 +80,16 @@ def update(*names, root=None, depth=None,
     config = load_config(root)
 
     if config:
-        common.show("Updating dependencies...", log=False)
+        common.show()
+        common.show("Updating dependencies...", color='message', log=False)
         common.show()
         count = config.install_deps(
             *names, update=True, depth=depth,
             recurse=recurse, force=force, fetch=True, clean=clean)
         common.dedent(level=0)
         if count and lock is not False:
-            common.show("Recording installed versions...", log=False)
+            common.show("Recording installed versions...",
+                        color='message', log=False)
             common.show()
             config.lock_deps(*names, obey_existing=lock is None)
 
@@ -111,7 +114,9 @@ def display(*, root=None, depth=None, allow_dirty=True):
     config = load_config(root)
 
     if config:
-        common.show("Displaying current dependency versions...", log=False)
+        common.show()
+        common.show("Displaying current dependency versions...",
+                    color='message', log=False)
         common.show()
         config.log(datetime.datetime.now().strftime("%F %T"))
         count = 0
@@ -140,7 +145,8 @@ def lock(*names, root=None):
     config = load_config(root)
 
     if config:
-        common.show("Locking dependencies...", log=False)
+        common.show()
+        common.show("Locking dependencies...", color='message', log=False)
         common.show()
         count = config.lock_deps(*names, obey_existing=False)
         common.dedent(level=0)
@@ -165,11 +171,13 @@ def delete(*, root=None, force=False):
     config = load_config(root)
 
     if config:
-        common.show("Checking for uncommitted changes...", log=False)
+        common.show()
+        common.show("Checking for uncommitted changes...",
+                    color='message', log=False)
         common.show()
         count = len(list(config.get_deps(allow_dirty=force)))
         common.dedent(level=0)
-        common.show("Deleting all dependencies...", log=False)
+        common.show("Deleting all dependencies...", color='message', log=False)
         common.show()
         config.uninstall_deps()
 
@@ -192,7 +200,7 @@ def show(*names, root=None):
         return False
 
     for name in names or [None]:
-        common.show(config.get_path(name))
+        common.show(config.get_path(name), color='path')
 
     return True
 
