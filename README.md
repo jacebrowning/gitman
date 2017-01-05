@@ -37,7 +37,7 @@ $ python setup.py install
 Create a configuration file (`gitman.yml` or `.gitman.yml`) in the root of your working tree:
 
 ```yaml
-location: vendor
+location: vendor/gitman
 sources:
 - name: framework
   repo: https://github.com/kstenerud/iOS-Universal-Framework
@@ -51,7 +51,7 @@ sources:
 Ignore the dependency storage location:
 
 ```sh
-$ echo vendor >> .gitignore
+$ echo vendor/gitman >> .gitignore
 ```
 
 # Usage
@@ -72,9 +72,9 @@ $ gitman update
 
 which will essentially:
 
-1. create a working tree at _(root)_/`<location>`/`<name>`
+1. create a working tree at `<root>`/`<location>`/`<name>`
 2. fetch from `repo` and checkout the specified `rev`
-3. symbolically link each `<location>`/`<name>` from _(root)_/`<link>` (if specified)
+3. symbolically link each `<location>`/`<name>` from `<root>`/`<link>` (if specified)
 4. repeat for all nested working trees containing a configuration file
 5. record the actual commit SHAs that were checked out (with `--lock` option)
 
