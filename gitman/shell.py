@@ -3,6 +3,7 @@
 import os
 import subprocess
 import logging
+import shutil
 
 from . import common
 from .exceptions import ShellError
@@ -57,19 +58,26 @@ def call(name, *args, _show=True, _ignore=False):
 
 
 def mkdir(path):
-    call('mkdir', '-p', path)
+    os.mkdir(path)
+    # call('mkdir', '-p', path)
 
 
 def cd(path, _show=True):
-    call('cd', path, _show=_show)
+    os.chdir(path)
+    #call('cd', path, _show=_show)
 
 
 def ln(source, target):
-    dirpath = os.path.dirname(target)
-    if not os.path.isdir(dirpath):
-        mkdir(dirpath)
-    call('ln', '-s', source, target)
+    if not os.name=='nt':
+        dirpath = os.path.dirname(target)
+        if not os.path.isdir(dirpath):
+            mkdir(dirpath)
+        call('ln', '-s', source, target)
 
 
 def rm(path):
-    call('rm', '-rf', path)
+    if not os.path.isdir(dirpath):
+        os.remove(path)
+    else:
+        shutil.rmtree(path)
+    #call('rm', '-rf', path)
