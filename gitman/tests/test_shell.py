@@ -12,14 +12,7 @@ from . import assert_calls
 
 
 class TestCall:
-
     """Tests for interacting with the shell."""
-
-    @patch('os.chdir')
-    def test_cd(self, mock_chdir):
-        """Verify directories are changed correctly."""
-        shell.call('cd', 'mock/name')
-        mock_chdir.assert_called_once_with('mock/name')
 
     def test_other_error_uncaught(self):
         """Verify program errors raise exceptions."""
@@ -42,36 +35,49 @@ class TestCall:
 
 @patch('gitman.shell.call')
 class TestPrograms:
-
     """Tests for calls to shell programs."""
 
-    @pytest.mark.skip(reason="gitman.shell.mkdir do not use call function")
-    def test_mkdir(self, mock_call):
+    @patch('os.makedirs')
+    def test_mkdir(self, mock_makedirs, mock_call):
         """Verify the commands to create directories."""
-        shell.mkdir('mock/name/path')
-        assert_calls(mock_call, ["mkdir -p mock/name/path"])
+        shell.mkdir('mock/dirpath')
+        mock_makedirs.assert_called_once_with('mock/dirpath')
+        assert_calls(mock_call, [])
 
-    def test_cd(self, mock_call):
+    @patch('os.chdir')
+    def test_cd(self, mock_chdir, mock_call):
         """Verify the commands to change directories."""
-        shell.cd('mock/name/path')
-        assert_calls(mock_call, ["cd mock/name/path"])
+        shell.cd('mock/dirpath')
+        mock_chdir.assert_called_once_with('mock/dirpath')
+        assert_calls(mock_call, [])
 
     @patch('os.path.isdir', Mock(return_value=True))
-    @pytest.mark.skipif(os.name == 'nt', reason="no symlink on windows")
+    @pytest.mark.skipif(os.name == 'nt', reason="no symlink on Windows")
     def test_ln(self, mock_call):
         """Verify the commands to create symbolic links."""
         shell.ln('mock/target', 'mock/source')
         assert_calls(mock_call, ["ln -s mock/target mock/source"])
 
     @patch('os.path.isdir', Mock(return_value=False))
-    @pytest.mark.skipif(os.name == 'nt', reason="no symlink on windows")
+    @pytest.mark.skipif(os.name == 'nt', reason="no symlink on Windows")
     def test_ln_missing_parent(self, mock_call):
         """Verify the commands to create symbolic links (missing parent)."""
         shell.ln('mock/target', 'mock/source')
         assert_calls(mock_call, ["ln -s mock/target mock/source"])
 
-    @pytest.mark.skip(reason="gitman.shell.rm do not use call function")
-    def test_rm(self, mock_call):
-        """Verify the commands to delete files/folders."""
-        shell.rm('mock/name/path')
-        assert_calls(mock_call, ["rm -rf mock/name/path"])
+    @patch('os.remove')
+    @patch('os.path.exists', Mock(return_value=True))
+    def test_rm_file(self, mock_remove, mock_call):
+        """Verify the commands to delete files."""
+        shell.rm('mock/path')
+        mock_remove.assert_called_once_with('mock/path')
+        assert_calls(mock_call, [])
+
+    @patch('shutil.rmtree')
+    @patch('os.path.exists', Mock(return_value=True))
+    @patch('os.path.isdir', Mock(return_value=True))
+    def test_rm_directory(self, mock_rmtree, mock_call):
+        """Verify the commands to delete directories."""
+        shell.rm('mock/dirpath')
+        mock_rmtree.assert_called_once_with('mock/dirpath')
+        assert_calls(mock_call, [])
