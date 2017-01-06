@@ -23,7 +23,7 @@ def read_package_variable(key):
     module_path = os.path.join(PACKAGE_NAME, '__init__.py')
     with open(module_path) as module:
         for line in module:
-            parts = line.strip().split(' ')
+            parts = line.strip().split(' ', 2)
             if parts and parts[0] == key:
                 return parts[-1].strip("'")
     assert 0, "'{0}' not found in '{1}'".format(key, module_path)
@@ -72,6 +72,7 @@ setuptools.setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Software Development',
         'Topic :: Software Development :: Build Tools',
         'Topic :: Software Development :: Version Control',
@@ -79,6 +80,6 @@ setuptools.setup(
     ],
 
     install_requires=[
-        'YORM==1.2b5',
+        'YORM~=1.1',
     ],
 )
