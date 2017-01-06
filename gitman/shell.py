@@ -59,12 +59,10 @@ def call(name, *args, _show=True, _ignore=False):
 
 def mkdir(path):
     os.mkdir(path)
-    # call('mkdir', '-p', path)
 
 
 def cd(path, _show=True):
-    os.chdir(path)
-    #call('cd', path, _show=_show)
+    call('cd', path, _show=_show)
 
 
 def ln(source, target):
@@ -73,11 +71,11 @@ def ln(source, target):
         if not os.path.isdir(dirpath):
             mkdir(dirpath)
         call('ln', '-s', source, target)
-
+    else:
+        log.debug("symlinks are not supported on windows system")
 
 def rm(path):
     if not os.path.isdir(dirpath):
         os.remove(path)
     else:
         shutil.rmtree(path)
-    #call('rm', '-rf', path)
