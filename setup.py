@@ -78,5 +78,7 @@ setuptools.setup(
         'Topic :: System :: Software Distribution',
     ],
 
-    install_requires=open("requirements.txt").readlines(),
+    install_requires=[
+        'YORM==1.2b4',
+    ],
 )

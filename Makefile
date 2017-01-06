@@ -111,7 +111,7 @@ else ifdef LINUX
 endif
 	@ touch $@  # flag to indicate dependencies are installed
 
-$(DEPS_BASE): setup.py requirements.txt $(PYTHON)
+$(DEPS_BASE): setup.py $(PYTHON)
 	$(PYTHON) setup.py develop
 	@ touch $@  # flag to indicate dependencies are installed
 
