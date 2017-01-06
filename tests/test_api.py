@@ -38,7 +38,7 @@ log = logging.getLogger(__name__)
 
 @pytest.fixture
 def config(root="/tmp/gitman-shared"):
-    with suppress(FileNotFoundError):
+    with suppress(FileNotFoundError, PermissionError):
         shutil.rmtree(root)
     with suppress(FileExistsError):
         os.makedirs(root)
