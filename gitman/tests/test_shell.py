@@ -31,8 +31,12 @@ class TestCall:
 
     def test_other_capture(self):
         """Verify a program's output can be captured."""
-        stdout = shell.call('echo', "Hello, world!")
-        assert "\"Hello, world!\"" == stdout
+        if os.name == 'nt':
+            stdout = shell.call('echo', 'Hello, world!', _shell=True)
+            assert '"Hello, world!"' == stdout
+        else:
+            stdout = shell.call('echo', 'Hello, world!\n')
+            assert "Hello, world!" == stdout
 
 
 @patch('gitman.shell.call')
@@ -52,14 +56,14 @@ class TestPrograms:
         assert_calls(mock_call, ["cd mock/name/path"])
 
     @patch('os.path.isdir', Mock(return_value=True))
-    @pytest.mark.skipif(os.name == 'nt',reason="symlink not supported on windows")
+    @pytest.mark.skipif(os.name == 'nt', reason="symlink not supported on windows")
     def test_ln(self, mock_call):
         """Verify the commands to create symbolic links."""
         shell.ln('mock/target', 'mock/source')
         assert_calls(mock_call, ["ln -s mock/target mock/source"])
 
     @patch('os.path.isdir', Mock(return_value=False))
-    @pytest.mark.skipif(os.name == 'nt',reason="symlink not supported on windows")
+    @pytest.mark.skipif(os.name == 'nt', reason="symlink not supported on windows")
     def test_ln_missing_parent(self, mock_call):
         """Verify the commands to create symbolic links (missing parent)."""
         shell.ln('mock/target', 'mock/source')

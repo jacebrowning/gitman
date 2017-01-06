@@ -14,14 +14,16 @@ OUT_PREFIX = "> "
 log = logging.getLogger(__name__)
 
 
-def call(name, *args, _show=True, _ignore=False):
-    """Call a shell program with arguments.
+def call(name, *args, _show=True, _ignore=False, _shell=False):
+    """Call a program with arguments.
 
     :param name: name of program to call
     :param args: list of command-line arguments
     :param _show: display the call on stdout
     :param _ignore: ignore non-zero return codes
-
+    :param _shell: force executing the program into a real shell 
+                   a windows shell command (i.e : dir or echo) needs a real shell
+                   but not a regular program (i.e : calc or git)
     """
     program = CMD_PREFIX + ' '.join([name, *args])
     if _show:
@@ -35,6 +37,7 @@ def call(name, *args, _show=True, _ignore=False):
     command = subprocess.run(
         [name, *args], universal_newlines=True,
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        shell=_shell
     )
 
     for line in command.stdout.splitlines():
@@ -77,7 +80,8 @@ def ln(source, target):
 
 
 def rm(path):
-    if not os.path.isdir(path):
-        os.remove(path)
-    else:
-        shutil.rmtree(path)
+    if os.path.exists(path):
+        if not os.path.isdir(path):
+            os.remove(path)
+        else:
+            shutil.rmtree(path)
