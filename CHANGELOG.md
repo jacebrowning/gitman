@@ -1,6 +1,6 @@
 # Revision History
 
-## 1.1 (unreleased)
+## 1.1 (2017/01/06)
 
 - Added coloring to the command-line output.
 - Added preliminary Windows support.
