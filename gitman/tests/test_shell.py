@@ -67,8 +67,7 @@ class TestPrograms:
     def test_ln_missing_parent(self, mock_call):
         """Verify the commands to create symbolic links (missing parent)."""
         shell.ln('mock/target', 'mock/source')
-        assert_calls(mock_call, ["mkdir -p mock",
-                                 "ln -s mock/target mock/source"])
+        assert_calls(mock_call, ["ln -s mock/target mock/source"])
 
     @pytest.mark.skip(reason="gitman.shell.rm do not use call function for now")
     def test_rm(self, mock_call):
