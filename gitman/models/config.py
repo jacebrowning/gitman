@@ -33,7 +33,7 @@ class Config:
     @property
     def config_path(self):
         """Get the full path to the configuration file."""
-        return os.path.join(self.root, self.filename)
+        return os.path.normpath(os.path.join(self.root, self.filename))
     path = config_path
 
     @property

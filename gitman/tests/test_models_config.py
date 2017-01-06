@@ -2,7 +2,7 @@
 
 import pytest
 from expecter import expect
-
+import os
 from gitman.models import Config, load_config
 
 from .conftest import FILES
@@ -37,7 +37,7 @@ class TestConfig:
         """Verify a configuration's path is correct."""
         config = Config('mock/root')
 
-        assert "mock/root/gitman.yml" == config.path
+        assert os.path.normpath("mock/root/gitman.yml") == config.path
 
     @pytest.mark.integration
     def test_install_and_list(self):

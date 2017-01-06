@@ -35,6 +35,7 @@ def call(name, *args, _show=True, _ignore=False):
     command = subprocess.run(
         [name, *args], universal_newlines=True,
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        shell=True
     )
 
     for line in command.stdout.splitlines():
@@ -58,7 +59,8 @@ def call(name, *args, _show=True, _ignore=False):
 
 
 def mkdir(path):
-    os.mkdir(path)
+    if not os.path.exists(path):
+        os.makedirs(path)
 
 
 def cd(path, _show=True):
@@ -66,7 +68,7 @@ def cd(path, _show=True):
 
 
 def ln(source, target):
-    if not os.name=='nt':
+    if not os.name == 'nt':
         dirpath = os.path.dirname(target)
         if not os.path.isdir(dirpath):
             mkdir(dirpath)
@@ -74,8 +76,9 @@ def ln(source, target):
     else:
         log.debug("symlinks are not supported on windows system")
 
+
 def rm(path):
-    if not os.path.isdir(dirpath):
+    if not os.path.isdir(path):
         os.remove(path)
     else:
         shutil.rmtree(path)
