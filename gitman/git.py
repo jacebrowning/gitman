@@ -18,6 +18,7 @@ def git(*args, **kwargs):
 def clone(repo, path, *, cache=None):
     """Clone a new Git repository."""
     cache = cache or os.path.expanduser("~/.gitcache")
+    cache = os.path.normpath(cache)
 
     name = repo.split('/')[-1]
     if name.endswith(".git"):
@@ -27,7 +28,7 @@ def clone(repo, path, *, cache=None):
     if not os.path.isdir(reference):
         git('clone', '--mirror', repo, reference)
 
-    git('clone', '--reference', reference, repo, path)
+    git('clone', '--reference', reference, repo, os.path.normpath(path))
 
 
 def fetch(repo, rev=None):
