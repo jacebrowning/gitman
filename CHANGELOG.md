@@ -4,6 +4,7 @@
 
 - Added coloring to the command-line output.
 - Added preliminary Windows support.
+- Fixed issue where `<dirty>` could be saved as a locked revision.
 
 ## 1.0.2 (2016/07/28)
 

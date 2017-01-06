@@ -72,6 +72,7 @@ setuptools.setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Software Development',
         'Topic :: Software Development :: Build Tools',
         'Topic :: Software Development :: Version Control',
@@ -79,6 +80,6 @@ setuptools.setup(
     ],
 
     install_requires=[
-        'YORM==1.2b5',
+        'YORM~=1.1',
     ],
 )
