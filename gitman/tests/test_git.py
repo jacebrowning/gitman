@@ -21,7 +21,8 @@ class TestGit:
             os.path.normpath("cache/mock.reference"),
             "git clone --reference " +
             os.path.normpath("cache/mock.reference")
-            " mock.git " + os.path.normpath("mock/path")
+            " mock.git " +
+            os.path.normpath("mock/path")
         ])
 
     @patch('os.path.isdir', Mock(return_value=True))
