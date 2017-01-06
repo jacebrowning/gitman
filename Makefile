@@ -150,7 +150,7 @@ COVERAGE_SPACE := $(BIN)/coverage.space
 
 RANDOM_SEED ?= $(shell date +%s)
 
-PYTEST_CORE_OPTS := -r xXw -vv
+PYTEST_CORE_OPTS := -ra -vv
 PYTEST_COV_OPTS := --cov=$(PACKAGE) --no-cov-on-fail --cov-report=term-missing --cov-report=html
 PYTEST_RANDOM_OPTS := --random --random-seed=$(RANDOM_SEED)
 
@@ -172,14 +172,14 @@ test-unit: install ## Run the unit tests
 
 .PHONY: test-int
 test-int: install ## Run the integration tests
-	@ if test -e $(FAILURES); then $(PYTEST) $(PYTEST_OPTS_FAILFAST) tests; fi
+	@ if test -e $(FAILURES); then TEST_INTEGRATION=true $(PYTEST) $(PYTEST_OPTS_FAILFAST) tests; fi
 	$(PYTEST) $(PYTEST_OPTS) tests --junitxml=$(REPORTS)/integration.xml
 	$(COVERAGE_SPACE) $(REPOSITORY) integration
 
 .PHONY: test-all
 test-all: install ## Run all the tests
-	@ if test -e $(FAILURES); then $(PYTEST) $(PYTEST_OPTS_FAILFAST) $(PACKAGES); fi
-	$(PYTEST) $(PYTEST_OPTS) $(PACKAGES) --junitxml=$(REPORTS)/overall.xml
+	@ if test -e $(FAILURES); then TEST_INTEGRATION=true $(PYTEST) $(PYTEST_OPTS_FAILFAST) $(PACKAGES); fi
+	TEST_INTEGRATION=true $(PYTEST) $(PYTEST_OPTS) $(PACKAGES) --junitxml=$(REPORTS)/overall.xml
 	$(COVERAGE_SPACE) $(REPOSITORY) overall
 
 .PHONY: read-coverage
