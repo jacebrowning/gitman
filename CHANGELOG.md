@@ -3,6 +3,7 @@
 ## 1.1 (unreleased)
 
 - Added coloring to the command-line output.
+- Added preliminary Windows support.
 
 ## 1.0.2 (2016/07/28)
 

@@ -1,8 +1,4 @@
-[![Build Status](https://travis-ci.org/jacebrowning/gitman.svg?branch=develop)](https://travis-ci.org/jacebrowning/gitman)
-[![Coverage Status](https://coveralls.io/repos/github/jacebrowning/gitman/badge.svg?branch=develop)](https://coveralls.io/github/jacebrowning/gitman?branch=develop)
-[![Scrutinizer Code Quality](http://img.shields.io/scrutinizer/g/jacebrowning/gitman.svg)](https://scrutinizer-ci.com/g/jacebrowning/gitman/?branch=master)
-[![PyPI Version](http://img.shields.io/pypi/v/GitMan.svg)](https://pypi.python.org/pypi/GitMan)
-[![PyPI Downloads](http://img.shields.io/pypi/dm/GitMan.svg)](https://pypi.python.org/pypi/GitMan)
+Unix: [![Build Status](https://travis-ci.org/jacebrowning/gitman.svg?branch=develop)](https://travis-ci.org/jacebrowning/gitman) Windows: [![Windows Build Status](https://img.shields.io/appveyor/ci/jacebrowning/gitman/develop.svg)](https://ci.appveyor.com/project/jacebrowning/gitman)<br>Metrics: [![Coverage Status](https://img.shields.io/coveralls/jacebrowning/gitman/develop.svg)](https://coveralls.io/r/jacebrowning/gitman) [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/jacebrowning/gitman.svg)](https://scrutinizer-ci.com/g/jacebrowning/gitman/?branch=develop)<br>Usage: [![PyPI Version](https://img.shields.io/pypi/v/GitMan.svg)](https://pypi.python.org/pypi/GitMan) [![PyPI Downloads](https://img.shields.io/pypi/dm/gitman.svg)](https://pypi.python.org/pypi/GitMan)
 
 # Overview
 
@@ -14,7 +10,6 @@ GitMan is a language-agnostic "dependency manager" using Git. It aims to serve a
 
 * Python 3.5+
 * Git 2.8+ (with [stored credentials](http://gitman.readthedocs.io/en/latest/setup/git/))
-* Unix shell (or Cygwin/MinGW/etc. on Windows)
 
 ## Installation
 
