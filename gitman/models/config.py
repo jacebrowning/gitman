@@ -29,22 +29,44 @@ class Config:
         self.location = location
         self.sources = []
         self.sources_locked = []
-
+        self.path = self.config_path
     @property
     def config_path(self):
         """Get the full path to the configuration file."""
         return os.path.normpath(os.path.join(self.root, self.filename))
-    path = config_path
+
+    @config_path.setter
+    def config_path(self, value):
+        """Set the full path to the configuration file."""
+        self._config_path = os.path.normpath(value)
+
+    @property
+    def path(self)
+        return os.path.normpath(self._path)
+
+    @path.setter
+    def path(self, value)
+        self._path = os.path.normpath(value)
 
     @property
     def log_path(self):
         """Get the full path to the log file."""
-        return os.path.join(self.location_path, self.LOG)
+        return os.path.normpath(os.path.join(self.location_path, self.LOG))
+
+    @log_path.setter
+    def log_path(self, value):
+        """Set the full path to the log file."""
+        self._log_path = os.path.normpath(value)
 
     @property
     def location_path(self):
         """Get the full path to the sources location."""
-        return os.path.join(self.root, self.location)
+        return os.path.normpath(os.path.join(self.root, self.location))
+
+    @location_path.setter
+    def location_path(self, value):
+        """Set the full path to the sources location."""
+        self._location_path = os.path.normpath(value)
 
     def get_path(self, name=None):
         """Get the full path to a dependency or internal file."""
@@ -54,7 +76,7 @@ class Config:
         elif name == '__log__':
             return self.log_path
         elif name:
-            return os.path.join(base, name)
+            return os.path.normpath(os.path.join(base, name))
         else:
             return base
 
