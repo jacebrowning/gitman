@@ -20,7 +20,7 @@ class TestGit:
             "git clone --mirror mock.git " +
             os.path.normpath("cache/mock.reference"),
             "git clone --reference " +
-            os.path.normpath("cache/mock.reference")
+            os.path.normpath("cache/mock.reference") +
             " mock.git " +
             os.path.normpath("mock/path")
         ])
