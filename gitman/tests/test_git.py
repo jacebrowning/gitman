@@ -17,21 +17,23 @@ class TestGit:
         """Verify the commands to set up a new reference repository."""
         git.clone('mock.git', 'mock/path', cache='cache')
         assert_calls(mock_call, [
-            "git clone --mirror mock.git " 
-                + os.path.normpath("cache/mock.reference"),
-            "git clone --reference " 
-                + os.path.normpath("cache/mock.reference") 
-                + " mock.git " + os.path.normpath("mock/path")])
+            "git clone --mirror mock.git " +
+            os.path.normpath("cache/mock.reference"),
+            "git clone --reference " +
+            os.path.normpath("cache/mock.reference")
+            " mock.git " + os.path.normpath("mock/path")
+        ])
 
     @patch('os.path.isdir', Mock(return_value=True))
     def test_clone_from_reference(self, mock_call):
         """Verify the commands to clone a Git repository from a reference."""
         git.clone('mock.git', 'mock/path', cache='cache')
         assert_calls(mock_call, [
-            "git clone --reference " 
-                + os.path.normpath("cache/mock.reference") 
-                + " mock.git " 
-                + os.path.normpath("mock/path")])
+            "git clone --reference " +
+            os.path.normpath("cache/mock.reference") +
+            " mock.git " +
+            os.path.normpath("mock/path")
+        ])
 
     def test_fetch(self, mock_call):
         """Verify the commands to fetch from a Git repository."""
