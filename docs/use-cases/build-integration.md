@@ -26,7 +26,7 @@ clean:
 using a configuration file similar to:
 
 ```yaml
-location: vendor
+location: vendor/gitman
 sources:
 - name: lib_foo
   repo: https://github.com/example/lib_foo

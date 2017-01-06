@@ -106,11 +106,54 @@ def dedent(level=None):
         _Config.indent_level = level
 
 
-def show(message="", file=sys.stdout, log=logging.getLogger(__name__)):
+def show(message="", color=None,
+         file=sys.stdout, log=logging.getLogger(__name__)):
     """Write to standard output or error if enabled."""
     if _Config.verbosity == 0:
-        print("  " * _Config.indent_level + message, file=file)
+        print(' ' * 2 * _Config.indent_level + style(message, color), file=file)
     elif _Config.verbosity >= 1:
         message = message.strip()
         if message and log:
-            log.info(message)
+            if color == 'error':
+                log.error(message)
+            else:
+                log.info(message)
+
+
+BOLD = '\033[1m'
+RED = '\033[31m'
+GREEN = '\033[32m'
+YELLOW = '\033[33m'
+BLUE = '\033[34m'
+MAGENTA = '\033[35m'
+CYAN = '\033[36m'
+WHITE = '\033[37m'
+RESET = '\033[0m'
+
+COLORS = dict(
+    revision=BOLD + BLUE,
+    dirty=BOLD + MAGENTA,
+    path='',
+    changes=YELLOW,
+    message=BOLD + WHITE,
+    error=BOLD + RED,
+)
+
+
+def style(msg, name, tty=None):
+    color_support = sys.stdout.isatty() if tty is None else tty
+    if not color_support:
+        return msg
+
+    if name == 'shell':
+        return msg.replace("$ ", BOLD + GREEN + "$ " + RESET)
+
+    color = COLORS.get(name)
+    if color:
+        return color + msg + RESET
+
+    if msg:
+        assert color is not None
+        return msg
+
+    return ""

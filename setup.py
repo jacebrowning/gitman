@@ -68,8 +68,7 @@ setuptools.setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
-        'Operating System :: MacOS',
-        'Operating System :: POSIX',
+        'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
@@ -79,5 +78,7 @@ setuptools.setup(
         'Topic :: System :: Software Distribution',
     ],
 
-    install_requires=open("requirements.txt").readlines(),
+    install_requires=[
+        'YORM==1.2b5',
+    ],
 )

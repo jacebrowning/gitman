@@ -115,17 +115,17 @@ def main(args=None, function=None):
     common.configure_logging(namespace.verbose)
 
     # Run the program
-    function, args, kwargs, exit_msg = _get_command(function, namespace)
+    function, args, kwargs, exit_message = _get_command(function, namespace)
     if function is None:
         parser.print_help()
         sys.exit(1)
-    _run_command(function, args, kwargs, exit_msg)
+    _run_command(function, args, kwargs, exit_message)
 
 
 def _get_command(function, namespace):
     args = []
     kwargs = {}
-    exit_msg = ""
+    exit_message = None
 
     if namespace.command in ['install', 'update']:
         function = getattr(commands, namespace.command)
@@ -139,7 +139,7 @@ def _get_command(function, namespace):
         if namespace.command == 'update':
             kwargs.update(recurse=namespace.recurse,
                           lock=namespace.lock)
-        exit_msg = "\n" + "Run again with '--force' to overwrite"
+        exit_message = "Run again with '--force' to overwrite changes"
 
     elif namespace.command == 'list':
         function = commands.display
@@ -156,7 +156,7 @@ def _get_command(function, namespace):
         function = commands.delete
         kwargs.update(root=namespace.root,
                       force=namespace.force)
-        exit_msg = "\n" + "Run again with '--force' to ignore"
+        exit_message = "Run again with '--force' to ignore changes"
 
     elif namespace.command == 'show':
         function = commands.show
@@ -171,26 +171,29 @@ def _get_command(function, namespace):
         function = commands.edit
         kwargs.update(root=namespace.root)
 
-    return function, args, kwargs, exit_msg
+    return function, args, kwargs, exit_message
 
 
-def _run_command(function, args, kwargs, exit_msg):
+def _run_command(function, args, kwargs, exit_message):
     success = False
     try:
         log.debug("Running %s command...", getattr(function, '__name__', 'a'))
         success = function(*args, **kwargs)
     except KeyboardInterrupt:
         log.debug("Command canceled")
-        exit_msg = ""
     except RuntimeError as exc:
-        exit_msg = str(exc) + exit_msg
-    else:
-        exit_msg = ""
+        common.dedent(0)
+        common.show(str(exc), color='error')
+        common.show()
+        if exit_message:
+            common.show(exit_message, color='message')
+            common.show()
+
     if success:
         log.debug("Command succeeded")
     else:
         log.debug("Command failed")
-        sys.exit(exit_msg or 1)
+        sys.exit(1)
 
 
 if __name__ == '__main__':  # pragma: no cover (manual test)
