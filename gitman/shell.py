@@ -35,7 +35,6 @@ def call(name, *args, _show=True, _ignore=False):
     command = subprocess.run(
         [name, *args], universal_newlines=True,
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-        shell=True
     )
 
     for line in command.stdout.splitlines():
