@@ -1,0 +1,41 @@
+[Make]
+
+cli = make
+
+version = GNU Make
+
+
+[Python]
+
+cli = python
+
+version = Python 3.5.
+
+
+[Git]
+
+cli = git
+
+version = 2.
+
+
+[virtualenv]
+
+cli = virtualenv
+
+version = 15.
+
+
+[pandoc]
+
+cli = pandoc
+
+version = 1.
+
+
+[Graphviz]
+
+cli = dot
+cli_version_arg = -V
+
+version = 2.

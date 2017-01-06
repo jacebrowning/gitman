@@ -1,3 +1,4 @@
+/demo
 */tests/files/gitman_sources
 
 # Temporary Python files
@@ -37,10 +38,12 @@ Icon*
 .coverage
 .coverage.*
 /htmlcov
+/xmlreport
 /pyunit.xml
 *.tmp
 
 # Build and release directories
+*.spec
 /build
 /dist
 

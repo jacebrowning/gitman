@@ -40,10 +40,10 @@ class Source(AttributeDictionary):
         return "<source {}>".format(self)
 
     def __str__(self):
-        fmt = "'{r}' @ '{v}' in '{d}'"
+        pattern = "'{r}' @ '{v}' in '{d}'"
         if self.link:
-            fmt += " <- '{s}'"
-        return fmt.format(r=self.repo, v=self.rev, d=self.name, s=self.link)
+            pattern += " <- '{s}'"
+        return pattern.format(r=self.repo, v=self.rev, d=self.name, s=self.link)
 
     def __eq__(self, other):
         return self.name == other.name
@@ -69,7 +69,7 @@ class Source(AttributeDictionary):
             log.debug("Confirming there are no uncommitted changes...")
             if git.changes(include_untracked=clean):
                 common.show()
-                msg = "Uncommitted changes: {}".format(os.getcwd())
+                msg = "Uncommitted changes in {}".format(os.getcwd())
                 raise UncommittedChanges(msg)
 
         # Fetch the desired revision
@@ -94,7 +94,7 @@ class Source(AttributeDictionary):
                     shell.rm(target)
                 else:
                     common.show()
-                    msg = "Preexisting link location: {}".format(target)
+                    msg = "Preexisting link location at {}".format(target)
                     raise UncommittedChanges(msg)
             shell.ln(source, target)
 
@@ -107,16 +107,17 @@ class Source(AttributeDictionary):
             path = os.getcwd()
             url = git.get_url()
             if git.changes(display_status=not allow_dirty, _show=True):
-                revision = self.DIRTY
                 if not allow_dirty:
                     common.show()
-                    msg = "Uncommitted changes: {}".format(os.getcwd())
+                    msg = "Uncommitted changes in {}".format(os.getcwd())
                     raise UncommittedChanges(msg)
+
+                common.show(self.DIRTY, color='dirty', log=False)
+                return path, url, self.DIRTY
             else:
                 revision = git.get_hash(_show=True)
-            common.show(revision, log=False)
-
-            return path, url, revision
+                common.show(revision, color='revision', log=False)
+                return path, url, revision
 
         elif allow_missing:
 
@@ -130,6 +131,6 @@ class Source(AttributeDictionary):
 
     def lock(self):
         """Return a locked version of the current source."""
-        _, _, revision = self.identify(allow_missing=False)
+        _, _, revision = self.identify(allow_dirty=False, allow_missing=False)
         source = self.__class__(self.repo, self.name, revision, self.link)
         return source

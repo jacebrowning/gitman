@@ -37,7 +37,7 @@ If you're using two-factory authentication on GitHub, you'll need to [provide a 
 You can also set up SSH keys (for [GitHub](https://help.github.com/articles/generating-ssh-keys/)) and use a different URL:
 
 ```shell
-$ git clone git://github.com/<owner>/<repo>.git
+$ git clone git@github.com:<owner>/<repo>.git
 ```
 
 ## OAuth Tokens

@@ -7,7 +7,7 @@ One common use case of `gitman` is to track versions of related product sub-comp
 A web app's `gitman.yml` might look something like:
 
 ```yaml
-location: vendor
+location: vendor/gitman
 sources:
 - name: api
   repo: https://github.com/example/api
@@ -25,7 +25,7 @@ package.json
 node_modules
 
 gitman.yml
-vendor/api  # dependency @ b27308
+vendor/gitman/api  # dependency @ b27308
 
 app
 tests

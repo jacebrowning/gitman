@@ -9,9 +9,8 @@ pytest-describe
 pytest-expecter
 pytest-cov
 pytest-random
-expecter
 freezegun
 
 # Coverage
 coverage
-coverage.space
+coverage.space >= 0.6.2

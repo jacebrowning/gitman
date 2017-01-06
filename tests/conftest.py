@@ -1,18 +1,10 @@
 """Integration tests configuration."""
-# pylint: disable=unused-argument
-
-import os
 
 import yorm
 
 from gitman.tests.conftest import pytest_configure  # pylint: disable=unused-import
 
 
-# TODO: delete if unused (and files)
-ROOT = os.path.dirname(__file__)
-FILES = os.path.join(ROOT, 'files')
-
-
-def pytest_runtest_setup(item):
+def pytest_runtest_setup(item):  # pylint: disable=unused-argument
     """Ensure files are created for integration tests."""
     yorm.settings.fake = False

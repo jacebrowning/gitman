@@ -45,10 +45,13 @@ def install(*names, root=None, depth=None,
     config = load_config(root)
 
     if config:
-        common.show("Installing dependencies...", log=False)
         common.show()
-        count = config.install_deps(*names, update=False, depth=depth,
-                                    force=force, fetch=fetch, clean=clean)
+        common.show("Installing dependencies...", color='message', log=False)
+        common.show()
+        count = config.install_dependencies(
+            *names, update=False, depth=depth,
+            force=force, fetch=fetch, clean=clean,
+        )
 
     return _display_result("install", "Installed", count)
 
@@ -79,16 +82,19 @@ def update(*names, root=None, depth=None,
     config = load_config(root)
 
     if config:
-        common.show("Updating dependencies...", log=False)
         common.show()
-        count = config.install_deps(
+        common.show("Updating dependencies...", color='message', log=False)
+        common.show()
+        count = config.install_dependencies(
             *names, update=True, depth=depth,
-            recurse=recurse, force=force, fetch=True, clean=clean)
+            recurse=recurse, force=force, fetch=True, clean=clean,
+        )
         common.dedent(level=0)
         if count and lock is not False:
-            common.show("Recording installed versions...", log=False)
+            common.show("Recording installed versions...",
+                        color='message', log=False)
             common.show()
-            config.lock_deps(*names, obey_existing=lock is None)
+            config.lock_dependencies(*names, obey_existing=lock is None)
 
     return _display_result("update", "Updated", count)
 
@@ -111,11 +117,14 @@ def display(*, root=None, depth=None, allow_dirty=True):
     config = load_config(root)
 
     if config:
-        common.show("Displaying current dependency versions...", log=False)
+        common.show()
+        common.show("Displaying current dependency versions...",
+                    color='message', log=False)
         common.show()
         config.log(datetime.datetime.now().strftime("%F %T"))
         count = 0
-        for identity in config.get_deps(depth=depth, allow_dirty=allow_dirty):
+        for identity in config.get_dependencies(depth=depth,
+                                                allow_dirty=allow_dirty):
             count += 1
             config.log("{}: {} @ {}", *identity)
         config.log()
@@ -140,9 +149,10 @@ def lock(*names, root=None):
     config = load_config(root)
 
     if config:
-        common.show("Locking dependencies...", log=False)
         common.show()
-        count = config.lock_deps(*names, obey_existing=False)
+        common.show("Locking dependencies...", color='message', log=False)
+        common.show()
+        count = config.lock_dependencies(*names, obey_existing=False)
         common.dedent(level=0)
 
     return _display_result("lock", "Locked", count)
@@ -165,13 +175,15 @@ def delete(*, root=None, force=False):
     config = load_config(root)
 
     if config:
-        common.show("Checking for uncommitted changes...", log=False)
         common.show()
-        count = len(list(config.get_deps(allow_dirty=force)))
+        common.show("Checking for uncommitted changes...",
+                    color='message', log=False)
+        common.show()
+        count = len(list(config.get_dependencies(allow_dirty=force)))
         common.dedent(level=0)
-        common.show("Deleting all dependencies...", log=False)
+        common.show("Deleting all dependencies...", color='message', log=False)
         common.show()
-        config.uninstall_deps()
+        config.uninstall_dependencies()
 
     return _display_result("delete", "Deleted", count, allow_zero=True)
 
@@ -192,7 +204,7 @@ def show(*names, root=None):
         return False
 
     for name in names or [None]:
-        common.show(config.get_path(name))
+        common.show(config.get_path(name), color='path')
 
     return True
 
