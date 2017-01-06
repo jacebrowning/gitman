@@ -22,8 +22,8 @@ def call(name, *args, _show=True, _ignore=False, _shell=False):
     :param _show: display the call on stdout
     :param _ignore: ignore non-zero return codes
     :param _shell: force executing the program into a real shell
-                   a windows shell command (i.e : dir or echo) needs a real shell
-                   but not a regular program (i.e : calc or git)
+                   a windows shell command (i.e : dir, echo) needs a real shell
+                   but not a regular program (i.e : calc, git)
     """
     program = CMD_PREFIX + ' '.join([name, *args])
     if _show:

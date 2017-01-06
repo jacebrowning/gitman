@@ -1,9 +1,10 @@
 # pylint: disable=no-self-use,misplaced-comparison-constant
 
+import os
+
 from unittest.mock import patch, Mock
 
 import pytest
-import os
 from gitman import shell
 from gitman.exceptions import ShellError
 
@@ -44,7 +45,7 @@ class TestPrograms:
 
     """Tests for calls to shell programs."""
 
-    @pytest.mark.skip(reason="gitman.shell.mkdir do not use call function for now")
+    @pytest.mark.skip(reason="gitman.shell.mkdir do not use call function")
     def test_mkdir(self, mock_call):
         """Verify the commands to create directories."""
         shell.mkdir('mock/name/path')
@@ -56,20 +57,20 @@ class TestPrograms:
         assert_calls(mock_call, ["cd mock/name/path"])
 
     @patch('os.path.isdir', Mock(return_value=True))
-    @pytest.mark.skipif(os.name == 'nt', reason="symlink not supported on windows")
+    @pytest.mark.skipif(os.name == 'nt', reason="no symlink on windows")
     def test_ln(self, mock_call):
         """Verify the commands to create symbolic links."""
         shell.ln('mock/target', 'mock/source')
         assert_calls(mock_call, ["ln -s mock/target mock/source"])
 
     @patch('os.path.isdir', Mock(return_value=False))
-    @pytest.mark.skipif(os.name == 'nt', reason="symlink not supported on windows")
+    @pytest.mark.skipif(os.name == 'nt', reason="no symlink on windows")
     def test_ln_missing_parent(self, mock_call):
         """Verify the commands to create symbolic links (missing parent)."""
         shell.ln('mock/target', 'mock/source')
         assert_calls(mock_call, ["ln -s mock/target mock/source"])
 
-    @pytest.mark.skip(reason="gitman.shell.rm do not use call function for now")
+    @pytest.mark.skip(reason="gitman.shell.rm do not use call function")
     def test_rm(self, mock_call):
         """Verify the commands to delete files/folders."""
         shell.rm('mock/name/path')

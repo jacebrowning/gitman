@@ -1,8 +1,9 @@
 # pylint: disable=no-self-use,redefined-outer-name,unused-variable,expression-not-assigned,misplaced-comparison-constant
 
+import os
 import pytest
 from expecter import expect
-import os
+
 from gitman.models import Config, load_config
 
 from .conftest import FILES
