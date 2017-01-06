@@ -22,17 +22,10 @@ def call(name, *args, _show=True, _ignore=False, _shell=False):
     :param _show: display the call on stdout
     :param _ignore: ignore non-zero return codes
     :param _shell: force executing the program into a real shell
-                   a windows shell command (i.e : dir, echo) needs a real shell
-                   but not a regular program (i.e : calc, git)
+                   a Windows shell command (i.e: dir, echo) needs a real shell
+                   but not a regular program (i.e: calc, git)
     """
-    program = CMD_PREFIX + ' '.join([name, *args])
-    if _show:
-        common.show(program)
-    else:
-        log.debug(program)
-
-    if name == 'cd':
-        return os.chdir(args[0])  # 'cd' has no effect in a subprocess
+    program = show(name, *args, stdout=_show)
 
     command = subprocess.run(
         [name, *args], universal_newlines=True,
@@ -47,7 +40,7 @@ def call(name, *args, _show=True, _ignore=False, _shell=False):
         return command.stdout.strip()
 
     elif _ignore:
-        log.debug("Ignored error from call to '%s'", program)
+        log.debug("Ignored error from call to '%s'", name)
 
     else:
         message = (
@@ -61,27 +54,39 @@ def call(name, *args, _show=True, _ignore=False, _shell=False):
 
 
 def mkdir(path):
+    show('mkdir', '-p', path)
     if not os.path.exists(path):
         os.makedirs(path)
 
 
 def cd(path, _show=True):
-    call('cd', path, _show=_show)
+    show('cd', path, stdout=_show)
+    os.chdir(path)
 
 
 def ln(source, target):
-    if not os.name == 'nt':
+    if os.name == 'nt':
+        log.warning("Symlinks are not supported on Windows")
+    else:
         dirpath = os.path.dirname(target)
         if not os.path.isdir(dirpath):
             mkdir(dirpath)
         call('ln', '-s', source, target)
-    else:
-        log.debug("symlinks are not supported on windows system")
 
 
 def rm(path):
+    show('rm', '-rf', path)
     if os.path.exists(path):
-        if not os.path.isdir(path):
-            os.remove(path)
-        else:
+        if os.path.isdir(path):
             shutil.rmtree(path)
+        else:
+            os.remove(path)
+
+
+def show(name, *args, stdout=True):
+    program = CMD_PREFIX + ' '.join([name, *args])
+    if stdout:
+        common.show(program, color='shell')
+    else:
+        log.debug(program)
+    return program

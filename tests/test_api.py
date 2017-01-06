@@ -11,7 +11,7 @@ from freezegun import freeze_time
 
 import gitman
 from gitman.models import Config
-from gitman.exceptions import InvalidRepository
+from gitman.exceptions import UncommittedChanges, InvalidRepository
 
 from .utilities import strip
 
@@ -38,7 +38,7 @@ log = logging.getLogger(__name__)
 
 @pytest.fixture
 def config(root="/tmp/gitman-shared"):
-    with suppress(FileNotFoundError):
+    with suppress(FileNotFoundError, PermissionError):
         shutil.rmtree(root)
     with suppress(FileExistsError):
         os.makedirs(root)
@@ -328,6 +328,13 @@ def describe_lock():
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
         """) == config.__mapper__.text
+
+    def it_should_fail_on_dirty_repositories(config):
+        expect(gitman.update(depth=1, lock=False)) == True
+        os.remove("deps/gitman_1/.project")
+
+        with pytest.raises(UncommittedChanges):
+            gitman.lock()
 
     def it_should_fail_on_invalid_repositories(config):
         os.system("mkdir deps && touch deps/gitman_1")

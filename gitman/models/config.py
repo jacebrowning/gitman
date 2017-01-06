@@ -43,7 +43,7 @@ class Config:
 
     @property
     def location_path(self):
-        """Get the full path to the sources location."""
+        """Get the full path to the dependency storage location."""
         return os.path.join(self.root, self.location)
 
     def get_path(self, name=None):
@@ -58,10 +58,10 @@ class Config:
         else:
             return base
 
-    def install_deps(self, *names, depth=None,
-                     update=True, recurse=False,
-                     force=False, fetch=False, clean=True):
-        """Get all sources."""
+    def install_dependencies(self, *names, depth=None,
+                             update=True, recurse=False,
+                             force=False, fetch=False, clean=True):
+        """Download or update the specified dependencies."""
         if depth == 0:
             log.info("Skipped directory: %s", self.location_path)
             return 0
@@ -92,7 +92,7 @@ class Config:
             config = load_config()
             if config:
                 common.indent()
-                count += config.install_deps(
+                count += config.install_dependencies(
                     depth=None if depth is None else max(0, depth - 1),
                     update=update and recurse,
                     recurse=recurse,
@@ -111,7 +111,7 @@ class Config:
 
         return count
 
-    def lock_deps(self, *names, obey_existing=True):
+    def lock_dependencies(self, *names, obey_existing=True):
         """Lock down the immediate dependency versions."""
         shell.cd(self.location_path)
         common.show()
@@ -143,12 +143,12 @@ class Config:
 
         return count
 
-    def uninstall_deps(self):
-        """Remove the sources location."""
+    def uninstall_dependencies(self):
+        """Delete the dependency storage location."""
         shell.rm(self.location_path)
         common.show()
 
-    def get_deps(self, depth=None, allow_dirty=True):
+    def get_dependencies(self, depth=None, allow_dirty=True):
         """Yield the path, repository URL, and hash of each dependency."""
         if not os.path.exists(self.location_path):
             return
@@ -169,7 +169,7 @@ class Config:
             config = load_config()
             if config:
                 common.indent()
-                yield from config.get_deps(
+                yield from config.get_dependencies(
                     depth=None if depth is None else max(0, depth - 1),
                     allow_dirty=allow_dirty,
                 )
@@ -185,7 +185,7 @@ class Config:
             outfile.write(message.format(*args) + '\n')
 
     def _get_sources(self, *, use_locked=None):
-        """Merge source lists using requested section as the base."""
+        """Merge source lists using the requested section as the base."""
         if use_locked is True:
             if self.sources_locked:
                 return self.sources_locked
@@ -198,7 +198,7 @@ class Config:
             sources = self.sources
         else:
             if self.sources_locked:
-                log.info("Defalting to locked sources...")
+                log.info("Defaulting to locked sources...")
                 sources = self.sources_locked
             else:
                 log.info("No locked sources, using latest...")

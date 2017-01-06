@@ -67,7 +67,7 @@ def changes(include_untracked=False, display_status=True, _show=False):
 
     if status and display_status:
         for line in git('status', _show=True).splitlines():
-            common.show(line)
+            common.show(line, color='changes')
 
     return status
 
