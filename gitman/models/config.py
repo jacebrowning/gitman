@@ -30,6 +30,7 @@ class Config:
         self.sources = []
         self.sources_locked = []
         self.path = self.config_path
+
     @property
     def config_path(self):
         """Get the full path to the configuration file."""
@@ -41,11 +42,11 @@ class Config:
         self._config_path = os.path.normpath(value)
 
     @property
-    def path(self)
+    def path(self):
         return os.path.normpath(self._path)
 
     @path.setter
-    def path(self, value)
+    def path(self, value):
         self._path = os.path.normpath(value)
 
     @property
