@@ -125,17 +125,20 @@ def describe_install():
 
             return config
 
+        @pytest.mark.skipif(os.name == 'nt', reason="no symlink on Windows")
         def it_should_create_links(config_with_link):
             expect(gitman.install(depth=1)) == True
 
             expect(os.listdir()).contains('my_link')
 
+        @pytest.mark.skipif(os.name == 'nt', reason="no symlink on Windows")
         def it_should_not_overwrite_files(config_with_link):
             os.system("touch my_link")
 
             with pytest.raises(RuntimeError):
                 gitman.install(depth=1)
 
+        @pytest.mark.skipif(os.name == 'nt', reason="no symlink on Windows")
         def it_overwrites_files_with_force(config_with_link):
             os.system("touch my_link")
 

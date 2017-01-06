@@ -1,5 +1,6 @@
 """Common exceptions, classes, and functions."""
 
+import os
 import sys
 import argparse
 import logging
@@ -142,6 +143,11 @@ COLORS = dict(
 
 def style(msg, name, tty=None):
     color_support = sys.stdout.isatty() if tty is None else tty
+
+    if os.name == 'nt':
+        color_support = False
+
+    # TODO : Color not yet supported on windows
     if not color_support:
         return msg
 
