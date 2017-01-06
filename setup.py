@@ -79,6 +79,6 @@ setuptools.setup(
     ],
 
     install_requires=[
-        'YORM==1.2b4',
+        'YORM==1.2b5',
     ],
 )

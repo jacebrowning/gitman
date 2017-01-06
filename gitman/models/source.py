@@ -131,6 +131,6 @@ class Source(AttributeDictionary):
 
     def lock(self):
         """Return a locked version of the current source."""
-        _, _, revision = self.identify(allow_missing=False)
+        _, _, revision = self.identify(allow_dirty=False, allow_missing=False)
         source = self.__class__(self.repo, self.name, revision, self.link)
         return source
