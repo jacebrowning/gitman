@@ -65,15 +65,21 @@ HONCHO := $(ACTIVATE) && $(BIN)/honcho
 all: doc
 
 .PHONY: ci
-ci: check test ## Run all tasks that determine CI status
+ci: check test demo ## Run all tasks that determine CI status
 
 .PHONY: watch
 watch: install .clean-test ## Continuously run all CI tasks when files chanage
 	$(SNIFFER)
 
-.PHONY: run ## Start the program
-run: install
-	$(PYTHON) $(PACKAGE)/__main__.py
+.PHONY: demo
+demo: install
+	$(BIN)/gitman install
+	$(BIN)/gitman update
+	$(BIN)/gitman list
+	$(BIN)/gitman lock
+	$(BIN)/gitman uninstall
+	$(BIN)/gitman show
+	$(BIN)/gitman edit
 
 # SYSTEM DEPENDENCIES ##########################################################
 
