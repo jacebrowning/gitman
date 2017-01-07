@@ -44,7 +44,6 @@ class TestPrograms:
             assert_calls(mock_call, ["mkdir mock/name/path"])
         else:
             assert_calls(mock_call, ["mkdir -p mock/name/path"])
-        
 
     @patch('os.chdir')
     def test_cd(self, mock_chdir, mock_call):
@@ -86,4 +85,3 @@ class TestPrograms:
             assert_calls(mock_call, ["rmdir /Q /S mock/dirpath"])
         else:
             assert_calls(mock_call, ["rm -rf mock/dirpath"])
-

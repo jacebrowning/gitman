@@ -141,7 +141,6 @@ COLORS = dict(
 )
 
 
-
 def style(msg, name):
     is_tty = hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()
     supports_ansi = sys.platform != 'win32' or 'ANSICON' in os.environ
