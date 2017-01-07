@@ -107,7 +107,11 @@ class Config:
                 continue
 
             source.update_files(force=force, fetch=fetch, clean=clean)
-            source.create_link(self.root, force=force)
+            # TODO : windows link support
+            if not os.name == 'nt':
+                source.create_link(self.root, force=force)
+            else:
+                log.info("Link are not supported on Windows")
             count += 1
 
             common.show()
