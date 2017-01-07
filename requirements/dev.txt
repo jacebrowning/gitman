@@ -3,7 +3,8 @@ pylint
 docutils
 readme
 pdoc
-mkdocs
+mkdocs==0.16.1
+jinja2==2.8.1
 pygments
 
 # Tooling
