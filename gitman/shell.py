@@ -4,6 +4,7 @@ import os
 import subprocess
 import logging
 import shutil
+import stat
 
 from . import common
 from .exceptions import ShellError
@@ -78,7 +79,11 @@ def rm(path):
     show('rm', '-rf', path)
     if os.path.exists(path):
         if os.path.isdir(path):
-            shutil.rmtree(path)
+            shutil.rmtree(
+                path, 
+                ignore_errors = False, 
+                onerror = rm_error_readonly
+            )
         else:
             os.remove(path)
 
@@ -90,3 +95,22 @@ def show(name, *args, stdout=True):
     else:
         log.debug(program)
     return program
+
+
+
+def rm_error_readonly(func, path, exc_info):
+    """
+    Error handler for ``shutil.rmtree``.
+
+    If the error is due to an access error (read only file)
+    it attempts to add write permission and then retries.
+
+    If the error is for another reason it re-raises the error.
+
+    Usage : ``shutil.rmtree(path, onerror=rm_error_readonly)``
+    """
+    if not os.access(path, os.W_OK):
+        os.chmod(path, stat.S_IWUSR)
+        func(path)
+    else:
+        raise ShellError("Can not remove " + path + " due to permission")
