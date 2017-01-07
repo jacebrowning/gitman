@@ -1,4 +1,3 @@
-# pylint: disable=attribute-defined-outside-init
 """Wrappers for the dependency configuration files."""
 
 import os
@@ -25,6 +24,11 @@ class Config:
 
     def __init__(self, root, filename="gitman.yml", location="gitman_sources"):
         super().__init__()
+        self._path = None
+        self._config_path = None
+        self._log_path = None
+        self._location_path = None
+        
         self.root = root
         self.filename = filename
         self.location = location
