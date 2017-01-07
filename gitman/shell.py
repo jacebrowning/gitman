@@ -80,9 +80,9 @@ def rm(path):
     if os.path.exists(path):
         if os.path.isdir(path):
             shutil.rmtree(
-                path, 
-                ignore_errors = False, 
-                onerror = rm_error_readonly
+                path,
+                ignore_errors=False,
+                onerror=rm_error_readonly
             )
         else:
             os.remove(path)
@@ -95,7 +95,6 @@ def show(name, *args, stdout=True):
     else:
         log.debug(program)
     return program
-
 
 
 def rm_error_readonly(func, path, exc_info):
