@@ -86,7 +86,7 @@ def rm(path):
         if os.name == 'nt':
             if os.path.isdir(path):
                 call(
-                    'rmdir', '/Q', '/S', 
+                    'rmdir', '/Q', '/S',
                     path, _shell=True
                 )
             else:
