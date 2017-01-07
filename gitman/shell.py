@@ -55,11 +55,10 @@ def call(name, *args, _show=True, _ignore=False, _shell=False):
 
 
 def mkdir(path):
-    if not os.path.exists(path):
-        if os.name == 'nt':
-            call('mkdir', path, _shell=True)
-        else:
-            call('mkdir', '-p', path)
+    if os.name == 'nt':
+        call('mkdir', path, _shell=True)
+    else:
+        call('mkdir', '-p', path)
 
 
 def cd(path, _show=True):
@@ -82,16 +81,15 @@ def ln(source, target):
 
 
 def rm(path):
-    if os.path.exists(path):
-        if os.name == 'nt' :
-            if os.path.isdir(path):
-                call('rmdir', '/Q', '/S', path, 
+    if os.name == 'nt':
+        if os.path.isdir(path):
+            call('rmdir', '/Q', '/S', path,
                     _shell=True
                 )
-            else:
-                call('del', '/Q', '/F', path, _shell=True)
         else:
-            call('rm', '-rf', path)
+            call('del', '/Q', '/F', path, _shell=True)
+    else:
+        call('rm', '-rf', path)
 
 
 def show(name, *args, stdout=True):
