@@ -1,6 +1,6 @@
 # Linters
-pep8
-pep257
+pycodestyle
+pydocstyle
 pylint
 
 # Testing
@@ -13,4 +13,4 @@ freezegun
 
 # Coverage
 coverage
-coverage.space >= 0.6.2
+coverage.space
