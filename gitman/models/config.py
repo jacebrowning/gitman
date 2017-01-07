@@ -199,7 +199,6 @@ class Config:
                 common.dedent()
 
             shell.cd(self.location_path, _show=False)
-
         common.dedent()
 
     def log(self, message="", *args):
