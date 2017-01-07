@@ -284,15 +284,16 @@ def describe_list():
         with open(config.log_path) as stream:
             contents = stream.read().replace("/private", "")
 
-        temp_path=os.path.normpath(tempfile.gettempdir())
-        test_string = "2012-01-14 12:00:01\n" +
-        temp_path + os.path.normpath("/gitman-shared/deps/gitman_1") + ": https://github.com/jacebrowning/gitman-demo @ 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd\n" +
-        temp_path + os.path.normpath("/gitman-shared/deps/gitman_1/gitman_sources/gdm_3") + ": https://github.com/jacebrowning/gdm-demo @ 050290bca3f14e13fd616604202b579853e7bfb0\n" +
-        temp_path + os.path.normpath("/gitman-shared/deps/gitman_1/gitman_sources/gdm_3/gitman_sources/gdm_3") + ": https://github.com/jacebrowning/gdm-demo @ fb693447579235391a45ca170959b5583c5042d8\n" +
-        temp_path + os.path.normpath("/gitman-shared/deps/gitman_1/gitman_sources/gdm_3/gitman_sources/gdm_4") + ": https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5\n" +
-        temp_path + os.path.normpath("/gitman-shared/deps/gitman_1/gitman_sources/gdm_4") + ": https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5\n" +
-        temp_path + os.path.normpath("/gitman-shared/deps/gitman_2") + ": https://github.com/jacebrowning/gitman-demo @ 7bd138fe7359561a8c2ff9d195dff238794ccc04\n" +
-        temp_path + os.path.normpath("/gitman-shared/deps/gitman_3") + ": https://github.com/jacebrowning/gitman-demo @ 9bf18e16b956041f0267c21baad555a23237b52e\n"
+        temp_path = os.path.normpath(tempfile.gettempdir())
+        test_string = ( "2012-01-14 12:00:01\n" +
+          temp_path + os.path.normpath("/gitman-shared/deps/gitman_1") + ": https://github.com/jacebrowning/gitman-demo @ 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd\n" +
+          temp_path + os.path.normpath("/gitman-shared/deps/gitman_1/gitman_sources/gdm_3") + ": https://github.com/jacebrowning/gdm-demo @ 050290bca3f14e13fd616604202b579853e7bfb0\n" +
+          temp_path + os.path.normpath("/gitman-shared/deps/gitman_1/gitman_sources/gdm_3/gitman_sources/gdm_3") + ": https://github.com/jacebrowning/gdm-demo @ fb693447579235391a45ca170959b5583c5042d8\n" +
+          temp_path + os.path.normpath("/gitman-shared/deps/gitman_1/gitman_sources/gdm_3/gitman_sources/gdm_4") + ": https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5\n" +
+          temp_path + os.path.normpath("/gitman-shared/deps/gitman_1/gitman_sources/gdm_4") + ": https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5\n" +
+          temp_path + os.path.normpath("/gitman-shared/deps/gitman_2") + ": https://github.com/jacebrowning/gitman-demo @ 7bd138fe7359561a8c2ff9d195dff238794ccc04\n" +
+          temp_path + os.path.normpath("/gitman-shared/deps/gitman_3") + ": https://github.com/jacebrowning/gitman-demo @ 9bf18e16b956041f0267c21baad555a23237b52e\n"
+        )
         expect(contents) == strip(test_string, end='\n\n')
 
 
