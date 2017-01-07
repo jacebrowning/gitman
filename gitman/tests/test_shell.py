@@ -37,13 +37,13 @@ class TestCall:
 class TestPrograms:
     """Tests for calls to shell programs."""
 
-    def test_mkdir(self, mock_makedirs, mock_call):
+    def test_mkdir(self, mock_call):
         """Verify the commands to create directories."""
-        shell.mkdir('mock/dirpath')
+        shell.mkdir('mock/name/dirpath')
         if os.name == 'nt':
-            assert_calls(mock_call, ["mkdir mock/name/path"])
+            assert_calls(mock_call, ["mkdir mock/name/dirpath"])
         else:
-            assert_calls(mock_call, ["mkdir -p mock/name/path"])
+            assert_calls(mock_call, ["mkdir -p mock/name/dirpath"])
 
     @patch('os.chdir')
     def test_cd(self, mock_chdir, mock_call):
@@ -68,7 +68,8 @@ class TestPrograms:
                                  "ln -s mock/target mock/source"])
 
     @patch('os.path.exists', Mock(return_value=True))
-    def test_rm_file(self, mock_remove, mock_call):
+    @patch('os.path.isdir', Mock(return_value=False))
+    def test_rm_file(self, mock_call):
         """Verify the commands to delete files."""
         shell.rm('mock/path')
         if os.name == 'nt':
@@ -78,7 +79,7 @@ class TestPrograms:
 
     @patch('os.path.exists', Mock(return_value=True))
     @patch('os.path.isdir', Mock(return_value=True))
-    def test_rm_directory(self, mock_rmtree, mock_call):
+    def test_rm_directory(self, mock_call):
         """Verify the commands to delete directories."""
         shell.rm('mock/dirpath')
         if os.name == 'nt':
