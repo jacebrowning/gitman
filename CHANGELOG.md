@@ -1,5 +1,9 @@
 # Revision History
 
+## 1.2 (unreleased)
+
+- Improved color support detection on Windows.
+
 ## 1.1 (2017/01/06)
 
 - Added coloring to the command-line output.

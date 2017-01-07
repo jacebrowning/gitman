@@ -78,8 +78,6 @@ demo: install
 	$(BIN)/gitman list
 	$(BIN)/gitman lock
 	$(BIN)/gitman uninstall
-	$(BIN)/gitman show
-	- $(BIN)/gitman edit
 
 # SYSTEM DEPENDENCIES ##########################################################
 
