@@ -141,14 +141,11 @@ COLORS = dict(
 )
 
 
-def style(msg, name, tty=None):
-    color_support = sys.stdout.isatty() if tty is None else tty
 
-    if os.name == 'nt':
-        color_support = False
-
-    # TODO : Color not yet supported on windows
-    if not color_support:
+def style(msg, name):
+    is_tty = hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()
+    supports_ansi = sys.platform != 'win32' or 'ANSICON' in os.environ
+    if not (is_tty and supports_ansi):
         return msg
 
     if name == 'shell':
@@ -159,7 +156,6 @@ def style(msg, name, tty=None):
         return color + msg + RESET
 
     if msg:
-        assert color is not None
-        return msg
+        assert color is not None, "Unknown style name requested"
 
-    return ""
+    return msg
