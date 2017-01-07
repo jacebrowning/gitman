@@ -1,3 +1,4 @@
+# pylint: disable=attribute-defined-outside-init
 """Wrappers for the dependency configuration files."""
 
 import os
