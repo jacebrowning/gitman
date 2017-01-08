@@ -351,13 +351,13 @@ def describe_lock():
             gitman.lock()
 
     def it_should_fail_on_invalid_repositories(config):
-      os.system("mkdir deps")
-      if os.name == 'nt':
-          os.system('type nul >>deps\gitman_1')
-      else:
-          os.system("touch deps/gitman_1")
+        os.system("mkdir deps")
+        if os.name == 'nt':
+            os.system('type nul >>deps\\gitman_1')
+        else:
+            os.system("touch deps/gitman_1")
 
-      with pytest.raises(InvalidRepository):
-          gitman.lock()
+        with pytest.raises(InvalidRepository):
+            gitman.lock()
 
-      expect(config.__mapper__.text).does_not_contain("<unknown>")
+        expect(config.__mapper__.text).does_not_contain("<unknown>")
