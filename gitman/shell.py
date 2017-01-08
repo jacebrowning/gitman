@@ -54,9 +54,11 @@ def call(name, *args, _show=True, _ignore=False, _shell=False):
 
 
 def mkdir(path):
-    show('mkdir', '-p', path)
     if not os.path.exists(path):
-        os.makedirs(path)
+        if os.name == 'nt':
+            call('mkdir', path, _shell=True)
+        else:
+            call('mkdir', '-p', path)
 
 
 def cd(path, _show=True):

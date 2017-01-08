@@ -37,12 +37,13 @@ class TestCall:
 class TestPrograms:
     """Tests for calls to shell programs."""
 
-    @patch('os.makedirs')
-    def test_mkdir(self, mock_makedirs, mock_call):
+    def test_mkdir(self, mock_call):
         """Verify the commands to create directories."""
         shell.mkdir('mock/dirpath')
-        mock_makedirs.assert_called_once_with('mock/dirpath')
-        assert_calls(mock_call, [])
+        if os.name == 'nt':
+            assert_calls(mock_call, ["mkdir mock/dirpath"])
+        else:
+            assert_calls(mock_call, ["mkdir -p mock/dirpath"])
 
     @patch('os.chdir')
     def test_cd(self, mock_chdir, mock_call):
