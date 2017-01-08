@@ -80,12 +80,13 @@ def ln(source, target):
 
 
 def rm(path):
-    show('rm', '-rf', path)
-    if os.path.exists(path):
-        if os.path.isdir(path):
-            shutil.rmtree(path)
-        else:
-            os.remove(path)
+    if os.name == 'nt':
+        if os.path.isfile(path):
+            call('del', '/Q', '/F', path, _shell=True)
+        elif os.path.isdir(path):
+            call('rmdir', '/Q', '/S', path, _shell=True)
+    else:
+        call('rm', '-rf', path)
 
 
 def show(name, *args, stdout=True):

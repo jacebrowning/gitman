@@ -66,19 +66,20 @@ class TestPrograms:
         shell.ln('mock/target', 'mock/source')
         assert_calls(mock_call, ["ln -s mock/target mock/source"])
 
-    @patch('os.remove')
-    @patch('os.path.exists', Mock(return_value=True))
-    def test_rm_file(self, mock_remove, mock_call):
+    @patch('os.path.isfile', Mock(return_value=True))
+    def test_rm_file(self, mock_call):
         """Verify the commands to delete files."""
         shell.rm('mock/path')
-        mock_remove.assert_called_once_with('mock/path')
-        assert_calls(mock_call, [])
+        if os.name == 'nt':
+            assert_calls(mock_call, ["del /Q /F mock/path"])
+        else:
+            assert_calls(mock_call, ["rm -rf mock/path"])
 
-    @patch('shutil.rmtree')
-    @patch('os.path.exists', Mock(return_value=True))
     @patch('os.path.isdir', Mock(return_value=True))
-    def test_rm_directory(self, mock_rmtree, mock_call):
+    def test_rm_directory(self, mock_call):
         """Verify the commands to delete directories."""
         shell.rm('mock/dirpath')
-        mock_rmtree.assert_called_once_with('mock/dirpath')
-        assert_calls(mock_call, [])
+        if os.name == 'nt':
+            assert_calls(mock_call, ["rmdir /Q /S mock/dirpath"])
+        else:
+            assert_calls(mock_call, ["rm -rf mock/dirpath"])
