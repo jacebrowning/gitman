@@ -28,7 +28,7 @@ class Config:
         self._config_path = None
         self._log_path = None
         self._location_path = None
-        
+
         self.root = root
         self.filename = filename
         self.location = location
@@ -48,7 +48,7 @@ class Config:
 
     @property
     def path(self):
-        return os.path.normpath(self._path)
+        return self._path
 
     @path.setter
     def path(self, value):
