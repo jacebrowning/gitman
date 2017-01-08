@@ -62,7 +62,10 @@ def mkdir(path):
 
 
 def cd(path, _show=True):
-    show('cd', path, stdout=_show)
+    if os.name == 'nt':
+        show('cd', '/D', path, stdout=_show)
+    else:
+        show('cd', path, stdout=_show)
     os.chdir(path)
 
 
