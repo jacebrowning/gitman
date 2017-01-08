@@ -2,9 +2,11 @@
 PROJECT := GitMan
 PACKAGE := gitman
 REPOSITORY := jacebrowning/gitman
+
+# Project paths
 PACKAGES := $(PACKAGE) tests
-CONFIG := $(shell ls *.py)
-MODULES := $(shell find $(PACKAGES) -name '*.py') $(CONFIG)
+CONFIG := $(wildcard *.py)
+MODULES := $(wildcard $(PACKAGE)/*.py)
 
 # Python settings
 ifndef TRAVIS
@@ -62,7 +64,7 @@ HONCHO := $(ACTIVATE) && $(BIN)/honcho
 # MAIN TASKS ###################################################################
 
 .PHONY: all
-all: doc
+all: install
 
 .PHONY: ci
 ci: check test demo ## Run all tasks that determine CI status
@@ -122,29 +124,24 @@ $(PYTHON):
 
 # CHECKS #######################################################################
 
-PEP8 := $(BIN)/pep8
-PEP8RADIUS := $(BIN)/pep8radius
-PEP257 := $(BIN)/pep257
 PYLINT := $(BIN)/pylint
+PYCODESTYLE := $(BIN)/pycodestyle
+PYDOCSTYLE := $(BIN)/pydocstyle
 
 .PHONY: check
-check: pep8 pep257 pylint ## Run linters and static analysis
-
-.PHONY: pep8
-pep8: install ## Check for convention issues
-	$(PEP8) $(PACKAGES) $(CONFIG) --config=.pep8rc
-
-.PHONY: pep257
-pep257: install ## Check for docstring issues
-	$(PEP257) $(PACKAGES) $(CONFIG)
+check: pylint pycodestyle pydocstyle ## Run linters and static analysis
 
 .PHONY: pylint
 pylint: install ## Check for code issues
-	$(PYLINT) $(PACKAGES) $(CONFIG) --rcfile=.pylintrc
+	$(PYLINT) $(PACKAGES) $(CONFIG) --rcfile=.pylint.ini
 
-.PHONY: fix
-fix: install
-	$(PEP8RADIUS) --docformatter --in-place
+.PHONY: pycodestyle
+pycodestyle: install ## Check for code conventions
+	$(PYCODESTYLE) $(PACKAGES) $(CONFIG) --config=.pycodestyle.ini
+
+.PHONY: pydocstyle
+pydocstyle: install ## Check for docstring conventions
+	$(PYDOCSTYLE) $(PACKAGES) $(CONFIG)
 
 # TESTS ########################################################################
 
@@ -177,12 +174,14 @@ test-unit: install ## Run the unit tests
 .PHONY: test-int
 test-int: install ## Run the integration tests
 	@ if test -e $(FAILURES); then TEST_INTEGRATION=true $(PYTEST) $(PYTEST_OPTS_FAILFAST) tests; fi
+	@ rm -rf $(FAILURES)
 	$(PYTEST) $(PYTEST_OPTS) tests --junitxml=$(REPORTS)/integration.xml
 	$(COVERAGE_SPACE) $(REPOSITORY) integration
 
 .PHONY: test-all
 test-all: install ## Run all the tests
 	@ if test -e $(FAILURES); then TEST_INTEGRATION=true $(PYTEST) $(PYTEST_OPTS_FAILFAST) $(PACKAGES); fi
+	@ rm -rf $(FAILURES)
 	TEST_INTEGRATION=true $(PYTEST) $(PYTEST_OPTS) $(PACKAGES) --junitxml=$(REPORTS)/overall.xml
 	$(COVERAGE_SPACE) $(REPOSITORY) overall
 
