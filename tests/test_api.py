@@ -353,7 +353,9 @@ def describe_lock():
     def it_should_fail_on_invalid_repositories(config):
         os.system("mkdir deps")
         if os.name == 'nt':
-            os.system('type nul >>deps\\gitman_1')
+            os.system('cd deps')
+            os.system('type nul >>gitman_1')
+            os.system('cd ..')
         else:
             os.system("touch deps/gitman_1")
 
