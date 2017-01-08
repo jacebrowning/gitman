@@ -1,4 +1,4 @@
-location: /tmp/gitman-test-dependencies
+location: ../../../tmp
 sources:
 - name: gitman_1
   link: ''
