@@ -46,7 +46,10 @@ def config(root=os.path.normpath(tempfile.gettempdir() + "/gitman-shared")):
     os.chdir(root)
     log.info("Temporary directory: %s", root)
 
-    os.system("touch .git")
+    if os.name == 'nt':
+      os.system("touch .git")
+    else:
+      os.system('copy /b ".git" +,, 1>nul')
     config = Config(root=root)
     config.__mapper__.text = CONFIG  # pylint: disable=no-member
 
