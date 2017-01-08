@@ -175,7 +175,7 @@ test-unit: install ## Run the unit tests
 test-int: install ## Run the integration tests
 	@ if test -e $(FAILURES); then TEST_INTEGRATION=true $(PYTEST) $(PYTEST_OPTS_FAILFAST) tests; fi
 	@ rm -rf $(FAILURES)
-	$(PYTEST) $(PYTEST_OPTS) tests --junitxml=$(REPORTS)/integration.xml
+	TEST_INTEGRATION=true $(PYTEST) $(PYTEST_OPTS) tests --junitxml=$(REPORTS)/integration.xml
 	$(COVERAGE_SPACE) $(REPOSITORY) integration
 
 .PHONY: test-all

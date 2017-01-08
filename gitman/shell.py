@@ -3,7 +3,6 @@
 import os
 import subprocess
 import logging
-import shutil
 
 from . import common
 from .exceptions import ShellError
