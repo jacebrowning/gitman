@@ -48,9 +48,9 @@ def config(root=os.path.normpath(tempfile.gettempdir() + "/gitman-shared")):
 
     if os.name == 'nt':
         if not os.path.exists(".git"):
-          os.system('type nul >>.git')
+            os.system('type nul >>.git')
         else:
-          os.system('copy /b ".git" +,, 1>nul')
+            os.system('copy /b ".git" +,, 1>nul')
     else:
         os.system("touch .git")
 
