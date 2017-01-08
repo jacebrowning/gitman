@@ -1,4 +1,4 @@
-"""Integration tests configuration."""
+"""Integration tests configuration file."""
 
 import yorm
 
