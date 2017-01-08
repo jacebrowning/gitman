@@ -4,6 +4,7 @@ import os
 import shutil
 from contextlib import suppress
 import logging
+import tempfile
 
 import pytest
 from expecter import expect
@@ -37,7 +38,7 @@ log = logging.getLogger(__name__)
 
 
 @pytest.fixture
-def config(root="/tmp/gitman-shared"):
+def config(root=os.path.normpath(tempfile.gettempdir() + "/gitman-shared")):
     with suppress(FileNotFoundError, PermissionError):
         shutil.rmtree(root)
     with suppress(FileExistsError):
@@ -45,7 +46,14 @@ def config(root="/tmp/gitman-shared"):
     os.chdir(root)
     log.info("Temporary directory: %s", root)
 
-    os.system("touch .git")
+    if os.name == 'nt':
+        if not os.path.exists(".git"):
+            os.system('type nul >>.git')
+        else:
+            os.system('copy /b ".git" +,, 1>nul')
+    else:
+        os.system("touch .git")
+
     config = Config(root=root)
     config.__mapper__.text = CONFIG  # pylint: disable=no-member
 
@@ -125,17 +133,20 @@ def describe_install():
 
             return config
 
+        @pytest.mark.skipif(os.name == 'nt', reason="no symlink on Windows")
         def it_should_create_links(config_with_link):
             expect(gitman.install(depth=1)) == True
 
             expect(os.listdir()).contains('my_link')
 
+        @pytest.mark.skipif(os.name == 'nt', reason="no symlink on Windows")
         def it_should_not_overwrite_files(config_with_link):
             os.system("touch my_link")
 
             with pytest.raises(RuntimeError):
                 gitman.install(depth=1)
 
+        @pytest.mark.skipif(os.name == 'nt', reason="no symlink on Windows")
         def it_overwrites_files_with_force(config_with_link):
             os.system("touch my_link")
 
@@ -279,16 +290,19 @@ def describe_list():
         gitman.list()
         with open(config.log_path) as stream:
             contents = stream.read().replace("/private", "")
-        expect(contents) == strip("""
-        2012-01-14 12:00:01
-        /tmp/gitman-shared/deps/gitman_1: https://github.com/jacebrowning/gitman-demo @ 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
-        /tmp/gitman-shared/deps/gitman_1/gitman_sources/gdm_3: https://github.com/jacebrowning/gdm-demo @ 050290bca3f14e13fd616604202b579853e7bfb0
-        /tmp/gitman-shared/deps/gitman_1/gitman_sources/gdm_3/gitman_sources/gdm_3: https://github.com/jacebrowning/gdm-demo @ fb693447579235391a45ca170959b5583c5042d8
-        /tmp/gitman-shared/deps/gitman_1/gitman_sources/gdm_3/gitman_sources/gdm_4: https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5
-        /tmp/gitman-shared/deps/gitman_1/gitman_sources/gdm_4: https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5
-        /tmp/gitman-shared/deps/gitman_2: https://github.com/jacebrowning/gitman-demo @ 7bd138fe7359561a8c2ff9d195dff238794ccc04
-        /tmp/gitman-shared/deps/gitman_3: https://github.com/jacebrowning/gitman-demo @ 9bf18e16b956041f0267c21baad555a23237b52e
-        """, end='\n\n')
+
+        temp_path = os.path.normpath(tempfile.gettempdir())
+        test_string = (
+            "2012-01-14 12:00:01\n" +
+            temp_path + os.path.normpath("/gitman-shared/deps/gitman_1") + ": https://github.com/jacebrowning/gitman-demo @ 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd\n" +
+            temp_path + os.path.normpath("/gitman-shared/deps/gitman_1/gitman_sources/gdm_3") + ": https://github.com/jacebrowning/gdm-demo @ 050290bca3f14e13fd616604202b579853e7bfb0\n" +
+            temp_path + os.path.normpath("/gitman-shared/deps/gitman_1/gitman_sources/gdm_3/gitman_sources/gdm_3") + ": https://github.com/jacebrowning/gdm-demo @ fb693447579235391a45ca170959b5583c5042d8\n" +
+            temp_path + os.path.normpath("/gitman-shared/deps/gitman_1/gitman_sources/gdm_3/gitman_sources/gdm_4") + ": https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5\n" +
+            temp_path + os.path.normpath("/gitman-shared/deps/gitman_1/gitman_sources/gdm_4") + ": https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5\n" +
+            temp_path + os.path.normpath("/gitman-shared/deps/gitman_2") + ": https://github.com/jacebrowning/gitman-demo @ 7bd138fe7359561a8c2ff9d195dff238794ccc04\n" +
+            temp_path + os.path.normpath("/gitman-shared/deps/gitman_3") + ": https://github.com/jacebrowning/gitman-demo @ 9bf18e16b956041f0267c21baad555a23237b52e\n"
+        )
+        expect(contents) == strip(test_string, end='\n\n')
 
 
 def describe_lock():
@@ -337,7 +351,13 @@ def describe_lock():
             gitman.lock()
 
     def it_should_fail_on_invalid_repositories(config):
-        os.system("mkdir deps && touch deps/gitman_1")
+        os.system("mkdir deps")
+        if os.name == 'nt':
+            os.system('cd deps')
+            os.system('type nul >>gitman_1')
+            os.system('cd ..')
+        else:
+            os.system("touch deps/gitman_1")
 
         with pytest.raises(InvalidRepository):
             gitman.lock()

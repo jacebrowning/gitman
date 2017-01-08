@@ -5,7 +5,7 @@ import functools
 import datetime
 import logging
 
-from . import common, system
+from . import common, system, shell
 from .models import load_config
 
 log = logging.getLogger(__name__)
@@ -183,6 +183,7 @@ def delete(*, root=None, force=False):
         common.dedent(level=0)
         common.show("Deleting all dependencies...", color='message', log=False)
         common.show()
+        shell.cd(root)
         config.uninstall_dependencies()
 
     return _display_result("delete", "Deleted", count, allow_zero=True)
