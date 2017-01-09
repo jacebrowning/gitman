@@ -345,7 +345,8 @@ def describe_lock():
         expect(config.__mapper__.text).does_not_contain("<dirty>")
 
     def it_should_fail_on_invalid_repositories(config):
-        os.makedirs("deps")
+        if not os.path.exists("deps"):
+            os.makedirs("deps")
         with open("deps/gitman_1", 'w') as stream:
             stream.write("invalid repository")
 
