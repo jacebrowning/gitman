@@ -134,12 +134,14 @@ def describe_install():
 
             expect(os.listdir()).contains('my_link')
 
+        @pytest.mark.xfail(os.name == 'nt', reason="No symlinks on Windows")
         def it_should_not_overwrite_files(config_with_link):
             os.system("touch my_link")
 
             with pytest.raises(RuntimeError):
                 gitman.install(depth=1)
 
+        @pytest.mark.xfail(os.name == 'nt', reason="No symlinks on Windows")
         def it_overwrites_files_with_force(config_with_link):
             os.system("touch my_link")
 
@@ -282,7 +284,7 @@ def describe_list():
         gitman.install()
         gitman.list()
         with open(config.log_path) as stream:
-            contents = stream.read().replace(ROOT, "/tmp")
+            contents = stream.read().replace(ROOT, "/tmp").replace('\\', '/')
         expect(contents) == strip("""
         2012-01-14 12:00:01
         /tmp/deps/gitman_1: https://github.com/jacebrowning/gitman-demo @ 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd

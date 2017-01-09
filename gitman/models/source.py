@@ -2,6 +2,7 @@
 
 import os
 import logging
+import warnings
 
 import yorm
 from yorm.types import String, AttributeDictionary
@@ -83,20 +84,29 @@ class Source(AttributeDictionary):
 
     def create_link(self, root, force=False):
         """Create a link from the target name to the current directory."""
-        if self.link:
-            log.info("Creating a symbolic link...")
-            target = os.path.join(root, self.link)
-            source = os.path.relpath(os.getcwd(), os.path.dirname(target))
-            if os.path.islink(target):
-                os.remove(target)
-            elif os.path.exists(target):
-                if force:
-                    shell.rm(target)
-                else:
-                    common.show()
-                    msg = "Preexisting link location at {}".format(target)
-                    raise UncommittedChanges(msg)
-            shell.ln(source, target)
+        if not self.link:
+            return
+
+        log.info("Creating a symbolic link...")
+
+        if os.name == 'nt':
+            warnings.warn("Symbolic links are not supported on Windows")
+            return
+
+        target = os.path.join(root, self.link)
+        source = os.path.relpath(os.getcwd(), os.path.dirname(target))
+
+        if os.path.islink(target):
+            os.remove(target)
+        elif os.path.exists(target):
+            if force:
+                shell.rm(target)
+            else:
+                common.show()
+                msg = "Preexisting link location at {}".format(target)
+                raise UncommittedChanges(msg)
+
+        shell.ln(source, target)
 
     def identify(self, allow_dirty=True, allow_missing=True):
         """Get the path and current repository URL and hash."""
