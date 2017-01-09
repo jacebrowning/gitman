@@ -342,8 +342,12 @@ def describe_lock():
         with pytest.raises(UncommittedChanges):
             gitman.lock()
 
+        expect(config.__mapper__.text).does_not_contain("<dirty>")
+
     def it_should_fail_on_invalid_repositories(config):
-        os.system("mkdir deps && touch deps/gitman_1")
+        os.makedirs("deps")
+        with open("deps/gitman_1", 'w') as stream:
+            stream.write("invalid repository")
 
         with pytest.raises(InvalidRepository):
             gitman.lock()
