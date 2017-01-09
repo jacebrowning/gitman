@@ -283,7 +283,7 @@ def describe_list():
         gitman.install()
         gitman.list()
         with open(config.log_path) as stream:
-            contents = stream.read().replace(ROOT, "/tmp")
+            contents = stream.read().replace(ROOT, "/tmp").replace('\\', '/')
         expect(contents) == strip("""
         2012-01-14 12:00:01
         /tmp/deps/gitman_1: https://github.com/jacebrowning/gitman-demo @ 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
