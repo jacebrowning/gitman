@@ -1,8 +1,8 @@
 # Revision History
 
-## 1.2 (unreleased)
+## 1.2 (2017/01/08)
 
-- Added preliminary Windows support.
+- Added preliminary Windows support (@StudioEtrange).
 
 ## 1.1 (2017/01/06)
 
