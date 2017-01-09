@@ -145,6 +145,7 @@ class Config:
 
     def uninstall_dependencies(self):
         """Delete the dependency storage location."""
+        shell.cd(self.root)
         shell.rm(self.location_path)
         common.show()
 
