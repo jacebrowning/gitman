@@ -112,16 +112,20 @@ def describe_config():
     def describe_get_path():
 
         def it_defaults_to_sources_location(config):
-            expect(config.get_path()) == "m/root/m/location"
+            expect(config.get_path()) == \
+                os.path.normpath("m/root/m/location")
 
         def it_can_get_the_config_path(config):
-            expect(config.get_path('__config__')) == "m/root/m.ext"
+            expect(config.get_path('__config__')) == \
+                os.path.normpath("m/root/m.ext")
 
         def it_can_get_log_path(config):
-            expect(config.get_path('__log__')) == "m/root/m/location/gitman.log"
+            expect(config.get_path('__log__')) == \
+                os.path.normpath("m/root/m/location/gitman.log")
 
         def it_can_get_dependency_path(config):
-            expect(config.get_path('foobar')) == "m/root/m/location/foobar"
+            expect(config.get_path('foobar')) == \
+                os.path.normpath("m/root/m/location/foobar")
 
 
 class TestLoad:

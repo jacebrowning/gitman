@@ -39,12 +39,12 @@ class Config:
     @property
     def log_path(self):
         """Get the full path to the log file."""
-        return os.path.join(self.location_path, self.LOG)
+        return os.path.normpath(os.path.join(self.location_path, self.LOG))
 
     @property
     def location_path(self):
         """Get the full path to the dependency storage location."""
-        return os.path.join(self.root, self.location)
+        return os.path.normpath(os.path.join(self.root, self.location))
 
     def get_path(self, name=None):
         """Get the full path to a dependency or internal file."""
@@ -54,7 +54,7 @@ class Config:
         elif name == '__log__':
             return self.log_path
         elif name:
-            return os.path.join(base, name)
+            return os.path.normpath(os.path.join(base, name))
         else:
             return base
 
