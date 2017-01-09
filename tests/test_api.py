@@ -340,11 +340,15 @@ def describe_lock():
     def it_should_fail_on_dirty_repositories(config):
         expect(gitman.update(depth=1, lock=False)) == True
         shell.rm(os.path.join("deps", "gitman_1", ".project"))
+        try:
 
-        with pytest.raises(UncommittedChanges):
-            gitman.lock()
+            with pytest.raises(UncommittedChanges):
+                gitman.lock()
 
-        expect(config.__mapper__.text).does_not_contain("<dirty>")
+            expect(config.__mapper__.text).does_not_contain("<dirty>")
+
+        finally:
+            shell.rm(os.path.join("deps", "gitman_1"))
 
     def it_should_fail_on_invalid_repositories(config):
         shell.mkdir("deps")
