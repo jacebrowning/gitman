@@ -134,6 +134,7 @@ def describe_install():
 
             expect(os.listdir()).contains('my_link')
 
+        @pytest.mark.xfail(os.name == 'nt', reason="No symlinks on Windows")
         def it_should_not_overwrite_files(config_with_link):
             os.system("touch my_link")
 
