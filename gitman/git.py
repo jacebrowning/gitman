@@ -2,6 +2,7 @@
 
 import os
 import logging
+from contextlib import suppress
 
 from . import common
 from .shell import call
@@ -50,13 +51,13 @@ def changes(include_untracked=False, display_status=True, _show=False):
     status = False
 
     try:
-        # refresh changes
+        # Refresh changes
         git('update-index', '-q', '--refresh', _show=False)
 
-        # check for uncommitted changes
+        # Check for uncommitted changes
         git('diff-index', '--quiet', 'HEAD', _show=_show)
 
-        # check for untracked files
+        # Check for untracked files
         output = git('ls-files', '--others', '--exclude-standard', _show=_show)
 
     except ShellError:
@@ -66,8 +67,9 @@ def changes(include_untracked=False, display_status=True, _show=False):
         status = bool(output.splitlines()) and include_untracked
 
     if status and display_status:
-        for line in git('status', _show=True).splitlines():
-            common.show(line, color='changes')
+        with suppress(ShellError):
+            for line in git('status', _show=True).splitlines():
+                common.show(line, color='changes')
 
     return status
 

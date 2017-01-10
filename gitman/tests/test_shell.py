@@ -8,7 +8,7 @@ import pytest
 from gitman import shell
 from gitman.exceptions import ShellError
 
-from . import assert_calls
+from .utils import check_calls
 
 
 class TestCall:
@@ -37,47 +37,57 @@ class TestCall:
 class TestPrograms:
     """Tests for calls to shell programs."""
 
-    @patch('os.makedirs')
-    def test_mkdir(self, mock_makedirs, mock_call):
+    def test_mkdir(self, mock_call):
         """Verify the commands to create directories."""
         shell.mkdir('mock/dirpath')
-        mock_makedirs.assert_called_once_with('mock/dirpath')
-        assert_calls(mock_call, [])
+        if os.name == 'nt':
+            check_calls(mock_call, ["mkdir mock/dirpath"])
+        else:
+            check_calls(mock_call, ["mkdir -p mock/dirpath"])
 
     @patch('os.chdir')
     def test_cd(self, mock_chdir, mock_call):
         """Verify the commands to change directories."""
         shell.cd('mock/dirpath')
         mock_chdir.assert_called_once_with('mock/dirpath')
-        assert_calls(mock_call, [])
+        check_calls(mock_call, [])
 
     @patch('os.path.isdir', Mock(return_value=True))
-    @pytest.mark.skipif(os.name == 'nt', reason="no symlink on Windows")
     def test_ln(self, mock_call):
         """Verify the commands to create symbolic links."""
         shell.ln('mock/target', 'mock/source')
-        assert_calls(mock_call, ["ln -s mock/target mock/source"])
+        if os.name == 'nt':
+            check_calls(mock_call, [])
+        else:
+            check_calls(mock_call, ["ln -s mock/target mock/source"])
 
     @patch('os.path.isdir', Mock(return_value=False))
-    @pytest.mark.skipif(os.name == 'nt', reason="no symlink on Windows")
+    @patch('os.path.exists', Mock(return_value=False))
     def test_ln_missing_parent(self, mock_call):
         """Verify the commands to create symbolic links (missing parent)."""
         shell.ln('mock/target', 'mock/source')
-        assert_calls(mock_call, ["ln -s mock/target mock/source"])
+        if os.name == 'nt':
+            check_calls(mock_call, [])
+        else:
+            check_calls(mock_call, [
+                "mkdir -p mock",
+                "ln -s mock/target mock/source",
+            ])
 
-    @patch('os.remove')
-    @patch('os.path.exists', Mock(return_value=True))
-    def test_rm_file(self, mock_remove, mock_call):
+    @patch('os.path.isfile', Mock(return_value=True))
+    def test_rm_file(self, mock_call):
         """Verify the commands to delete files."""
         shell.rm('mock/path')
-        mock_remove.assert_called_once_with('mock/path')
-        assert_calls(mock_call, [])
+        if os.name == 'nt':
+            check_calls(mock_call, ["del /Q /F mock/path"])
+        else:
+            check_calls(mock_call, ["rm -rf mock/path"])
 
-    @patch('shutil.rmtree')
-    @patch('os.path.exists', Mock(return_value=True))
     @patch('os.path.isdir', Mock(return_value=True))
-    def test_rm_directory(self, mock_rmtree, mock_call):
+    def test_rm_directory(self, mock_call):
         """Verify the commands to delete directories."""
         shell.rm('mock/dirpath')
-        mock_rmtree.assert_called_once_with('mock/dirpath')
-        assert_calls(mock_call, [])
+        if os.name == 'nt':
+            check_calls(mock_call, ["rmdir /Q /S mock/dirpath"])
+        else:
+            check_calls(mock_call, ["rm -rf mock/dirpath"])

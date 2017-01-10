@@ -5,7 +5,7 @@ import os
 from gitman import git
 from gitman.exceptions import ShellError
 
-from . import assert_calls
+from .utils import check_calls
 
 
 @patch('gitman.git.call')
@@ -16,7 +16,7 @@ class TestGit:
     def test_clone(self, mock_call):
         """Verify the commands to set up a new reference repository."""
         git.clone('mock.git', 'mock/path', cache='cache')
-        assert_calls(mock_call, [
+        check_calls(mock_call, [
             "git clone --mirror mock.git " +
             os.path.normpath("cache/mock.reference"),
             "git clone --reference " +
@@ -29,7 +29,7 @@ class TestGit:
     def test_clone_from_reference(self, mock_call):
         """Verify the commands to clone a Git repository from a reference."""
         git.clone('mock.git', 'mock/path', cache='cache')
-        assert_calls(mock_call, [
+        check_calls(mock_call, [
             "git clone --reference " +
             os.path.normpath("cache/mock.reference") +
             " mock.git " +
@@ -39,7 +39,7 @@ class TestGit:
     def test_fetch(self, mock_call):
         """Verify the commands to fetch from a Git repository."""
         git.fetch('mock.git')
-        assert_calls(mock_call, [
+        check_calls(mock_call, [
             "git remote set-url origin mock.git",
             "git fetch --tags --force --prune origin",
         ])
@@ -47,7 +47,7 @@ class TestGit:
     def test_fetch_rev(self, mock_call):
         """Verify the commands to fetch from a Git repository w/ rev."""
         git.fetch('mock.git', 'mock-rev')
-        assert_calls(mock_call, [
+        check_calls(mock_call, [
             "git remote set-url origin mock.git",
             "git fetch --tags --force --prune origin mock-rev",
         ])
@@ -55,7 +55,7 @@ class TestGit:
     def test_fetch_rev_sha(self, mock_call):
         """Verify the commands to fetch from a Git repository w/ SHA."""
         git.fetch('mock.git', 'abcdef1234' * 4)
-        assert_calls(mock_call, [
+        check_calls(mock_call, [
             "git remote set-url origin mock.git",
             "git fetch --tags --force --prune origin",
         ])
@@ -63,7 +63,7 @@ class TestGit:
     def test_fetch_rev_revparse(self, mock_call):
         """Verify the commands to fetch from a Git repository w/ rev-parse."""
         git.fetch('mock.git', 'master@{2015-02-12 18:30:00}')
-        assert_calls(mock_call, [
+        check_calls(mock_call, [
             "git remote set-url origin mock.git",
             "git fetch --tags --force --prune origin",
         ])
@@ -71,7 +71,7 @@ class TestGit:
     def test_changes(self, mock_call):
         """Verify the commands to check for uncommitted changes."""
         git.changes(include_untracked=True)
-        assert_calls(mock_call, [
+        check_calls(mock_call, [
             # based on: http://stackoverflow.com/questions/3878624
             "git update-index -q --refresh",
             "git diff-index --quiet HEAD",
@@ -102,7 +102,7 @@ class TestGit:
     def test_update(self, mock_call):
         """Verify the commands to update a working tree to a revision."""
         git.update('mock_rev')
-        assert_calls(mock_call, [
+        check_calls(mock_call, [
             "git stash",
             "git clean --force -d -x",
             "git checkout --force mock_rev",
@@ -112,7 +112,7 @@ class TestGit:
     def test_update_branch(self, mock_call):
         """Verify the commands to update a working tree to a branch."""
         git.update('mock_branch', fetch=True)
-        assert_calls(mock_call, [
+        check_calls(mock_call, [
             "git stash",
             "git clean --force -d -x",
             "git checkout --force mock_branch",
@@ -122,7 +122,7 @@ class TestGit:
 
     def test_update_no_clean(self, mock_call):
         git.update('mock_rev', clean=False)
-        assert_calls(mock_call, [
+        check_calls(mock_call, [
             "git stash",
             "git checkout --force mock_rev",
             "git branch --set-upstream-to origin/mock_rev",
@@ -132,7 +132,7 @@ class TestGit:
         """Verify the commands to update a working tree to a rev-parse."""
         mock_call.return_value = "abc123"
         git.update('mock_branch@{2015-02-12 18:30:00}')
-        assert_calls(mock_call, [
+        check_calls(mock_call, [
             "git stash",
             "git clean --force -d -x",
             "git checkout --force mock_branch",
@@ -144,19 +144,19 @@ class TestGit:
     def test_get_url(self, mock_call):
         """Verify the commands to get the current repository's URL."""
         git.get_url()
-        assert_calls(mock_call, ["git config --get remote.origin.url"])
+        check_calls(mock_call, ["git config --get remote.origin.url"])
 
     def test_get_hash(self, mock_call):
         """Verify the commands to get the working tree's hash."""
         git.get_hash()
-        assert_calls(mock_call, ["git rev-parse HEAD"])
+        check_calls(mock_call, ["git rev-parse HEAD"])
 
     def test_get_tag(self, mock_call):
         """Verify the commands to get the working tree's tag."""
         git.get_tag()
-        assert_calls(mock_call, ["git describe --tags --exact-match"])
+        check_calls(mock_call, ["git describe --tags --exact-match"])
 
     def test_get_branch(self, mock_call):
         """Verify the commands to get the working tree's branch."""
         git.get_branch()
-        assert_calls(mock_call, ["git rev-parse --abbrev-ref HEAD"])
+        check_calls(mock_call, ["git rev-parse --abbrev-ref HEAD"])

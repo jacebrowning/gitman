@@ -1,3 +1,10 @@
+environment:
+  global:
+    RANDOM_SEED: 0
+  matrix:
+    - PYTHON_MAJOR: 3
+      PYTHON_MINOR: 5
+
 cache:
   - env
 
@@ -14,6 +21,6 @@ install:
 build: off
 
 test_script:
-  - make test
   - make check
+  - make test
   - make demo
