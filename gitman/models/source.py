@@ -59,11 +59,14 @@ class Source(AttributeDictionary):
         """Ensure the source matches the specified revision."""
         log.info("Updating source files...")
 
-        # Enter the working tree
+        # Clone the repository if needed
         if not os.path.exists(self.name):
-            log.debug("Creating a new repository...")
             git.clone(self.repo, self.name)
+
+        # Enter the working tree
         shell.cd(self.name)
+        if not git.valid():
+            raise self._invalid_repository
 
         # Check for uncommitted changes
         if not force:
@@ -113,6 +116,8 @@ class Source(AttributeDictionary):
         if os.path.isdir(self.name):
 
             shell.cd(self.name)
+            if not git.valid():
+                raise self._invalid_repository
 
             path = os.getcwd()
             url = git.get_url()
@@ -135,12 +140,16 @@ class Source(AttributeDictionary):
 
         else:
 
-            path = os.path.join(os.getcwd(), self.name)
-            msg = "Not a valid repository: {}".format(path)
-            raise InvalidRepository(msg)
+            raise self._invalid_repository
 
     def lock(self):
         """Return a locked version of the current source."""
         _, _, revision = self.identify(allow_dirty=False, allow_missing=False)
         source = self.__class__(self.repo, self.name, revision, self.link)
         return source
+
+    @property
+    def _invalid_repository(self):
+        path = os.path.join(os.getcwd(), self.name)
+        msg = "Not a valid repository: {}".format(path)
+        return InvalidRepository(msg)

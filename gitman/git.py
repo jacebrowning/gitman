@@ -18,6 +18,8 @@ def git(*args, **kwargs):
 
 def clone(repo, path, *, cache=None):
     """Clone a new Git repository."""
+    log.debug("Creating a new repository...")
+
     cache = cache or os.path.expanduser("~/.gitcache")
     cache = os.path.normpath(cache)
 
@@ -44,6 +46,18 @@ def fetch(repo, rev=None):
         else:
             args.append(rev)
     git(*args)
+
+
+def valid():
+    """Confirm the current directory is a valid working tree."""
+    log.debug("Checking for a valid working tree...")
+
+    try:
+        git('rev-parse', '--is-inside-work-tree', _show=False)
+    except ShellError:
+        return False
+    else:
+        return True
 
 
 def changes(include_untracked=False, display_status=True, _show=False):
