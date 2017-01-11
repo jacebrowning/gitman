@@ -61,7 +61,7 @@ def config():
 def describe_install():
 
     def it_creates_missing_directories(config):
-        expect(os.path.isdir(config.location)) == False
+        shell.rm(config.location)
 
         expect(gitman.install('gitman_1', depth=1)) == True
 
