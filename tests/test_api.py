@@ -17,7 +17,8 @@ from gitman.exceptions import UncommittedChanges, InvalidRepository
 from .utilities import strip
 
 
-ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'tmp')
+ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)))
+TMP = os.path.join(ROOT, 'tmp')
 
 CONFIG = """
 location: deps
@@ -39,23 +40,25 @@ sources:
 log = logging.getLogger(__name__)
 
 
-@pytest.fixture
+@pytest.yield_fixture
 def config():
-    log.info("Temporary directory: %s", ROOT)
+    log.info("Temporary directory: %s", TMP)
 
     with suppress(FileNotFoundError, PermissionError):
-        shutil.rmtree(ROOT)
+        shutil.rmtree(TMP)
     with suppress(FileExistsError):
-        os.makedirs(ROOT)
-    os.chdir(ROOT)
+        os.makedirs(TMP)
+    os.chdir(TMP)
 
     os.system("touch .git")
-    config = Config(root=ROOT)
+    config = Config(root=TMP)
     config.__mapper__.text = CONFIG
 
-    log.debug("File listing: %s", os.listdir(ROOT))
+    log.debug("File listing: %s", os.listdir(TMP))
 
-    return config
+    yield config
+
+    os.chdir(ROOT)
 
 
 def describe_install():
@@ -297,7 +300,7 @@ def describe_list():
         gitman.list()
 
         with open(config.log_path) as stream:
-            contents = stream.read().replace(ROOT, "tmp").replace('\\', '/')
+            contents = stream.read().replace(TMP, "tmp").replace('\\', '/')
         expect(contents) == strip("""
         2012-01-14 12:00:01
         tmp/deps/gitman_1: https://github.com/jacebrowning/gitman-demo @ 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd

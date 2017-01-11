@@ -61,7 +61,6 @@ class Source(AttributeDictionary):
 
         # Clone the repository if needed
         if not os.path.exists(self.name):
-            log.debug("Creating a new repository...")
             git.clone(self.repo, self.name)
 
         # Enter the working tree
