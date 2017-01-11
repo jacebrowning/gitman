@@ -68,6 +68,13 @@ class TestGit:
             "git fetch --tags --force --prune origin",
         ])
 
+    def test_valid(self, mock_call):
+        """Verify the commands to check for a working tree."""
+        git.valid()
+        check_calls(mock_call, [
+            "git rev-parse --is-inside-work-tree",
+        ])
+
     def test_changes(self, mock_call):
         """Verify the commands to check for uncommitted changes."""
         git.changes(include_untracked=True)

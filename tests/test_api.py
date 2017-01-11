@@ -114,6 +114,17 @@ def describe_install():
 
         expect(os.listdir(config.location)) == ['gitman_1']
 
+    def it_detects_invalid_repositories(config):
+        shell.rm(os.path.join("deps", "gitman_1", ".git"))
+        shell.mkdir(os.path.join("deps", "gitman_1", ".git"))
+
+        try:
+            with pytest.raises(InvalidRepository):
+                expect(gitman.install('gitman_1', depth=1)) == False
+
+        finally:
+            shell.rm(os.path.join("deps", "gitman_1"))
+
     def describe_links():
 
         @pytest.fixture
@@ -340,8 +351,8 @@ def describe_lock():
     def it_should_fail_on_dirty_repositories(config):
         expect(gitman.update(depth=1, lock=False)) == True
         shell.rm(os.path.join("deps", "gitman_1", ".project"))
-        try:
 
+        try:
             with pytest.raises(UncommittedChanges):
                 gitman.lock()
 
@@ -350,7 +361,7 @@ def describe_lock():
         finally:
             shell.rm(os.path.join("deps", "gitman_1"))
 
-    def it_should_fail_on_invalid_repositories(config):
+    def it_should_fail_on_missing_repositories(config):
         shell.mkdir("deps")
         shell.rm(os.path.join("deps", "gitman_1"))
 
@@ -358,3 +369,17 @@ def describe_lock():
             gitman.lock()
 
         expect(config.__mapper__.text).does_not_contain("<unknown>")
+
+    def it_should_fail_on_invalid_repositories(config):
+        shell.mkdir("deps")
+        shell.rm(os.path.join("deps", "gitman_1", ".git"))
+        shell.mkdir(os.path.join("deps", "gitman_1", ".git"))
+
+        try:
+            with pytest.raises(InvalidRepository):
+                gitman.lock()
+
+            expect(config.__mapper__.text).does_not_contain("<unknown>")
+
+        finally:
+            shell.rm(os.path.join("deps", "gitman_1"))

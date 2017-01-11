@@ -46,6 +46,16 @@ def fetch(repo, rev=None):
     git(*args)
 
 
+def valid():
+    """Confirm the current directory is a valid working tree."""
+    try:
+        git('rev-parse', '--is-inside-work-tree', _show=False)
+    except ShellError:
+        return False
+    else:
+        return True
+
+
 def changes(include_untracked=False, display_status=True, _show=False):
     """Determine if there are changes in the working tree."""
     status = False
