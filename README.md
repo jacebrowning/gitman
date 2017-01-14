@@ -45,6 +45,12 @@ sources:
   link: Tools/XcodeCoverage
 ```
 
+or, let GitMan create a sample configuration file for you:
+
+```sh
+$ gitman init
+```
+
 Ignore the dependency storage location:
 
 ```sh

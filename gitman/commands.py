@@ -6,7 +6,7 @@ import datetime
 import logging
 
 from . import common, system
-from .models import load_config
+from .models import load_config, Config, Source
 
 log = logging.getLogger(__name__)
 
@@ -19,6 +19,33 @@ def restore_cwd(func):
         os.chdir(cwd)
         return result
     return wrapped
+
+
+def init():
+    """Create a new configuration file for the project."""
+    success = False
+
+    config = load_config()
+    if config:
+        msg = "Configuration file already exists: {}".format(config.path)
+        common.show(msg, 'error')
+
+    else:
+        config = Config()
+        source = Source(name="sample_dependency",
+                        repo="https://github.com/githubtraining/hellogitworld")
+        config.sources.append(source)
+        source = source.lock(rev="ebbbf773431ba07510251bb03f9525c7bab2b13a")
+        config.sources_locked.append(source)
+        config.save()
+
+        msg = "Created sample configuration file: {}".format(config.path)
+        common.show(msg, 'success')
+        success = True
+
+    common.show("To edit this configuration file, run: gitman edit", 'message')
+
+    return success
 
 
 @restore_cwd

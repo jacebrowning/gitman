@@ -2,6 +2,14 @@
 
 All of the [command-line interface](cli.md) functionality is available from the Python package by importing `gitman`.
 
+## Init
+
+To generate a sample configuration for a new project, call:
+
+```python
+gitman.init()
+```
+
 ## Install
 
 To clone/checkout the specified dependencies, call:

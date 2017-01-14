@@ -130,9 +130,9 @@ class Source(AttributeDictionary):
                 common.show(self.DIRTY, color='dirty', log=False)
                 return path, url, self.DIRTY
             else:
-                revision = git.get_hash(_show=True)
-                common.show(revision, color='revision', log=False)
-                return path, url, revision
+                rev = git.get_hash(_show=True)
+                common.show(rev, color='rev', log=False)
+                return path, url, rev
 
         elif allow_missing:
 
@@ -142,10 +142,11 @@ class Source(AttributeDictionary):
 
             raise self._invalid_repository
 
-    def lock(self):
+    def lock(self, rev=None):
         """Return a locked version of the current source."""
-        _, _, revision = self.identify(allow_dirty=False, allow_missing=False)
-        source = self.__class__(self.repo, self.name, revision, self.link)
+        if rev is None:
+            _, _, rev = self.identify(allow_dirty=False, allow_missing=False)
+        source = self.__class__(self.repo, self.name, rev, self.link)
         return source
 
     @property
