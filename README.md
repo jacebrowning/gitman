@@ -31,7 +31,13 @@ $ python setup.py install
 
 ## Setup
 
-Create a configuration file (`gitman.yml` or `.gitman.yml`) in the root of your working tree:
+Generate a sample configuration file:
+
+```sh
+$ gitman init
+```
+
+or manually create one (`gitman.yml` or `.gitman.yml`) in the root of your working tree:
 
 ```yaml
 location: vendor/gitman
@@ -43,12 +49,6 @@ sources:
   repo: https://github.com/jonreid/XcodeCoverage
   rev: master
   link: Tools/XcodeCoverage
-```
-
-or, let GitMan create a sample configuration file for you:
-
-```sh
-$ gitman init
 ```
 
 Ignore the dependency storage location:
