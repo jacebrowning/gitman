@@ -1,5 +1,9 @@
 # Revision History
 
+## 1.3 (unreleased)
+
+- Added `init` command to generate sample configuration files.
+
 ## 1.2 (2017/01/08)
 
 - Added preliminary Windows support (@StudioEtrange).

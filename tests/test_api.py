@@ -61,6 +61,33 @@ def config():
     os.chdir(ROOT)
 
 
+def describe_init():
+
+    def it_creates_a_new_config_file(tmpdir):
+        tmpdir.chdir()
+
+        expect(gitman.init()) == True
+
+        expect(Config().__mapper__.text) == strip("""
+        location: gitman_sources
+        sources:
+        - name: sample_dependency
+          link: ''
+          repo: https://github.com/githubtraining/hellogitworld
+          rev: master
+        sources_locked:
+        - name: sample_dependency
+          link: ''
+          repo: https://github.com/githubtraining/hellogitworld
+          rev: ebbbf773431ba07510251bb03f9525c7bab2b13a
+        """)
+
+    def it_does_not_modify_existing_config_file(config):
+        expect(gitman.init()) == False
+
+        expect(config.__mapper__.text) == CONFIG
+
+
 def describe_install():
 
     def it_creates_missing_directories(config):

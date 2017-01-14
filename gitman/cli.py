@@ -13,7 +13,7 @@ from . import commands
 log = logging.getLogger(__name__)
 
 
-def main(args=None, function=None):
+def main(args=None, function=None):  # pylint: disable=too-many-statements
     """Process command-line arguments and run the program."""
 
     # Shared options
@@ -43,6 +43,11 @@ def main(args=None, function=None):
                                      parents=[debug], **shared)
     subs = parser.add_subparsers(help="", dest='command', metavar="<command>")
 
+    # Init parser
+    info = "create a new configuration file for the project"
+    sub = subs.add_parser('init', description=info.capitalize() + '.',
+                          help=info, parents=[debug], **shared)
+
     # Install parser
     info = "get the specified versions of all dependencies"
     sub = subs.add_parser('install', description=info.capitalize() + '.',
@@ -70,7 +75,7 @@ def main(args=None, function=None):
                        action='store_false', dest='lock', default=None,
                        help="disable recording of versions for later reinstall")
 
-    # Display parser
+    # List parser
     info = "display the current version of each dependency"
     sub = subs.add_parser('list', description=info.capitalize() + '.',
                           help=info, parents=[debug, project, depth], **shared)
@@ -122,12 +127,15 @@ def main(args=None, function=None):
     _run_command(function, args, kwargs, exit_message)
 
 
-def _get_command(function, namespace):
+def _get_command(function, namespace):  # pylint: disable=too-many-statements
     args = []
     kwargs = {}
     exit_message = None
 
-    if namespace.command in ['install', 'update']:
+    if namespace.command == 'init':
+        function = commands.init
+
+    elif namespace.command in ['install', 'update']:
         function = getattr(commands, namespace.command)
         args = namespace.name
         kwargs.update(root=namespace.root,

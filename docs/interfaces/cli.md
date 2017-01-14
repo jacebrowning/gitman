@@ -2,6 +2,14 @@
 
 After setting up `gitman` with a [configuration file](../index.md#setup), various commands can be run to manage these Git-controlled source dependencies.
 
+## Init
+
+To generate a sample configuration for a new project, run:
+
+```sh
+$ gitman init
+```
+
 ## Install
 
 To clone/checkout the specified dependencies, run:

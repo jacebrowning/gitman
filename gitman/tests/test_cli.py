@@ -47,6 +47,17 @@ class TestMain:
             cli.main([], Mock(side_effect=RuntimeError))
 
 
+class TestInit:
+    """Unit tests for the `init` command."""
+
+    @patch('gitman.commands.init')
+    def test_install(self, mock_init):
+        """Verify the 'install' command can be run."""
+        cli.main(['init'])
+
+        mock_init.assert_called_once_with()
+
+
 class TestInstall:
     """Unit tests for the `install` command."""
 

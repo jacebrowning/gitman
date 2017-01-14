@@ -132,11 +132,12 @@ WHITE = '\033[37m'
 RESET = '\033[0m'
 
 COLORS = dict(
-    revision=BOLD + BLUE,
+    rev=BOLD + BLUE,
     dirty=BOLD + MAGENTA,
     path='',
     changes=YELLOW,
     message=BOLD + WHITE,
+    success=BOLD + GREEN,
     error=BOLD + RED,
 )
 
@@ -155,6 +156,7 @@ def style(msg, name):
         return color + msg + RESET
 
     if msg:
-        assert color is not None, "Unknown style name requested"
+        assert color is not None, \
+            "Unknown style name requested: {!r}".format(name)
 
     return msg

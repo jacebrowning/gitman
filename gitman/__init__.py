@@ -18,6 +18,7 @@ if sys.version_info < PYTHON_VERSION:  # pragma: no cover (manual test)
 
 try:
     # pylint: disable=wrong-import-position
+    from .commands import init
     from .commands import install
     from .commands import update
     from .commands import display as list  # pylint: disable=redefined-builtin

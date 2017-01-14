@@ -22,9 +22,10 @@ class Config:
 
     LOG = "gitman.log"
 
-    def __init__(self, root, filename="gitman.yml", location="gitman_sources"):
+    def __init__(self, root=None,
+                 filename="gitman.yml", location="gitman_sources"):
         super().__init__()
-        self.root = root
+        self.root = root or os.getcwd()
         self.filename = filename
         self.location = location
         self.sources = []
@@ -139,7 +140,7 @@ class Config:
             shell.cd(self.location_path, _show=False)
 
         if count:
-            yorm.save(self)
+            self.save()
 
         return count
 
@@ -212,6 +213,10 @@ class Config:
                 extras.append(source)
 
         return sources + extras
+
+    def save(self):
+        """Save changes to the configuration file."""
+        yorm.save(self)
 
 
 def load_config(root=None):
