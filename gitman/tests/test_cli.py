@@ -8,6 +8,7 @@ from expecter import expect
 
 from gitman import cli
 from gitman.common import _Config
+from gitman.exceptions import UncommittedChanges, ScriptFailure
 
 
 class TestMain:
@@ -44,7 +45,9 @@ class TestMain:
     def test_main_error(self):
         """Verify runtime errors are handled."""
         with pytest.raises(SystemExit):
-            cli.main([], Mock(side_effect=RuntimeError))
+            cli.main([], Mock(side_effect=UncommittedChanges))
+        with pytest.raises(SystemExit):
+            cli.main([], Mock(side_effect=ScriptFailure))
 
 
 class TestInit:

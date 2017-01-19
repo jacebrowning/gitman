@@ -72,23 +72,22 @@ class Config:
         shell.cd(self.location_path)
 
         sources = self._get_sources(use_locked=False if update else None)
-        dirs = list(names) if names else [source.name for source in sources]
-        common.show()
+        selected_names = list(names) if names else [s.name for s in sources]
+        common.newline()
         common.indent()
 
         count = 0
         for source in sources:
-            if source.name in dirs:
-                dirs.remove(source.name)
+            if source.name in selected_names:
+                selected_names.remove(source.name)
             else:
                 log.info("Skipped dependency: %s", source.name)
                 continue
 
             source.update_files(force=force, fetch=fetch, clean=clean)
             source.create_link(self.root, force=force)
+            common.newline()
             count += 1
-
-            common.show()
 
             config = load_config()
             if config:
@@ -106,16 +105,44 @@ class Config:
             shell.cd(self.location_path, _show=False)
 
         common.dedent()
-        if dirs:
-            log.error("No such dependency: %s", ' '.join(dirs))
+        if selected_names:
+            log.error("No such dependency: %s", ' '.join(selected_names))
             return 0
+
+        return count
+
+    def run_scripts(self, *names):
+        """Run scripts for the specified dependencies."""
+        sources = self._get_sources()
+        selected_names = list(names) if names else [s.name for s in sources]
+
+        shell.cd(self.location_path)
+        common.newline()
+        common.indent()
+
+        count = 0
+        for source in sources:
+            if source.name in selected_names:
+                source.run_scripts()
+                common.newline()
+                count += 1
+
+                config = load_config()
+                if config:
+                    common.indent()
+                    count += config.run_scripts()
+                    common.dedent()
+
+                shell.cd(self.location_path, _show=False)
+
+        common.dedent()
 
         return count
 
     def lock_dependencies(self, *names, obey_existing=True):
         """Lock down the immediate dependency versions."""
         shell.cd(self.location_path)
-        common.show()
+        common.newline()
         common.indent()
 
         sources = self._get_sources(use_locked=obey_existing).copy()
@@ -135,7 +162,7 @@ class Config:
                 self.sources_locked[index] = source.lock()
             count += 1
 
-            common.show()
+            common.newline()
 
             shell.cd(self.location_path, _show=False)
 
@@ -148,7 +175,7 @@ class Config:
         """Delete the dependency storage location."""
         shell.cd(self.root)
         shell.rm(self.location_path)
-        common.show()
+        common.newline()
 
     def get_dependencies(self, depth=None, allow_dirty=True):
         """Yield the path, repository URL, and hash of each dependency."""
@@ -156,7 +183,7 @@ class Config:
             return
 
         shell.cd(self.location_path)
-        common.show()
+        common.newline()
         common.indent()
 
         for source in self.sources:
@@ -166,7 +193,7 @@ class Config:
                 continue
 
             yield source.identify(allow_dirty=allow_dirty)
-            common.show()
+            common.newline()
 
             config = load_config()
             if config:

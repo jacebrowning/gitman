@@ -52,8 +52,6 @@ class _Config:
 
 def configure_logging(count=0):
     """Configure logging using the provided verbosity count."""
-    assert _Config.MAX_VERBOSITY == 4
-
     if count == -1:
         level = settings.QUIET_LOGGING_LEVEL
         default_format = settings.DEFAULT_LOGGING_FORMAT
@@ -89,7 +87,7 @@ def configure_logging(count=0):
 
     # Warn about excessive verbosity
     if count > _Config.MAX_VERBOSITY:
-        msg = "maximum verbosity level is {}".format(_Config.MAX_VERBOSITY)
+        msg = "Maximum verbosity level is {}".format(_Config.MAX_VERBOSITY)
         logging.warning(msg)
         _Config.verbosity = _Config.MAX_VERBOSITY
     else:
@@ -97,28 +95,37 @@ def configure_logging(count=0):
 
 
 def indent():
+    """Increase the indent of future output lines."""
     _Config.indent_level += 1
 
 
 def dedent(level=None):
+    """Decrease (or reset) the indent of future output lines."""
     if level is None:
         _Config.indent_level = max(0, _Config.indent_level - 1)
     else:
         _Config.indent_level = level
 
 
-def show(message="", color=None,
+def newline():
+    """Write a new line to standard output."""
+    show("")
+
+
+def show(*messages, color=None,
          file=sys.stdout, log=logging.getLogger(__name__)):
     """Write to standard output or error if enabled."""
-    if _Config.verbosity == 0:
-        print(' ' * 2 * _Config.indent_level + style(message, color), file=file)
-    elif _Config.verbosity >= 1:
-        message = message.strip()
-        if message and log:
-            if color == 'error':
-                log.error(message)
-            else:
-                log.info(message)
+    for message in messages:
+        if _Config.verbosity == 0:
+            text = ' ' * 2 * _Config.indent_level + style(message, color)
+            print(text, file=file)
+        elif _Config.verbosity >= 1:
+            message = message.strip()
+            if message and log:
+                if color == 'error':
+                    log.error(message)
+                else:
+                    log.info(message)
 
 
 BOLD = '\033[1m'
@@ -132,10 +139,12 @@ WHITE = '\033[37m'
 RESET = '\033[0m'
 
 COLORS = dict(
-    rev=BOLD + BLUE,
-    dirty=BOLD + MAGENTA,
     path='',
-    changes=YELLOW,
+    git_rev=BOLD + BLUE,
+    git_dirty=BOLD + MAGENTA,
+    git_changes=YELLOW,
+    shell_output=CYAN,
+    shell_error=YELLOW,
     message=BOLD + WHITE,
     success=BOLD + GREEN,
     error=BOLD + RED,

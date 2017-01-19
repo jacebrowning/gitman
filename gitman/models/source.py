@@ -5,37 +5,38 @@ import logging
 import warnings
 
 import yorm
-from yorm.types import String, AttributeDictionary
+from yorm.types import String, List, AttributeDictionary
 
-from .. import common
-from .. import git
-from .. import shell
-from ..exceptions import InvalidConfig, InvalidRepository, UncommittedChanges
+from .. import common, exceptions, shell, git
 
 
 log = logging.getLogger(__name__)
 
 
 @yorm.attr(name=String)
-@yorm.attr(link=String)
 @yorm.attr(repo=String)
 @yorm.attr(rev=String)
+@yorm.attr(link=String)
+@yorm.attr(scripts=List.of_type(String))
 class Source(AttributeDictionary):
     """A dictionary of `git` and `ln` arguments."""
 
     DIRTY = '<dirty>'
     UNKNOWN = '<unknown>'
 
-    def __init__(self, repo, name, rev='master', link=None):
+    def __init__(self, repo, name, rev='master', link=None, scripts=None):
         super().__init__()
         self.repo = repo
         self.name = name
         self.rev = rev
         self.link = link
+        self.scripts = scripts or []
         if not self.repo:
-            raise InvalidConfig("'repo' missing on {}".format(repr(self)))
+            msg = "'repo' missing on {}".format(repr(self))
+            raise exceptions.InvalidConfig(msg)
         if not self.name:
-            raise InvalidConfig("'name' missing on {}".format(repr(self)))
+            msg = "'name' missing on {}".format(repr(self))
+            raise exceptions.InvalidConfig(msg)
 
     def __repr__(self):
         return "<source {}>".format(self)
@@ -72,9 +73,8 @@ class Source(AttributeDictionary):
         if not force:
             log.debug("Confirming there are no uncommitted changes...")
             if git.changes(include_untracked=clean):
-                common.show()
                 msg = "Uncommitted changes in {}".format(os.getcwd())
-                raise UncommittedChanges(msg)
+                raise exceptions.UncommittedChanges(msg)
 
         # Fetch the desired revision
         if fetch or self.rev not in (git.get_branch(),
@@ -105,11 +105,33 @@ class Source(AttributeDictionary):
             if force:
                 shell.rm(target)
             else:
-                common.show()
                 msg = "Preexisting link location at {}".format(target)
-                raise UncommittedChanges(msg)
+                raise exceptions.UncommittedChanges(msg)
 
         shell.ln(source, target)
+
+    def run_scripts(self):
+        if not self.scripts:
+            return
+
+        log.info("Running install scripts...")
+
+        # Enter the working tree
+        shell.cd(self.name)
+        if not git.valid():
+            raise self._invalid_repository
+
+        # Run all scripts
+        for script in self.scripts:
+            try:
+                lines = shell.call(script, _shell=True)
+            except exceptions.ShellError as exc:
+                common.show(*exc.output, color='shell_error')
+                msg = "Command '{}' failed in {}".format(exc.program,
+                                                         os.getcwd())
+                raise exceptions.ScriptFailure(msg)
+            else:
+                common.show(*lines, color='shell_output')
 
     def identify(self, allow_dirty=True, allow_missing=True):
         """Get the path and current repository URL and hash."""
@@ -123,9 +145,8 @@ class Source(AttributeDictionary):
             url = git.get_url()
             if git.changes(display_status=not allow_dirty, _show=True):
                 if not allow_dirty:
-                    common.show()
                     msg = "Uncommitted changes in {}".format(os.getcwd())
-                    raise UncommittedChanges(msg)
+                    raise exceptions.UncommittedChanges(msg)
 
                 common.show(self.DIRTY, color='dirty', log=False)
                 return path, url, self.DIRTY
@@ -153,4 +174,4 @@ class Source(AttributeDictionary):
     def _invalid_repository(self):
         path = os.path.join(os.getcwd(), self.name)
         msg = "Not a valid repository: {}".format(path)
-        return InvalidRepository(msg)
+        return exceptions.InvalidRepository(msg)

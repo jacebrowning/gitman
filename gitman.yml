@@ -17,6 +17,9 @@ sources_locked:
   link: ''
   repo: https://github.com/jacebrowning/gitman-demo
   rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
+  scripts:
+    - cat .noserc
+    - make foobar
 - name: gitman_2
   link: ''
   repo: https://github.com/jacebrowning/gitman-demo
@@ -25,3 +28,6 @@ sources_locked:
   link: ''
   repo: https://github.com/jacebrowning/gitman-demo
   rev: 2da24fca34af3748e3cab61db81a2ae8b35aec94
+  scripts:
+    - echo "Hello, World!"
+    - pwd

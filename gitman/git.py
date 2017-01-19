@@ -72,18 +72,18 @@ def changes(include_untracked=False, display_status=True, _show=False):
         git('diff-index', '--quiet', 'HEAD', _show=_show)
 
         # Check for untracked files
-        output = git('ls-files', '--others', '--exclude-standard', _show=_show)
+        lines = git('ls-files', '--others', '--exclude-standard', _show=_show)
 
     except ShellError:
         status = True
 
     else:
-        status = bool(output.splitlines()) and include_untracked
+        status = bool(lines) and include_untracked
 
     if status and display_status:
         with suppress(ShellError):
-            for line in git('status', _show=True).splitlines():
-                common.show(line, color='changes')
+            lines = git('status', _show=True)
+            common.show(*lines, color='git_changes')
 
     return status
 
@@ -107,22 +107,23 @@ def update(rev, *, clean=True, fetch=False):  # pylint: disable=redefined-outer-
 
 def get_url():
     """Get the current repository's URL."""
-    return git('config', '--get', 'remote.origin.url', _show=False)
+    return git('config', '--get', 'remote.origin.url', _show=False)[0]
 
 
 def get_hash(_show=False):
     """Get the current working tree's hash."""
-    return git('rev-parse', 'HEAD', _show=_show)
+    return git('rev-parse', 'HEAD', _show=_show)[0]
 
 
 def get_tag():
     """Get the current working tree's tag (if on a tag)."""
-    return git('describe', '--tags', '--exact-match', _show=False, _ignore=True)
+    return git('describe', '--tags', '--exact-match',
+               _show=False, _ignore=True)[0]
 
 
 def get_branch():
     """Get the current working tree's branch."""
-    return git('rev-parse', '--abbrev-ref', 'HEAD', _show=False)
+    return git('rev-parse', '--abbrev-ref', 'HEAD', _show=False)[0]
 
 
 def _get_sha_from_rev(rev):
@@ -133,5 +134,5 @@ def _get_sha_from_rev(rev):
         date = parts[1].strip("{}")
         git('checkout', '--force', branch, _show=False)
         rev = git('rev-list', '-n', '1', '--before={!r}'.format(date),
-                  branch, _show=False)
+                  branch, _show=False)[0]
     return rev

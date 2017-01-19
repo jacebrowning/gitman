@@ -1,12 +1,17 @@
-"""Shared exepections."""
+"""Shared exceptions."""
 
 
 class InvalidConfig(ValueError):
     """Raised when the configuration file is invalid."""
 
 
-class ShellError(Exception):
+class ShellError(RuntimeError):
     """Raised when a shell call has a non-zero return code."""
+
+    def __init__(self, *args, **kwargs):
+        self.program = kwargs.pop('program', None)
+        self.output = kwargs.pop('output', None)
+        super().__init__(*args, **kwargs)
 
 
 class InvalidRepository(RuntimeError):
@@ -15,3 +20,7 @@ class InvalidRepository(RuntimeError):
 
 class UncommittedChanges(RuntimeError):
     """Raised when uncommitted changes are not expected."""
+
+
+class ScriptFailure(ShellError):
+    """Raised when post-install script has a non-zero exit code."""

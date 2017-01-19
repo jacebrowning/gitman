@@ -72,8 +72,8 @@ def main(args=None):
     common.configure_logging()
 
     # Run the program
-    function, args, kwargs, exit_msg = _get_command(None, namespace)
-    _run_command(function, args, kwargs, exit_msg)
+    function, args, kwargs = _get_command(None, namespace)
+    _run_command(function, args, kwargs)
 
 
 if __name__ == '__main__':  # pragma: no cover (manual test)
