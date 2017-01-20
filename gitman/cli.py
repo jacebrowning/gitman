@@ -192,8 +192,7 @@ def _run_command(function, args, kwargs):
         exit_message = "Run again with '--force' to discard changes"
     except exceptions.ScriptFailure as exception:
         _show_error(exception)
-        # TODO: support this option
-        # exit_message = "Run again with '--ignore-scripts' to bypass the error"
+        exit_message = "Run again with '--force' to ignore script errors"
     finally:
         if exit_message:
             common.show(exit_message, color='message')

@@ -67,19 +67,19 @@ class Config:
             log.info("Skipped directory: %s", self.location_path)
             return 0
 
+        sources = self._get_sources(use_locked=False if update else None)
+        sources_filter = list(names) if names else [s.name for s in sources]
+
         if not os.path.isdir(self.location_path):
             shell.mkdir(self.location_path)
         shell.cd(self.location_path)
-
-        sources = self._get_sources(use_locked=False if update else None)
-        selected_names = list(names) if names else [s.name for s in sources]
         common.newline()
         common.indent()
 
         count = 0
         for source in sources:
-            if source.name in selected_names:
-                selected_names.remove(source.name)
+            if source.name in sources_filter:
+                sources_filter.remove(source.name)
             else:
                 log.info("Skipped dependency: %s", source.name)
                 continue
@@ -105,16 +105,20 @@ class Config:
             shell.cd(self.location_path, _show=False)
 
         common.dedent()
-        if selected_names:
-            log.error("No such dependency: %s", ' '.join(selected_names))
+        if sources_filter:
+            log.error("No such dependency: %s", ' '.join(sources_filter))
             return 0
 
         return count
 
-    def run_scripts(self, *names):
+    def run_scripts(self, *names, depth=None, force=False):
         """Run scripts for the specified dependencies."""
+        if depth == 0:
+            log.info("Skipped directory: %s", self.location_path)
+            return 0
+
         sources = self._get_sources()
-        selected_names = list(names) if names else [s.name for s in sources]
+        sources_filter = list(names) if names else [s.name for s in sources]
 
         shell.cd(self.location_path)
         common.newline()
@@ -122,15 +126,17 @@ class Config:
 
         count = 0
         for source in sources:
-            if source.name in selected_names:
-                source.run_scripts()
-                common.newline()
+            if source.name in sources_filter:
+                source.run_scripts(force=force)
                 count += 1
 
                 config = load_config()
                 if config:
                     common.indent()
-                    count += config.run_scripts()
+                    count += config.run_scripts(
+                        depth=None if depth is None else max(0, depth - 1),
+                        force=force,
+                    )
                     common.dedent()
 
                 shell.cd(self.location_path, _show=False)
@@ -141,16 +147,16 @@ class Config:
 
     def lock_dependencies(self, *names, obey_existing=True):
         """Lock down the immediate dependency versions."""
+        sources = self._get_sources(use_locked=obey_existing).copy()
+        sources_filter = list(names) if names else [s.name for s in sources]
+
         shell.cd(self.location_path)
         common.newline()
         common.indent()
 
-        sources = self._get_sources(use_locked=obey_existing).copy()
-        dirs = list(names) if names else [source.name for source in sources]
-
         count = 0
         for source in sources:
-            if source.name not in dirs:
+            if source.name not in sources_filter:
                 log.info("Skipped dependency: %s", source.name)
                 continue
 
@@ -161,8 +167,6 @@ class Config:
             else:
                 self.sources_locked[index] = source.lock()
             count += 1
-
-            common.newline()
 
             shell.cd(self.location_path, _show=False)
 
@@ -193,7 +197,6 @@ class Config:
                 continue
 
             yield source.identify(allow_dirty=allow_dirty)
-            common.newline()
 
             config = load_config()
             if config:

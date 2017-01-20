@@ -110,10 +110,7 @@ class Source(AttributeDictionary):
 
         shell.ln(source, target)
 
-    def run_scripts(self):
-        if not self.scripts:
-            return
-
+    def run_scripts(self, force=False):
         log.info("Running install scripts...")
 
         # Enter the working tree
@@ -121,17 +118,27 @@ class Source(AttributeDictionary):
         if not git.valid():
             raise self._invalid_repository
 
+        # Check for scripts
+        if not self.scripts:
+            common.show("(no scripts to run)", color='shell_info')
+            common.newline()
+            return
+
         # Run all scripts
         for script in self.scripts:
             try:
                 lines = shell.call(script, _shell=True)
             except exceptions.ShellError as exc:
                 common.show(*exc.output, color='shell_error')
-                msg = "Command '{}' failed in {}".format(exc.program,
-                                                         os.getcwd())
-                raise exceptions.ScriptFailure(msg)
+                cmd = exc.program
+                if force:
+                    log.debug("Ignored error from call to '%s'", cmd)
+                else:
+                    msg = "Command '{}' failed in {}".format(cmd, os.getcwd())
+                    raise exceptions.ScriptFailure(msg)
             else:
                 common.show(*lines, color='shell_output')
+        common.newline()
 
     def identify(self, allow_dirty=True, allow_missing=True):
         """Get the path and current repository URL and hash."""
@@ -148,11 +155,13 @@ class Source(AttributeDictionary):
                     msg = "Uncommitted changes in {}".format(os.getcwd())
                     raise exceptions.UncommittedChanges(msg)
 
-                common.show(self.DIRTY, color='dirty', log=False)
+                common.show(self.DIRTY, color='git_dirty', log=False)
+                common.newline()
                 return path, url, self.DIRTY
             else:
                 rev = git.get_hash(_show=True)
-                common.show(rev, color='rev', log=False)
+                common.show(rev, color='git_rev', log=False)
+                common.newline()
                 return path, url, rev
 
         elif allow_missing:
@@ -167,7 +176,8 @@ class Source(AttributeDictionary):
         """Return a locked version of the current source."""
         if rev is None:
             _, _, rev = self.identify(allow_dirty=False, allow_missing=False)
-        source = self.__class__(self.repo, self.name, rev, self.link)
+        source = self.__class__(self.repo, self.name, rev,
+                                self.link, self.scripts)
         return source
 
     @property

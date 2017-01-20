@@ -58,7 +58,8 @@ def install(*names, root=None, depth=None,
     - `*names`: optional list of dependency directory names to filter on
     - `root`: specifies the path to the root working tree
     - `depth`: number of levels of dependencies to traverse
-    - `force`: indicates uncommitted changes can be overwritten
+    - `force`: indicates uncommitted changes can be overwritten and
+               script errors can be ignored
     - `fetch`: indicates the latest branches should always be fetched
     - `clean`: indicates untracked files should be deleted from dependencies
 
@@ -80,10 +81,8 @@ def install(*names, root=None, depth=None,
             force=force, fetch=fetch, clean=clean,
         )
 
-        common.show("Running scripts...", color='message', log=False)
-        common.newline()
-        config.run_scripts(*names)
-        common.newline()
+        if count:
+            _run_scripts(*names, depth=depth, force=force, _config=config)
 
     return _display_result("install", "Installed", count)
 
@@ -128,12 +127,27 @@ def update(*names, root=None, depth=None,
             common.newline()
             config.lock_dependencies(*names, obey_existing=lock is None)
 
-        common.show("Running scripts...", color='message', log=False)
-        common.newline()
-        config.run_scripts(*names)
-        common.newline()
+        if count:
+            _run_scripts(*names, depth=depth, force=force, _config=config)
 
     return _display_result("update", "Updated", count)
+
+
+def _run_scripts(*names, depth=None, force=False, _config=None):
+    """Run post-install scripts.
+
+    Optional arguments:
+
+    - `*names`: optional list of dependency directory names filter on
+    - `depth`: number of levels of dependencies to traverse
+    - `force`: indicates script errors can be ignored
+
+    """
+    assert _config, "'_config' is required"
+
+    common.show("Running scripts...", color='message', log=False)
+    common.newline()
+    _config.run_scripts(*names, depth=depth, force=force)
 
 
 @restore_cwd

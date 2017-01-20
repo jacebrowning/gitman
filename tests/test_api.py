@@ -200,6 +200,30 @@ def describe_install():
 
             expect(gitman.install(depth=1, force=True)) == True
 
+    def describe_scripts():
+
+        @pytest.fixture
+        def config_with_scripts(config):
+            config.__mapper__.text = strip("""
+            location: deps
+            sources:
+            - name: gitman_1
+              repo: https://github.com/jacebrowning/gitman-demo
+              rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+              link: ''
+              scripts:
+              - make foobar
+            """)
+
+            return config
+
+        def it_detects_failures_in_scripts(config_with_scripts):
+            with pytest.raises(RuntimeError):
+                expect(gitman.install())
+
+        def script_failures_can_be_ignored(config_with_scripts):
+            expect(gitman.install(force=True)) == True
+
 
 def describe_uninstall():
 

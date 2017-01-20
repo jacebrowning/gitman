@@ -143,6 +143,8 @@ COLORS = dict(
     git_rev=BOLD + BLUE,
     git_dirty=BOLD + MAGENTA,
     git_changes=YELLOW,
+    shell=BOLD + GREEN,
+    shell_info=BOLD + MAGENTA,
     shell_output=CYAN,
     shell_error=YELLOW,
     message=BOLD + WHITE,
@@ -151,14 +153,14 @@ COLORS = dict(
 )
 
 
-def style(msg, name):
+def style(msg, name=None, *, _color_support=False):
     is_tty = hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()
     supports_ansi = sys.platform != 'win32' or 'ANSICON' in os.environ
-    if not (is_tty and supports_ansi):
+    if not (is_tty and supports_ansi) and not _color_support:
         return msg
 
     if name == 'shell':
-        return msg.replace("$ ", BOLD + GREEN + "$ " + RESET)
+        return msg.replace("$ ", COLORS.get(name) + "$ " + RESET)
 
     color = COLORS.get(name)
     if color:
