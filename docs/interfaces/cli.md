@@ -42,7 +42,7 @@ It will only fetch from the repository if needed. To always fetch, run:
 gitman install --fetch
 ```
 
-It will exit with an error if there are any uncommitted changes in dependencies. To overwrite all changes, run:
+It will exit with an error if there are any uncommitted changes in dependencies or a post-install script fails. To overwrite all changes or ignore script failures, run:
 
 ```sh
 gitman install --force

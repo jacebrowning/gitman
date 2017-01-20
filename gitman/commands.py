@@ -98,7 +98,8 @@ def update(*names, root=None, depth=None,
     - `root`: specifies the path to the root working tree
     - `depth`: number of levels of dependencies to traverse
     - `recurse`: indicates nested dependencies should also be updated
-    - `force`: indicates uncommitted changes can be overwritten
+    - `force`: indicates uncommitted changes can be overwritten and
+               script errors can be ignored
     - `clean`: indicates untracked files should be deleted from dependencies
     - `lock`: indicates actual dependency versions should be recorded
 
