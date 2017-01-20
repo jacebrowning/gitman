@@ -5,37 +5,38 @@ import logging
 import warnings
 
 import yorm
-from yorm.types import String, AttributeDictionary
+from yorm.types import String, List, AttributeDictionary
 
-from .. import common
-from .. import git
-from .. import shell
-from ..exceptions import InvalidConfig, InvalidRepository, UncommittedChanges
+from .. import common, exceptions, shell, git
 
 
 log = logging.getLogger(__name__)
 
 
 @yorm.attr(name=String)
-@yorm.attr(link=String)
 @yorm.attr(repo=String)
 @yorm.attr(rev=String)
+@yorm.attr(link=String)
+@yorm.attr(scripts=List.of_type(String))
 class Source(AttributeDictionary):
     """A dictionary of `git` and `ln` arguments."""
 
     DIRTY = '<dirty>'
     UNKNOWN = '<unknown>'
 
-    def __init__(self, repo, name, rev='master', link=None):
+    def __init__(self, repo, name, rev='master', link=None, scripts=None):
         super().__init__()
         self.repo = repo
         self.name = name
         self.rev = rev
         self.link = link
+        self.scripts = scripts or []
         if not self.repo:
-            raise InvalidConfig("'repo' missing on {}".format(repr(self)))
+            msg = "'repo' missing on {}".format(repr(self))
+            raise exceptions.InvalidConfig(msg)
         if not self.name:
-            raise InvalidConfig("'name' missing on {}".format(repr(self)))
+            msg = "'name' missing on {}".format(repr(self))
+            raise exceptions.InvalidConfig(msg)
 
     def __repr__(self):
         return "<source {}>".format(self)
@@ -72,9 +73,8 @@ class Source(AttributeDictionary):
         if not force:
             log.debug("Confirming there are no uncommitted changes...")
             if git.changes(include_untracked=clean):
-                common.show()
                 msg = "Uncommitted changes in {}".format(os.getcwd())
-                raise UncommittedChanges(msg)
+                raise exceptions.UncommittedChanges(msg)
 
         # Fetch the desired revision
         if fetch or self.rev not in (git.get_branch(),
@@ -105,11 +105,40 @@ class Source(AttributeDictionary):
             if force:
                 shell.rm(target)
             else:
-                common.show()
                 msg = "Preexisting link location at {}".format(target)
-                raise UncommittedChanges(msg)
+                raise exceptions.UncommittedChanges(msg)
 
         shell.ln(source, target)
+
+    def run_scripts(self, force=False):
+        log.info("Running install scripts...")
+
+        # Enter the working tree
+        shell.cd(self.name)
+        if not git.valid():
+            raise self._invalid_repository
+
+        # Check for scripts
+        if not self.scripts:
+            common.show("(no scripts to run)", color='shell_info')
+            common.newline()
+            return
+
+        # Run all scripts
+        for script in self.scripts:
+            try:
+                lines = shell.call(script, _shell=True)
+            except exceptions.ShellError as exc:
+                common.show(*exc.output, color='shell_error')
+                cmd = exc.program
+                if force:
+                    log.debug("Ignored error from call to '%s'", cmd)
+                else:
+                    msg = "Command '{}' failed in {}".format(cmd, os.getcwd())
+                    raise exceptions.ScriptFailure(msg)
+            else:
+                common.show(*lines, color='shell_output')
+        common.newline()
 
     def identify(self, allow_dirty=True, allow_missing=True):
         """Get the path and current repository URL and hash."""
@@ -123,15 +152,16 @@ class Source(AttributeDictionary):
             url = git.get_url()
             if git.changes(display_status=not allow_dirty, _show=True):
                 if not allow_dirty:
-                    common.show()
                     msg = "Uncommitted changes in {}".format(os.getcwd())
-                    raise UncommittedChanges(msg)
+                    raise exceptions.UncommittedChanges(msg)
 
-                common.show(self.DIRTY, color='dirty', log=False)
+                common.show(self.DIRTY, color='git_dirty', log=False)
+                common.newline()
                 return path, url, self.DIRTY
             else:
                 rev = git.get_hash(_show=True)
-                common.show(rev, color='rev', log=False)
+                common.show(rev, color='git_rev', log=False)
+                common.newline()
                 return path, url, rev
 
         elif allow_missing:
@@ -146,11 +176,12 @@ class Source(AttributeDictionary):
         """Return a locked version of the current source."""
         if rev is None:
             _, _, rev = self.identify(allow_dirty=False, allow_missing=False)
-        source = self.__class__(self.repo, self.name, rev, self.link)
+        source = self.__class__(self.repo, self.name, rev,
+                                self.link, self.scripts)
         return source
 
     @property
     def _invalid_repository(self):
         path = os.path.join(os.getcwd(), self.name)
         msg = "Not a valid repository: {}".format(path)
-        return InvalidRepository(msg)
+        return exceptions.InvalidRepository(msg)

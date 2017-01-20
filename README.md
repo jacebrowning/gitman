@@ -49,6 +49,11 @@ sources:
   repo: https://github.com/jonreid/XcodeCoverage
   rev: master
   link: Tools/XcodeCoverage
+- name: trufflehog
+  repo: https://github.com/dxa4481/truffleHog
+  rev: master
+  scripts:
+  - chmod a+x truffleHog.py
 ```
 
 Ignore the dependency storage location:
@@ -75,11 +80,12 @@ $ gitman update
 
 which will essentially:
 
-1. create a working tree at `<root>`/`<location>`/`<name>`
-2. fetch from `repo` and checkout the specified `rev`
-3. symbolically link each `<location>`/`<name>` from `<root>`/`<link>` (if specified)
-4. repeat for all nested working trees containing a configuration file
-5. record the actual commit SHAs that were checked out (with `--lock` option)
+1. Create a working tree at `<root>`/`<location>`/`<name>`
+2. Fetch from `repo` and checkout the specified `rev`
+3. Symbolically link each `<location>`/`<name>` from `<root>`/`<link>` (if specified)
+4. Repeat for all nested working trees containing a configuration file
+5. Record the actual commit SHAs that were checked out (with `--lock` option)
+6. Run optional post-install scripts for each dependency
 
 where `rev` can be:
 

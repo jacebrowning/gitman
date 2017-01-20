@@ -75,8 +75,8 @@ watch: install .clean-test ## Continuously run all CI tasks when files chanage
 
 .PHONY: demo
 demo: install
-	$(BIN)/gitman install
-	$(BIN)/gitman update
+	$(BIN)/gitman install --force  # some scripts have intentional errors
+	$(BIN)/gitman update --force  # some scripts have intentional errors
 	$(BIN)/gitman list
 	$(BIN)/gitman lock
 	$(BIN)/gitman uninstall

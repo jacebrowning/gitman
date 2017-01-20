@@ -16,7 +16,7 @@ Delete all untracked files in dependencies by instead running:
 git deps --clean
 ```
 
-Git will exit with an error if there are any uncommitted changes in dependencies. To overwrite all changes, run:
+Git will exit with an error if there are any uncommitted changes in dependencies or a post-install script fails. To overwrite all changes or ignore script failures, run:
 
 ```sh
 git deps --force

@@ -1,10 +1,12 @@
-# pylint: disable=no-self-use,misplaced-comparison-constant
+# pylint: disable=no-self-use,misplaced-comparison-constant,expression-not-assigned
 
 import os
 
 from unittest.mock import patch, Mock
 
 import pytest
+from expecter import expect
+
 from gitman import shell
 from gitman.exceptions import ShellError
 
@@ -26,11 +28,11 @@ class TestCall:
     def test_other_capture(self):
         """Verify a program's output can be captured."""
         if os.name == 'nt':
-            stdout = shell.call('echo', 'Hello, world!', _shell=True)
-            assert '"Hello, world!"' == stdout
+            lines = shell.call('echo Hello, world!', _shell=True)
         else:
-            stdout = shell.call('echo', 'Hello, world!\n')
-            assert "Hello, world!" == stdout
+            lines = shell.call('echo', 'Hello, world!')
+
+        expect(lines) == ["Hello, world!"]
 
 
 @patch('gitman.shell.call')

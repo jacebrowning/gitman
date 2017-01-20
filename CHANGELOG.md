@@ -3,6 +3,7 @@
 ## 1.3 (unreleased)
 
 - Added `init` command to generate sample configuration files.
+- Added support for post-install scripts on dependencies.
 
 ## 1.2 (2017/01/08)
 
