@@ -27,7 +27,7 @@ def call(name, *args, _show=True, _shell=False, _ignore=False):
     program = show(name, *args, stdout=_show)
 
     command = subprocess.run(
-        [name, *args], universal_newlines=True,
+        name if _shell else [name, *args], universal_newlines=True,
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
         shell=_shell
     )
@@ -57,7 +57,7 @@ def call(name, *args, _show=True, _shell=False, _ignore=False):
 def mkdir(path):
     if not os.path.exists(path):
         if os.name == 'nt':
-            call('mkdir', path, _shell=True)
+            call("mkdir " + path, _shell=True)
         else:
             call('mkdir', '-p', path)
 
@@ -83,9 +83,9 @@ def ln(source, target):
 def rm(path):
     if os.name == 'nt':
         if os.path.isfile(path):
-            call('del', '/Q', '/F', path, _shell=True)
+            call("del /Q /F " + path, _shell=True)
         elif os.path.isdir(path):
-            call('rmdir', '/Q', '/S', path, _shell=True)
+            call("rmdir /Q /S " + path, _shell=True)
     else:
         call('rm', '-rf', path)
 
