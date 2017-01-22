@@ -17,7 +17,7 @@ log = logging.getLogger(__name__)
 @yorm.attr(sources=SortedList.of_type(Source))
 @yorm.attr(sources_locked=SortedList.of_type(Source))
 @yorm.sync("{self.root}/{self.filename}", auto_save=False)
-class Config:
+class Config(yorm.ModelMixin):
     """A dictionary of dependency configuration options."""
 
     LOG = "gitman.log"
@@ -243,10 +243,6 @@ class Config:
                 extras.append(source)
 
         return sources + extras
-
-    def save(self):
-        """Save changes to the configuration file."""
-        yorm.save(self)
 
 
 def load_config(root=None):

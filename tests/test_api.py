@@ -27,17 +27,20 @@ sources:
   repo: https://github.com/jacebrowning/gitman-demo
   rev: example-branch
   link: ''
-  scripts: []
+  scripts:
+  -
 - name: gitman_2
   repo: https://github.com/jacebrowning/gitman-demo
   rev: example-tag
   link: ''
-  scripts: []
+  scripts:
+  -
 - name: gitman_3
   repo: https://github.com/jacebrowning/gitman-demo
   rev: 9bf18e16b956041f0267c21baad555a23237b52e
   link: ''
-  scripts: []
+  scripts:
+  -
 """.lstrip()
 
 log = logging.getLogger(__name__)
@@ -78,13 +81,15 @@ def describe_init():
           repo: https://github.com/githubtraining/hellogitworld
           rev: master
           link: ''
-          scripts: []
+          scripts:
+          -
         sources_locked:
         - name: sample_dependency
           repo: https://github.com/githubtraining/hellogitworld
           rev: ebbbf773431ba07510251bb03f9525c7bab2b13a
           link: ''
-          scripts: []
+          scripts:
+          -
         """)
 
     def it_does_not_modify_existing_config_file(config):
@@ -115,18 +120,21 @@ def describe_install():
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
           link: ''
-          scripts: []
+          scripts:
+          -
         sources_locked:
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
           link: ''
-          scripts: []
+          scripts:
+          -
         - name: gitman_3
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
           link: ''
-          scripts: []
+          scripts:
+          -
         """)
 
         expect(gitman.install(depth=1)) == True
@@ -141,13 +149,15 @@ def describe_install():
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
           link: ''
-          scripts: []
+          scripts:
+          -
         sources_locked:
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
           link: ''
-          scripts: []
+          scripts:
+          -
         """)
 
         expect(gitman.install('gitman_1', depth=1)) == True
@@ -176,7 +186,8 @@ def describe_install():
               repo: https://github.com/jacebrowning/gitman-demo
               rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
               link: my_link
-              scripts: []
+              scripts:
+              -
             """)
 
             return config
@@ -264,18 +275,21 @@ def describe_update():
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
           link: ''
-          scripts: []
+          scripts:
+          -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
           link: ''
-          scripts: []
+          scripts:
+          -
         sources_locked:
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: (old revision)
           link: ''
-          scripts: []
+          scripts:
+          -
         """)
 
         gitman.update(depth=1)
@@ -287,18 +301,21 @@ def describe_update():
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
           link: ''
-          scripts: []
+          scripts:
+          -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
           link: ''
-          scripts: []
+          scripts:
+          -
         sources_locked:
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
           link: ''
-          scripts: []
+          scripts:
+          -
         """)
 
     def it_should_not_lock_dependnecies_when_disabled(config):
@@ -309,18 +326,21 @@ def describe_update():
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
           link: ''
-          scripts: []
+          scripts:
+          -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
           link: ''
-          scripts: []
+          scripts:
+          -
         sources_locked:
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: (old revision)
           link: ''
-          scripts: []
+          scripts:
+          -
         """)
 
         gitman.update(depth=1, lock=False)
@@ -332,18 +352,21 @@ def describe_update():
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
           link: ''
-          scripts: []
+          scripts:
+          -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
           link: ''
-          scripts: []
+          scripts:
+          -
         sources_locked:
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: (old revision)
           link: ''
-          scripts: []
+          scripts:
+          -
         """)
 
     def it_should_lock_all_dependencies_when_enabled(config):
@@ -355,17 +378,20 @@ def describe_update():
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
           link: ''
-          scripts: []
+          scripts:
+          -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
           link: ''
-          scripts: []
+          scripts:
+          -
         - name: gitman_3
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
           link: ''
-          scripts: []
+          scripts:
+          -
         """)
 
 
@@ -402,17 +428,20 @@ def describe_lock():
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
           link: ''
-          scripts: []
+          scripts:
+          -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
           link: ''
-          scripts: []
+          scripts:
+          -
         - name: gitman_3
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
           link: ''
-          scripts: []
+          scripts:
+          -
         """) == config.__mapper__.text
 
     def it_records_specified_dependencies(config):
@@ -425,12 +454,14 @@ def describe_lock():
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
           link: ''
-          scripts: []
+          scripts:
+          -
         - name: gitman_3
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
           link: ''
-          scripts: []
+          scripts:
+          -
         """) == config.__mapper__.text
 
     def it_should_fail_on_dirty_repositories(config):
