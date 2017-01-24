@@ -26,19 +26,19 @@ sources:
 - name: gitman_1
   repo: https://github.com/jacebrowning/gitman-demo
   rev: example-branch
-  link: ''
+  link:
   scripts:
   -
 - name: gitman_2
   repo: https://github.com/jacebrowning/gitman-demo
   rev: example-tag
-  link: ''
+  link:
   scripts:
   -
 - name: gitman_3
   repo: https://github.com/jacebrowning/gitman-demo
   rev: 9bf18e16b956041f0267c21baad555a23237b52e
-  link: ''
+  link:
   scripts:
   -
 """.lstrip()
@@ -80,14 +80,14 @@ def describe_init():
         - name: sample_dependency
           repo: https://github.com/githubtraining/hellogitworld
           rev: master
-          link: ''
+          link:
           scripts:
           -
         sources_locked:
         - name: sample_dependency
           repo: https://github.com/githubtraining/hellogitworld
           rev: ebbbf773431ba07510251bb03f9525c7bab2b13a
-          link: ''
+          link:
           scripts:
           -
         """)
@@ -119,20 +119,20 @@ def describe_install():
         - name: gitman_1
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
-          link: ''
+          link:
           scripts:
           -
         sources_locked:
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
-          link: ''
+          link:
           scripts:
           -
         - name: gitman_3
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link: ''
+          link:
           scripts:
           -
         """)
@@ -148,14 +148,14 @@ def describe_install():
         - name: gitman_1
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
-          link: ''
+          link:
           scripts:
           -
         sources_locked:
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link: ''
+          link:
           scripts:
           -
         """)
@@ -221,7 +221,7 @@ def describe_install():
             - name: gitman_1
               repo: https://github.com/jacebrowning/gitman-demo
               rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-              link: ''
+              link:
               scripts:
               - make foobar
             """)
@@ -274,20 +274,20 @@ def describe_update():
         - name: gitman_1
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
-          link: ''
+          link:
           scripts:
           -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
-          link: ''
+          link:
           scripts:
           -
         sources_locked:
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: (old revision)
-          link: ''
+          link:
           scripts:
           -
         """)
@@ -300,20 +300,20 @@ def describe_update():
         - name: gitman_1
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
-          link: ''
+          link:
           scripts:
           -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
-          link: ''
+          link:
           scripts:
           -
         sources_locked:
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link: ''
+          link:
           scripts:
           -
         """)
@@ -325,20 +325,20 @@ def describe_update():
         - name: gitman_1
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
-          link: ''
+          link:
           scripts:
           -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
-          link: ''
+          link:
           scripts:
           -
         sources_locked:
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: (old revision)
-          link: ''
+          link:
           scripts:
           -
         """)
@@ -351,20 +351,20 @@ def describe_update():
         - name: gitman_1
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
-          link: ''
+          link:
           scripts:
           -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
-          link: ''
+          link:
           scripts:
           -
         sources_locked:
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: (old revision)
-          link: ''
+          link:
           scripts:
           -
         """)
@@ -377,19 +377,19 @@ def describe_update():
         - name: gitman_1
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
-          link: ''
+          link:
           scripts:
           -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link: ''
+          link:
           scripts:
           -
         - name: gitman_3
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
-          link: ''
+          link:
           scripts:
           -
         """)
@@ -427,19 +427,19 @@ def describe_lock():
         - name: gitman_1
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
-          link: ''
+          link:
           scripts:
           -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link: ''
+          link:
           scripts:
           -
         - name: gitman_3
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
-          link: ''
+          link:
           scripts:
           -
         """) == config.__mapper__.text
@@ -453,13 +453,13 @@ def describe_lock():
         - name: gitman_1
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
-          link: ''
+          link:
           scripts:
           -
         - name: gitman_3
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
-          link: ''
+          link:
           scripts:
           -
         """) == config.__mapper__.text

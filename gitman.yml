@@ -3,20 +3,20 @@ sources:
 - name: gitman_1
   repo: https://github.com/jacebrowning/gitman-demo
   rev: example-branch
-  link: ''
+  link:
   scripts:
   - cat .noserc
   - make foobar
 - name: gitman_2
   repo: https://github.com/jacebrowning/gitman-demo
   rev: example-tag
-  link: ''
+  link:
   scripts:
   -
 - name: gitman_3
   repo: https://github.com/jacebrowning/gitman-demo
   rev: master@{2015-06-18 11:11:11}
-  link: ''
+  link:
   scripts:
   - echo "Hello, World!"
   - pwd
@@ -24,20 +24,20 @@ sources_locked:
 - name: gitman_1
   repo: https://github.com/jacebrowning/gitman-demo
   rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
-  link: ''
+  link:
   scripts:
   - cat .noserc
   - make foobar
 - name: gitman_2
   repo: https://github.com/jacebrowning/gitman-demo
   rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-  link: ''
+  link:
   scripts:
   -
 - name: gitman_3
   repo: https://github.com/jacebrowning/gitman-demo
   rev: 2da24fca34af3748e3cab61db81a2ae8b35aec94
-  link: ''
+  link:
   scripts:
   - echo "Hello, World!"
   - pwd

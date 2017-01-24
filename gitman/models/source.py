@@ -5,7 +5,7 @@ import logging
 import warnings
 
 import yorm
-from yorm.types import String, List, AttributeDictionary
+from yorm.types import String, NullableString, List, AttributeDictionary
 
 from .. import common, exceptions, shell, git
 
@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 @yorm.attr(name=String)
 @yorm.attr(repo=String)
 @yorm.attr(rev=String)
-@yorm.attr(link=String)
+@yorm.attr(link=NullableString)
 @yorm.attr(scripts=List.of_type(String))
 class Source(AttributeDictionary):
     """A dictionary of `git` and `ln` arguments."""
@@ -24,19 +24,18 @@ class Source(AttributeDictionary):
     DIRTY = '<dirty>'
     UNKNOWN = '<unknown>'
 
-    def __init__(self, repo, name, rev='master', link=None, scripts=None):
+    def __init__(self, repo, name=None, rev='master', link=None, scripts=None):
         super().__init__()
         self.repo = repo
-        self.name = name
+        self.name = self._infer_name(repo) if name is None else name
         self.rev = rev
         self.link = link
         self.scripts = scripts or []
-        if not self.repo:
-            msg = "'repo' missing on {}".format(repr(self))
-            raise exceptions.InvalidConfig(msg)
-        if not self.name:
-            msg = "'name' missing on {}".format(repr(self))
-            raise exceptions.InvalidConfig(msg)
+
+        for key in ['name', 'repo', 'rev']:
+            if not self[key]:
+                msg = "'{}' required for {}".format(key, repr(self))
+                raise exceptions.InvalidConfig(msg)
 
     def __repr__(self):
         return "<source {}>".format(self)
@@ -185,3 +184,9 @@ class Source(AttributeDictionary):
         path = os.path.join(os.getcwd(), self.name)
         msg = "Not a valid repository: {}".format(path)
         return exceptions.InvalidRepository(msg)
+
+    @staticmethod
+    def _infer_name(repo):
+        filename = repo.split('/')[-1]
+        name = filename.split('.')[0]
+        return name

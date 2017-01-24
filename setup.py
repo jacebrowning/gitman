@@ -80,6 +80,6 @@ setuptools.setup(
     ],
 
     install_requires=[
-        'YORM~=1.3b2',
+        'YORM~=1.3',
     ],
 )

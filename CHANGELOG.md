@@ -4,6 +4,7 @@
 
 - Added `init` command to generate sample configuration files.
 - Added support for post-install scripts on dependencies.
+- Updated configuration format to support `null` for links.
 
 ## 1.2 (2017/01/08)
 
