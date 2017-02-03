@@ -8,6 +8,9 @@ import logging
 from . import settings
 
 
+_log = logging.getLogger(__name__)
+
+
 class WideHelpFormatter(argparse.HelpFormatter):
     """Command-line help text formatter with wider help text."""
 
@@ -112,9 +115,13 @@ def newline():
     show("")
 
 
-def show(*messages, color=None,
-         file=sys.stdout, log=logging.getLogger(__name__)):
+def show(*messages, file=sys.stdout, log=_log, **kwargs):
     """Write to standard output or error if enabled."""
+    if any(messages):
+        assert 'color' in kwargs, "Color is required"
+
+    color = kwargs.pop('color', None)
+
     for message in messages:
         if _Config.verbosity == 0:
             text = ' ' * 2 * _Config.indent_level + style(message, color)

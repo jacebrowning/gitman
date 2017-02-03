@@ -28,7 +28,7 @@ def init():
     config = load_config()
     if config:
         msg = "Configuration file already exists: {}".format(config.path)
-        common.show(msg, 'error')
+        common.show(msg, color='error')
 
     else:
         config = Config()
@@ -40,10 +40,11 @@ def init():
         config.save()
 
         msg = "Created sample configuration file: {}".format(config.path)
-        common.show(msg, 'success')
+        common.show(msg, color='success')
         success = True
 
-    common.show("To edit this configuration file, run: gitman edit", 'message')
+    msg = "To edit this configuration file, run: gitman edit"
+    common.show(msg, color='message')
 
     return success
 
