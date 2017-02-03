@@ -6,7 +6,7 @@ import datetime
 import logging
 
 from . import common, system
-from .models import load_config
+from .models import load_config, Config, Source
 
 log = logging.getLogger(__name__)
 
@@ -21,6 +21,34 @@ def restore_cwd(func):
     return wrapped
 
 
+def init():
+    """Create a new configuration file for the project."""
+    success = False
+
+    config = load_config()
+    if config:
+        msg = "Configuration file already exists: {}".format(config.path)
+        common.show(msg, color='error')
+
+    else:
+        config = Config()
+        source = Source(name="sample_dependency",
+                        repo="https://github.com/githubtraining/hellogitworld")
+        config.sources.append(source)
+        source = source.lock(rev="ebbbf773431ba07510251bb03f9525c7bab2b13a")
+        config.sources_locked.append(source)
+        config.save()
+
+        msg = "Created sample configuration file: {}".format(config.path)
+        common.show(msg, color='success')
+        success = True
+
+    msg = "To edit this configuration file, run: gitman edit"
+    common.show(msg, color='message')
+
+    return success
+
+
 @restore_cwd
 def install(*names, root=None, depth=None,
             force=False, fetch=False, clean=True):
@@ -31,7 +59,8 @@ def install(*names, root=None, depth=None,
     - `*names`: optional list of dependency directory names to filter on
     - `root`: specifies the path to the root working tree
     - `depth`: number of levels of dependencies to traverse
-    - `force`: indicates uncommitted changes can be overwritten
+    - `force`: indicates uncommitted changes can be overwritten and
+               script errors can be ignored
     - `fetch`: indicates the latest branches should always be fetched
     - `clean`: indicates untracked files should be deleted from dependencies
 
@@ -45,13 +74,16 @@ def install(*names, root=None, depth=None,
     config = load_config(root)
 
     if config:
-        common.show()
+        common.newline()
         common.show("Installing dependencies...", color='message', log=False)
-        common.show()
+        common.newline()
         count = config.install_dependencies(
             *names, update=False, depth=depth,
             force=force, fetch=fetch, clean=clean,
         )
+
+        if count:
+            _run_scripts(*names, depth=depth, force=force, _config=config)
 
     return _display_result("install", "Installed", count)
 
@@ -67,7 +99,8 @@ def update(*names, root=None, depth=None,
     - `root`: specifies the path to the root working tree
     - `depth`: number of levels of dependencies to traverse
     - `recurse`: indicates nested dependencies should also be updated
-    - `force`: indicates uncommitted changes can be overwritten
+    - `force`: indicates uncommitted changes can be overwritten and
+               script errors can be ignored
     - `clean`: indicates untracked files should be deleted from dependencies
     - `lock`: indicates actual dependency versions should be recorded
 
@@ -82,21 +115,41 @@ def update(*names, root=None, depth=None,
     config = load_config(root)
 
     if config:
-        common.show()
+        common.newline()
         common.show("Updating dependencies...", color='message', log=False)
-        common.show()
+        common.newline()
         count = config.install_dependencies(
             *names, update=True, depth=depth,
             recurse=recurse, force=force, fetch=True, clean=clean,
         )
-        common.dedent(level=0)
+
         if count and lock is not False:
             common.show("Recording installed versions...",
                         color='message', log=False)
-            common.show()
+            common.newline()
             config.lock_dependencies(*names, obey_existing=lock is None)
 
+        if count:
+            _run_scripts(*names, depth=depth, force=force, _config=config)
+
     return _display_result("update", "Updated", count)
+
+
+def _run_scripts(*names, depth=None, force=False, _config=None):
+    """Run post-install scripts.
+
+    Optional arguments:
+
+    - `*names`: optional list of dependency directory names filter on
+    - `depth`: number of levels of dependencies to traverse
+    - `force`: indicates script errors can be ignored
+
+    """
+    assert _config, "'_config' is required"
+
+    common.show("Running scripts...", color='message', log=False)
+    common.newline()
+    _config.run_scripts(*names, depth=depth, force=force)
 
 
 @restore_cwd
@@ -117,10 +170,10 @@ def display(*, root=None, depth=None, allow_dirty=True):
     config = load_config(root)
 
     if config:
-        common.show()
+        common.newline()
         common.show("Displaying current dependency versions...",
                     color='message', log=False)
-        common.show()
+        common.newline()
         config.log(datetime.datetime.now().strftime("%F %T"))
         count = 0
         for identity in config.get_dependencies(depth=depth,
@@ -149,9 +202,9 @@ def lock(*names, root=None):
     config = load_config(root)
 
     if config:
-        common.show()
+        common.newline()
         common.show("Locking dependencies...", color='message', log=False)
-        common.show()
+        common.newline()
         count = config.lock_dependencies(*names, obey_existing=False)
         common.dedent(level=0)
 
@@ -175,14 +228,14 @@ def delete(*, root=None, force=False):
     config = load_config(root)
 
     if config:
-        common.show()
+        common.newline()
         common.show("Checking for uncommitted changes...",
                     color='message', log=False)
-        common.show()
+        common.newline()
         count = len(list(config.get_dependencies(allow_dirty=force)))
         common.dedent(level=0)
         common.show("Deleting all dependencies...", color='message', log=False)
-        common.show()
+        common.newline()
         config.uninstall_dependencies()
 
     return _display_result("delete", "Deleted", count, allow_zero=True)

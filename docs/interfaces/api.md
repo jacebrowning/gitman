@@ -2,6 +2,14 @@
 
 All of the [command-line interface](cli.md) functionality is available from the Python package by importing `gitman`.
 
+## Init
+
+To generate a sample configuration for a new project, call:
+
+```python
+gitman.init()
+```
+
 ## Install
 
 To clone/checkout the specified dependencies, call:
@@ -15,7 +23,8 @@ with optional arguments:
 - `*names`: optional list of dependency directory names to filter on
 - `root`: specifies the path to the root working tree
 - `depth`: number of levels of dependencies to traverse
-- `force`: indicates uncommitted changes can be overwritten
+- `force`: indicates uncommitted changes can be overwritten and
+           script errors can be ignored
 - `fetch`: indicates the latest branches should always be fetched
 - `clean`: indicates untracked files should be deleted from dependencies
 
@@ -33,7 +42,8 @@ with optional arguments:
 - `root`: specifies the path to the root working tree
 - `depth`: number of levels of dependencies to traverse
 - `recurse`: indicates nested dependencies should also be updated
-- `force`: indicates uncommitted changes can be overwritten
+- `force`: indicates uncommitted changes can be overwritten and
+           script errors can be ignored
 - `clean`: indicates untracked files should be deleted from dependencies
 - `lock`: indicates actual dependency versions should be recorded
 

@@ -68,6 +68,13 @@ class TestGit:
             "git fetch --tags --force --prune origin",
         ])
 
+    def test_valid(self, mock_call):
+        """Verify the commands to check for a working tree."""
+        git.valid()
+        check_calls(mock_call, [
+            "git rev-parse --is-inside-work-tree",
+        ])
+
     def test_changes(self, mock_call):
         """Verify the commands to check for uncommitted changes."""
         git.changes(include_untracked=True)
@@ -81,17 +88,17 @@ class TestGit:
 
     def test_changes_false(self, _):
         """Verify the absence of changes can be detected."""
-        with patch('gitman.git.call', Mock(return_value="")):
+        with patch('gitman.git.call', Mock(return_value=[""])):
             assert False is git.changes()
 
     def test_changes_false_with_untracked(self, _):
         """Verify untracked files can be detected."""
-        with patch('gitman.git.call', Mock(return_value="file_1")):
+        with patch('gitman.git.call', Mock(return_value=["file_1"])):
             assert False is git.changes()
 
     def test_changes_true_when_untracked_included(self, _):
         """Verify untracked files can be detected."""
-        with patch('gitman.git.call', Mock(return_value="file_1")):
+        with patch('gitman.git.call', Mock(return_value=["file_1"])):
             assert True is git.changes(include_untracked=True)
 
     def test_changes_true_when_uncommitted(self, _):
@@ -130,7 +137,7 @@ class TestGit:
 
     def test_update_revparse(self, mock_call):
         """Verify the commands to update a working tree to a rev-parse."""
-        mock_call.return_value = "abc123"
+        mock_call.return_value = ["abc123"]
         git.update('mock_branch@{2015-02-12 18:30:00}')
         check_calls(mock_call, [
             "git stash",

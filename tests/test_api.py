@@ -17,51 +17,91 @@ from gitman.exceptions import UncommittedChanges, InvalidRepository
 from .utilities import strip
 
 
-ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'tmp')
+ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)))
+TMP = os.path.join(ROOT, 'tmp')
 
 CONFIG = """
 location: deps
 sources:
 - name: gitman_1
-  link: ''
   repo: https://github.com/jacebrowning/gitman-demo
   rev: example-branch
+  link:
+  scripts:
+  -
 - name: gitman_2
-  link: ''
   repo: https://github.com/jacebrowning/gitman-demo
   rev: example-tag
+  link:
+  scripts:
+  -
 - name: gitman_3
-  link: ''
   repo: https://github.com/jacebrowning/gitman-demo
   rev: 9bf18e16b956041f0267c21baad555a23237b52e
+  link:
+  scripts:
+  -
 """.lstrip()
 
 log = logging.getLogger(__name__)
 
 
-@pytest.fixture
+@pytest.yield_fixture
 def config():
-    log.info("Temporary directory: %s", ROOT)
+    log.info("Temporary directory: %s", TMP)
 
     with suppress(FileNotFoundError, PermissionError):
-        shutil.rmtree(ROOT)
+        shutil.rmtree(TMP)
     with suppress(FileExistsError):
-        os.makedirs(ROOT)
-    os.chdir(ROOT)
+        os.makedirs(TMP)
+    os.chdir(TMP)
 
     os.system("touch .git")
-    config = Config(root=ROOT)
+    config = Config(root=TMP)
     config.__mapper__.text = CONFIG
 
-    log.debug("File listing: %s", os.listdir(ROOT))
+    log.debug("File listing: %s", os.listdir(TMP))
 
-    return config
+    yield config
+
+    os.chdir(ROOT)
+
+
+def describe_init():
+
+    def it_creates_a_new_config_file(tmpdir):
+        tmpdir.chdir()
+
+        expect(gitman.init()) == True
+
+        expect(Config().__mapper__.text) == strip("""
+        location: gitman_sources
+        sources:
+        - name: sample_dependency
+          repo: https://github.com/githubtraining/hellogitworld
+          rev: master
+          link:
+          scripts:
+          -
+        sources_locked:
+        - name: sample_dependency
+          repo: https://github.com/githubtraining/hellogitworld
+          rev: ebbbf773431ba07510251bb03f9525c7bab2b13a
+          link:
+          scripts:
+          -
+        """)
+
+    def it_does_not_modify_existing_config_file(config):
+        expect(gitman.init()) == False
+
+        expect(config.__mapper__.text) == CONFIG
 
 
 def describe_install():
 
     def it_creates_missing_directories(config):
-        expect(os.path.isdir(config.location)) == False
+        shell.rm(config.location)
 
         expect(gitman.install('gitman_1', depth=1)) == True
 
@@ -77,18 +117,24 @@ def describe_install():
         location: deps
         sources:
         - name: gitman_1
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
+          link:
+          scripts:
+          -
         sources_locked:
         - name: gitman_2
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
+          link:
+          scripts:
+          -
         - name: gitman_3
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+          link:
+          scripts:
+          -
         """)
 
         expect(gitman.install(depth=1)) == True
@@ -100,19 +146,34 @@ def describe_install():
         location: deps
         sources:
         - name: gitman_1
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
+          link:
+          scripts:
+          -
         sources_locked:
         - name: gitman_2
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+          link:
+          scripts:
+          -
         """)
 
         expect(gitman.install('gitman_1', depth=1)) == True
 
         expect(os.listdir(config.location)) == ['gitman_1']
+
+    def it_detects_invalid_repositories(config):
+        shell.rm(os.path.join("deps", "gitman_1", ".git"))
+        shell.mkdir(os.path.join("deps", "gitman_1", ".git"))
+
+        try:
+            with pytest.raises(InvalidRepository):
+                expect(gitman.install('gitman_1', depth=1)) == False
+
+        finally:
+            shell.rm(os.path.join("deps", "gitman_1"))
 
     def describe_links():
 
@@ -122,9 +183,11 @@ def describe_install():
             location: deps
             sources:
             - name: gitman_1
-              link: my_link
               repo: https://github.com/jacebrowning/gitman-demo
               rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+              link: my_link
+              scripts:
+              -
             """)
 
             return config
@@ -147,6 +210,30 @@ def describe_install():
             os.system("touch my_link")
 
             expect(gitman.install(depth=1, force=True)) == True
+
+    def describe_scripts():
+
+        @pytest.fixture
+        def config_with_scripts(config):
+            config.__mapper__.text = strip("""
+            location: deps
+            sources:
+            - name: gitman_1
+              repo: https://github.com/jacebrowning/gitman-demo
+              rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+              link:
+              scripts:
+              - make foobar
+            """)
+
+            return config
+
+        def it_detects_failures_in_scripts(config_with_scripts):
+            with pytest.raises(RuntimeError):
+                expect(gitman.install())
+
+        def script_failures_can_be_ignored(config_with_scripts):
+            expect(gitman.install(force=True)) == True
 
 
 def describe_uninstall():
@@ -185,18 +272,24 @@ def describe_update():
         location: deps
         sources:
         - name: gitman_1
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
+          link:
+          scripts:
+          -
         - name: gitman_2
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
+          link:
+          scripts:
+          -
         sources_locked:
         - name: gitman_2
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: (old revision)
+          link:
+          scripts:
+          -
         """)
 
         gitman.update(depth=1)
@@ -205,18 +298,24 @@ def describe_update():
         location: deps
         sources:
         - name: gitman_1
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
+          link:
+          scripts:
+          -
         - name: gitman_2
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
+          link:
+          scripts:
+          -
         sources_locked:
         - name: gitman_2
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+          link:
+          scripts:
+          -
         """)
 
     def it_should_not_lock_dependnecies_when_disabled(config):
@@ -224,18 +323,24 @@ def describe_update():
         location: deps
         sources:
         - name: gitman_1
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
+          link:
+          scripts:
+          -
         - name: gitman_2
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
+          link:
+          scripts:
+          -
         sources_locked:
         - name: gitman_2
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: (old revision)
+          link:
+          scripts:
+          -
         """)
 
         gitman.update(depth=1, lock=False)
@@ -244,18 +349,24 @@ def describe_update():
         location: deps
         sources:
         - name: gitman_1
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
+          link:
+          scripts:
+          -
         - name: gitman_2
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
+          link:
+          scripts:
+          -
         sources_locked:
         - name: gitman_2
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: (old revision)
+          link:
+          scripts:
+          -
         """)
 
     def it_should_lock_all_dependencies_when_enabled(config):
@@ -264,17 +375,23 @@ def describe_update():
         expect(config.__mapper__.text) == CONFIG + strip("""
         sources_locked:
         - name: gitman_1
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
+          link:
+          scripts:
+          -
         - name: gitman_2
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+          link:
+          scripts:
+          -
         - name: gitman_3
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
+          link:
+          scripts:
+          -
         """)
 
 
@@ -286,7 +403,7 @@ def describe_list():
         gitman.list()
 
         with open(config.log_path) as stream:
-            contents = stream.read().replace(ROOT, "tmp").replace('\\', '/')
+            contents = stream.read().replace(TMP, "tmp").replace('\\', '/')
         expect(contents) == strip("""
         2012-01-14 12:00:01
         tmp/deps/gitman_1: https://github.com/jacebrowning/gitman-demo @ 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
@@ -308,17 +425,23 @@ def describe_lock():
         expect(config.__mapper__.text) == CONFIG + strip("""
         sources_locked:
         - name: gitman_1
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
+          link:
+          scripts:
+          -
         - name: gitman_2
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+          link:
+          scripts:
+          -
         - name: gitman_3
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
+          link:
+          scripts:
+          -
         """) == config.__mapper__.text
 
     def it_records_specified_dependencies(config):
@@ -328,20 +451,24 @@ def describe_lock():
         expect(config.__mapper__.text) == CONFIG + strip("""
         sources_locked:
         - name: gitman_1
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
+          link:
+          scripts:
+          -
         - name: gitman_3
-          link: ''
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
+          link:
+          scripts:
+          -
         """) == config.__mapper__.text
 
     def it_should_fail_on_dirty_repositories(config):
         expect(gitman.update(depth=1, lock=False)) == True
         shell.rm(os.path.join("deps", "gitman_1", ".project"))
-        try:
 
+        try:
             with pytest.raises(UncommittedChanges):
                 gitman.lock()
 
@@ -350,7 +477,7 @@ def describe_lock():
         finally:
             shell.rm(os.path.join("deps", "gitman_1"))
 
-    def it_should_fail_on_invalid_repositories(config):
+    def it_should_fail_on_missing_repositories(config):
         shell.mkdir("deps")
         shell.rm(os.path.join("deps", "gitman_1"))
 
@@ -358,3 +485,17 @@ def describe_lock():
             gitman.lock()
 
         expect(config.__mapper__.text).does_not_contain("<unknown>")
+
+    def it_should_fail_on_invalid_repositories(config):
+        shell.mkdir("deps")
+        shell.rm(os.path.join("deps", "gitman_1", ".git"))
+        shell.mkdir(os.path.join("deps", "gitman_1", ".git"))
+
+        try:
+            with pytest.raises(InvalidRepository):
+                gitman.lock()
+
+            expect(config.__mapper__.text).does_not_contain("<unknown>")
+
+        finally:
+            shell.rm(os.path.join("deps", "gitman_1"))

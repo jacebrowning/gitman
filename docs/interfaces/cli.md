@@ -2,6 +2,14 @@
 
 After setting up `gitman` with a [configuration file](../index.md#setup), various commands can be run to manage these Git-controlled source dependencies.
 
+## Init
+
+To generate a sample configuration for a new project, run:
+
+```sh
+$ gitman init
+```
+
 ## Install
 
 To clone/checkout the specified dependencies, run:
@@ -34,7 +42,7 @@ It will only fetch from the repository if needed. To always fetch, run:
 gitman install --fetch
 ```
 
-It will exit with an error if there are any uncommitted changes in dependencies. To overwrite all changes, run:
+It will exit with an error if there are any uncommitted changes in dependencies or a post-install script fails. To overwrite all changes or ignore script failures, run:
 
 ```sh
 gitman install --force

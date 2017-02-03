@@ -13,49 +13,51 @@ OUT_PREFIX = "> "
 log = logging.getLogger(__name__)
 
 
-def call(name, *args, _show=True, _ignore=False, _shell=False):
+def call(name, *args, _show=True, _shell=False, _ignore=False):
     """Call a program with arguments.
 
     :param name: name of program to call
     :param args: list of command-line arguments
     :param _show: display the call on stdout
-    :param _ignore: ignore non-zero return codes
     :param _shell: force executing the program into a real shell
                    a Windows shell command (i.e: dir, echo) needs a real shell
                    but not a regular program (i.e: calc, git)
+    :param _ignore: ignore non-zero return codes
     """
     program = show(name, *args, stdout=_show)
 
     command = subprocess.run(
-        [name, *args], universal_newlines=True,
+        name if _shell else [name, *args], universal_newlines=True,
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
         shell=_shell
     )
 
-    for line in command.stdout.splitlines():
-        log.debug(OUT_PREFIX + line.strip())
+    output = [line.strip() for line in command.stdout.splitlines()]
+    for line in output:
+        log.debug(OUT_PREFIX + line)
 
     if command.returncode == 0:
-        return command.stdout.strip()
+        return output
 
     elif _ignore:
         log.debug("Ignored error from call to '%s'", name)
+        return output
 
     else:
         message = (
             "An external program call failed." + "\n\n"
             "In working directory: " + os.getcwd() + "\n\n"
             "The following command produced a non-zero return code:" + "\n\n" +
-            program + "\n" +
-            command.stdout
+            CMD_PREFIX + program + "\n" +
+            command.stdout.strip()
         )
-        raise ShellError(message)
+        raise ShellError(message, program=program, output=output)
 
 
 def mkdir(path):
     if not os.path.exists(path):
         if os.name == 'nt':
-            call('mkdir', path, _shell=True)
+            call("mkdir " + path, _shell=True)
         else:
             call('mkdir', '-p', path)
 
@@ -81,17 +83,17 @@ def ln(source, target):
 def rm(path):
     if os.name == 'nt':
         if os.path.isfile(path):
-            call('del', '/Q', '/F', path, _shell=True)
+            call("del /Q /F " + path, _shell=True)
         elif os.path.isdir(path):
-            call('rmdir', '/Q', '/S', path, _shell=True)
+            call("rmdir /Q /S " + path, _shell=True)
     else:
         call('rm', '-rf', path)
 
 
 def show(name, *args, stdout=True):
-    program = CMD_PREFIX + ' '.join([name, *args])
+    program = ' '.join([name, *args])
     if stdout:
-        common.show(program, color='shell')
+        common.show(CMD_PREFIX + program, color='shell')
     else:
-        log.debug(program)
+        log.debug(CMD_PREFIX + program)
     return program

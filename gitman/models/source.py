@@ -5,37 +5,37 @@ import logging
 import warnings
 
 import yorm
-from yorm.types import String, AttributeDictionary
+from yorm.types import String, NullableString, List, AttributeDictionary
 
-from .. import common
-from .. import git
-from .. import shell
-from ..exceptions import InvalidConfig, InvalidRepository, UncommittedChanges
+from .. import common, exceptions, shell, git
 
 
 log = logging.getLogger(__name__)
 
 
 @yorm.attr(name=String)
-@yorm.attr(link=String)
 @yorm.attr(repo=String)
 @yorm.attr(rev=String)
+@yorm.attr(link=NullableString)
+@yorm.attr(scripts=List.of_type(String))
 class Source(AttributeDictionary):
     """A dictionary of `git` and `ln` arguments."""
 
     DIRTY = '<dirty>'
     UNKNOWN = '<unknown>'
 
-    def __init__(self, repo, name, rev='master', link=None):
+    def __init__(self, repo, name=None, rev='master', link=None, scripts=None):
         super().__init__()
         self.repo = repo
-        self.name = name
+        self.name = self._infer_name(repo) if name is None else name
         self.rev = rev
         self.link = link
-        if not self.repo:
-            raise InvalidConfig("'repo' missing on {}".format(repr(self)))
-        if not self.name:
-            raise InvalidConfig("'name' missing on {}".format(repr(self)))
+        self.scripts = scripts or []
+
+        for key in ['name', 'repo', 'rev']:
+            if not self[key]:
+                msg = "'{}' required for {}".format(key, repr(self))
+                raise exceptions.InvalidConfig(msg)
 
     def __repr__(self):
         return "<source {}>".format(self)
@@ -59,19 +59,21 @@ class Source(AttributeDictionary):
         """Ensure the source matches the specified revision."""
         log.info("Updating source files...")
 
-        # Enter the working tree
+        # Clone the repository if needed
         if not os.path.exists(self.name):
-            log.debug("Creating a new repository...")
             git.clone(self.repo, self.name)
+
+        # Enter the working tree
         shell.cd(self.name)
+        if not git.valid():
+            raise self._invalid_repository
 
         # Check for uncommitted changes
         if not force:
             log.debug("Confirming there are no uncommitted changes...")
             if git.changes(include_untracked=clean):
-                common.show()
                 msg = "Uncommitted changes in {}".format(os.getcwd())
-                raise UncommittedChanges(msg)
+                raise exceptions.UncommittedChanges(msg)
 
         # Fetch the desired revision
         if fetch or self.rev not in (git.get_branch(),
@@ -102,32 +104,64 @@ class Source(AttributeDictionary):
             if force:
                 shell.rm(target)
             else:
-                common.show()
                 msg = "Preexisting link location at {}".format(target)
-                raise UncommittedChanges(msg)
+                raise exceptions.UncommittedChanges(msg)
 
         shell.ln(source, target)
+
+    def run_scripts(self, force=False):
+        log.info("Running install scripts...")
+
+        # Enter the working tree
+        shell.cd(self.name)
+        if not git.valid():
+            raise self._invalid_repository
+
+        # Check for scripts
+        if not self.scripts:
+            common.show("(no scripts to run)", color='shell_info')
+            common.newline()
+            return
+
+        # Run all scripts
+        for script in self.scripts:
+            try:
+                lines = shell.call(script, _shell=True)
+            except exceptions.ShellError as exc:
+                common.show(*exc.output, color='shell_error')
+                cmd = exc.program
+                if force:
+                    log.debug("Ignored error from call to '%s'", cmd)
+                else:
+                    msg = "Command '{}' failed in {}".format(cmd, os.getcwd())
+                    raise exceptions.ScriptFailure(msg)
+            else:
+                common.show(*lines, color='shell_output')
+        common.newline()
 
     def identify(self, allow_dirty=True, allow_missing=True):
         """Get the path and current repository URL and hash."""
         if os.path.isdir(self.name):
 
             shell.cd(self.name)
+            if not git.valid():
+                raise self._invalid_repository
 
             path = os.getcwd()
             url = git.get_url()
             if git.changes(display_status=not allow_dirty, _show=True):
                 if not allow_dirty:
-                    common.show()
                     msg = "Uncommitted changes in {}".format(os.getcwd())
-                    raise UncommittedChanges(msg)
+                    raise exceptions.UncommittedChanges(msg)
 
-                common.show(self.DIRTY, color='dirty', log=False)
+                common.show(self.DIRTY, color='git_dirty', log=False)
+                common.newline()
                 return path, url, self.DIRTY
             else:
-                revision = git.get_hash(_show=True)
-                common.show(revision, color='revision', log=False)
-                return path, url, revision
+                rev = git.get_hash(_show=True)
+                common.show(rev, color='git_rev', log=False)
+                common.newline()
+                return path, url, rev
 
         elif allow_missing:
 
@@ -135,12 +169,24 @@ class Source(AttributeDictionary):
 
         else:
 
-            path = os.path.join(os.getcwd(), self.name)
-            msg = "Not a valid repository: {}".format(path)
-            raise InvalidRepository(msg)
+            raise self._invalid_repository
 
-    def lock(self):
+    def lock(self, rev=None):
         """Return a locked version of the current source."""
-        _, _, revision = self.identify(allow_dirty=False, allow_missing=False)
-        source = self.__class__(self.repo, self.name, revision, self.link)
+        if rev is None:
+            _, _, rev = self.identify(allow_dirty=False, allow_missing=False)
+        source = self.__class__(self.repo, self.name, rev,
+                                self.link, self.scripts)
         return source
+
+    @property
+    def _invalid_repository(self):
+        path = os.path.join(os.getcwd(), self.name)
+        msg = "Not a valid repository: {}".format(path)
+        return exceptions.InvalidRepository(msg)
+
+    @staticmethod
+    def _infer_name(repo):
+        filename = repo.split('/')[-1]
+        name = filename.split('.')[0]
+        return name

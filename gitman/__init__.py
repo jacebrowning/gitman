@@ -3,7 +3,7 @@
 import sys
 
 __project__ = 'GitMan'
-__version__ = '1.2'
+__version__ = '1.3'
 
 CLI = 'gitman'
 PLUGIN = 'deps'
@@ -18,6 +18,7 @@ if sys.version_info < PYTHON_VERSION:  # pragma: no cover (manual test)
 
 try:
     # pylint: disable=wrong-import-position
+    from .commands import init
     from .commands import install
     from .commands import update
     from .commands import display as list  # pylint: disable=redefined-builtin

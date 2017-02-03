@@ -1,5 +1,11 @@
 # Revision History
 
+## 1.3 (2017/02/03)
+
+- Added `init` command to generate sample configuration files.
+- Added support for post-install scripts on dependencies.
+- Updated configuration format to support `null` for links.
+
 ## 1.2 (2017/01/08)
 
 - Added preliminary Windows support (@StudioEtrange).

@@ -17,14 +17,15 @@ log = logging.getLogger(__name__)
 @yorm.attr(sources=SortedList.of_type(Source))
 @yorm.attr(sources_locked=SortedList.of_type(Source))
 @yorm.sync("{self.root}/{self.filename}", auto_save=False)
-class Config:
+class Config(yorm.ModelMixin):
     """A dictionary of dependency configuration options."""
 
     LOG = "gitman.log"
 
-    def __init__(self, root, filename="gitman.yml", location="gitman_sources"):
+    def __init__(self, root=None,
+                 filename="gitman.yml", location="gitman_sources"):
         super().__init__()
-        self.root = root
+        self.root = root or os.getcwd()
         self.filename = filename
         self.location = location
         self.sources = []
@@ -66,28 +67,27 @@ class Config:
             log.info("Skipped directory: %s", self.location_path)
             return 0
 
+        sources = self._get_sources(use_locked=False if update else None)
+        sources_filter = list(names) if names else [s.name for s in sources]
+
         if not os.path.isdir(self.location_path):
             shell.mkdir(self.location_path)
         shell.cd(self.location_path)
-
-        sources = self._get_sources(use_locked=False if update else None)
-        dirs = list(names) if names else [source.name for source in sources]
-        common.show()
+        common.newline()
         common.indent()
 
         count = 0
         for source in sources:
-            if source.name in dirs:
-                dirs.remove(source.name)
+            if source.name in sources_filter:
+                sources_filter.remove(source.name)
             else:
                 log.info("Skipped dependency: %s", source.name)
                 continue
 
             source.update_files(force=force, fetch=fetch, clean=clean)
             source.create_link(self.root, force=force)
+            common.newline()
             count += 1
-
-            common.show()
 
             config = load_config()
             if config:
@@ -105,24 +105,58 @@ class Config:
             shell.cd(self.location_path, _show=False)
 
         common.dedent()
-        if dirs:
-            log.error("No such dependency: %s", ' '.join(dirs))
+        if sources_filter:
+            log.error("No such dependency: %s", ' '.join(sources_filter))
             return 0
+
+        return count
+
+    def run_scripts(self, *names, depth=None, force=False):
+        """Run scripts for the specified dependencies."""
+        if depth == 0:
+            log.info("Skipped directory: %s", self.location_path)
+            return 0
+
+        sources = self._get_sources()
+        sources_filter = list(names) if names else [s.name for s in sources]
+
+        shell.cd(self.location_path)
+        common.newline()
+        common.indent()
+
+        count = 0
+        for source in sources:
+            if source.name in sources_filter:
+                source.run_scripts(force=force)
+                count += 1
+
+                config = load_config()
+                if config:
+                    common.indent()
+                    count += config.run_scripts(
+                        depth=None if depth is None else max(0, depth - 1),
+                        force=force,
+                    )
+                    common.dedent()
+
+                shell.cd(self.location_path, _show=False)
+
+        common.dedent()
 
         return count
 
     def lock_dependencies(self, *names, obey_existing=True):
         """Lock down the immediate dependency versions."""
-        shell.cd(self.location_path)
-        common.show()
-        common.indent()
-
         sources = self._get_sources(use_locked=obey_existing).copy()
-        dirs = list(names) if names else [source.name for source in sources]
+        sources_filter = list(names) if names else [s.name for s in sources]
+
+        shell.cd(self.location_path)
+        common.newline()
+        common.indent()
 
         count = 0
         for source in sources:
-            if source.name not in dirs:
+            if source.name not in sources_filter:
                 log.info("Skipped dependency: %s", source.name)
                 continue
 
@@ -134,12 +168,10 @@ class Config:
                 self.sources_locked[index] = source.lock()
             count += 1
 
-            common.show()
-
             shell.cd(self.location_path, _show=False)
 
         if count:
-            yorm.save(self)
+            self.save()
 
         return count
 
@@ -147,7 +179,7 @@ class Config:
         """Delete the dependency storage location."""
         shell.cd(self.root)
         shell.rm(self.location_path)
-        common.show()
+        common.newline()
 
     def get_dependencies(self, depth=None, allow_dirty=True):
         """Yield the path, repository URL, and hash of each dependency."""
@@ -155,7 +187,7 @@ class Config:
             return
 
         shell.cd(self.location_path)
-        common.show()
+        common.newline()
         common.indent()
 
         for source in self.sources:
@@ -165,7 +197,6 @@ class Config:
                 continue
 
             yield source.identify(allow_dirty=allow_dirty)
-            common.show()
 
             config = load_config()
             if config:
