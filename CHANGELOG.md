@@ -1,6 +1,6 @@
 # Revision History
 
-## 1.3 (unreleased)
+## 1.3 (2017/02/03)
 
 - Added `init` command to generate sample configuration files.
 - Added support for post-install scripts on dependencies.
