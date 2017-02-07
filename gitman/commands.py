@@ -25,13 +25,14 @@ def init():
     """Create a new configuration file for the project."""
     success = False
 
-    config = load_config()
+    root = _find_root()
+    config = load_config(root)
     if config:
         msg = "Configuration file already exists: {}".format(config.path)
         common.show(msg, color='error')
 
     else:
-        config = Config()
+        config = Config(root)
         source = Source(name="sample_dependency",
                         repo="https://github.com/githubtraining/hellogitworld")
         config.sources.append(source)
@@ -281,7 +282,7 @@ def edit(*, root=None):
     return system.launch(config.path)
 
 
-def _find_root(base, cwd=None):
+def _find_root(base=None, cwd=None):
     if cwd is None:
         cwd = os.getcwd()
         log.info("Current directory: %s", cwd)

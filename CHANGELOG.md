@@ -1,5 +1,9 @@
 # Revision History
 
+## 1.3.1 (unreleased)
+
+- Fixed `init` command to always create configuration files in the root.
+
 ## 1.3 (2017/02/03)
 
 - Added `init` command to generate sample configuration files.
