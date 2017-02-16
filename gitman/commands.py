@@ -22,10 +22,10 @@ def restore_cwd(func):
 
 
 def init():
-    """Create a new configuration file for the project."""
+    """Create a new config file for the project."""
     success = False
 
-    config = _find_config()
+    config = load_config()
 
     if config:
         msg = "Configuration file already exists: {}".format(config.path)
@@ -40,11 +40,11 @@ def init():
         config.sources_locked.append(source)
         config.save()
 
-        msg = "Created sample configuration file: {}".format(config.path)
+        msg = "Created sample config file: {}".format(config.path)
         common.show(msg, color='success')
         success = True
 
-    msg = "To edit this configuration file, run: gitman edit"
+    msg = "To edit this config file, run: gitman edit"
     common.show(msg, color='message')
 
     return success
@@ -71,7 +71,7 @@ def install(*names, root=None, depth=None,
              ', '.join(names) if names else '<all>')
     count = None
 
-    config = _find_config(root)
+    config = load_config(root)
 
     if config:
         common.newline()
@@ -111,7 +111,7 @@ def update(*names, root=None, depth=None,
              ', '.join(names) if names else '<all>')
     count = None
 
-    config = _find_config(root)
+    config = load_config(root)
 
     if config:
         common.newline()
@@ -165,7 +165,7 @@ def display(*, root=None, depth=None, allow_dirty=True):
     log.info("Displaying dependencies...")
     count = None
 
-    config = _find_config(root)
+    config = load_config(root)
 
     if config:
         common.newline()
@@ -196,7 +196,7 @@ def lock(*names, root=None):
     log.info("Locking dependencies...")
     count = None
 
-    config = _find_config(root)
+    config = load_config(root)
 
     if config:
         common.newline()
@@ -221,7 +221,7 @@ def delete(*, root=None, force=False):
     log.info("Deleting dependencies...")
     count = None
 
-    config = _find_config(root)
+    config = load_config(root)
 
     if config:
         common.newline()
@@ -246,10 +246,10 @@ def show(*names, root=None):
     """
     log.info("Finding paths...")
 
-    config = _find_config(root)
+    config = load_config(root)
 
     if not config:
-        log.error("No configuration found")
+        log.error("No config found")
         return False
 
     for name in names or [None]:
@@ -266,69 +266,15 @@ def edit(*, root=None):
     - `root`: specifies the path to the root working tree
 
     """
-    log.info("Launching configuration...")
+    log.info("Launching config...")
 
-    config = _find_config(root)
+    config = load_config(root)
 
     if not config:
-        log.error("No configuration found")
+        log.error("No config found")
         return False
 
     return system.launch(config.path)
-
-
-def _find_config(root=None, *, cwd=None):
-    if cwd is None:
-        cwd = os.getcwd()
-        log.info("Current directory: %s", cwd)
-
-    if root:
-        log.info("Specified root: %s", root)
-    else:
-        root = _find_root(cwd=cwd)
-
-    log.info("Searching for config...")
-    path = cwd
-    while path != os.path.dirname(path):
-        log.debug("Checking path: %s", path)
-        config = load_config(path)
-        if config:
-            return config
-        elif path == root:
-            break
-        else:
-            path = os.path.dirname(path)
-
-    return None
-
-
-def _find_root(base=None, *, cwd=None):
-    if cwd is None:
-        cwd = os.getcwd()
-        log.info("Current directory: %s", cwd)
-
-    if base:
-        root = os.path.abspath(base)
-        log.info("Specified root: %s", root)
-
-    else:
-        log.info("Searching for root...")
-        path = cwd
-        root = None
-        while path != os.path.dirname(path):
-            log.debug("Checking path: %s", path)
-            if '.git' in os.listdir(path):
-                root = path
-                break
-            path = os.path.dirname(path)
-
-        if root:
-            log.info("Found root: %s", root)
-        else:
-            root = cwd
-            log.warning("No root found, default: %s", root)
-
-    return root
 
 
 def _display_result(present, past, count, allow_zero=False):

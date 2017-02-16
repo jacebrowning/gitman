@@ -1,5 +1,3 @@
-"""Wrappers for the dependency configuration files."""
-
 import os
 import logging
 
@@ -18,7 +16,7 @@ log = logging.getLogger(__name__)
 @yorm.attr(sources_locked=SortedList.of_type(Source))
 @yorm.sync("{self.root}/{self.filename}", auto_save=False)
 class Config(yorm.ModelMixin):
-    """A dictionary of dependency configuration options."""
+    """Specifies all dependencies for a project."""
 
     LOG = "gitman.log"
 
@@ -33,7 +31,7 @@ class Config(yorm.ModelMixin):
 
     @property
     def config_path(self):
-        """Get the full path to the configuration file."""
+        """Get the full path to the config file."""
         return os.path.normpath(os.path.join(self.root, self.filename))
     path = config_path
 
@@ -89,7 +87,7 @@ class Config(yorm.ModelMixin):
             common.newline()
             count += 1
 
-            config = load_config()
+            config = load_config(search=False)
             if config:
                 common.indent()
                 count += config.install_dependencies(
@@ -130,7 +128,7 @@ class Config(yorm.ModelMixin):
                 source.run_scripts(force=force)
                 count += 1
 
-                config = load_config()
+                config = load_config(search=False)
                 if config:
                     common.indent()
                     count += config.run_scripts(
@@ -198,7 +196,7 @@ class Config(yorm.ModelMixin):
 
             yield source.identify(allow_dirty=allow_dirty)
 
-            config = load_config()
+            config = load_config(search=False)
             if config:
                 common.indent()
                 yield from config.get_dependencies(
@@ -245,18 +243,36 @@ class Config(yorm.ModelMixin):
         return sources + extras
 
 
-def load_config(root=None):
-    """Load the configuration for the current project."""
-    if root is None:
-        root = os.getcwd()
+def load_config(start=None, *, search=True):
+    """Load the config for the current project."""
+    if start:
+        start = os.path.abspath(start)
+    else:
+        start = os.getcwd()
 
-    for filename in os.listdir(root):
-        if _valid_filename(filename):
-            config = Config(root, filename)
-            log.debug("Loaded config: %s", config.path)
-            return config
+    if search:
+        log.debug("Searching for config...")
 
-    log.debug("No config found in: %s", root)
+    path = start
+    while path != os.path.dirname(path):
+        log.debug("Looking for config in: %s", path)
+
+        for filename in os.listdir(path):
+            if _valid_filename(filename):
+                config = Config(path, filename)
+                log.debug("Found config: %s", config.path)
+                return config
+
+        if search:
+            path = os.path.dirname(path)
+        else:
+            break
+
+    if search:
+        log.debug("No config found starting from: %s", start)
+    else:
+        log.debug("No config found in: %s", start)
+
     return None
 
 

@@ -12,7 +12,7 @@ from .conftest import FILES
 class TestConfig:
 
     def test_init_defaults(self):
-        """Verify a configuration has a default filename and location."""
+        """Verify a config has a default filename and location."""
         config = Config('mock/root')
 
         assert 'mock/root' == config.root
@@ -35,7 +35,7 @@ class TestConfig:
         assert '.gitman' == config.location
 
     def test_path(self):
-        """Verify a configuration's path is correct."""
+        """Verify the path is correct."""
         config = Config('mock/root')
 
         assert os.path.normpath("mock/root/gitman.yml") == config.path

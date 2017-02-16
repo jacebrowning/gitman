@@ -1,56 +1,61 @@
 # pylint: disable=redefined-outer-name,unused-argument,unused-variable,singleton-comparison,expression-not-assigned
 
-import os
-
 from expecter import expect
 
-from gitman.commands import install, update, display, delete
-from gitman.commands import _find_root, _find_config
-
-from .conftest import ROOT, FILES
-
-PROJECT_ROOT = os.path.dirname(os.path.dirname(ROOT))
-PROJECT_PARENT = os.path.dirname(PROJECT_ROOT)
+from gitman import commands
 
 
-def describe_commands():
+def describe_install():
 
     def can_be_run_without_project(tmpdir):
         tmpdir.chdir()
 
-        assert not install()
-        assert not update()
-        assert not display()
-        assert not delete()
+        expect(commands.install()) == False
 
 
-def describe_find_config():
+def describe_update():
 
-    def when_found_in_root():
-        expect(_find_config(cwd=ROOT)) != None
+    def can_be_run_without_project(tmpdir):
+        tmpdir.chdir()
 
-    def when_found_in_current_directory():
-        expect(_find_config(root=ROOT, cwd=FILES)) != None
-
-    def when_not_found():
-        expect(_find_config(root=PROJECT_PARENT, cwd=PROJECT_PARENT)) == None
-
-    def when_not_found_outside_root():
-        expect(_find_config(root=PROJECT_ROOT, cwd=PROJECT_PARENT)) == None
+        expect(commands.update()) == False
 
 
-def describe_find_root():
+def describe_display():
 
-    def when_specified():
-        os.chdir(PROJECT_PARENT)
+    def can_be_run_without_project(tmpdir):
+        tmpdir.chdir()
 
-        expect(_find_root(FILES)) == FILES
+        expect(commands.display()) == False
 
-    def when_not_specified():
-        expect(_find_root(None, cwd=ROOT)) == PROJECT_ROOT
 
-    def when_matching_current_directory():
-        expect(_find_root(PROJECT_ROOT, cwd=ROOT)) == PROJECT_ROOT
+def describe_lock():
 
-    def when_not_found():
-        expect(_find_root(None, cwd=PROJECT_PARENT)) == PROJECT_PARENT
+    def can_be_run_without_project(tmpdir):
+        tmpdir.chdir()
+
+        expect(commands.lock()) == False
+
+
+def describe_delete():
+
+    def can_be_run_without_project(tmpdir):
+        tmpdir.chdir()
+
+        expect(commands.delete()) == False
+
+
+def describe_show():
+
+    def can_be_run_without_project(tmpdir):
+        tmpdir.chdir()
+
+        expect(commands.show()) == False
+
+
+def describe_edit():
+
+    def can_be_run_without_project(tmpdir):
+        tmpdir.chdir()
+
+        expect(commands.show()) == False
