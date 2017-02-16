@@ -1,5 +1,3 @@
-"""Wrappers for the dependency configuration files."""
-
 import os
 import logging
 import warnings

@@ -45,7 +45,7 @@ def positive_int(value):
 
 
 class _Config:
-    """Share configuration options."""
+    """Share logging options."""
 
     MAX_VERBOSITY = 4
 

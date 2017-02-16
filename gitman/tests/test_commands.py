@@ -1,37 +1,61 @@
-# pylint: disable=no-self-use
+# pylint: disable=redefined-outer-name,unused-argument,unused-variable,singleton-comparison,expression-not-assigned
 
-import os
+from expecter import expect
 
-from gitman.commands import _find_root, install, update, display, delete
-
-from .conftest import ROOT, FILES
-
-PROJECT_ROOT = os.path.dirname(os.path.dirname(ROOT))
-PROJECT_PARENT = os.path.dirname(PROJECT_ROOT)
+from gitman import commands
 
 
-class TestCommands:
+def describe_install():
 
-    def test_commands_can_be_run_without_project(self, tmpdir):
+    def can_be_run_without_project(tmpdir):
         tmpdir.chdir()
 
-        assert not install()
-        assert not update()
-        assert not display()
-        assert not delete()
+        expect(commands.install()) == False
 
 
-class TestFindRoot:
+def describe_update():
 
-    def test_specified(self):
-        os.chdir(PROJECT_PARENT)
-        assert FILES == _find_root(FILES)
+    def can_be_run_without_project(tmpdir):
+        tmpdir.chdir()
 
-    def test_none(self):
-        assert PROJECT_ROOT == _find_root(None, cwd=ROOT)
+        expect(commands.update()) == False
 
-    def test_current(self):
-        assert PROJECT_ROOT == _find_root(PROJECT_ROOT, cwd=ROOT)
 
-    def test_missing(self):
-        assert PROJECT_PARENT == _find_root(None, cwd=PROJECT_PARENT)
+def describe_display():
+
+    def can_be_run_without_project(tmpdir):
+        tmpdir.chdir()
+
+        expect(commands.display()) == False
+
+
+def describe_lock():
+
+    def can_be_run_without_project(tmpdir):
+        tmpdir.chdir()
+
+        expect(commands.lock()) == False
+
+
+def describe_delete():
+
+    def can_be_run_without_project(tmpdir):
+        tmpdir.chdir()
+
+        expect(commands.delete()) == False
+
+
+def describe_show():
+
+    def can_be_run_without_project(tmpdir):
+        tmpdir.chdir()
+
+        expect(commands.show()) == False
+
+
+def describe_edit():
+
+    def can_be_run_without_project(tmpdir):
+        tmpdir.chdir()
+
+        expect(commands.show()) == False

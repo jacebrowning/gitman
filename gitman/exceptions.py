@@ -2,7 +2,7 @@
 
 
 class InvalidConfig(ValueError):
-    """Raised when the configuration file is invalid."""
+    """Raised when the config file is invalid."""
 
 
 class ShellError(RuntimeError):
