@@ -1,8 +1,11 @@
-# pylint: disable=no-self-use
+# pylint: disable=redefined-outer-name,unused-argument,unused-variable,singleton-comparison,expression-not-assigned
 
 import os
 
-from gitman.commands import _find_root, install, update, display, delete
+from expecter import expect
+
+from gitman.commands import install, update, display, delete
+from gitman.commands import _find_root, _find_config
 
 from .conftest import ROOT, FILES
 
@@ -10,9 +13,9 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(ROOT))
 PROJECT_PARENT = os.path.dirname(PROJECT_ROOT)
 
 
-class TestCommands:
+def describe_commands():
 
-    def test_commands_can_be_run_without_project(self, tmpdir):
+    def can_be_run_without_project(tmpdir):
         tmpdir.chdir()
 
         assert not install()
@@ -21,17 +24,33 @@ class TestCommands:
         assert not delete()
 
 
-class TestFindRoot:
+def describe_find_config():
 
-    def test_specified(self):
+    def when_found_in_root():
+        expect(_find_config(cwd=ROOT)) != None
+
+    def when_found_in_current_directory():
+        expect(_find_config(root=ROOT, cwd=FILES)) != None
+
+    def when_not_found():
+        expect(_find_config(root=PROJECT_PARENT, cwd=PROJECT_PARENT)) == None
+
+    def when_not_found_outside_root():
+        expect(_find_config(root=PROJECT_ROOT, cwd=PROJECT_PARENT)) == None
+
+
+def describe_find_root():
+
+    def when_specified():
         os.chdir(PROJECT_PARENT)
-        assert FILES == _find_root(FILES)
 
-    def test_none(self):
-        assert PROJECT_ROOT == _find_root(None, cwd=ROOT)
+        expect(_find_root(FILES)) == FILES
 
-    def test_current(self):
-        assert PROJECT_ROOT == _find_root(PROJECT_ROOT, cwd=ROOT)
+    def when_not_specified():
+        expect(_find_root(None, cwd=ROOT)) == PROJECT_ROOT
 
-    def test_missing(self):
-        assert PROJECT_PARENT == _find_root(None, cwd=PROJECT_PARENT)
+    def when_matching_current_directory():
+        expect(_find_root(PROJECT_ROOT, cwd=ROOT)) == PROJECT_ROOT
+
+    def when_not_found():
+        expect(_find_root(None, cwd=PROJECT_PARENT)) == PROJECT_PARENT

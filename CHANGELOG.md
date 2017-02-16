@@ -1,8 +1,8 @@
 # Revision History
 
-## 1.3.1 (unreleased)
+## 1.4 (unreleased)
 
-- Fixed `init` command to always create configuration files in the root.
+- Allow configuration files to exist in subdirectories of the main project.
 
 ## 1.3 (2017/02/03)
 

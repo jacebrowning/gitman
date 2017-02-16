@@ -25,14 +25,14 @@ def init():
     """Create a new configuration file for the project."""
     success = False
 
-    root = _find_root()
-    config = load_config(root)
+    config = _find_config()
+
     if config:
         msg = "Configuration file already exists: {}".format(config.path)
         common.show(msg, color='error')
 
     else:
-        config = Config(root)
+        config = Config()
         source = Source(name="sample_dependency",
                         repo="https://github.com/githubtraining/hellogitworld")
         config.sources.append(source)
@@ -71,8 +71,7 @@ def install(*names, root=None, depth=None,
              ', '.join(names) if names else '<all>')
     count = None
 
-    root = _find_root(root)
-    config = load_config(root)
+    config = _find_config(root)
 
     if config:
         common.newline()
@@ -112,8 +111,7 @@ def update(*names, root=None, depth=None,
              ', '.join(names) if names else '<all>')
     count = None
 
-    root = _find_root(root)
-    config = load_config(root)
+    config = _find_config(root)
 
     if config:
         common.newline()
@@ -167,8 +165,7 @@ def display(*, root=None, depth=None, allow_dirty=True):
     log.info("Displaying dependencies...")
     count = None
 
-    root = _find_root(root)
-    config = load_config(root)
+    config = _find_config(root)
 
     if config:
         common.newline()
@@ -199,8 +196,7 @@ def lock(*names, root=None):
     log.info("Locking dependencies...")
     count = None
 
-    root = _find_root(root)
-    config = load_config(root)
+    config = _find_config(root)
 
     if config:
         common.newline()
@@ -225,8 +221,7 @@ def delete(*, root=None, force=False):
     log.info("Deleting dependencies...")
     count = None
 
-    root = _find_root(root)
-    config = load_config(root)
+    config = _find_config(root)
 
     if config:
         common.newline()
@@ -251,8 +246,8 @@ def show(*names, root=None):
     """
     log.info("Finding paths...")
 
-    root = _find_root(root)
-    config = load_config(root)
+    config = _find_config(root)
+
     if not config:
         log.error("No configuration found")
         return False
@@ -273,8 +268,8 @@ def edit(*, root=None):
     """
     log.info("Launching configuration...")
 
-    root = _find_root(root)
-    config = load_config(root)
+    config = _find_config(root)
+
     if not config:
         log.error("No configuration found")
         return False
@@ -282,7 +277,32 @@ def edit(*, root=None):
     return system.launch(config.path)
 
 
-def _find_root(base=None, cwd=None):
+def _find_config(root=None, *, cwd=None):
+    if cwd is None:
+        cwd = os.getcwd()
+        log.info("Current directory: %s", cwd)
+
+    if root:
+        log.info("Specified root: %s", root)
+    else:
+        root = _find_root(cwd=cwd)
+
+    log.info("Searching for config...")
+    path = cwd
+    while path != os.path.dirname(path):
+        log.debug("Checking path: %s", path)
+        config = load_config(path)
+        if config:
+            return config
+        elif path == root:
+            break
+        else:
+            path = os.path.dirname(path)
+
+    return None
+
+
+def _find_root(base=None, *, cwd=None):
     if cwd is None:
         cwd = os.getcwd()
         log.info("Current directory: %s", cwd)
@@ -294,14 +314,12 @@ def _find_root(base=None, cwd=None):
     else:
         log.info("Searching for root...")
         path = cwd
-        prev = None
         root = None
-        while path != prev:
+        while path != os.path.dirname(path):
             log.debug("Checking path: %s", path)
             if '.git' in os.listdir(path):
                 root = path
                 break
-            prev = path
             path = os.path.dirname(path)
 
         if root:
