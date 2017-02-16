@@ -2,13 +2,13 @@
 
 ## 1.4 (unreleased)
 
-- Allow configuration files to exist in subdirectories of the main project.
+- Allow config files to exist in subdirectories of the main project.
 
 ## 1.3 (2017/02/03)
 
-- Added `init` command to generate sample configuration files.
+- Added `init` command to generate sample config files.
 - Added support for post-install scripts on dependencies.
-- Updated configuration format to support `null` for links.
+- Updated config format to support `null` for links.
 
 ## 1.2 (2017/01/08)
 
@@ -43,7 +43,7 @@
 
 ## 0.9 (2016/03/31)
 
-- Added `edit` command to launch the configuration file.
+- Added `edit` command to launch the config file.
 - Depth now defaults to 5 to prevent infinite recursion.
 - Fixed handling of source lists containing different dependencies.
 

@@ -1,10 +1,10 @@
 # Command-line Interface
 
-After setting up `gitman` with a [configuration file](../index.md#setup), various commands can be run to manage these Git-controlled source dependencies.
+After setting up `gitman` with a [config file](../index.md#setup), various commands can be run to manage these Git-controlled source dependencies.
 
 ## Init
 
-To generate a sample configuration for a new project, run:
+To generate a sample config for a new project, run:
 
 ```sh
 $ gitman init
@@ -150,7 +150,7 @@ To display the path to a dependency:
 gitman show <name>
 ```
 
-To display the path to the configuration file:
+To display the path to the config file:
 
 ```sh
 gitman show --config
@@ -164,7 +164,7 @@ gitman show --log
 
 ## Edit
 
-To open the existing configuration file:
+To open the existing config file:
 
 ```sh
 gitman edit

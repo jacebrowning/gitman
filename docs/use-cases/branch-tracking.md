@@ -33,7 +33,7 @@ tests
 
 ## Understanding Locked Sources
 
-In the configuration file, the `sources_locked` section identifies that commit `b27308` of the API was last used to test this web app -- the last time `$ gitman update` was run.
+In the config file, the `sources_locked` section identifies that commit `b27308` of the API was last used to test this web app -- the last time `$ gitman update` was run.
 
 The `sources` section identifies that the `develop` branch should be used when checking out a new version of the API.
 

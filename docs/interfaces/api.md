@@ -4,7 +4,7 @@ All of the [command-line interface](cli.md) functionality is available from the 
 
 ## Init
 
-To generate a sample configuration for a new project, call:
+To generate a sample config for a new project, call:
 
 ```python
 gitman.init()

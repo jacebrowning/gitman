@@ -31,7 +31,7 @@ $ python setup.py install
 
 ## Setup
 
-Generate a sample configuration file:
+Generate a sample config file:
 
 ```sh
 $ gitman init
@@ -83,7 +83,7 @@ which will essentially:
 1. Create a working tree at `<root>`/`<location>`/`<name>`
 2. Fetch from `repo` and checkout the specified `rev`
 3. Symbolically link each `<location>`/`<name>` from `<root>`/`<link>` (if specified)
-4. Repeat for all nested working trees containing a configuration file
+4. Repeat for all nested working trees containing a config file
 5. Record the actual commit SHAs that were checked out (with `--lock` option)
 6. Run optional post-install scripts for each dependency
 

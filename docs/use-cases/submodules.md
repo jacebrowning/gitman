@@ -4,7 +4,7 @@ While Git [submodules](http://git-scm.com/docs/git-submodule) are an obvious cho
 
 ## An Existing Submodule
 
-When managing a single dependency using submodules, there will be two items in your working tree with special meaning. The `.gitmodules` file, which contains submodule configuration, and semi-ignored directory containing the checked out dependency:
+When managing a single dependency using submodules, there will be two items in your working tree with special meaning. The `.gitmodules` file, which contains submodule config, and semi-ignored directory containing the checked out dependency:
 
 ```sh
 <root>/vendor/my_dependency  # submodule at: a943a702d06f34599aee1f8da8ef9f7296031d69
@@ -39,4 +39,4 @@ In other working trees, simply run `$ gitman install` to check out the source de
 
 ### Modifying Dependencies
 
-To include a different version of a dependency, modify the `rev` value in the configuration file.
+To include a different version of a dependency, modify the `rev` value in the config file.
