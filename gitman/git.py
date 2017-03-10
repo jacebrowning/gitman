@@ -4,7 +4,7 @@ import os
 import logging
 from contextlib import suppress
 
-from . import common
+from . import common, settings
 from .shell import call
 from .exceptions import ShellError
 
@@ -16,12 +16,9 @@ def git(*args, **kwargs):
     return call('git', *args, **kwargs)
 
 
-def clone(repo, path, *, cache=None):
+def clone(repo, path, *, cache=settings.CACHE):
     """Clone a new Git repository."""
     log.debug("Creating a new repository...")
-
-    cache = cache or os.path.expanduser("~/.gitcache")
-    cache = os.path.normpath(cache)
 
     name = repo.split('/')[-1]
     if name.endswith(".git"):
