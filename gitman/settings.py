@@ -1,6 +1,10 @@
 """Program defaults."""
 
+import os
 import logging
+
+# Cache settings
+CACHE = os.path.expanduser(os.getenv('GITMAN_CACHE', "~/.gitcache"))
 
 # Logging settings
 DEFAULT_LOGGING_FORMAT = "%(message)s"
