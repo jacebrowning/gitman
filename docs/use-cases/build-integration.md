@@ -23,7 +23,7 @@ clean:
   gitman uninstall
 ```
 
-using a configuration file similar to:
+using a config file similar to:
 
 ```yaml
 location: vendor/gitman
@@ -47,8 +47,8 @@ sources_locked:
 
 Running `make depends` performs the following actions:
 
-1. Check the modification times of the configuration and log files
-2. If the configuration file is newer, continue
+1. Check the modification times of the config and log files
+2. If the config file is newer, continue
 3. Install the locked dependency versions
 4. Run `make` inside of each dependency's folder
 5. Update the log file with the current versions of all dependencies
@@ -57,4 +57,4 @@ To update your dependencies:
 
 1. Run `gitman update`
 2. Run `make depends`
-3. If the new build passes your tests, commit the new configuration file
+3. If the new build passes your tests, commit the new config file

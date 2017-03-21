@@ -9,6 +9,7 @@ pages:
 - Home: index.md
 - Setup:
     - Git: setup/git.md
+    - Environment: setup/environment.md
 - Interfaces:
     - Command Line: interfaces/cli.md
     - Git Plugin: interfaces/plugin.md

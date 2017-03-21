@@ -43,7 +43,7 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
     subs = parser.add_subparsers(help="", dest='command', metavar="<command>")
 
     # Init parser
-    info = "create a new configuration file for the project"
+    info = "create a new config file for the project"
     sub = subs.add_parser('init', description=info.capitalize() + '.',
                           help=info, parents=[debug], **shared)
 
@@ -108,7 +108,7 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
                      help="display the path of the log file")
 
     # Edit parser
-    info = "open the configuration file in the default editor"
+    info = "open the config file in the default editor"
     sub = subs.add_parser('edit', description=info.capitalize() + '.',
                           help=info, parents=[debug, project], **shared)
 
