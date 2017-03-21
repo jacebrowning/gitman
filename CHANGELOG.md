@@ -3,6 +3,7 @@
 ## 1.4 (2017/03/21)
 
 - Allow config files to exist in subdirectories of the main project.
+- Added `${GITMAN_CACHE}` to customize the repository cache location.
 
 ## 1.3 (2017/02/03)
 
