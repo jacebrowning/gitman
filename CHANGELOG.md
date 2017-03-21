@@ -1,6 +1,6 @@
 # Revision History
 
-## 1.4 (unreleased)
+## 1.4 (2017/03/21)
 
 - Allow config files to exist in subdirectories of the main project.
 
