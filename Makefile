@@ -30,11 +30,11 @@ watch: install .clean-test ## Continuously run all CI tasks when files chanage
 
 .PHONY: demo
 demo: install
-	$(BIN)/gitman install --force  # some scripts have intentional errors
-	$(BIN)/gitman update --force  # some scripts have intentional errors
-	$(BIN)/gitman list
-	$(BIN)/gitman lock
-	$(BIN)/gitman uninstall
+	pipenv run gitman install --force  # some scripts have intentional errors
+	pipenv run gitman update --force  # some scripts have intentional errors
+	pipenv run gitman list
+	pipenv run gitman lock
+	pipenv run gitman uninstall
 
 # SYSTEM DEPENDENCIES ##########################################################
 
