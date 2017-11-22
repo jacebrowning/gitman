@@ -54,8 +54,7 @@ class Config(yorm.ModelMixin):
             return self.log_path
         elif name:
             return os.path.normpath(os.path.join(base, name))
-        else:
-            return base
+        return base
 
     def install_dependencies(self, *names, depth=None,
                              update=True, recurse=False,
@@ -219,9 +218,8 @@ class Config(yorm.ModelMixin):
         if use_locked is True:
             if self.sources_locked:
                 return self.sources_locked
-            else:
-                log.info("No locked sources, defaulting to none...")
-                return []
+            log.info("No locked sources, defaulting to none...")
+            return []
 
         sources = []
         if use_locked is False:

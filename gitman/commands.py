@@ -304,6 +304,6 @@ def _display_result(present, past, count, allow_zero=False):
         return True
     elif count is None:
         return False
-    else:
-        assert count == 0
-        return allow_zero
+
+    assert count == 0
+    return allow_zero
