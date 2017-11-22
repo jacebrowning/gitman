@@ -7,10 +7,6 @@ verify_ssl = true
 
 python_version = "3.6"
 
-[packages]
-
-# testpackage = "*"
-
 [dev-packages]
 
 # Linters
