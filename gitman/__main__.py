@@ -1,7 +1,7 @@
 """Package entry point."""
 
 # Declare itself as package if needed for better debugging support
-# pylint: disable=multiple-imports,wrong-import-position,redefined-builtin
+# pylint: disable=multiple-imports,wrong-import-position,redefined-builtin,used-before-assignment
 if __name__ == '__main__' and __package__ is None:  # pragma: no cover
     import os, sys, importlib
     parent_dir = os.path.abspath(os.path.dirname(__file__))
