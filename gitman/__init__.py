@@ -24,5 +24,6 @@ try:
     from .commands import display as list  # pylint: disable=redefined-builtin
     from .commands import lock
     from .commands import delete as uninstall
+    from .commands import clean_dependencies as clean
 except ImportError:  # pragma: no cover (manual test)
     pass

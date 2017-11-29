@@ -237,6 +237,35 @@ def delete(*, root=None, force=False):
     return _display_result("delete", "Deleted", count, allow_zero=True)
 
 
+@restore_cwd
+def clean_dependencies(*, root=None, force=False):
+    """Delete dependencies for a project but not top level folder.
+
+    Optional arguments:
+
+    - `root`: specifies the path to the root working tree
+    - `force`: indicates uncommitted changes can be overwritten
+
+    """
+    log.info("Cleaning dependencies...")
+    count = None
+
+    config = load_config(root)
+
+    if config:
+        common.newline()
+        common.show("Checking for uncommitted changes...",
+                    color='message', log=False)
+        common.newline()
+        count = len(list(config.get_dependencies(allow_dirty=force)))
+        common.dedent(level=0)
+        common.show("Cleaning all dependencies...", color='message', log=False)
+        common.newline()
+        config.clean_dependencies(allow_dirty=force)
+
+    return _display_result("clean", "Cleaned", count, allow_zero=True)
+
+
 def show(*names, root=None):
     """Display the path of an installed dependency or internal file.
 

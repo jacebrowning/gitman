@@ -96,6 +96,13 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
     sub.add_argument('-f', '--force', action='store_true',
                      help="delete uncommitted changes in dependencies")
 
+    # Clean parser
+    info = "delete only installed dependencies but not top level folder"
+    sub = subs.add_parser('clean', description=info.capitalize() + '.',
+                          help=info, parents=[debug, project], **shared)
+    sub.add_argument('-f', '--force', action='store_true',
+                     help="delete uncommitted changes in dependencies")
+
     # Show parser
     info = "display the path of a dependency or internal file"
     sub = subs.add_parser('show', description=info.capitalize() + '.',
@@ -160,6 +167,11 @@ def _get_command(function, namespace):  # pylint: disable=too-many-statements
 
     elif namespace.command == 'uninstall':
         function = commands.delete
+        kwargs.update(root=namespace.root,
+                      force=namespace.force)
+
+    elif namespace.command == 'clean':
+        function = commands.clean_dependencies
         kwargs.update(root=namespace.root,
                       force=namespace.force)
 
