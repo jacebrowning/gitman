@@ -4,7 +4,7 @@ build:
       - pylint-run --rcfile=.pylint.ini
   nodes:
     py35:
-      enviornment:
+      environment:
         python: 3.5.1
     py36:
       environment:
