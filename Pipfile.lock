@@ -1,23 +1,25 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c9d9b82a2ac9cec9277aafa784071a37a3a17694c3aacaccdb9a7d62c881d603"
+            "sha256": "72e1630903fbf6516ea8e79b530fbda8a757b89737f768904b9d93c3e0ac2f4d"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
-            "implementation_version": "3.5.2",
+            "implementation_version": "3.6.3",
             "os_name": "posix",
             "platform_machine": "x86_64",
             "platform_python_implementation": "CPython",
-            "platform_release": "4.10.0-40-generic",
-            "platform_system": "Linux",
-            "platform_version": "#44~16.04.1-Ubuntu SMP Thu Nov 9 15:37:44 UTC 2017",
-            "python_full_version": "3.5.2",
-            "python_version": "3.5",
-            "sys_platform": "linux"
+            "platform_release": "17.2.0",
+            "platform_system": "Darwin",
+            "platform_version": "Darwin Kernel Version 17.2.0: Fri Sep 29 18:27:05 PDT 2017; root:xnu-4570.20.62~3/RELEASE_X86_64",
+            "python_full_version": "3.6.3",
+            "python_version": "3.6",
+            "sys_platform": "darwin"
         },
         "pipfile-spec": 6,
-        "requires": {},
+        "requires": {
+            "python_version": "3.6"
+        },
         "sources": [
             {
                 "url": "https://pypi.python.org/simple",
@@ -127,6 +129,13 @@
                 "sha256:54f0e5bf3cfec621b5625969351207f937668bea9159a4c635f722c997bfe546"
             ],
             "version": "==0.8"
+        },
+        "dis3": {
+            "hashes": [
+                "sha256:d333e2bf803a4b0e240278df2ce749108ad4eb1242d49e8985337a1a8393236f",
+                "sha256:ee9f71e1a0c01a3ba742a36be91147948db99da3ee29094dccb48857c54608ef"
+            ],
+            "version": "==0.1.1"
         },
         "docopt": {
             "hashes": [
