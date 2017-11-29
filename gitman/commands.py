@@ -234,7 +234,7 @@ def delete(*, root=None, force=False, keep_location=False):
         common.show("Deleting all dependencies...", color='message', log=False)
         common.newline()
         if keep_location:
-            config.clean_dependencies(allow_dirty=force)
+            config.clean_dependencies()
         else:
             config.uninstall_dependencies()
 

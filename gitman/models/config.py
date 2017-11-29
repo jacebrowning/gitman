@@ -178,9 +178,9 @@ class Config(yorm.ModelMixin):
         shell.rm(self.location_path)
         common.newline()
 
-    def clean_dependencies(self, allow_dirty=True):
+    def clean_dependencies(self):
         """Delete the dependency storage location."""
-        for (path, _, _) in self.get_top_level_dependencies(allow_dirty=allow_dirty):
+        for path in self.get_top_level_dependencies():
 
             if path == self.location_path:
                 log.info("Skipped dependency: %s", path)
@@ -191,7 +191,7 @@ class Config(yorm.ModelMixin):
 
         shell.rm(self.log_path)
 
-    def get_top_level_dependencies(self, allow_dirty=True):
+    def get_top_level_dependencies(self):
         """Yield the path, repository URL, and hash of each top level dependency."""
         if not os.path.exists(self.location_path):
             return
@@ -202,7 +202,7 @@ class Config(yorm.ModelMixin):
 
         for source in self.sources:
 
-            yield source.identify(allow_dirty=allow_dirty)
+            yield os.path.join(self.location_path, source.name)
 
             shell.cd(self.location_path, _show=False)
 
