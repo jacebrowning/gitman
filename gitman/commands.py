@@ -209,13 +209,14 @@ def lock(*names, root=None):
 
 
 @restore_cwd
-def delete(*, root=None, force=False):
+def delete(*, root=None, force=False, keep_location=False):
     """Delete dependencies for a project.
 
     Optional arguments:
 
     - `root`: specifies the path to the root working tree
     - `force`: indicates uncommitted changes can be overwritten
+    - `keep_location`: delete top level folder or keep the location
 
     """
     log.info("Deleting dependencies...")
@@ -232,38 +233,12 @@ def delete(*, root=None, force=False):
         common.dedent(level=0)
         common.show("Deleting all dependencies...", color='message', log=False)
         common.newline()
-        config.uninstall_dependencies()
+        if keep_location:
+            config.clean_dependencies(allow_dirty=force)
+        else:
+            config.uninstall_dependencies()
 
     return _display_result("delete", "Deleted", count, allow_zero=True)
-
-
-@restore_cwd
-def clean_dependencies(*, root=None, force=False):
-    """Delete dependencies for a project but not top level folder.
-
-    Optional arguments:
-
-    - `root`: specifies the path to the root working tree
-    - `force`: indicates uncommitted changes can be overwritten
-
-    """
-    log.info("Cleaning dependencies...")
-    count = None
-
-    config = load_config(root)
-
-    if config:
-        common.newline()
-        common.show("Checking for uncommitted changes...",
-                    color='message', log=False)
-        common.newline()
-        count = len(list(config.get_dependencies(allow_dirty=force)))
-        common.dedent(level=0)
-        common.show("Cleaning all dependencies...", color='message', log=False)
-        common.newline()
-        config.clean_dependencies(allow_dirty=force)
-
-    return _display_result("clean", "Cleaned", count, allow_zero=True)
 
 
 def show(*names, root=None):

@@ -180,7 +180,7 @@ class Config(yorm.ModelMixin):
 
     def clean_dependencies(self, allow_dirty=True):
         """Delete the dependency storage location."""
-        for (path, url, rev) in self.get_top_level_dependencies(allow_dirty=allow_dirty):
+        for (path, _, _) in self.get_top_level_dependencies(allow_dirty=allow_dirty):
 
             if path == self.location_path:
                 log.info("Skipped dependency: %s", path)

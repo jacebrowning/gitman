@@ -136,6 +136,12 @@ If any dependencies contain uncommitted changes, instead run:
 gitman uninstall --force
 ```
 
+If you need to keep the top level folder and anything other than the dependencies:
+
+```sh
+gitman uninstall --keep-location
+```
+
 ## Show
 
 To display the path to the dependency storage location:

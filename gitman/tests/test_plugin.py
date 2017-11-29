@@ -82,6 +82,6 @@ class TestMain:
         plugin.main(['--uninstall', '--force'])
 
         assert [
-            call.delete(root=None, force=True),
+            call.delete(root=None, force=True, keep_location=False),
             call.delete().__bool__(),  # command status check
         ] == mock_commands.mock_calls

@@ -69,3 +69,10 @@ If any dependencies contain uncommitted changes, instead run:
 ```sh
 git deps --uninstall --force
 ```
+
+If you need to keep the top level folder and anything other than the dependencies:
+
+```sh
+git deps --uninstall --keep-location
+```
+

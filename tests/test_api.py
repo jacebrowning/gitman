@@ -260,13 +260,13 @@ def describe_uninstall():
         expect(os.path.exists(config.log_path)) == False
 
 
-def describe_clean():
+def describe_keep_location():
 
     def it_deletes_dependencies_when_they_exist(config):
         gitman.install('gitman_1', depth=1)
         expect(os.path.isdir(config.location)) == True
 
-        expect(gitman.clean()) == True
+        expect(gitman.uninstall(keep_location=True)) == True
 
         expect(os.path.exists(os.path.join(config.location, 'gitman_1'))) == False
 
@@ -277,7 +277,7 @@ def describe_clean():
     def it_should_not_fail_when_no_dependencies_exist(config):
         expect(os.path.isdir(config.location)) == False
 
-        expect(gitman.clean()) == True
+        expect(gitman.uninstall(keep_location=True)) == True
 
         gitman.uninstall()
 
@@ -286,7 +286,7 @@ def describe_clean():
         gitman.list()
         expect(os.path.exists(config.log_path)) == True
 
-        gitman.clean()
+        gitman.uninstall(keep_location=True)
         expect(os.path.exists(config.log_path)) == False
 
         gitman.uninstall()
