@@ -137,6 +137,17 @@ MKDOCS_INDEX := site/index.html
 .PHONY: doc
 doc: uml mkdocs ## Generate documentation
 
+.PHONY: docs/demo.gif
+docs/demo.gif:
+	@ sleep 3; clear; sleep 1
+	gitman install --force
+	@ sleep 3; clear; sleep 1
+	gitman list
+	@ sleep 3; clear; sleep 1
+	gitman lock
+	@ sleep 3; clear; sleep 1
+	gitman uninstall
+
 .PHONY: uml
 uml: install docs/*.png
 docs/*.png: $(MODULES)
