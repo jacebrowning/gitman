@@ -1,5 +1,9 @@
 # Revision History
 
+## 1.5 (unreleased)
+
+- Added `--keep-location` option on `uninstall` (@DavidWatkins).
+
 ## 1.4 (2017/03/21)
 
 - Allow config files to exist in subdirectories of the main project.
