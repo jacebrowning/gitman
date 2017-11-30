@@ -29,7 +29,7 @@ $ cd gitman
 $ python setup.py install
 ```
 
-## Setup
+## Configuration
 
 Generate a sample config file:
 
