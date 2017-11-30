@@ -95,6 +95,8 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
                           help=info, parents=[debug, project], **shared)
     sub.add_argument('-f', '--force', action='store_true',
                      help="delete uncommitted changes in dependencies")
+    sub.add_argument('-k', '--keep-location', dest='keep_location', default=False,
+                     action='store_true', help="keep top level folder location")
 
     # Show parser
     info = "display the path of a dependency or internal file"
@@ -161,7 +163,8 @@ def _get_command(function, namespace):  # pylint: disable=too-many-statements
     elif namespace.command == 'uninstall':
         function = commands.delete
         kwargs.update(root=namespace.root,
-                      force=namespace.force)
+                      force=namespace.force,
+                      keep_location=namespace.keep_location)
 
     elif namespace.command == 'show':
         function = commands.show

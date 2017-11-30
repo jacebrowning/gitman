@@ -55,6 +55,9 @@ def main(args=None):
         '-x', '--uninstall', const='uninstall',
         help="delete all installed dependencies", **shared
     )
+    parser.add_argument('-k', '--keep-location', action='store_true',
+                        dest='keep_location', default=False,
+                        help='keep top level folder location')
 
     # Parse arguments
     namespace = parser.parse_args(args=args)

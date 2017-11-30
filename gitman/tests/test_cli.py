@@ -252,7 +252,7 @@ class TestUninstall:
         cli.main(['uninstall'])
 
         mock_uninstall.assert_called_once_with(
-            root=None, force=False)
+            root=None, force=False, keep_location=False)
 
     @patch('gitman.commands.delete')
     def test_uninstall_root(self, mock_uninstall):
@@ -260,7 +260,7 @@ class TestUninstall:
         cli.main(['uninstall', '--root', 'mock/path/to/root'])
 
         mock_uninstall.assert_called_once_with(
-            root='mock/path/to/root', force=False)
+            root='mock/path/to/root', force=False, keep_location=False)
 
     @patch('gitman.commands.delete')
     def test_uninstall_force(self, mock_uninstall):
@@ -268,7 +268,15 @@ class TestUninstall:
         cli.main(['uninstall', '--force'])
 
         mock_uninstall.assert_called_once_with(
-            root=None, force=True)
+            root=None, force=True, keep_location=False)
+
+    @patch('gitman.commands.delete')
+    def test_uninstall_keep_location(self, mock_uninstall):
+        """Verify the 'uninstall' command can be run with keep_location."""
+        cli.main(['uninstall', '--keep-location'])
+
+        mock_uninstall.assert_called_once_with(
+            root=None, force=False, keep_location=True)
 
 
 def describe_show():

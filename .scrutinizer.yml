@@ -2,6 +2,13 @@ build:
   tests:
     override:
       - pylint-run --rcfile=.pylint.ini
+  nodes:
+    py35:
+      environment:
+        python: 3.5.1
+    py36:
+      environment:
+        python: 3.6
 checks:
   python:
     code_rating: true
