@@ -2,7 +2,7 @@ Unix: [![Build Status](https://travis-ci.org/jacebrowning/gitman.svg?branch=deve
 
 # Overview
 
-GitMan is a language-agnostic "dependency manager" using Git. It aims to serve as a submodules replacement and provides advanced options for managing versions of nested Git repositories.
+GitMan is a language-agnostic dependency manager using Git. It aims to serve as a submodules replacement and provides advanced options for managing versions of nested Git repositories.
 
 ![demo](https://raw.githubusercontent.com/jacebrowning/gitman/develop/docs/demo.gif)
 
