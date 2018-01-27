@@ -29,7 +29,7 @@ def clone(repo, path, *, cache=settings.CACHE, sparse_paths=None):
         git('clone', '--mirror', repo, reference)
 
     normpath = os.path.normpath(path)
-    if len(sparse_paths) > 0:
+    if sparse_paths:
         os.mkdir(normpath)
         git('-C', normpath, 'init')
         git('-C', normpath, 'config', 'core.sparseCheckout', 'true')
@@ -40,7 +40,8 @@ def clone(repo, path, *, cache=settings.CACHE, sparse_paths=None):
         with open("%s/%s/.git/objects/info/alternates" % (os.getcwd(), normpath), 'w') as fd:
             fd.write("%s/objects" % reference)
 
-        # We use `HEAD` here in order to respect, that not all repos have `master` as their default branch
+        # We use `HEAD` here in order to respect,
+        # that not all repos have `master` as their default branch
         git('-C', normpath, 'pull', 'origin', 'HEAD')
     else:
         git('clone', '--reference', reference, repo, os.path.normpath(path))
