@@ -6,7 +6,7 @@ name = "pypi"
 
 [requires]
 
-python_version = "3.5.4"
+python_version = "3.5"
 
 [dev-packages]
 
