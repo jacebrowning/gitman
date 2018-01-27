@@ -54,6 +54,11 @@ sources:
   rev: master
   scripts:
   - chmod a+x truffleHog.py
+- name: fontawesome
+  repo: https://github.com/FortAwesome/Font-Awesome
+  rev: master
+  sparse_paths:
+  - fonts
 ```
 
 Ignore the dependency storage location:
@@ -83,9 +88,10 @@ which will essentially:
 1. Create a working tree at `<root>`/`<location>`/`<name>`
 2. Fetch from `repo` and checkout the specified `rev`
 3. Symbolically link each `<location>`/`<name>` from `<root>`/`<link>` (if specified)
-4. Repeat for all nested working trees containing a config file
-5. Record the actual commit SHAs that were checked out (with `--lock` option)
-6. Run optional post-install scripts for each dependency
+4. Materialize only the selected paths from `sparse_paths`, if present in the config file
+5. Repeat for all nested working trees containing a config file
+6. Record the actual commit SHAs that were checked out (with `--lock` option)
+7. Run optional post-install scripts for each dependency
 
 where `rev` can be:
 
@@ -93,6 +99,11 @@ where `rev` can be:
 * a tag: `v1.0`
 * a branch: `master`
 * a `rev-parse` date: `'develop@{2015-06-18 10:30:59}'`
+
+`sparse_paths` can be a list of directories to check out. Using `sparse_paths` will use git's sparse checkout
+feature to just materialize the selected paths in the working tree. As this is a
+[git feature](https://git-scm.com/docs/git-read-tree#_sparse_checkout), all syntax options are available and passed
+unmodified to `$GIT_DIR/info/sparse-checkout`.
 
 ## Restoring Previous Versions
 

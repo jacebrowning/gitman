@@ -20,6 +20,14 @@ sources:
   scripts:
   - echo "Hello, World!"
   - pwd
+- name: gitman_4
+  repo: https://github.com/jacebrowning/gitman-demo
+  rev: example-branch-2
+  link:
+  scripts:
+  -
+  sparse_paths:
+  - docs
 sources_locked:
 - name: gitman_1
   repo: https://github.com/jacebrowning/gitman-demo
@@ -41,3 +49,11 @@ sources_locked:
   scripts:
   - echo "Hello, World!"
   - pwd
+- name: gitman_4
+  repo: https://github.com/jacebrowning/gitman-demo
+  rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
+  link:
+  scripts:
+  -
+  sparse_paths:
+  - src
