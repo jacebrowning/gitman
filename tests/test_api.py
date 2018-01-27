@@ -29,17 +29,23 @@ sources:
   link:
   scripts:
   -
+  sparse_paths:
+  -
 - name: gitman_2
   repo: https://github.com/jacebrowning/gitman-demo
   rev: example-tag
   link:
   scripts:
   -
+  sparse_paths:
+  -
 - name: gitman_3
   repo: https://github.com/jacebrowning/gitman-demo
   rev: 9bf18e16b956041f0267c21baad555a23237b52e
   link:
   scripts:
+  -
+  sparse_paths:
   -
 """.lstrip()
 
@@ -83,12 +89,16 @@ def describe_init():
           link:
           scripts:
           -
+          sparse_paths:
+          -
         sources_locked:
         - name: sample_dependency
           repo: https://github.com/githubtraining/hellogitworld
           rev: ebbbf773431ba07510251bb03f9525c7bab2b13a
           link:
           scripts:
+          -
+          sparse_paths:
           -
         """)
 
@@ -309,11 +319,15 @@ def describe_update():
           link:
           scripts:
           -
+          sparse_paths:
+          -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
           link:
           scripts:
+          -
+          sparse_paths:
           -
         sources_locked:
         - name: gitman_2
@@ -321,6 +335,8 @@ def describe_update():
           rev: (old revision)
           link:
           scripts:
+          -
+          sparse_paths:
           -
         """)
 
@@ -335,11 +351,15 @@ def describe_update():
           link:
           scripts:
           -
+          sparse_paths:
+          -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
           link:
           scripts:
+          -
+          sparse_paths:
           -
         sources_locked:
         - name: gitman_2
@@ -347,6 +367,8 @@ def describe_update():
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
           link:
           scripts:
+          -
+          sparse_paths:
           -
         """)
 
@@ -360,11 +382,15 @@ def describe_update():
           link:
           scripts:
           -
+          sparse_paths:
+          -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
           link:
           scripts:
+          -
+          sparse_paths:
           -
         sources_locked:
         - name: gitman_2
@@ -372,6 +398,8 @@ def describe_update():
           rev: (old revision)
           link:
           scripts:
+          -
+          sparse_paths:
           -
         """)
 
@@ -386,11 +414,15 @@ def describe_update():
           link:
           scripts:
           -
+          sparse_paths:
+          -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-tag
           link:
           scripts:
+          -
+          sparse_paths:
           -
         sources_locked:
         - name: gitman_2
@@ -398,6 +430,8 @@ def describe_update():
           rev: (old revision)
           link:
           scripts:
+          -
+          sparse_paths:
           -
         """)
 
@@ -412,17 +446,23 @@ def describe_update():
           link:
           scripts:
           -
+          sparse_paths:
+          -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
           link:
           scripts:
           -
+          sparse_paths:
+          -
         - name: gitman_3
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
           link:
           scripts:
+          -
+          sparse_paths:
           -
         """)
 
@@ -462,17 +502,23 @@ def describe_lock():
           link:
           scripts:
           -
+          sparse_paths:
+          -
         - name: gitman_2
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
           link:
           scripts:
           -
+          sparse_paths:
+          -
         - name: gitman_3
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
           link:
           scripts:
+          -
+          sparse_paths:
           -
         """) == config.__mapper__.text
 
@@ -488,11 +534,15 @@ def describe_lock():
           link:
           scripts:
           -
+          sparse_paths:
+          -
         - name: gitman_3
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 9bf18e16b956041f0267c21baad555a23237b52e
           link:
           scripts:
+          -
+          sparse_paths:
           -
         """) == config.__mapper__.text
 
