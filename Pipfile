@@ -2,6 +2,7 @@
 
 url = "https://pypi.python.org/simple"
 verify_ssl = true
+name = "pypi"
 
 [requires]
 
@@ -15,17 +16,15 @@ pycodestyle = "~=2.3"
 pydocstyle = "~=2.0"
 
 # Testing
-pytest = "~=3.0.7"
-pytest-describe = "==0.11.0"
-pytest-expecter = "==0.2.2.post6"
+pytest = "~=3.3"
+pytest-describe = "*"
+pytest-expecter = "*"
 pytest-cov = "*"
 pytest-random = "*"
-pytest-catchlog = "*"
 freezegun = "*"
 
 # Coverage
-coverage = "~=4.0"
-"coverage.space" = "~=0.8"
+"coverage.space" = "*"
 
 # Documentation
 mkdocs = "*"
@@ -34,7 +33,6 @@ pygments = "*"
 
 # Build
 wheel = "*"
-pyinstaller = "*"
 
 # Release
 twine = "*"
