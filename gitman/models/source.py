@@ -13,10 +13,10 @@ log = logging.getLogger(__name__)
 
 @yorm.attr(name=String)
 @yorm.attr(repo=String)
+@yorm.attr(sparse_paths=List.of_type(String))
 @yorm.attr(rev=String)
 @yorm.attr(link=NullableString)
 @yorm.attr(scripts=List.of_type(String))
-@yorm.attr(sparse_paths=List.of_type(String))
 class Source(AttributeDictionary):
     """A dictionary of `git` and `ln` arguments."""
 

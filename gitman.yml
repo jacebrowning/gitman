@@ -51,9 +51,9 @@ sources_locked:
   - pwd
 - name: gitman_4
   repo: https://github.com/jacebrowning/gitman-demo
+  sparse_paths:
+  - src
   rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
   link:
   scripts:
   -
-  sparse_paths:
-  - src
