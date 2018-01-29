@@ -61,7 +61,7 @@ class Source(AttributeDictionary):
 
         # Clone the repository if needed
         if not os.path.exists(self.name):
-            git.clone(self.repo, self.name, sparse_paths=self.sparse_paths)
+            git.clone(self.repo, self.name, sparse_paths=self.sparse_paths, rev=self.rev)
 
         # Enter the working tree
         shell.cd(self.name)

@@ -16,7 +16,7 @@ def git(*args, **kwargs):
     return call('git', *args, **kwargs)
 
 
-def clone(repo, path, *, cache=settings.CACHE, sparse_paths=None):
+def clone(repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None):
     """Clone a new Git repository."""
     log.debug("Creating a new repository...")
 
@@ -40,9 +40,9 @@ def clone(repo, path, *, cache=settings.CACHE, sparse_paths=None):
         with open("%s/%s/.git/objects/info/alternates" % (os.getcwd(), normpath), 'w') as fd:
             fd.write("%s/objects" % reference)
 
-        # We use `HEAD` here in order to respect,
+        # We use directly the revision requested here in order to respect,
         # that not all repos have `master` as their default branch
-        git('-C', normpath, 'pull', 'origin', 'HEAD')
+        git('-C', normpath, 'pull', 'origin', rev)
     else:
         git('clone', '--reference', reference, repo, os.path.normpath(path))
 
