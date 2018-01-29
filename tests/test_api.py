@@ -245,6 +245,34 @@ def describe_install():
         def script_failures_can_be_ignored(config_with_scripts):
             expect(gitman.install(force=True)) == True
 
+    def describe_sparse_paths():
+        @pytest.fixture
+        def config_with_scripts(config):
+            config.__mapper__.text = strip("""
+                    location: deps
+                    sources:
+                    - name: gitman_1
+                      repo: https://github.com/jacebrowning/gitman-demo
+                      sparse_paths:
+                      - src/*
+                      rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
+                      link:
+                      scripts:
+                      -
+                    """)
+
+            return config
+
+        def it_successfully_materializes_the_repo(config):
+            expect(gitman.install(depth=1, force=True)) == True
+            dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
+            expect(dir_listing).contains('src')
+
+        def it_contains_only_the_sparse_paths(config):
+            expect(gitman.install(depth=1, force=True)) == True
+            dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
+            expect(dir_listing).contains('src')
+            expect(len(dir_listing) == 1)
 
 def describe_uninstall():
 
