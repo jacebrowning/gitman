@@ -54,6 +54,11 @@ sources:
   rev: master
   scripts:
   - chmod a+x truffleHog.py
+- name: fontawesome
+  repo: https://github.com/FortAwesome/Font-Awesome
+  sparse_paths:
+  - fonts/*
+  rev: master
 ```
 
 Ignore the dependency storage location:

@@ -13,6 +13,7 @@ log = logging.getLogger(__name__)
 
 @yorm.attr(name=String)
 @yorm.attr(repo=String)
+@yorm.attr(sparse_paths=List.of_type(String))
 @yorm.attr(rev=String)
 @yorm.attr(link=NullableString)
 @yorm.attr(scripts=List.of_type(String))
@@ -22,13 +23,14 @@ class Source(AttributeDictionary):
     DIRTY = '<dirty>'
     UNKNOWN = '<unknown>'
 
-    def __init__(self, repo, name=None, rev='master', link=None, scripts=None):
+    def __init__(self, repo, name=None, rev='master', link=None, scripts=None, sparse_paths=None):
         super().__init__()
         self.repo = repo
         self.name = self._infer_name(repo) if name is None else name
         self.rev = rev
         self.link = link
         self.scripts = scripts or []
+        self.sparse_paths = sparse_paths or []
 
         for key in ['name', 'repo', 'rev']:
             if not self[key]:
@@ -59,7 +61,7 @@ class Source(AttributeDictionary):
 
         # Clone the repository if needed
         if not os.path.exists(self.name):
-            git.clone(self.repo, self.name)
+            git.clone(self.repo, self.name, sparse_paths=self.sparse_paths, rev=self.rev)
 
         # Enter the working tree
         shell.cd(self.name)

@@ -16,7 +16,7 @@ def git(*args, **kwargs):
     return call('git', *args, **kwargs)
 
 
-def clone(repo, path, *, cache=settings.CACHE):
+def clone(repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None):
     """Clone a new Git repository."""
     log.debug("Creating a new repository...")
 
@@ -28,7 +28,23 @@ def clone(repo, path, *, cache=settings.CACHE):
     if not os.path.isdir(reference):
         git('clone', '--mirror', repo, reference)
 
-    git('clone', '--reference', reference, repo, os.path.normpath(path))
+    normpath = os.path.normpath(path)
+    if sparse_paths:
+        os.mkdir(normpath)
+        git('-C', normpath, 'init')
+        git('-C', normpath, 'config', 'core.sparseCheckout', 'true')
+        git('-C', normpath, 'remote', 'add', '-f', 'origin', reference)
+
+        with open("%s/%s/.git/info/sparse-checkout" % (os.getcwd(), normpath), 'w') as fd:
+            fd.writelines(sparse_paths)
+        with open("%s/%s/.git/objects/info/alternates" % (os.getcwd(), normpath), 'w') as fd:
+            fd.write("%s/objects" % reference)
+
+        # We use directly the revision requested here in order to respect,
+        # that not all repos have `master` as their default branch
+        git('-C', normpath, 'pull', 'origin', rev)
+    else:
+        git('clone', '--reference', reference, repo, os.path.normpath(path))
 
 
 def fetch(repo, rev=None):
