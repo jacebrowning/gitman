@@ -3,6 +3,8 @@
 ## 1.5 (unreleased)
 
 - Added `--keep-location` option on `uninstall` (@DavidWatkins).
+- Added feature to enable sparse checkouts. See the docs for further information. (@xenji)
+
 
 ## 1.4 (2017/03/21)
 
