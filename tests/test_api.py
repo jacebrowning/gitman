@@ -274,6 +274,7 @@ def describe_install():
             expect(dir_listing).contains('src')
             expect(len(dir_listing) == 1)
 
+
 def describe_uninstall():
 
     def it_deletes_dependencies_when_they_exist(config):
