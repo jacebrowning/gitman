@@ -22,7 +22,7 @@ def gitsvn(*args, **kwargs):
 
 def in_svn_repo():
     """Determine if the current working directory is inside a subversion repository."""
-    output = git('show', _ignore=True)
+    output = git('show', _show=False, _ignore=True)
     if any('git-svn-id' in line for line in output):
         return True
     return False
@@ -63,6 +63,7 @@ def clone(repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None):
 
 def fetch(repo, rev=None):
     """Fetch the latest changes from the remote repository."""
+
     if in_svn_repo() and rev:
         gitsvn('rebase', rev)
     else:
