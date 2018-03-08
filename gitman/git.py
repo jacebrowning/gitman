@@ -19,6 +19,15 @@ def git(*args, **kwargs):
 def gitsvn(*args, **kwargs):
     return call('git', 'svn', *args, **kwargs)
 
+
+def in_svn_repo():
+    """Determine if the current working directory is inside a subversion repository."""
+    output = git('show', _ignore=True)
+    if any('git-svn-id' in line for line in output):
+        return True
+    return False
+
+
 def clone(repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None):
     """Clone a new Git repository."""
     log.debug("Creating a new repository...")
