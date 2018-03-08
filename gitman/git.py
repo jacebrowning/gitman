@@ -31,32 +31,34 @@ def in_svn_repo():
 def clone(repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None):
     """Clone a new Git repository."""
     log.debug("Creating a new repository...")
+    try:
+        name = repo.split('/')[-1]
+        if name.endswith(".git"):
+            name = name[:-4]
 
-    name = repo.split('/')[-1]
-    if name.endswith(".git"):
-        name = name[:-4]
+        reference = os.path.join(cache, name + ".reference")
+        if not os.path.isdir(reference):
+            git('clone', '--mirror', repo, reference)
 
-    reference = os.path.join(cache, name + ".reference")
-    if not os.path.isdir(reference):
-        git('clone', '--mirror', repo, reference)
+        normpath = os.path.normpath(path)
+        if sparse_paths:
+            os.mkdir(normpath)
+            git('-C', normpath, 'init')
+            git('-C', normpath, 'config', 'core.sparseCheckout', 'true')
+            git('-C', normpath, 'remote', 'add', '-f', 'origin', reference)
 
-    normpath = os.path.normpath(path)
-    if sparse_paths:
-        os.mkdir(normpath)
-        git('-C', normpath, 'init')
-        git('-C', normpath, 'config', 'core.sparseCheckout', 'true')
-        git('-C', normpath, 'remote', 'add', '-f', 'origin', reference)
+            with open("%s/%s/.git/info/sparse-checkout" % (os.getcwd(), normpath), 'w') as fd:
+                fd.writelines(sparse_paths)
+            with open("%s/%s/.git/objects/info/alternates" % (os.getcwd(), normpath), 'w') as fd:
+                fd.write("%s/objects" % reference)
 
-        with open("%s/%s/.git/info/sparse-checkout" % (os.getcwd(), normpath), 'w') as fd:
-            fd.writelines(sparse_paths)
-        with open("%s/%s/.git/objects/info/alternates" % (os.getcwd(), normpath), 'w') as fd:
-            fd.write("%s/objects" % reference)
-
-        # We use directly the revision requested here in order to respect,
-        # that not all repos have `master` as their default branch
-        git('-C', normpath, 'pull', 'origin', rev)
-    else:
-        git('clone', '--reference', reference, repo, os.path.normpath(path))
+            # We use directly the revision requested here in order to respect,
+            # that not all repos have `master` as their default branch
+            git('-C', normpath, 'pull', 'origin', rev)
+        else:
+            git('clone', '--reference', reference, repo, os.path.normpath(path))
+    except ShellError:
+        gitsvn('clone', '-r', 'HEAD', repo, path)
 
 
 def fetch(repo, rev=None):
