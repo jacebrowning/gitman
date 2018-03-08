@@ -63,16 +63,19 @@ def clone(repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None):
 
 def fetch(repo, rev=None):
     """Fetch the latest changes from the remote repository."""
-    git('remote', 'set-url', 'origin', repo)
-    args = ['fetch', '--tags', '--force', '--prune', 'origin']
-    if rev:
-        if len(rev) == 40:
-            pass  # fetch only works with a SHA if already present locally
-        elif '@' in rev:
-            pass  # fetch doesn't work with rev-parse
-        else:
-            args.append(rev)
-    git(*args)
+    if in_svn_repo() and rev:
+        gitsvn('rebase', rev)
+    else:
+        git('remote', 'set-url', 'origin', repo)
+        args = ['fetch', '--tags', '--force', '--prune', 'origin']
+        if rev:
+            if len(rev) == 40:
+                pass  # fetch only works with a SHA if already present locally
+            elif '@' in rev:
+                pass  # fetch doesn't work with rev-parse
+            else:
+                args.append(rev)
+        git(*args)
 
 
 def valid():
