@@ -126,13 +126,16 @@ def update(rev, *, clean=True, fetch=False):  # pylint: disable=redefined-outer-
     if clean:
         git('clean', '--force', '-d', '-x', _show=False)
 
-    rev = _get_sha_from_rev(rev)
-    git('checkout', '--force', rev)
-    git('branch', '--set-upstream-to', 'origin/' + rev, **hide)
+    if in_svn_repo():
+        gitsvn('rebase', rev)
+    else:
+        rev = _get_sha_from_rev(rev)
+        git('checkout', '--force', rev)
+        git('branch', '--set-upstream-to', 'origin/' + rev, **hide)
 
-    if fetch:
-        # if `rev` was a branch it might be tracking something older
-        git('pull', '--ff-only', '--no-rebase', **hide)
+        if fetch:
+            # if `rev` was a branch it might be tracking something older
+            git('pull', '--ff-only', '--no-rebase', **hide)
 
 
 def get_url():
