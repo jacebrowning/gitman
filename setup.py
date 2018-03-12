@@ -49,7 +49,7 @@ setuptools.setup(
     version=read_package_variable('__version__'),
 
     description=read_package_variable('DESCRIPTION'),
-    url='https://jacebrowning/gitman',
+    url='https://github.com/jacebrowning/gitman',
     author='Jace Browning',
     author_email='jacebrowning@gmail.com',
 
