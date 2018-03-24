@@ -24,7 +24,7 @@ pytest-random = "*"
 freezegun = "*"
 
 # Coverage
-"coverage.space" = "*"
+coverage-space = "*"
 
 # Documentation
 mkdocs = "*"
