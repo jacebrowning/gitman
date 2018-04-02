@@ -8,6 +8,10 @@ name = "pypi"
 
 python_version = "3"
 
+[packages]
+
+gitman = { path = ".", editable = true }
+
 [dev-packages]
 
 # Linters
@@ -19,11 +23,11 @@ pydocstyle = "~=2.0"
 pytest = "~=3.3"
 pytest-describe = "*"
 pytest-expecter = "*"
-pytest-cov = "*"
 pytest-random = "*"
+pytest-cov = "*"
 freezegun = "*"
 
-# Coverage
+# Reports
 coverage-space = "*"
 
 # Documentation
@@ -33,9 +37,12 @@ pygments = "*"
 
 # Build
 wheel = "*"
+pyinstaller = "*"
 
 # Release
 twine = "*"
 
 # Tooling
 sniffer = "*"
+pync = { version = "<2.0", sys_platform = "== 'darwin'" }
+MacFSEvents = { version = "*", sys_platform = "== 'darwin'" }

@@ -65,7 +65,7 @@ sources_locked:
   repo: https://github.com/jacebrowning/gitman-demo
   sparse_paths:
   -
-  rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
+  rev: f50c1ac8bf27377625b0cc93ea27f8069c7b513a
   link:
   scripts:
   -
