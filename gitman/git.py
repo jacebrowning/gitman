@@ -15,51 +15,59 @@ log = logging.getLogger(__name__)
 def git(*args, **kwargs):
     return call('git', *args, **kwargs)
 
+def gitsvn(*args, **kwargs):
+    return call('git', 'svn', *args, **kwargs)
 
-def clone(repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None):
+
+def clone(type, repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None):
     """Clone a new Git repository."""
     log.debug("Creating a new repository...")
 
-    name = repo.split('/')[-1]
-    if name.endswith(".git"):
-        name = name[:-4]
+    if type == 'git':
+        name = repo.split('/')[-1]
+        if name.endswith(".git"):
+            name = name[:-4]
 
-    reference = os.path.join(cache, name + ".reference")
-    if not os.path.isdir(reference):
-        git('clone', '--mirror', repo, reference)
+        reference = os.path.join(cache, name + ".reference")
+        if not os.path.isdir(reference):
+            git('clone', '--mirror', repo, reference)
 
-    normpath = os.path.normpath(path)
-    if sparse_paths:
-        os.mkdir(normpath)
-        git('-C', normpath, 'init')
-        git('-C', normpath, 'config', 'core.sparseCheckout', 'true')
-        git('-C', normpath, 'remote', 'add', '-f', 'origin', reference)
+        normpath = os.path.normpath(path)
+        if sparse_paths:
+            os.mkdir(normpath)
+            git('-C', normpath, 'init')
+            git('-C', normpath, 'config', 'core.sparseCheckout', 'true')
+            git('-C', normpath, 'remote', 'add', '-f', 'origin', reference)
 
-        with open("%s/%s/.git/info/sparse-checkout" % (os.getcwd(), normpath), 'w') as fd:
-            fd.writelines(sparse_paths)
-        with open("%s/%s/.git/objects/info/alternates" % (os.getcwd(), normpath), 'w') as fd:
-            fd.write("%s/objects" % reference)
+            with open("%s/%s/.git/info/sparse-checkout" % (os.getcwd(), normpath), 'w') as fd:
+                fd.writelines(sparse_paths)
+            with open("%s/%s/.git/objects/info/alternates" % (os.getcwd(), normpath), 'w') as fd:
+                fd.write("%s/objects" % reference)
 
-        # We use directly the revision requested here in order to respect,
-        # that not all repos have `master` as their default branch
-        git('-C', normpath, 'pull', 'origin', rev)
-    else:
-        git('clone', '--reference', reference, repo, os.path.normpath(path))
-
-
-def fetch(repo, rev=None):
-    """Fetch the latest changes from the remote repository."""
-    git('remote', 'set-url', 'origin', repo)
-    args = ['fetch', '--tags', '--force', '--prune', 'origin']
-    if rev:
-        if len(rev) == 40:
-            pass  # fetch only works with a SHA if already present locally
-        elif '@' in rev:
-            pass  # fetch doesn't work with rev-parse
+            # We use directly the revision requested here in order to respect,
+            # that not all repos have `master` as their default branch
+            git('-C', normpath, 'pull', 'origin', rev)
         else:
-            args.append(rev)
-    git(*args)
+            git('clone', '--reference', reference, repo, os.path.normpath(path))
+    elif type == 'git-svn':
+        gitsvn('clone', '-r', 'HEAD', repo, path)
 
+def fetch(type, repo, rev=None):
+    """Fetch the latest changes from the remote repository."""
+    
+    if type == 'git':
+        git('remote', 'set-url', 'origin', repo)
+        args = ['fetch', '--tags', '--force', '--prune', 'origin']
+        if rev:
+            if len(rev) == 40:
+                pass  # fetch only works with a SHA if already present locally
+            elif '@' in rev:
+                pass  # fetch doesn't work with rev-parse
+            else:
+                args.append(rev)
+        git(*args)
+    elif type == 'git-svn':
+        gitsvn('rebase', rev)
 
 def valid():
     """Confirm the current directory is a valid working tree."""
@@ -101,7 +109,7 @@ def changes(include_untracked=False, display_status=True, _show=False):
     return status
 
 
-def update(rev, *, clean=True, fetch=False):  # pylint: disable=redefined-outer-name
+def update(type, rev, *, clean=True, fetch=False):  # pylint: disable=redefined-outer-name
     """Update the working tree to the specified revision."""
     hide = {'_show': False, '_ignore': True}
 
@@ -109,13 +117,16 @@ def update(rev, *, clean=True, fetch=False):  # pylint: disable=redefined-outer-
     if clean:
         git('clean', '--force', '-d', '-x', _show=False)
 
-    rev = _get_sha_from_rev(rev)
-    git('checkout', '--force', rev)
-    git('branch', '--set-upstream-to', 'origin/' + rev, **hide)
+    if type == 'git':
+        rev = _get_sha_from_rev(rev)
+        git('checkout', '--force', rev)
+        git('branch', '--set-upstream-to', 'origin/' + rev, **hide)
 
-    if fetch:
-        # if `rev` was a branch it might be tracking something older
-        git('pull', '--ff-only', '--no-rebase', **hide)
+        if fetch:
+            # if `rev` was a branch it might be tracking something older
+            git('pull', '--ff-only', '--no-rebase', **hide)
+    elif type == 'git-svn':
+        gitsvn('rebase', rev)
 
 
 def get_url():

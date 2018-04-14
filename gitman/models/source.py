@@ -1,7 +1,7 @@
 import os
 import logging
 import warnings
-
+from enum import Enum
 import yorm
 from yorm.types import String, NullableString, List, AttributeDictionary
 
@@ -11,7 +11,9 @@ from .. import common, exceptions, shell, git
 log = logging.getLogger(__name__)
 
 
+
 @yorm.attr(name=String)
+@yorm.attr(type=String)
 @yorm.attr(repo=String)
 @yorm.attr(sparse_paths=List.of_type(String))
 @yorm.attr(rev=String)
@@ -23,8 +25,9 @@ class Source(AttributeDictionary):
     DIRTY = '<dirty>'
     UNKNOWN = '<unknown>'
 
-    def __init__(self, repo, name=None, rev='master', link=None, scripts=None, sparse_paths=None):
+    def __init__(self, type, repo, name=None, rev='master', link=None, scripts=None, sparse_paths=None):
         super().__init__()
+        self.type = type or 'git'
         self.repo = repo
         self.name = self._infer_name(repo) if name is None else name
         self.rev = rev
@@ -36,15 +39,20 @@ class Source(AttributeDictionary):
             if not self[key]:
                 msg = "'{}' required for {}".format(key, repr(self))
                 raise exceptions.InvalidConfig(msg)
+    
+        print(str(self))
+
+    def _on_post_load(self):
+        self.type = self.type or 'git'
 
     def __repr__(self):
         return "<source {}>".format(self)
 
     def __str__(self):
-        pattern = "'{r}' @ '{v}' in '{d}'"
+        pattern = "['{t}'] '{r}' @ '{v}' in '{d}'"
         if self.link:
             pattern += " <- '{s}'"
-        return pattern.format(r=self.repo, v=self.rev, d=self.name, s=self.link)
+        return pattern.format(t=self.type, r=self.repo, v=self.rev, d=self.name, s=self.link)
 
     def __eq__(self, other):
         return self.name == other.name
@@ -61,7 +69,7 @@ class Source(AttributeDictionary):
 
         # Clone the repository if needed
         if not os.path.exists(self.name):
-            git.clone(self.repo, self.name, sparse_paths=self.sparse_paths, rev=self.rev)
+            git.clone(self.type, self.repo, self.name, sparse_paths=self.sparse_paths, rev=self.rev)
 
         # Enter the working tree
         shell.cd(self.name)
@@ -79,10 +87,10 @@ class Source(AttributeDictionary):
         if fetch or self.rev not in (git.get_branch(),
                                      git.get_hash(),
                                      git.get_tag()):
-            git.fetch(self.repo, self.rev)
+            git.fetch(self.type, self.repo, self.rev)
 
         # Update the working tree to the desired revision
-        git.update(self.rev, fetch=fetch, clean=clean)
+        git.update(self.type, self.rev, fetch=fetch, clean=clean)
 
     def create_link(self, root, force=False):
         """Create a link from the target name to the current directory."""
@@ -175,8 +183,10 @@ class Source(AttributeDictionary):
         """Return a locked version of the current source."""
         if rev is None:
             _, _, rev = self.identify(allow_dirty=False, allow_missing=False)
-        source = self.__class__(self.repo, self.name, rev,
-                                self.link, self.scripts)
+        source = self.__class__(self.type, self.repo, 
+                                self.name, rev, 
+                                self.link, self.scripts,
+                                self.sparse_paths)
         return source
 
     @property

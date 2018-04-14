@@ -29,6 +29,13 @@ class Config(yorm.ModelMixin):
         self.sources = []
         self.sources_locked = []
 
+
+    def _on_post_load(self):
+        for source in self.sources:
+            source._on_post_load()
+        for source in self.sources_locked:
+            source._on_post_load()
+
     @property
     def config_path(self):
         """Get the full path to the config file."""
@@ -288,6 +295,7 @@ def load_config(start=None, *, search=True):
         for filename in os.listdir(path):
             if _valid_filename(filename):
                 config = Config(path, filename)
+                config._on_post_load()
                 log.debug("Found config: %s", config.path)
                 return config
 
