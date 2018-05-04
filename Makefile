@@ -82,7 +82,6 @@ COVERAGE_SPACE := pipenv run coverage.space
 
 RANDOM_SEED ?= $(shell date +%s)
 FAILURES := .cache/v/cache/lastfailed
-REPORTS ?= xmlreport
 
 PYTEST_CORE_OPTIONS := -ra -vv
 PYTEST_COV_OPTIONS := --cov=$(PACKAGE) --no-cov-on-fail --cov-report=term-missing:skip-covered --cov-report=html
@@ -100,7 +99,7 @@ test: test-all ## Run unit and integration tests
 .PHONY: test-unit
 test-unit: install
 	@ ( mv $(FAILURES) $(FAILURES).bak || true ) > /dev/null 2>&1
-	$(PYTEST) $(PYTEST_OPTIONS) $(PACKAGE) --junitxml=$(REPORTS)/unit.xml
+	$(PYTEST) $(PYTEST_OPTIONS) $(PACKAGE)
 	@ ( mv $(FAILURES).bak $(FAILURES) || true ) > /dev/null 2>&1
 	$(COVERAGE_SPACE) $(REPOSITORY) unit
 
@@ -108,14 +107,14 @@ test-unit: install
 test-int: install
 	@ if test -e $(FAILURES); then TEST_INTEGRATION=true $(PYTEST) $(PYTEST_RERUN_OPTIONS) tests; fi
 	@ rm -rf $(FAILURES)
-	TEST_INTEGRATION=true $(PYTEST) $(PYTEST_OPTIONS) tests --junitxml=$(REPORTS)/integration.xml
+	TEST_INTEGRATION=true $(PYTEST) $(PYTEST_OPTIONS) tests
 	$(COVERAGE_SPACE) $(REPOSITORY) integration
 
 .PHONY: test-all
 test-all: install
 	@ if test -e $(FAILURES); then TEST_INTEGRATION=true $(PYTEST) $(PYTEST_RERUN_OPTIONS) $(PACKAGES); fi
 	@ rm -rf $(FAILURES)
-	TEST_INTEGRATION=true $(PYTEST) $(PYTEST_OPTIONS) $(PACKAGES) --junitxml=$(REPORTS)/overall.xml
+	TEST_INTEGRATION=true $(PYTEST) $(PYTEST_OPTIONS) $(PACKAGES)
 	$(COVERAGE_SPACE) $(REPOSITORY) overall
 
 .PHONY: read-coverage
@@ -203,7 +202,7 @@ TWINE := pipenv run twine
 upload: dist ## Upload the current version to PyPI
 	git diff --name-only --exit-code
 	$(TWINE) upload dist/*.*
-	bin/open https://pypi.python.org/pypi/$(PROJECT)
+	bin/open https://pypi.org/project/$(PROJECT)
 
 # CLEANUP #####################################################################
 
