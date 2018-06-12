@@ -40,7 +40,8 @@ class Source(AttributeDictionary):
                 msg = "'{}' required for {}".format(key, repr(self))
                 raise exceptions.InvalidConfig(msg)
     
-        print(str(self))
+        #uncomment next line to print source configuration
+        #print(str(self))
 
     def _on_post_load(self):
         self.type = self.type or 'git'
@@ -79,18 +80,16 @@ class Source(AttributeDictionary):
         # Check for uncommitted changes
         if not force:
             log.debug("Confirming there are no uncommitted changes...")
-            if git.changes(include_untracked=clean):
+            if git.changes(self.type, include_untracked=clean):
                 msg = "Uncommitted changes in {}".format(os.getcwd())
                 raise exceptions.UncommittedChanges(msg)
 
         # Fetch the desired revision
-        if fetch or self.rev not in (git.get_branch(),
-                                     git.get_hash(),
-                                     git.get_tag()):
+        if fetch or git.is_fetch_required(self.type, self.rev):
             git.fetch(self.type, self.repo, self.rev)
 
         # Update the working tree to the desired revision
-        git.update(self.type, self.rev, fetch=fetch, clean=clean)
+        git.update(self.type, self.repo, self.name, fetch=fetch, clean=clean, rev=self.rev)
 
     def create_link(self, root, force=False):
         """Create a link from the target name to the current directory."""
@@ -156,8 +155,8 @@ class Source(AttributeDictionary):
                 raise self._invalid_repository
 
             path = os.getcwd()
-            url = git.get_url()
-            if git.changes(display_status=not allow_dirty, _show=True):
+            url = git.get_url(self.type)
+            if git.changes(self.type, display_status=not allow_dirty, _show=True):
                 if not allow_dirty:
                     msg = "Uncommitted changes in {}".format(os.getcwd())
                     raise exceptions.UncommittedChanges(msg)
@@ -166,7 +165,7 @@ class Source(AttributeDictionary):
                 common.newline()
                 return path, url, self.DIRTY
             else:
-                rev = git.get_hash(_show=True)
+                rev = git.get_hash(self.type, _show=True)
                 common.show(rev, color='git_rev', log=False)
                 common.newline()
                 return path, url, rev
