@@ -102,7 +102,7 @@ def update(*names, root=None, depth=None,
     - `force`: indicates uncommitted changes can be overwritten and
                script errors can be ignored
     - `clean`: indicates untracked files should be deleted from dependencies
-    - `lock`: indicates actual dependency versions should be recorded
+    - `lock`: indicates updated dependency versions should be recorded
 
     """
     log.info("%s dependencies%s: %s",
