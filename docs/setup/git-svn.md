@@ -1,6 +1,6 @@
-# git-svn Setup
+# Git SVN Setup
 
-## STEP 0: Install missing SVN packages
+## Install missing SVN packages
 
 ```shell
 sudo apt-get install git-svn
@@ -9,7 +9,7 @@ sudo apt-get install subversion libapache2-svn
 
 ## Credentials
 
-In order for `gitman` to interact with Git-SVN, it must be configured to store your SVN credentials (cached) for private repository access.
+In order for `gitman` to interact with `git svn`, it must be configured to store your SVN credentials (cached) for private repository access.
 
 
 To test, trying cloning one of your private repositories:
@@ -38,7 +38,7 @@ For further information about caching credentials see [here](http://svnbook.red-
 ### Option 2: Manually store Credentials
 
 1. Generate the MD5 hash of the realmstring of the repository provider. 
-2. Create a file under /home/<username>/.subversion/auth/svn.simple, where the filename is the md5 hash. This is how git svn will find the credentials when challenged.
+2. Create a file under /home/<username>/.subversion/auth/svn.simple, where the filename is the md5 hash. This is how `git svn` will find the credentials when challenged.
 3. The content of the file will have key value pairs as shown below:
 
 ```
@@ -61,4 +61,4 @@ V <username character count>
 END
 ```
 
-4. Now both git svn and svn should be able to check out from the repo without asking for credentials.
+4. Now both `git svn` and `svn` should be able to check out from the repo without asking for credentials.
