@@ -5,6 +5,7 @@ import shutil
 
 import logging
 from contextlib import suppress
+import re
 
 from . import common, settings
 from .shell import call
@@ -56,10 +57,20 @@ def clone(type, repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None
         git('-C', normpath, 'pull', 'origin', rev)
     else:
         git('clone', '--reference', reference, repo, os.path.normpath(path))
-    
 
 
-def fetch(type, repo, rev=None):
+
+def is_sha(rev):
+    """Heuristically determine whether a revision corresponds to a commit SHA.
+
+    Any sequence of 7 to 40 hexadecimal digits will be recognized as a
+    commit SHA. The minimum of 7 digits is not an arbitrary choice, it
+    is the default length for short SHAs in Git.
+    """
+    return re.match('^[0-9a-f]{7,40}$', rev) is not None
+
+
+def fetch(repo, rev=None):
     """Fetch the latest changes from the remote repository."""
     
     if type == 'git-svn':
@@ -71,7 +82,7 @@ def fetch(type, repo, rev=None):
     git('remote', 'set-url', 'origin', repo)
     args = ['fetch', '--tags', '--force', '--prune', 'origin']
     if rev:
-        if len(rev) == 40:
+        if is_sha(rev):
             pass  # fetch only works with a SHA if already present locally
         elif '@' in rev:
             pass  # fetch doesn't work with rev-parse

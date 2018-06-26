@@ -12,7 +12,7 @@ __pycache__
 Icon*
 
 # Temporary virtual environment files
-/.cache/
+/.*cache/
 /.venv/
 
 # Temporary server files
@@ -34,7 +34,6 @@ Icon*
 *.gdraw
 
 # Testing and coverage results
-/.pytest/
 /.coverage
 /.coverage.*
 /htmlcov/

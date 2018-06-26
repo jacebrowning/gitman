@@ -1,12 +1,16 @@
 [[source]]
 
-url = "https://pypi.python.org/simple"
+url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
 [requires]
 
 python_version = "3"
+
+[packages]
+
+gitman = { path = ".", editable = true }
 
 [dev-packages]
 
@@ -19,12 +23,12 @@ pydocstyle = "~=2.0"
 pytest = "~=3.3"
 pytest-describe = "*"
 pytest-expecter = "*"
-pytest-cov = "*"
 pytest-random = "*"
+pytest-cov = "*"
 freezegun = "*"
 
-# Coverage
-"coverage.space" = "*"
+# Reports
+coverage-space = "*"
 
 # Documentation
 mkdocs = "*"
@@ -33,9 +37,12 @@ pygments = "*"
 
 # Build
 wheel = "*"
+pyinstaller = "*"
 
 # Release
 twine = "*"
 
 # Tooling
 sniffer = "*"
+pync = { version = "<2.0", sys_platform = "== 'darwin'" }
+MacFSEvents = { version = "*", sys_platform = "== 'darwin'" }
