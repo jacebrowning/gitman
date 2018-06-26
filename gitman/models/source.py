@@ -86,7 +86,7 @@ class Source(AttributeDictionary):
 
         # Fetch the desired revision
         if fetch or git.is_fetch_required(self.type, self.rev):
-            git.fetch(self.type, self.repo, self.rev)
+            git.fetch(self.type, self.repo, self.name, rev=self.rev)
 
         # Update the working tree to the desired revision
         git.update(self.type, self.repo, self.name, fetch=fetch, clean=clean, rev=self.rev)

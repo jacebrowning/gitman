@@ -70,7 +70,7 @@ def is_sha(rev):
     return re.match('^[0-9a-f]{7,40}$', rev) is not None
 
 
-def fetch(repo, rev=None):
+def fetch(type, repo, path, rev=None):
     """Fetch the latest changes from the remote repository."""
     
     if type == 'git-svn':
