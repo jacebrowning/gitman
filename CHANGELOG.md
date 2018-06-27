@@ -4,6 +4,9 @@
 
 - Added `--keep-location` option on `uninstall` (@DavidWatkins).
 - Added feature to enable sparse checkouts. See the docs for further information. (@xenji)
+- **BREAKING**: Removed confusing `--lock` option on `update` command in favor of just using the `lock` command.
+- **BREAKING**: Renamed `--no-lock` to `--skip-lock` on `update` command.
+- **BREAKING**: Renamed `--no-dirty` to `--fail-if-dirty` on `list` command.
 
 ## 1.4 (2017/03/21)
 
