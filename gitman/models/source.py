@@ -1,11 +1,11 @@
-import os
 import logging
+import os
 import warnings
 
 import yorm
-from yorm.types import String, NullableString, List, AttributeDictionary
+from yorm.types import AttributeDictionary, List, NullableString, String
 
-from .. import common, exceptions, shell, git
+from .. import common, exceptions, git, shell
 
 
 log = logging.getLogger(__name__)
@@ -23,7 +23,8 @@ class Source(AttributeDictionary):
     DIRTY = '<dirty>'
     UNKNOWN = '<unknown>'
 
-    def __init__(self, repo, name=None, rev='master', link=None, scripts=None, sparse_paths=None):
+    def __init__(self, repo, name=None, rev='master',
+                 link=None, scripts=None, sparse_paths=None):
         super().__init__()
         self.repo = repo
         self.name = self._infer_name(repo) if name is None else name
@@ -44,7 +45,8 @@ class Source(AttributeDictionary):
         pattern = "'{r}' @ '{v}' in '{d}'"
         if self.link:
             pattern += " <- '{s}'"
-        return pattern.format(r=self.repo, v=self.rev, d=self.name, s=self.link)
+        return pattern.format(r=self.repo, v=self.rev,
+                              d=self.name, s=self.link)
 
     def __eq__(self, other):
         return self.name == other.name
@@ -61,7 +63,8 @@ class Source(AttributeDictionary):
 
         # Clone the repository if needed
         if not os.path.exists(self.name):
-            git.clone(self.repo, self.name, sparse_paths=self.sparse_paths, rev=self.rev)
+            git.clone(self.repo, self.name,
+                      sparse_paths=self.sparse_paths, rev=self.rev)
 
         # Enter the working tree
         shell.cd(self.name)
@@ -157,19 +160,16 @@ class Source(AttributeDictionary):
                 common.show(self.DIRTY, color='git_dirty', log=False)
                 common.newline()
                 return path, url, self.DIRTY
-            else:
-                rev = git.get_hash(_show=True)
-                common.show(rev, color='git_rev', log=False)
-                common.newline()
-                return path, url, rev
 
-        elif allow_missing:
+            rev = git.get_hash(_show=True)
+            common.show(rev, color='git_rev', log=False)
+            common.newline()
+            return path, url, rev
 
+        if allow_missing:
             return os.getcwd(), '<missing>', self.UNKNOWN
 
-        else:
-
-            raise self._invalid_repository
+        raise self._invalid_repository
 
     def lock(self, rev=None):
         """Return a locked version of the current source."""

@@ -1,8 +1,10 @@
 """Integration tests configuration file."""
 
+# pylint: disable=unused-import
+
 import yorm
 
-from gitman.tests.conftest import pytest_configure  # pylint: disable=unused-import
+from gitman.tests.conftest import pytest_configure
 
 
 def pytest_runtest_setup(item):  # pylint: disable=unused-argument

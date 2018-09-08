@@ -29,13 +29,9 @@ def read_package_variable(key, filename='__init__.py'):
 
 def build_description():
     """Build a description for the project from documentation files."""
-    try:
-        readme = open("README.rst").read()
-        changelog = open("CHANGELOG.rst").read()
-    except IOError:
-        return "<placeholder>"
-    else:
-        return readme + '\n' + changelog
+    readme = open("README.md").read()
+    changelog = open("CHANGELOG.md").read()
+    return readme + '\n' + changelog
 
 
 check_python_version()
@@ -71,6 +67,7 @@ setuptools.setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Topic :: Software Development',
         'Topic :: Software Development :: Build Tools',
         'Topic :: Software Development :: Version Control',

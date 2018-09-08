@@ -1,7 +1,7 @@
 # pylint: disable=unused-variable,expression-not-assigned
 
-import sys
 import subprocess
+import sys
 
 from expecter import expect
 

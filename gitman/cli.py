@@ -2,12 +2,12 @@
 
 """Command-line interface."""
 
-import sys
 import argparse
 import logging
+import sys
 
-from . import CLI, VERSION, DESCRIPTION
-from . import common, exceptions, commands
+from . import CLI, DESCRIPTION, VERSION, commands, common, exceptions
+
 
 log = logging.getLogger(__name__)
 
@@ -91,8 +91,9 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
                           help=info, parents=[debug, project], **shared)
     sub.add_argument('-f', '--force', action='store_true',
                      help="delete uncommitted changes in dependencies")
-    sub.add_argument('-k', '--keep-location', dest='keep_location', default=False,
-                     action='store_true', help="keep top level folder location")
+    sub.add_argument('-k', '--keep-location', dest='keep_location',
+                     default=False, action='store_true',
+                     help="keep top level folder location")
 
     # Show parser
     info = "display the path of a dependency or internal file"

@@ -12,7 +12,7 @@ __pycache__
 Icon*
 
 # Temporary virtual environment files
-/.*cache/
+/.cache/
 /.venv/
 
 # Temporary server files
@@ -24,7 +24,6 @@ Icon*
 /docs/apidocs/
 /site/
 /*.html
-/*.rst
 /docs/*.png
 
 # Google Drive
@@ -37,10 +36,6 @@ Icon*
 /.coverage
 /.coverage.*
 /htmlcov/
-/xmlreport/
-/pyunit.xml
-/tmp/
-*.tmp
 
 # Build and release directories
 /build/

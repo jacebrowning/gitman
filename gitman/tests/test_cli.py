@@ -1,14 +1,14 @@
 # pylint: disable=no-self-use,unused-variable,expression-not-assigned
 
-from unittest.mock import Mock, patch
 import logging
+from unittest.mock import Mock, patch
 
 import pytest
 from expecter import expect
 
 from gitman import cli
 from gitman.common import _Config
-from gitman.exceptions import UncommittedChanges, ScriptFailure
+from gitman.exceptions import ScriptFailure, UncommittedChanges
 
 
 class TestMain:
