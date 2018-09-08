@@ -1,6 +1,6 @@
 # pylint: disable=no-self-use
 
-from unittest.mock import patch, call
+from unittest.mock import call, patch
 
 from gitman import plugin
 

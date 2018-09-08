@@ -5,9 +5,9 @@
 import argparse
 import logging
 
-from . import PLUGIN, NAME, __version__
-from . import common
+from . import NAME, PLUGIN, __version__, common
 from .cli import _get_command, _run_command
+
 
 PROG = 'git ' + PLUGIN
 DESCRIPTION = "Use {} (v{}) to install repostories.".format(NAME, __version__)

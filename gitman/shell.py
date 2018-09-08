@@ -1,11 +1,12 @@
 """Utilities to call shell programs."""
 
+import logging
 import os
 import subprocess
-import logging
 
 from . import common
 from .exceptions import ShellError
+
 
 CMD_PREFIX = "$ "
 OUT_PREFIX = "> "
@@ -39,19 +40,18 @@ def call(name, *args, _show=True, _shell=False, _ignore=False):
     if command.returncode == 0:
         return output
 
-    elif _ignore:
+    if _ignore:
         log.debug("Ignored error from call to '%s'", name)
         return output
 
-    else:
-        message = (
-            "An external program call failed." + "\n\n"
-            "In working directory: " + os.getcwd() + "\n\n"
-            "The following command produced a non-zero return code:" + "\n\n" +
-            CMD_PREFIX + program + "\n" +
-            command.stdout.strip()
-        )
-        raise ShellError(message, program=program, output=output)
+    message = (
+        "An external program call failed." + "\n\n"
+        "In working directory: " + os.getcwd() + "\n\n"
+        "The following command produced a non-zero return code:" + "\n\n" +
+        CMD_PREFIX + program + "\n" +
+        command.stdout.strip()
+    )
+    raise ShellError(message, program=program, output=output)
 
 
 def mkdir(path):

@@ -2,6 +2,7 @@
 
 import sys
 
+
 __project__ = 'GitMan'
 __version__ = '1.5b4'
 

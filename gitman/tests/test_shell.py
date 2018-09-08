@@ -1,8 +1,7 @@
 # pylint: disable=no-self-use,misplaced-comparison-constant,expression-not-assigned
 
 import os
-
-from unittest.mock import patch, Mock
+from unittest.mock import Mock, patch
 
 import pytest
 from expecter import expect
