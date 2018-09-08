@@ -1,7 +1,8 @@
 """Program defaults."""
 
-import os
 import logging
+import os
+
 
 # Cache settings
 CACHE = os.path.expanduser(os.getenv('GITMAN_CACHE', "~/.gitcache"))

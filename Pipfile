@@ -1,0 +1,48 @@
+[[source]]
+
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[requires]
+
+python_version = "3"
+
+[packages]
+
+gitman = { path = ".", editable = true }
+
+[dev-packages]
+
+# Linters
+pylint = "~=2.1"
+pycodestyle = "~=2.3"
+pydocstyle = "~=2.0"
+
+# Testing
+pytest = "~=3.3"
+pytest-describe = "*"
+pytest-expecter = "*"
+pytest-random = "*"
+pytest-cov = "*"
+freezegun = "*"
+
+# Reports
+coverage-space = "*"
+
+# Documentation
+mkdocs = "*"
+docutils = "*"
+pygments = "*"
+
+# Build
+wheel = "*"
+pyinstaller = "*"
+
+# Release
+twine = "*"
+
+# Tooling
+sniffer = "*"
+MacFSEvents = { version = "*", sys_platform = "== 'darwin'" }
+pync = { version = "*", sys_platform = "== 'darwin'" }

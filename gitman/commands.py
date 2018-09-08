@@ -1,12 +1,13 @@
 """Functions to manage the installation of dependencies."""
 
-import os
-import functools
 import datetime
+import functools
 import logging
+import os
 
 from . import common, system
-from .models import load_config, Config, Source
+from .models import Config, Source, load_config
+
 
 log = logging.getLogger(__name__)
 
@@ -102,7 +103,7 @@ def update(*names, root=None, depth=None,
     - `force`: indicates uncommitted changes can be overwritten and
                script errors can be ignored
     - `clean`: indicates untracked files should be deleted from dependencies
-    - `lock`: indicates actual dependency versions should be recorded
+    - `lock`: indicates updated dependency versions should be recorded
 
     """
     log.info("%s dependencies%s: %s",
@@ -209,13 +210,14 @@ def lock(*names, root=None):
 
 
 @restore_cwd
-def delete(*, root=None, force=False):
+def delete(*, root=None, force=False, keep_location=False):
     """Delete dependencies for a project.
 
     Optional arguments:
 
     - `root`: specifies the path to the root working tree
     - `force`: indicates uncommitted changes can be overwritten
+    - `keep_location`: delete top level folder or keep the location
 
     """
     log.info("Deleting dependencies...")
@@ -232,7 +234,10 @@ def delete(*, root=None, force=False):
         common.dedent(level=0)
         common.show("Deleting all dependencies...", color='message', log=False)
         common.newline()
-        config.uninstall_dependencies()
+        if keep_location:
+            config.clean_dependencies()
+        else:
+            config.uninstall_dependencies()
 
     return _display_result("delete", "Deleted", count, allow_zero=True)
 
@@ -302,8 +307,8 @@ def _display_result(present, past, count, allow_zero=False):
 
     if count:
         return True
-    elif count is None:
+    if count is None:
         return False
-    else:
-        assert count == 0
-        return allow_zero
+
+    assert count == 0
+    return allow_zero

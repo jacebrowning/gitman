@@ -1,12 +1,12 @@
-import os
 import logging
+import os
 
 import yorm
-from yorm.types import String, SortedList
+from yorm.types import SortedList, String
 
-from .. import common
-from .. import shell
 from . import Source
+from .. import common, shell
+
 
 log = logging.getLogger(__name__)
 
@@ -50,12 +50,11 @@ class Config(yorm.ModelMixin):
         base = self.location_path
         if name == '__config__':
             return self.path
-        elif name == '__log__':
+        if name == '__log__':
             return self.log_path
-        elif name:
+        if name:
             return os.path.normpath(os.path.join(base, name))
-        else:
-            return base
+        return base
 
     def install_dependencies(self, *names, depth=None,
                              update=True, recurse=False,
@@ -179,8 +178,38 @@ class Config(yorm.ModelMixin):
         shell.rm(self.location_path)
         common.newline()
 
+    def clean_dependencies(self):
+        """Delete the dependency storage location."""
+        for path in self.get_top_level_dependencies():
+
+            if path == self.location_path:
+                log.info("Skipped dependency: %s", path)
+            else:
+                shell.rm(path)
+
+            common.newline()
+
+        shell.rm(self.log_path)
+
+    def get_top_level_dependencies(self):
+        """Yield the path, repository, and hash of top-level dependencies."""
+        if not os.path.exists(self.location_path):
+            return
+
+        shell.cd(self.location_path)
+        common.newline()
+        common.indent()
+
+        for source in self.sources:
+
+            yield os.path.join(self.location_path, source.name)
+
+            shell.cd(self.location_path, _show=False)
+
+        common.dedent()
+
     def get_dependencies(self, depth=None, allow_dirty=True):
-        """Yield the path, repository URL, and hash of each dependency."""
+        """Yield the path, repository, and hash of each dependency."""
         if not os.path.exists(self.location_path):
             return
 
@@ -219,9 +248,8 @@ class Config(yorm.ModelMixin):
         if use_locked is True:
             if self.sources_locked:
                 return self.sources_locked
-            else:
-                log.info("No locked sources, defaulting to none...")
-                return []
+            log.info("No locked sources, defaulting to none...")
+            return []
 
         sources = []
         if use_locked is False:
@@ -237,7 +265,8 @@ class Config(yorm.ModelMixin):
         extras = []
         for source in self.sources + self.sources_locked:
             if source not in sources:
-                log.info("Source %r missing from selected section", source.name)
+                log.info("Source %r missing from selected section",
+                         source.name)
                 extras.append(source)
 
         return sources + extras

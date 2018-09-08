@@ -1,12 +1,13 @@
 """Utilities to call Git commands."""
 
-import os
 import logging
+import os
+import re
 from contextlib import suppress
 
 from . import common, settings
-from .shell import call
 from .exceptions import ShellError
+from .shell import call
 
 
 log = logging.getLogger(__name__)
@@ -16,7 +17,7 @@ def git(*args, **kwargs):
     return call('git', *args, **kwargs)
 
 
-def clone(repo, path, *, cache=settings.CACHE):
+def clone(repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None):
     """Clone a new Git repository."""
     log.debug("Creating a new repository...")
 
@@ -28,7 +29,35 @@ def clone(repo, path, *, cache=settings.CACHE):
     if not os.path.isdir(reference):
         git('clone', '--mirror', repo, reference)
 
-    git('clone', '--reference', reference, repo, os.path.normpath(path))
+    normpath = os.path.normpath(path)
+    if sparse_paths:
+        os.mkdir(normpath)
+        git('-C', normpath, 'init')
+        git('-C', normpath, 'config', 'core.sparseCheckout', 'true')
+        git('-C', normpath, 'remote', 'add', '-f', 'origin', reference)
+
+        with open("%s/%s/.git/info/sparse-checkout" %
+                  (os.getcwd(), normpath), 'w') as fd:
+            fd.writelines(sparse_paths)
+        with open("%s/%s/.git/objects/info/alternates" %
+                  (os.getcwd(), normpath), 'w') as fd:
+            fd.write("%s/objects" % reference)
+
+        # We use directly the revision requested here in order to respect,
+        # that not all repos have `master` as their default branch
+        git('-C', normpath, 'pull', 'origin', rev)
+    else:
+        git('clone', '--reference', reference, repo, os.path.normpath(path))
+
+
+def is_sha(rev):
+    """Heuristically determine whether a revision corresponds to a commit SHA.
+
+    Any sequence of 7 to 40 hexadecimal digits will be recognized as a
+    commit SHA. The minimum of 7 digits is not an arbitrary choice, it
+    is the default length for short SHAs in Git.
+    """
+    return re.match('^[0-9a-f]{7,40}$', rev) is not None
 
 
 def fetch(repo, rev=None):
@@ -36,7 +65,7 @@ def fetch(repo, rev=None):
     git('remote', 'set-url', 'origin', repo)
     args = ['fetch', '--tags', '--force', '--prune', 'origin']
     if rev:
-        if len(rev) == 40:
+        if is_sha(rev):
             pass  # fetch only works with a SHA if already present locally
         elif '@' in rev:
             pass  # fetch doesn't work with rev-parse

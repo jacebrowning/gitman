@@ -45,7 +45,7 @@ with optional arguments:
 - `force`: indicates uncommitted changes can be overwritten and
            script errors can be ignored
 - `clean`: indicates untracked files should be deleted from dependencies
-- `lock`: indicates actual dependency versions should be recorded
+- `lock`: indicates updated dependency versions should be recorded
 
 ## List
 
@@ -79,10 +79,11 @@ with optional arguments:
 To delete all dependencies, call:
 
 ```python
-gitman.uninstall(root=None, force=False)
+gitman.uninstall(root=None, force=False, keep_location=False)
 ```
 
 with optional arguments:
 
 - `root`: specifies the path to the root working tree
 - `force`: indicates uncommitted changes can be overwritten
+- `keep_location`: indicates that the top level folder should be kept

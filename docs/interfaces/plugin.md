@@ -7,19 +7,19 @@
 To clone/checkout the specified dependencies, run:
 
 ```sh
-git deps
+$ git deps
 ```
 
 Delete all untracked files in dependencies by instead running:
 
 ```sh
-git deps --clean
+$ git deps --clean
 ```
 
 Git will exit with an error if there are any uncommitted changes in dependencies or a post-install script fails. To overwrite all changes or ignore script failures, run:
 
 ```sh
-git deps --force
+$ git deps --force
 ```
 
 ## Update
@@ -27,25 +27,25 @@ git deps --force
 If any of the dependencies track a branch (rather than a specific commit), the current upstream version of that branch can be checked out by running:
 
 ```sh
-git deps --update
+$ git deps --update
 ```
 
 This will also record the exact versions that were checked out. Disable this behavior by instead running:
 
 ```sh
-git deps --update --no-lock
+$ git deps --update --skip-lock
 ```
 
 Or, to additionally get the latest versions of all nested dependencies, run:
 
 ```sh
-git deps --update --all
+$ git deps --update --all
 ```
 
 To restore the exact versions previously checked out, run:
 
 ```sh
-git deps
+$ git deps
 ```
 
 ## List
@@ -53,7 +53,7 @@ git deps
 To display the currently checked out dependencies, run:
 
 ```sh
-git deps --list
+$ git deps --list
 ```
 
 ## Uninstall
@@ -61,11 +61,18 @@ git deps --list
 To delete all dependencies, run:
 
 ```sh
-git deps --uninstall
+$ git deps --uninstall
 ```
 
 If any dependencies contain uncommitted changes, instead run:
 
 ```sh
-git deps --uninstall --force
+$ git deps --uninstall --force
 ```
+
+If you need to keep the top level folder and anything other than the dependencies:
+
+```sh
+$ git deps --uninstall --keep-location
+```
+

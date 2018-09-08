@@ -2,6 +2,8 @@ location: demo
 sources:
 - name: gitman_1
   repo: https://github.com/jacebrowning/gitman-demo
+  sparse_paths:
+  -
   rev: example-branch
   link:
   scripts:
@@ -9,20 +11,34 @@ sources:
   - make foobar
 - name: gitman_2
   repo: https://github.com/jacebrowning/gitman-demo
+  sparse_paths:
+  -
   rev: example-tag
   link:
   scripts:
   -
 - name: gitman_3
   repo: https://github.com/jacebrowning/gitman-demo
+  sparse_paths:
+  -
   rev: master@{2015-06-18 11:11:11}
   link:
   scripts:
   - echo "Hello, World!"
   - pwd
+- name: gitman_4
+  repo: https://github.com/jacebrowning/gitman-demo
+  sparse_paths:
+  -
+  rev: example-branch-2
+  link:
+  scripts:
+  -
 sources_locked:
 - name: gitman_1
   repo: https://github.com/jacebrowning/gitman-demo
+  sparse_paths:
+  -
   rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
   link:
   scripts:
@@ -30,14 +46,26 @@ sources_locked:
   - make foobar
 - name: gitman_2
   repo: https://github.com/jacebrowning/gitman-demo
+  sparse_paths:
+  -
   rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
   link:
   scripts:
   -
 - name: gitman_3
   repo: https://github.com/jacebrowning/gitman-demo
+  sparse_paths:
+  -
   rev: 2da24fca34af3748e3cab61db81a2ae8b35aec94
   link:
   scripts:
   - echo "Hello, World!"
   - pwd
+- name: gitman_4
+  repo: https://github.com/jacebrowning/gitman-demo
+  sparse_paths:
+  -
+  rev: f50c1ac8bf27377625b0cc93ea27f8069c7b513a
+  link:
+  scripts:
+  -

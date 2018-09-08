@@ -1,9 +1,9 @@
 """Common exceptions, classes, and functions."""
 
-import os
-import sys
 import argparse
 import logging
+import os
+import sys
 
 from . import settings
 
@@ -27,7 +27,6 @@ class WarningFormatter(logging.Formatter):
         self.verbose_format = verbose_format
 
     def format(self, record):
-        """A hack to change the formatting style dynamically."""
         # pylint: disable=protected-access
         if record.levelno > logging.INFO:
             self._style._fmt = self.verbose_format
@@ -37,7 +36,6 @@ class WarningFormatter(logging.Formatter):
 
 
 def positive_int(value):
-    """Custom `int` that must be positive."""
     value = int(value)
     if value < 1:
         raise TypeError

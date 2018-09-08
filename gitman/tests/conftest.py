@@ -1,7 +1,7 @@
 """Unit test configuration file."""
 
-import os
 import logging
+import os
 
 import pytest
 import yorm

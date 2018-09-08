@@ -1,12 +1,18 @@
+build:
+  tests:
+    override:
+      - pylint-run --rcfile=.pylint.ini
+  nodes:
+    py35:
+      environment:
+        python: 3.5.1
+    py36:
+      environment:
+        python: 3.6
 checks:
   python:
     code_rating: true
     duplicate_code: true
-tools:
-  external_code_coverage: true
-  pylint:
-    python_version: 3
-    config_file: '.pylintrc'
 filter:
   excluded_paths:
     - "*/tests/*"

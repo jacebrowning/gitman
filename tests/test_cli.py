@@ -1,7 +1,7 @@
 # pylint: disable=unused-variable,redefined-outer-name,expression-not-assigned
 
 import os
-from unittest.mock import patch, call
+from unittest.mock import call, patch
 
 import pytest
 from expecter import expect

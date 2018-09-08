@@ -18,7 +18,7 @@ then credential storage is not set up correctly.
 
 ## Stored Credentials
 
-To use the Keychain manager on OS X, run:
+To use the Keychain on macOS, run:
 
 ```
 $ git config --global credential.helper osxkeychain

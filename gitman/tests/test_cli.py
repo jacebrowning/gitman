@@ -1,14 +1,14 @@
 # pylint: disable=no-self-use,unused-variable,expression-not-assigned
 
-from unittest.mock import Mock, patch
 import logging
+from unittest.mock import Mock, patch
 
 import pytest
 from expecter import expect
 
 from gitman import cli
 from gitman.common import _Config
-from gitman.exceptions import UncommittedChanges, ScriptFailure
+from gitman.exceptions import ScriptFailure, UncommittedChanges
 
 
 class TestMain:
@@ -155,25 +155,11 @@ class TestUpdate:
     @patch('gitman.commands.update')
     def test_update_no_lock(self, mock_update):
         """Verify the 'update' command can disable locking."""
-        cli.main(['update', '--no-lock'])
+        cli.main(['update', '--skip-lock'])
 
         mock_update.assert_called_once_with(
             root=None, depth=5,
             force=False, clean=False, recurse=False, lock=False)
-
-    @patch('gitman.commands.update')
-    def test_update_lock(self, mock_update):
-        """Verify the 'update' command can enable locking."""
-        cli.main(['update', '--lock'])
-
-        mock_update.assert_called_once_with(
-            root=None, depth=5,
-            force=False, clean=False, recurse=False, lock=True)
-
-    def test_update_lock_conflict(self):
-        """Verify the 'update' command cannot specify both locking options."""
-        with pytest.raises(SystemExit):
-            cli.main(['update', '--lock', '--no-lock'])
 
     @patch('gitman.commands.update')
     def test_update_specific_sources(self, mock_install):
@@ -216,7 +202,7 @@ class TestList:
     @patch('gitman.commands.display')
     def test_list_no_dirty(self, mock_display):
         """Verify the 'list' command can be set to fail when dirty."""
-        cli.main(['list', '--no-dirty'])
+        cli.main(['list', '--fail-if-dirty'])
 
         mock_display.assert_called_once_with(
             root=None, depth=5, allow_dirty=False)
@@ -252,7 +238,7 @@ class TestUninstall:
         cli.main(['uninstall'])
 
         mock_uninstall.assert_called_once_with(
-            root=None, force=False)
+            root=None, force=False, keep_location=False)
 
     @patch('gitman.commands.delete')
     def test_uninstall_root(self, mock_uninstall):
@@ -260,7 +246,7 @@ class TestUninstall:
         cli.main(['uninstall', '--root', 'mock/path/to/root'])
 
         mock_uninstall.assert_called_once_with(
-            root='mock/path/to/root', force=False)
+            root='mock/path/to/root', force=False, keep_location=False)
 
     @patch('gitman.commands.delete')
     def test_uninstall_force(self, mock_uninstall):
@@ -268,7 +254,15 @@ class TestUninstall:
         cli.main(['uninstall', '--force'])
 
         mock_uninstall.assert_called_once_with(
-            root=None, force=True)
+            root=None, force=True, keep_location=False)
+
+    @patch('gitman.commands.delete')
+    def test_uninstall_keep_location(self, mock_uninstall):
+        """Verify the 'uninstall' command can be run with keep_location."""
+        cli.main(['uninstall', '--keep-location'])
+
+        mock_uninstall.assert_called_once_with(
+            root=None, force=False, keep_location=True)
 
 
 def describe_show():

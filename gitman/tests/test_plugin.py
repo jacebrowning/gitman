@@ -1,6 +1,6 @@
 # pylint: disable=no-self-use
 
-from unittest.mock import patch, call
+from unittest.mock import call, patch
 
 from gitman import plugin
 
@@ -53,7 +53,7 @@ class TestMain:
         """Verify 'update' can be called without locking."""
         mock_commands.update.__name__ = 'mock'
 
-        plugin.main(['--update', '--no-lock'])
+        plugin.main(['--update', '--skip-lock'])
 
         assert [
             call.update(root=None, depth=None,
@@ -82,6 +82,6 @@ class TestMain:
         plugin.main(['--uninstall', '--force'])
 
         assert [
-            call.delete(root=None, force=True),
+            call.delete(root=None, force=True, keep_location=False),
             call.delete().__bool__(),  # command status check
         ] == mock_commands.mock_calls

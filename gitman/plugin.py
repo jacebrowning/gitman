@@ -5,9 +5,9 @@
 import argparse
 import logging
 
-from . import PLUGIN, NAME, __version__
-from . import common
+from . import NAME, PLUGIN, __version__, common
 from .cli import _get_command, _run_command
+
 
 PROG = 'git ' + PLUGIN
 DESCRIPTION = "Use {} (v{}) to install repostories.".format(NAME, __version__)
@@ -40,9 +40,9 @@ def main(args=None):
     )
     parser.add_argument('-a', '--all', action='store_true', dest='recurse',
                         help="include nested dependencies when updating")
-    parser.add_argument('-L', '--no-lock',
+    parser.add_argument('-L', '--skip-lock',
                         action='store_false', dest='lock', default=True,
-                        help="skip recording of versions for later reinstall")
+                        help="disable recording of updated versions")
 
     # Display option
     group.add_argument(
@@ -55,6 +55,9 @@ def main(args=None):
         '-x', '--uninstall', const='uninstall',
         help="delete all installed dependencies", **shared
     )
+    parser.add_argument('-k', '--keep-location', action='store_true',
+                        dest='keep_location', default=False,
+                        help='keep top level folder location')
 
     # Parse arguments
     namespace = parser.parse_args(args=args)

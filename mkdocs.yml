@@ -1,9 +1,9 @@
 site_name: GitMan
-site_description: A language-agnostic "dependency manager" using Git.
+site_description: A language-agnostic dependency manager using Git.
 site_author: Jace Browning
 repo_url: https://github.com/jacebrowning/gitman
 
-theme: mkdocs
+theme: readthedocs
 
 pages:
 - Home: index.md
@@ -19,6 +19,7 @@ pages:
   - Tracking Branches: use-cases/branch-tracking.md
   - Linking Feature Branches: use-cases/linked-features.md
   - Build System Integration: use-cases/build-integration.md
+  - Sparse Checkouts: use-cases/sparse-checkouts.md
 - About:
   - Release Notes: about/changelog.md
   - Contributing: about/contributing.md

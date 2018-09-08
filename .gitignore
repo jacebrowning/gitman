@@ -12,19 +12,18 @@ __pycache__
 Icon*
 
 # Temporary virtual environment files
-.cache
-/env
+/.cache/
+/.venv/
 
 # Temporary server files
 .env
 *.pid
 
 # Generated documentation
-/docs/gen
-/docs/apidocs
-/site
+/docs/gen/
+/docs/apidocs/
+/site/
 /*.html
-/*.rst
 /docs/*.png
 
 # Google Drive
@@ -34,19 +33,14 @@ Icon*
 *.gdraw
 
 # Testing and coverage results
-.cache
-.pytest
-.coverage
-.coverage.*
-/htmlcov
-/xmlreport
-/pyunit.xml
-*.tmp
+/.coverage
+/.coverage.*
+/htmlcov/
 
 # Build and release directories
+/build/
+/dist/
 *.spec
-/build
-/dist
 
 # Sublime Text
 *.sublime-workspace
