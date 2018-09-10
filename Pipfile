@@ -28,7 +28,7 @@ pytest-cov = "*"
 freezegun = "*"
 
 # Reports
-coverage-space = "*"
+coveragespace = "*"
 
 # Documentation
 mkdocs = "*"
