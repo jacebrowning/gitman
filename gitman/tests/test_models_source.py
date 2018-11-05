@@ -1,7 +1,7 @@
 # pylint: disable=no-self-use,redefined-outer-name,misplaced-comparison-constant
 
-from unittest.mock import patch, Mock
 from copy import copy
+from unittest.mock import Mock, patch
 
 import pytest
 

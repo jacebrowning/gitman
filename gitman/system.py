@@ -1,9 +1,10 @@
 """Interface to the operating system."""
 
+import logging
 import os
 import platform
 import subprocess
-import logging
+
 
 log = logging.getLogger(__name__)
 

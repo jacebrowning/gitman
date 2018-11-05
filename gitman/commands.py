@@ -1,12 +1,13 @@
 """Functions to manage the installation of dependencies."""
 
-import os
-import functools
 import datetime
+import functools
 import logging
+import os
 
 from . import common, system
-from .models import load_config, Config, Source
+from .models import Config, Source, load_config
+
 
 log = logging.getLogger(__name__)
 
@@ -103,7 +104,7 @@ def update(*names, root=None, depth=None,
     - `force`: indicates uncommitted changes can be overwritten and
                script errors can be ignored
     - `clean`: indicates untracked files should be deleted from dependencies
-    - `lock`: indicates actual dependency versions should be recorded
+    - `lock`: indicates updated dependency versions should be recorded
 
     """
     log.info("%s dependencies%s: %s",
@@ -307,7 +308,7 @@ def _display_result(present, past, count, allow_zero=False):
 
     if count:
         return True
-    elif count is None:
+    if count is None:
         return False
 
     assert count == 0

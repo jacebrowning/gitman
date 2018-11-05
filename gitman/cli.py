@@ -2,12 +2,12 @@
 
 """Command-line interface."""
 
-import sys
 import argparse
 import logging
+import sys
 
-from . import CLI, VERSION, DESCRIPTION
-from . import common, exceptions, commands
+from . import CLI, DESCRIPTION, VERSION, commands, common, exceptions
+
 
 log = logging.getLogger(__name__)
 
@@ -65,20 +65,16 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
     sub.add_argument('name', nargs='*',
                      help="list of dependencies names to update")
     sub.add_argument('-a', '--all', action='store_true', dest='recurse',
-                     help="update all nested dependencies, recursively")
-    group = sub.add_mutually_exclusive_group()
-    group.add_argument('-l', '--lock',
-                       action='store_true', dest='lock', default=None,
-                       help="enable recording of versions for later reinstall")
-    group.add_argument('-L', '--no-lock',
-                       action='store_false', dest='lock', default=None,
-                       help="disable recording of versions for later reinstall")
+                     help="also update all nested dependencies")
+    sub.add_argument('-L', '--skip-lock',
+                     action='store_false', dest='lock', default=None,
+                     help="disable recording of updated versions")
 
     # List parser
     info = "display the current version of each dependency"
     sub = subs.add_parser('list', description=info.capitalize() + '.',
                           help=info, parents=[debug, project, depth], **shared)
-    sub.add_argument('-D', '--no-dirty', action='store_false',
+    sub.add_argument('-D', '--fail-if-dirty', action='store_false',
                      dest='allow_dirty',
                      help="fail if a source has uncommitted changes")
 
@@ -95,8 +91,9 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
                           help=info, parents=[debug, project], **shared)
     sub.add_argument('-f', '--force', action='store_true',
                      help="delete uncommitted changes in dependencies")
-    sub.add_argument('-k', '--keep-location', dest='keep_location', default=False,
-                     action='store_true', help="keep top level folder location")
+    sub.add_argument('-k', '--keep-location', dest='keep_location',
+                     default=False, action='store_true',
+                     help="keep top level folder location")
 
     # Show parser
     info = "display the path of a dependency or internal file"

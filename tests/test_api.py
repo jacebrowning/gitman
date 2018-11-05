@@ -1,9 +1,9 @@
 # pylint: disable=redefined-outer-name,unused-argument,unused-variable,singleton-comparison,expression-not-assigned,no-member
 
+import logging
 import os
 import shutil
 from contextlib import suppress
-import logging
 
 import pytest
 from expecter import expect
@@ -11,8 +11,8 @@ from freezegun import freeze_time
 
 import gitman
 from gitman import shell
+from gitman.exceptions import InvalidRepository, UncommittedChanges
 from gitman.models import Config
-from gitman.exceptions import UncommittedChanges, InvalidRepository
 
 from .utilities import strip
 
@@ -318,7 +318,8 @@ def describe_keep_location():
 
         expect(gitman.uninstall(keep_location=True)) == True
 
-        expect(os.path.exists(os.path.join(config.location, 'gitman_1'))) == False
+        path = os.path.join(config.location, 'gitman_1')
+        expect(os.path.exists(path)) == False
 
         expect(os.path.exists(config.location)) == True
 

@@ -1,6 +1,7 @@
 # pylint: disable=no-self-use,redefined-outer-name,unused-variable,expression-not-assigned,misplaced-comparison-constant,len-as-condition
 
 import os
+
 import pytest
 from expecter import expect
 
@@ -73,7 +74,7 @@ class TestConfig:
         assert 2 == count
 
     def test_install_with_dirs_unknown(self):
-        """Verify zero dependencies are installed with an unknown dependency."""
+        """Verify zero dependencies are installed with unknown dependency."""
         config = Config(FILES)
 
         count = config.install_dependencies('foobar')

@@ -1,15 +1,15 @@
 """Utilities to call Git commands."""
 
+import logging
 import os
+import re
+from contextlib import suppress
+
 import shutil
 
-import logging
-from contextlib import suppress
-import re
-
 from . import common, settings
-from .shell import call
 from .exceptions import ShellError
+from .shell import call
 
 
 log = logging.getLogger(__name__)
@@ -47,9 +47,11 @@ def clone(type, repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None
         git('-C', normpath, 'config', 'core.sparseCheckout', 'true')
         git('-C', normpath, 'remote', 'add', '-f', 'origin', reference)
 
-        with open("%s/%s/.git/info/sparse-checkout" % (os.getcwd(), normpath), 'w') as fd:
+        with open("%s/%s/.git/info/sparse-checkout" %
+                  (os.getcwd(), normpath), 'w') as fd:
             fd.writelines(sparse_paths)
-        with open("%s/%s/.git/objects/info/alternates" % (os.getcwd(), normpath), 'w') as fd:
+        with open("%s/%s/.git/objects/info/alternates" %
+                  (os.getcwd(), normpath), 'w') as fd:
             fd.write("%s/objects" % reference)
 
         # We use directly the revision requested here in order to respect,

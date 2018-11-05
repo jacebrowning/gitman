@@ -1,7 +1,8 @@
 # pylint: disable=no-self-use
 
-from unittest.mock import patch, Mock
 import os
+from unittest.mock import Mock, patch
+
 from gitman import git
 from gitman.exceptions import ShellError
 

@@ -15,7 +15,7 @@ gitman = { path = ".", editable = true }
 [dev-packages]
 
 # Linters
-pylint = "~=1.7"
+pylint = "~=2.1"
 pycodestyle = "~=2.3"
 pydocstyle = "~=2.0"
 
@@ -28,7 +28,7 @@ pytest-cov = "*"
 freezegun = "*"
 
 # Reports
-coverage-space = "*"
+coveragespace = "*"
 
 # Documentation
 mkdocs = "*"
@@ -44,5 +44,5 @@ twine = "*"
 
 # Tooling
 sniffer = "*"
-pync = { version = "<2.0", sys_platform = "== 'darwin'" }
 MacFSEvents = { version = "*", sys_platform = "== 'darwin'" }
+pync = { version = "*", sys_platform = "== 'darwin'" }

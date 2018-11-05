@@ -1,11 +1,11 @@
-import os
 import logging
+import os
 import warnings
-from enum import Enum
-import yorm
-from yorm.types import String, NullableString, List, AttributeDictionary
 
-from .. import common, exceptions, shell, git
+import yorm
+from yorm.types import AttributeDictionary, List, NullableString, String
+
+from .. import common, exceptions, git, shell
 
 
 log = logging.getLogger(__name__)
@@ -164,19 +164,16 @@ class Source(AttributeDictionary):
                 common.show(self.DIRTY, color='git_dirty', log=False)
                 common.newline()
                 return path, url, self.DIRTY
-            else:
-                rev = git.get_hash(self.type, _show=True)
-                common.show(rev, color='git_rev', log=False)
-                common.newline()
-                return path, url, rev
 
-        elif allow_missing:
+            rev = git.get_hash(_show=True)
+            common.show(rev, color='git_rev', log=False)
+            common.newline()
+            return path, url, rev
 
+        if allow_missing:
             return os.getcwd(), '<missing>', self.UNKNOWN
 
-        else:
-
-            raise self._invalid_repository
+        raise self._invalid_repository
 
     def lock(self, rev=None):
         """Return a locked version of the current source."""
