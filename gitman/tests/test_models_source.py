@@ -10,7 +10,7 @@ from gitman.models import Source
 
 @pytest.fixture
 def source():
-    return Source('repo', 'name', rev='rev', link='link')
+    return Source('git','repo', 'name', rev='rev', link='link')
 
 
 class TestSource:
@@ -47,13 +47,13 @@ class TestSource:
 
     def test_repr(self, source):
         """Verify sources can be represented."""
-        assert "<source 'repo' @ 'rev' in 'name' <- 'link'>" == repr(source)
+        assert "<source ['git'] 'repo' @ 'rev' in 'name' <- 'link'>" == repr(source)
 
     def test_repr_no_link(self, source):
         """Verify sources can be represented."""
         source.link = None
 
-        assert "<source 'repo' @ 'rev' in 'name'>" == repr(source)
+        assert "<source ['git'] 'repo' @ 'rev' in 'name'>" == repr(source)
 
     def test_eq(self, source):
         source2 = copy(source)
