@@ -165,7 +165,7 @@ class Source(AttributeDictionary):
                 common.newline()
                 return path, url, self.DIRTY
 
-            rev = git.get_hash(_show=True)
+            rev = git.get_hash(self.type, _show=True)
             common.show(rev, color='git_rev', log=False)
             common.newline()
             return path, url, rev
