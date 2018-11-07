@@ -11,7 +11,6 @@ from .. import common, exceptions, git, shell
 log = logging.getLogger(__name__)
 
 
-
 @yorm.attr(name=String)
 @yorm.attr(type=String)
 @yorm.attr(repo=String)
@@ -25,7 +24,9 @@ class Source(AttributeDictionary):
     DIRTY = '<dirty>'
     UNKNOWN = '<unknown>'
 
-    def __init__(self, type, repo, name=None, rev='master', link=None, scripts=None, sparse_paths=None):
+    def __init__(self, type, repo, name=None, rev='master',
+                 link=None, scripts=None, sparse_paths=None):
+
         super().__init__()
         self.type = type or 'git'
         self.repo = repo
@@ -39,9 +40,9 @@ class Source(AttributeDictionary):
             if not self[key]:
                 msg = "'{}' required for {}".format(key, repr(self))
                 raise exceptions.InvalidConfig(msg)
-    
-        #uncomment next line to print source configuration
-        #print(str(self))
+
+        # uncomment next line to print source configuration
+        # print(str(self))
 
     def _on_post_load(self):
         self.type = self.type or 'git'
@@ -179,8 +180,9 @@ class Source(AttributeDictionary):
         """Return a locked version of the current source."""
         if rev is None:
             _, _, rev = self.identify(allow_dirty=False, allow_missing=False)
-        source = self.__class__(self.type, self.repo, 
-                                self.name, rev, 
+
+        source = self.__class__(self.type, self.repo,
+                                self.name, rev,
                                 self.link, self.scripts,
                                 self.sparse_paths)
         return source

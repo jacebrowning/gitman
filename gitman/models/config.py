@@ -29,12 +29,11 @@ class Config(yorm.ModelMixin):
         self.sources = []
         self.sources_locked = []
 
-
     def _on_post_load(self):
         for source in self.sources:
-            source._on_post_load()
+            source._on_post_load()  # pylint: disable=protected-access
         for source in self.sources_locked:
-            source._on_post_load()
+            source._on_post_load()  # pylint: disable=protected-access
 
     @property
     def config_path(self):
@@ -296,7 +295,7 @@ def load_config(start=None, *, search=True):
         for filename in os.listdir(path):
             if _valid_filename(filename):
                 config = Config(path, filename)
-                config._on_post_load()
+                config._on_post_load()  # pylint: disable=protected-access
                 log.debug("Found config: %s", config.path)
                 return config
 

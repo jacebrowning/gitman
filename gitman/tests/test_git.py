@@ -119,7 +119,7 @@ class TestGit:
 
     def test_update_branch(self, mock_call):
         """Verify the commands to update a working tree to a branch."""
-        git.update('git', 'mock.git', 'mock/path', fetch=True, rev = 'mock_branch')
+        git.update('git', 'mock.git', 'mock/path', fetch=True, rev='mock_branch')
         check_calls(mock_call, [
             "git stash",
             "git clean --force -d -x",

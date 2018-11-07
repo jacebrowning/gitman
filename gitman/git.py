@@ -3,9 +3,8 @@
 import logging
 import os
 import re
-from contextlib import suppress
-
 import shutil
+from contextlib import suppress
 
 from . import common, settings
 from .exceptions import ShellError
@@ -18,15 +17,18 @@ log = logging.getLogger(__name__)
 def git(*args, **kwargs):
     return call('git', *args, **kwargs)
 
+
 def gitsvn(*args, **kwargs):
-    return call('git', 'svn', *args, **kwargs) 
+    return call('git', 'svn', *args, **kwargs)
+
 
 def clone(type, repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None):
     """Clone a new Git repository."""
     log.debug("Creating a new repository...")
 
     if type == 'git-svn':
-        # just the preperation for the svn deep clone / checkout here (clone will be made in update function to simplify source.py).
+        # just the preperation for the svn deep clone / checkout here
+        # clone will be made in update function to simplify source.py).
         os.makedirs(path)
         return
 
@@ -61,7 +63,6 @@ def clone(type, repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None
         git('clone', '--reference', reference, repo, os.path.normpath(path))
 
 
-
 def is_sha(rev):
     """Heuristically determine whether a revision corresponds to a commit SHA.
 
@@ -72,13 +73,13 @@ def is_sha(rev):
     return re.match('^[0-9a-f]{7,40}$', rev) is not None
 
 
-def fetch(type, repo, path, rev=None):
+def fetch(type, repo, path, rev=None):  # pylint: disable=unused-argument
     """Fetch the latest changes from the remote repository."""
-    
+
     if type == 'git-svn':
         # deep clone happens in update function
         return
-    
+
     assert type == 'git'
 
     git('remote', 'set-url', 'origin', repo)
@@ -114,7 +115,7 @@ def changes(type, include_untracked=False, display_status=True, _show=False):
         return status
 
     assert type == 'git'
-    
+
     try:
         # Refresh changes
         git('update-index', '-q', '--refresh', _show=False)
@@ -139,26 +140,26 @@ def changes(type, include_untracked=False, display_status=True, _show=False):
     return status
 
 
-def update(type, repo, path, *, clean=True, fetch=False, rev=None):  # pylint: disable=redefined-outer-name
- 
+def update(type, repo, path, *, clean=True, fetch=False, rev=None):  # pylint: disable=redefined-outer-name,unused-argument
+
     if type == 'git-svn':
         # make deep clone here for simplification of sources.py
         # and to realize consistent readonly clone (always forced)
-        
+
         # completly empty current directory (remove also hidden content)
         for root, dirs, files in os.walk('.'):
             for f in files:
                 os.unlink(os.path.join(root, f))
             for d in dirs:
                 shutil.rmtree(os.path.join(root, d))
-        
-        # clone specified svn revision 
+
+        # clone specified svn revision
         gitsvn('clone', '-r', rev, repo, '.')
         return
 
     assert type == 'git'
 
-    """Update the working tree to the specified revision."""
+    # Update the working tree to the specified revision.
     hide = {'_show': False, '_ignore': True}
 
     git('stash', **hide)
@@ -178,7 +179,7 @@ def get_url(type):
     """Get the current repository's URL."""
     if type == 'git-svn':
         return git('config', '--get', 'svn-remote.svn.url', _show=False)[0]
-    
+
     assert type == 'git'
 
     return git('config', '--get', 'remote.origin.url', _show=False)[0]
@@ -188,25 +189,27 @@ def get_hash(type, _show=False):
     """Get the current working tree's hash."""
     if type == 'git-svn':
         return ''.join(filter(str.isdigit, gitsvn('info', _show=_show)[4]))
-    
+
     assert type == 'git'
-    
+
     return git('rev-parse', 'HEAD', _show=_show)[0]
+
 
 def get_tag():
     """Get the current working tree's tag (if on a tag)."""
     return git('describe', '--tags', '--exact-match',
                _show=False, _ignore=True)[0]
 
+
 def is_fetch_required(type, rev):
     if type == 'git-svn':
         return False
-   
+
     assert type == 'git'
 
     return rev not in (get_branch(),
-                        get_hash(type),
-                        get_tag())
+                       get_hash(type),
+                       get_tag())
 
 
 def get_branch():

@@ -10,7 +10,7 @@ from gitman.models import Source
 
 @pytest.fixture
 def source():
-    return Source('git','repo', 'name', rev='rev', link='link')
+    return Source('git', 'repo', 'name', rev='rev', link='link')
 
 
 class TestSource:
