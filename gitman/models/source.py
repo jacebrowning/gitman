@@ -41,9 +41,6 @@ class Source(AttributeDictionary):
                 msg = "'{}' required for {}".format(key, repr(self))
                 raise exceptions.InvalidConfig(msg)
 
-        # uncomment next line to print source configuration
-        # print(str(self))
-
     def _on_post_load(self):
         self.type = self.type or 'git'
 
@@ -54,7 +51,8 @@ class Source(AttributeDictionary):
         pattern = "['{t}'] '{r}' @ '{v}' in '{d}'"
         if self.link:
             pattern += " <- '{s}'"
-        return pattern.format(t=self.type, r=self.repo, v=self.rev, d=self.name, s=self.link)
+        return pattern.format(t=self.type, r=self.repo,
+                              v=self.rev, d=self.name, s=self.link)
 
     def __eq__(self, other):
         return self.name == other.name
@@ -71,7 +69,8 @@ class Source(AttributeDictionary):
 
         # Clone the repository if needed
         if not os.path.exists(self.name):
-            git.clone(self.type, self.repo, self.name, sparse_paths=self.sparse_paths, rev=self.rev)
+            git.clone(self.type, self.repo, self.name,
+                      sparse_paths=self.sparse_paths, rev=self.rev)
 
         # Enter the working tree
         shell.cd(self.name)
@@ -90,7 +89,8 @@ class Source(AttributeDictionary):
             git.fetch(self.type, self.repo, self.name, rev=self.rev)
 
         # Update the working tree to the desired revision
-        git.update(self.type, self.repo, self.name, fetch=fetch, clean=clean, rev=self.rev)
+        git.update(self.type, self.repo, self.name,
+                   fetch=fetch, clean=clean, rev=self.rev)
 
     def create_link(self, root, force=False):
         """Create a link from the target name to the current directory."""
@@ -157,7 +157,8 @@ class Source(AttributeDictionary):
 
             path = os.getcwd()
             url = git.get_url(self.type)
-            if git.changes(self.type, display_status=not allow_dirty, _show=True):
+            if git.changes(self.type,
+                           display_status=not allow_dirty, _show=True):
                 if not allow_dirty:
                     msg = "Uncommitted changes in {}".format(os.getcwd())
                     raise exceptions.UncommittedChanges(msg)

@@ -1,5 +1,9 @@
 # Revision History
 
+## 1.6 (unreleased)
+
+- Added `git svn` support (@daniel-brosche).
+
 ## 1.5 (2018-09-08)
 
 - Added `--keep-location` option on `uninstall` (@DavidWatkins).

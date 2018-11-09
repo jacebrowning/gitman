@@ -63,7 +63,8 @@ class TestGit:
 
     def test_fetch_rev_revparse(self, mock_call):
         """Verify the commands to fetch from a Git repository w/ rev-parse."""
-        git.fetch('git', 'mock.git', 'mock/path', 'master@{2015-02-12 18:30:00}')
+        git.fetch('git', 'mock.git', 'mock/path',
+                  'master@{2015-02-12 18:30:00}')
         check_calls(mock_call, [
             "git remote set-url origin mock.git",
             "git fetch --tags --force --prune origin",
@@ -119,7 +120,8 @@ class TestGit:
 
     def test_update_branch(self, mock_call):
         """Verify the commands to update a working tree to a branch."""
-        git.update('git', 'mock.git', 'mock/path', fetch=True, rev='mock_branch')
+        git.update('git', 'mock.git', 'mock/path',
+                   fetch=True, rev='mock_branch')
         check_calls(mock_call, [
             "git stash",
             "git clean --force -d -x",
@@ -139,7 +141,8 @@ class TestGit:
     def test_update_revparse(self, mock_call):
         """Verify the commands to update a working tree to a rev-parse."""
         mock_call.return_value = ["abc123"]
-        git.update('git', 'mock.git', 'mock/path', rev='mock_branch@{2015-02-12 18:30:00}')
+        git.update('git', 'mock.git', 'mock/path',
+                   rev='mock_branch@{2015-02-12 18:30:00}')
         check_calls(mock_call, [
             "git stash",
             "git clean --force -d -x",

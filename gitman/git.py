@@ -22,7 +22,8 @@ def gitsvn(*args, **kwargs):
     return call('git', 'svn', *args, **kwargs)
 
 
-def clone(type, repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None):
+def clone(type, repo, path, *,
+          cache=settings.CACHE, sparse_paths=None, rev=None):
     """Clone a new Git repository."""
     log.debug("Creating a new repository...")
 
