@@ -10,14 +10,14 @@ from gitman.models import Source
 
 @pytest.fixture
 def source():
-    return Source('repo', 'name', rev='rev', link='link')
+    return Source('git', 'repo', 'name', rev='rev', link='link')
 
 
 class TestSource:
 
     def test_init_defaults(self):
         """Verify a source has a default revision."""
-        source = Source('http://example.com/foo/bar.git')
+        source = Source('git', 'http://example.com/foo/bar.git')
 
         assert 'http://example.com/foo/bar.git' == source.repo
         assert 'bar' == source.name
@@ -26,34 +26,34 @@ class TestSource:
 
     def test_init_rev(self):
         """Verify the revision can be customized."""
-        source = Source('http://mock.git', 'mock_name', 'v1.0')
+        source = Source('git', 'http://mock.git', 'mock_name', 'v1.0')
 
         assert 'v1.0' == source.rev
 
     def test_init_link(self):
         """Verify the link can be set."""
-        source = Source('http://mock.git', 'mock_name', link='mock/link')
+        source = Source('git', 'http://mock.git', 'mock_name', link='mock/link')
 
         assert 'mock/link' == source.link
 
     def test_init_error(self):
         """Verify the repository, name, and rev are required."""
         with pytest.raises(ValueError):
-            Source('', name='mock_name', rev='master')
+            Source('git', '', name='mock_name', rev='master')
         with pytest.raises(ValueError):
-            Source('http://mock.git', name='', rev='master')
+            Source('git', 'http://mock.git', name='', rev='master')
         with pytest.raises(ValueError):
-            Source('http://mock.git', name='mock_name', rev='')
+            Source('git', 'http://mock.git', name='mock_name', rev='')
 
     def test_repr(self, source):
         """Verify sources can be represented."""
-        assert "<source 'repo' @ 'rev' in 'name' <- 'link'>" == repr(source)
+        assert "<source ['git'] 'repo' @ 'rev' in 'name' <- 'link'>" == repr(source)
 
     def test_repr_no_link(self, source):
         """Verify sources can be represented."""
         source.link = None
 
-        assert "<source 'repo' @ 'rev' in 'name'>" == repr(source)
+        assert "<source ['git'] 'repo' @ 'rev' in 'name'>" == repr(source)
 
     def test_eq(self, source):
         source2 = copy(source)
@@ -64,11 +64,11 @@ class TestSource:
 
     def test_lt(self):
         sources = [
-            Source('http://github.com/owner/123.git'),
-            Source('bbb', name='456'),
-            Source('ccc', '456'),
-            Source('BBB', 'AAA'),
-            Source('AAA', 'AAA'),
+            Source('git', 'http://github.com/owner/123.git'),
+            Source('git', 'bbb', name='456'),
+            Source('git', 'ccc', '456'),
+            Source('git', 'BBB', 'AAA'),
+            Source('git', 'AAA', 'AAA'),
         ]
 
         assert sources == sorted(sources)

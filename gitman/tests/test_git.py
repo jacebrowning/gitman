@@ -16,7 +16,7 @@ class TestGit:
     @patch('os.path.isdir', Mock(return_value=False))
     def test_clone(self, mock_call):
         """Verify the commands to set up a new reference repository."""
-        git.clone('mock.git', 'mock/path', cache='cache')
+        git.clone('git', 'mock.git', 'mock/path', cache='cache')
         check_calls(mock_call, [
             "git clone --mirror mock.git " +
             os.path.normpath("cache/mock.reference"),
@@ -29,7 +29,7 @@ class TestGit:
     @patch('os.path.isdir', Mock(return_value=True))
     def test_clone_from_reference(self, mock_call):
         """Verify the commands to clone a Git repository from a reference."""
-        git.clone('mock.git', 'mock/path', cache='cache')
+        git.clone('git', 'mock.git', 'mock/path', cache='cache')
         check_calls(mock_call, [
             "git clone --reference " +
             os.path.normpath("cache/mock.reference") +
@@ -39,7 +39,7 @@ class TestGit:
 
     def test_fetch(self, mock_call):
         """Verify the commands to fetch from a Git repository."""
-        git.fetch('mock.git')
+        git.fetch('git', 'mock.git', 'mock/path')
         check_calls(mock_call, [
             "git remote set-url origin mock.git",
             "git fetch --tags --force --prune origin",
@@ -47,7 +47,7 @@ class TestGit:
 
     def test_fetch_rev(self, mock_call):
         """Verify the commands to fetch from a Git repository w/ rev."""
-        git.fetch('mock.git', 'mock-rev')
+        git.fetch('git', 'mock.git', 'mock/path', 'mock-rev')
         check_calls(mock_call, [
             "git remote set-url origin mock.git",
             "git fetch --tags --force --prune origin mock-rev",
@@ -55,7 +55,7 @@ class TestGit:
 
     def test_fetch_rev_sha(self, mock_call):
         """Verify the commands to fetch from a Git repository w/ SHA."""
-        git.fetch('mock.git', 'abcdef1234' * 4)
+        git.fetch('git', 'mock.git', 'mock/path', 'abcdef1234' * 4)
         check_calls(mock_call, [
             "git remote set-url origin mock.git",
             "git fetch --tags --force --prune origin",
@@ -63,7 +63,7 @@ class TestGit:
 
     def test_fetch_rev_revparse(self, mock_call):
         """Verify the commands to fetch from a Git repository w/ rev-parse."""
-        git.fetch('mock.git', 'master@{2015-02-12 18:30:00}')
+        git.fetch('git', 'mock.git', 'mock/path', 'master@{2015-02-12 18:30:00}')
         check_calls(mock_call, [
             "git remote set-url origin mock.git",
             "git fetch --tags --force --prune origin",
@@ -78,7 +78,7 @@ class TestGit:
 
     def test_changes(self, mock_call):
         """Verify the commands to check for uncommitted changes."""
-        git.changes(include_untracked=True)
+        git.changes('git', include_untracked=True)
         check_calls(mock_call, [
             # based on: http://stackoverflow.com/questions/3878624
             "git update-index -q --refresh",
@@ -90,26 +90,26 @@ class TestGit:
     def test_changes_false(self, _):
         """Verify the absence of changes can be detected."""
         with patch('gitman.git.call', Mock(return_value=[""])):
-            assert False is git.changes()
+            assert False is git.changes('git')
 
     def test_changes_false_with_untracked(self, _):
         """Verify untracked files can be detected."""
         with patch('gitman.git.call', Mock(return_value=["file_1"])):
-            assert False is git.changes()
+            assert False is git.changes('git')
 
     def test_changes_true_when_untracked_included(self, _):
         """Verify untracked files can be detected."""
         with patch('gitman.git.call', Mock(return_value=["file_1"])):
-            assert True is git.changes(include_untracked=True)
+            assert True is git.changes('git', include_untracked=True)
 
     def test_changes_true_when_uncommitted(self, _):
         """Verify uncommitted changes can be detected."""
         with patch('gitman.git.call', Mock(side_effect=ShellError)):
-            assert True is git.changes(display_status=False)
+            assert True is git.changes('git', display_status=False)
 
     def test_update(self, mock_call):
         """Verify the commands to update a working tree to a revision."""
-        git.update('mock_rev')
+        git.update('git', 'mock.git', 'mock/path', rev='mock_rev')
         check_calls(mock_call, [
             "git stash",
             "git clean --force -d -x",
@@ -119,7 +119,7 @@ class TestGit:
 
     def test_update_branch(self, mock_call):
         """Verify the commands to update a working tree to a branch."""
-        git.update('mock_branch', fetch=True)
+        git.update('git', 'mock.git', 'mock/path', fetch=True, rev='mock_branch')
         check_calls(mock_call, [
             "git stash",
             "git clean --force -d -x",
@@ -129,7 +129,7 @@ class TestGit:
         ])
 
     def test_update_no_clean(self, mock_call):
-        git.update('mock_rev', clean=False)
+        git.update('git', 'mock.git', 'mock/path', clean=False, rev='mock_rev')
         check_calls(mock_call, [
             "git stash",
             "git checkout --force mock_rev",
@@ -139,7 +139,7 @@ class TestGit:
     def test_update_revparse(self, mock_call):
         """Verify the commands to update a working tree to a rev-parse."""
         mock_call.return_value = ["abc123"]
-        git.update('mock_branch@{2015-02-12 18:30:00}')
+        git.update('git', 'mock.git', 'mock/path', rev='mock_branch@{2015-02-12 18:30:00}')
         check_calls(mock_call, [
             "git stash",
             "git clean --force -d -x",
@@ -151,12 +151,12 @@ class TestGit:
 
     def test_get_url(self, mock_call):
         """Verify the commands to get the current repository's URL."""
-        git.get_url()
+        git.get_url('git')
         check_calls(mock_call, ["git config --get remote.origin.url"])
 
     def test_get_hash(self, mock_call):
         """Verify the commands to get the working tree's hash."""
-        git.get_hash()
+        git.get_hash('git')
         check_calls(mock_call, ["git rev-parse HEAD"])
 
     def test_get_tag(self, mock_call):

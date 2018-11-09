@@ -34,7 +34,8 @@ def init():
 
     else:
         config = Config()
-        source = Source(name="sample_dependency",
+        source = Source('git',
+                        name="sample_dependency",
                         repo="https://github.com/githubtraining/hellogitworld")
         config.sources.append(source)
         source = source.lock(rev="ebbbf773431ba07510251bb03f9525c7bab2b13a")

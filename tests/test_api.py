@@ -24,6 +24,7 @@ CONFIG = """
 location: deps
 sources:
 - name: gitman_1
+  type: git
   repo: https://github.com/jacebrowning/gitman-demo
   sparse_paths:
   -
@@ -32,6 +33,7 @@ sources:
   scripts:
   -
 - name: gitman_2
+  type: git
   repo: https://github.com/jacebrowning/gitman-demo
   sparse_paths:
   -
@@ -40,6 +42,7 @@ sources:
   scripts:
   -
 - name: gitman_3
+  type: git
   repo: https://github.com/jacebrowning/gitman-demo
   sparse_paths:
   -
@@ -84,6 +87,7 @@ def describe_init():
         location: gitman_sources
         sources:
         - name: sample_dependency
+          type: git
           repo: https://github.com/githubtraining/hellogitworld
           sparse_paths:
           -
@@ -93,6 +97,7 @@ def describe_init():
           -
         sources_locked:
         - name: sample_dependency
+          type: git
           repo: https://github.com/githubtraining/hellogitworld
           sparse_paths:
           -
@@ -127,6 +132,7 @@ def describe_install():
         location: deps
         sources:
         - name: gitman_1
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
           link:
@@ -134,12 +140,14 @@ def describe_install():
           -
         sources_locked:
         - name: gitman_2
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           rev: example-branch
           link:
           scripts:
           -
         - name: gitman_3
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
           link:
@@ -163,6 +171,7 @@ def describe_install():
           -
         sources_locked:
         - name: gitman_2
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
           link:
@@ -229,6 +238,7 @@ def describe_install():
             location: deps
             sources:
             - name: gitman_1
+              type: git
               repo: https://github.com/jacebrowning/gitman-demo
               rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
               link:
@@ -252,6 +262,7 @@ def describe_install():
                     location: deps
                     sources:
                     - name: gitman_1
+                      type: git
                       repo: https://github.com/jacebrowning/gitman-demo
                       sparse_paths:
                       - src/*
@@ -344,6 +355,7 @@ def describe_update():
         location: deps
         sources:
         - name: gitman_1
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -352,6 +364,7 @@ def describe_update():
           scripts:
           -
         - name: gitman_2
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -361,6 +374,7 @@ def describe_update():
           -
         sources_locked:
         - name: gitman_2
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -376,6 +390,7 @@ def describe_update():
         location: deps
         sources:
         - name: gitman_1
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -384,6 +399,7 @@ def describe_update():
           scripts:
           -
         - name: gitman_2
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -393,6 +409,7 @@ def describe_update():
           -
         sources_locked:
         - name: gitman_2
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -407,6 +424,7 @@ def describe_update():
         location: deps
         sources:
         - name: gitman_1
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -415,6 +433,7 @@ def describe_update():
           scripts:
           -
         - name: gitman_2
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -424,6 +443,7 @@ def describe_update():
           -
         sources_locked:
         - name: gitman_2
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -439,6 +459,7 @@ def describe_update():
         location: deps
         sources:
         - name: gitman_1
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -447,6 +468,7 @@ def describe_update():
           scripts:
           -
         - name: gitman_2
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -456,6 +478,7 @@ def describe_update():
           -
         sources_locked:
         - name: gitman_2
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -471,6 +494,7 @@ def describe_update():
         expect(config.__mapper__.text) == CONFIG + strip("""
         sources_locked:
         - name: gitman_1
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -479,6 +503,7 @@ def describe_update():
           scripts:
           -
         - name: gitman_2
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -487,6 +512,7 @@ def describe_update():
           scripts:
           -
         - name: gitman_3
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -527,6 +553,7 @@ def describe_lock():
         expect(config.__mapper__.text) == CONFIG + strip("""
         sources_locked:
         - name: gitman_1
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -535,6 +562,7 @@ def describe_lock():
           scripts:
           -
         - name: gitman_2
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -543,6 +571,7 @@ def describe_lock():
           scripts:
           -
         - name: gitman_3
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -559,6 +588,7 @@ def describe_lock():
         expect(config.__mapper__.text) == CONFIG + strip("""
         sources_locked:
         - name: gitman_1
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -
@@ -567,6 +597,7 @@ def describe_lock():
           scripts:
           -
         - name: gitman_3
+          type: git
           repo: https://github.com/jacebrowning/gitman-demo
           sparse_paths:
           -

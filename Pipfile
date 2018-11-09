@@ -25,6 +25,7 @@ pytest-describe = "*"
 pytest-expecter = "*"
 pytest-random = "*"
 pytest-cov = "*"
+pathlib2 = "*"
 freezegun = "*"
 
 # Reports
