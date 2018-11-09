@@ -5,7 +5,7 @@ repo_url: https://github.com/jacebrowning/gitman
 
 theme: readthedocs
 
-nav:
+pages:
 - Home: index.md
 - Setup:
     - Git: setup/git.md

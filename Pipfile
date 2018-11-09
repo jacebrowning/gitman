@@ -32,7 +32,7 @@ freezegun = "*"
 coveragespace = "*"
 
 # Documentation
-mkdocs = "*"
+mkdocs = "<1"
 docutils = "*"
 pygments = "*"
 
