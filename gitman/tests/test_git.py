@@ -3,7 +3,7 @@
 import os
 from unittest.mock import Mock, patch
 
-from gitman import git
+from gitman import git, settings
 from gitman.exceptions import ShellError
 
 from .utils import check_calls
@@ -25,6 +25,17 @@ class TestGit:
             " mock.git " +
             os.path.normpath("mock/path")
         ])
+
+    @patch('os.path.isdir', Mock(return_value=False))
+    def test_clone_without_cache(self, mock_call):
+        # disable cache
+        settings.CACHE_DISABLE = True
+        """Verify the commands to set up a new reference repository."""
+        git.clone('git', 'mock.git', 'mock/path', cache='cache')
+        check_calls(mock_call, [
+            "git clone mock.git mock/path"
+        ])
+        settings.CACHE_DISABLE = False
 
     @patch('os.path.isdir', Mock(return_value=True))
     def test_clone_from_reference(self, mock_call):
