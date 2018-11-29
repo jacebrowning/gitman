@@ -6,6 +6,7 @@ import os
 
 # Cache settings
 CACHE = os.path.expanduser(os.getenv('GITMAN_CACHE', "~/.gitcache"))
+CACHE_DISABLE = bool(os.getenv('GITMAN_CACHE_DISABLE'))
 
 # Logging settings
 DEFAULT_LOGGING_FORMAT = "%(message)s"
