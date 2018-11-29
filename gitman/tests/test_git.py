@@ -33,7 +33,7 @@ class TestGit:
         try:
             git.clone('git', 'mock.git', 'mock/path', cache='cache')
             check_calls(mock_call, [
-                "git clone mock.git mock/path"
+                "git clone mock.git " + os.path.normpath("mock/path")
             ])
         finally:
             settings.CACHE_DISABLE = False
