@@ -195,7 +195,7 @@ def _run_command(function, args, kwargs):
     except exceptions.UncommittedChanges as exception:
         _show_error(exception)
         exit_message = ("Run again with '--force' to discard changes "
-                        "or '--skip-changes' to skip changes")
+                        "or '--skip-changes' to skip this dependency")
     except exceptions.ScriptFailure as exception:
         _show_error(exception)
         exit_message = "Run again with '--force' to ignore script errors"
