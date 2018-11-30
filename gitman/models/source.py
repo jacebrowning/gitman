@@ -84,7 +84,7 @@ class Source(AttributeDictionary):
             if skip_changes:
                 if git.changes(self.type, include_untracked=clean,
                                display_status=False):
-                    msg = ("Skip update due to uncommitted changes "
+                    msg = ("Skipped update due to uncommitted changes "
                            "in {}").format(os.getcwd())
                     common.show(msg, color='git_changes')
                     return

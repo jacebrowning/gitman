@@ -26,7 +26,7 @@ def main(args=None):
     )
     parser.add_argument(
         '-s', '--skip-changes', action='store_true', dest='skip_changes',
-        help="skip uncommitted changes in dependencies"
+        help="skip dependencies with uncommitted changes"
     )
     parser.add_argument(
         '-c', '--clean', action='store_true',

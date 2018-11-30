@@ -37,7 +37,7 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
                          help="delete ignored files in dependencies")
     options.add_argument('-s', '--skip-changes', action='store_true',
                          dest='skip_changes',
-                         help="skip uncommitted changes in dependencies")
+                         help="skip dependencies with uncommitted changes")
 
     shared = {'formatter_class': common.WideHelpFormatter}
 
