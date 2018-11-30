@@ -2,11 +2,12 @@
 
 ## 1.6 (unreleased)
 
-- Added `git svn` support (@daniel-brosche).
+- Added `git svn` support. (@daniel-brosche)
+- Added `$GITMAN_CACHE_DISABLE` to disable repository mirrors. (@daniel-brosche)
 
 ## 1.5 (2018-09-08)
 
-- Added `--keep-location` option on `uninstall` (@DavidWatkins).
+- Added `--keep-location` option on `uninstall`. (@DavidWatkins)
 - Added feature to enable sparse checkouts. See the docs for further information. (@xenji)
 - **BREAKING**: Removed confusing `--lock` option on `update` command in favor of just using the `lock` command.
 - **BREAKING**: Renamed `--no-lock` to `--skip-lock` on `update` command.
@@ -15,7 +16,7 @@
 ## 1.4 (2017-03-21)
 
 - Allow config files to exist in subdirectories of the main project.
-- Added `${GITMAN_CACHE}` to customize the repository cache location.
+- Added `$GITMAN_CACHE` to customize the repository cache location.
 
 ## 1.3 (2017-02-03)
 
@@ -25,7 +26,7 @@
 
 ## 1.2 (2017-01-08)
 
-- Added preliminary Windows support (@StudioEtrange).
+- Added preliminary Windows support. (@StudioEtrange)
 
 ## 1.1 (2017-01-06)
 
@@ -81,7 +82,7 @@
 
 ## 0.7 (2015-12-22)
 
-- Fixed `git remote rm` command (@hdnivara).
+- Fixed `git remote rm` command. (@hdnivara)
 - Now applying the `update` dependency filter to locking as well.
 - Now only locking previous locked dependencies.
 - Added `lock` command to manually save all dependency versions.
