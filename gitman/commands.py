@@ -54,7 +54,7 @@ def init():
 
 @restore_cwd
 def install(*names, root=None, depth=None,
-            force=False, fetch=False, clean=True):
+            force=False, fetch=False, clean=True, skip_changes=False):
     """Install dependencies for a project.
 
     Optional arguments:
@@ -66,7 +66,7 @@ def install(*names, root=None, depth=None,
                script errors can be ignored
     - `fetch`: indicates the latest branches should always be fetched
     - `clean`: indicates untracked files should be deleted from dependencies
-
+    - `skip_changes`: indicates uncommited changes should be skipped
     """
     log.info("%sInstalling dependencies: %s",
              'force-' if force else '',
@@ -81,7 +81,7 @@ def install(*names, root=None, depth=None,
         common.newline()
         count = config.install_dependencies(
             *names, update=False, depth=depth,
-            force=force, fetch=fetch, clean=clean,
+            force=force, fetch=fetch, clean=clean, skip_changes=skip_changes
         )
 
         if count:
@@ -92,7 +92,8 @@ def install(*names, root=None, depth=None,
 
 @restore_cwd
 def update(*names, root=None, depth=None,
-           recurse=False, force=False, clean=True, lock=None):  # pylint: disable=redefined-outer-name
+           recurse=False, force=False, clean=True, lock=None,  # pylint: disable=redefined-outer-name
+           skip_changes=False):
     """Update dependencies for a project.
 
     Optional arguments:
@@ -105,7 +106,7 @@ def update(*names, root=None, depth=None,
                script errors can be ignored
     - `clean`: indicates untracked files should be deleted from dependencies
     - `lock`: indicates updated dependency versions should be recorded
-
+    - `skip_changes`: indicates uncommited changes should be skipped
     """
     log.info("%s dependencies%s: %s",
              'Force updating' if force else 'Updating',
@@ -122,6 +123,7 @@ def update(*names, root=None, depth=None,
         count = config.install_dependencies(
             *names, update=True, depth=depth,
             recurse=recurse, force=force, fetch=True, clean=clean,
+            skip_changes=skip_changes
         )
 
         if count and lock is not False:

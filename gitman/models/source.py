@@ -63,7 +63,8 @@ class Source(AttributeDictionary):
     def __lt__(self, other):
         return self.name < other.name
 
-    def update_files(self, force=False, fetch=False, clean=True):
+    def update_files(self, force=False, fetch=False, clean=True,
+                     skip_changes=False):
         """Ensure the source matches the specified revision."""
         log.info("Updating source files...")
 
@@ -80,9 +81,17 @@ class Source(AttributeDictionary):
         # Check for uncommitted changes
         if not force:
             log.debug("Confirming there are no uncommitted changes...")
-            if git.changes(self.type, include_untracked=clean):
-                msg = "Uncommitted changes in {}".format(os.getcwd())
-                raise exceptions.UncommittedChanges(msg)
+            if skip_changes:
+                if git.changes(self.type, include_untracked=clean,
+                               display_status=False):
+                    msg = ("Skip update due to uncommitted changes "
+                           "in {}").format(os.getcwd())
+                    common.show(msg, color='git_changes')
+                    return
+            else:
+                if git.changes(self.type, include_untracked=clean):
+                    msg = "Uncommitted changes in {}".format(os.getcwd())
+                    raise exceptions.UncommittedChanges(msg)
 
         # Fetch the desired revision
         if fetch or git.is_fetch_required(self.type, self.rev):

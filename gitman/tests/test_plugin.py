@@ -18,7 +18,8 @@ class TestMain:
 
         assert [
             call.install(root=None, depth=None,
-                         clean=False, fetch=True, force=False),
+                         clean=False, fetch=True, force=False,
+                         skip_changes=False),
             call.install().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
@@ -31,7 +32,8 @@ class TestMain:
 
         assert [
             call.update(root=None, depth=None,
-                        clean=True, force=False, recurse=False, lock=True),
+                        clean=True, force=False, recurse=False, lock=True,
+                        skip_changes=False),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
@@ -44,7 +46,8 @@ class TestMain:
 
         assert [
             call.update(root=None, depth=None,
-                        clean=False, force=False, recurse=True, lock=True),
+                        clean=False, force=False, recurse=True, lock=True,
+                        skip_changes=False),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
@@ -57,7 +60,22 @@ class TestMain:
 
         assert [
             call.update(root=None, depth=None,
-                        clean=False, force=False, recurse=False, lock=False),
+                        clean=False, force=False, recurse=False, lock=False,
+                        skip_changes=False),
+            call.update().__bool__(),  # command status check
+        ] == mock_commands.mock_calls
+
+    @patch('gitman.cli.commands')
+    def test_update_skip_changes(self, mock_commands):
+        """Verify the 'update' command with skip changes option."""
+        mock_commands.update.__name__ = 'mock'
+
+        plugin.main(['--update', '--skip-changes'])
+
+        assert [
+            call.update(root=None, depth=None,
+                        clean=False, force=False, recurse=False, lock=True,
+                        skip_changes=True),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 

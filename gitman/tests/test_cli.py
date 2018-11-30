@@ -70,7 +70,8 @@ class TestInstall:
         cli.main(['install'])
 
         mock_install.assert_called_once_with(
-            root=None, depth=5, force=False, fetch=False, clean=False)
+            root=None, depth=5, force=False, fetch=False, clean=False,
+            skip_changes=False)
 
     @patch('gitman.commands.install')
     def test_install_root(self, mock_install):
@@ -79,7 +80,8 @@ class TestInstall:
 
         mock_install.assert_called_once_with(
             root='mock/path/to/root', depth=5,
-            force=False, fetch=False, clean=False)
+            force=False, fetch=False, clean=False,
+            skip_changes=False)
 
     @patch('gitman.commands.install')
     def test_install_force(self, mock_install):
@@ -87,7 +89,8 @@ class TestInstall:
         cli.main(['install', '--force'])
 
         mock_install.assert_called_once_with(
-            root=None, depth=5, force=True, fetch=False, clean=False)
+            root=None, depth=5, force=True, fetch=False, clean=False,
+            skip_changes=False)
 
     @patch('gitman.commands.install')
     def test_install_fetch(self, mock_install):
@@ -95,7 +98,8 @@ class TestInstall:
         cli.main(['install', '--fetch'])
 
         mock_install.assert_called_once_with(
-            root=None, depth=5, force=False, fetch=True, clean=False)
+            root=None, depth=5, force=False, fetch=True, clean=False,
+            skip_changes=False)
 
     @patch('gitman.commands.install')
     def test_install_clean(self, mock_install):
@@ -103,7 +107,8 @@ class TestInstall:
         cli.main(['install', '--clean'])
 
         mock_install.assert_called_once_with(
-            root=None, depth=5, force=False, fetch=False, clean=True)
+            root=None, depth=5, force=False, fetch=False, clean=True,
+            skip_changes=False)
 
     @patch('gitman.commands.install')
     def test_install_specific_sources(self, mock_install):
@@ -112,7 +117,8 @@ class TestInstall:
 
         mock_install.assert_called_once_with(
             'foo', 'bar', root=None, depth=5,
-            force=False, fetch=False, clean=False)
+            force=False, fetch=False, clean=False,
+            skip_changes=False)
 
     @patch('gitman.commands.install')
     def test_install_with_depth(self, mock_update):
@@ -120,7 +126,8 @@ class TestInstall:
         cli.main(['install', '--depth', '10'])
 
         mock_update.assert_called_once_with(
-            root=None, depth=10, force=False, fetch=False, clean=False)
+            root=None, depth=10, force=False, fetch=False, clean=False,
+            skip_changes=False)
 
     @patch('gitman.commands.install', Mock())
     def test_install_with_depth_invalid(self):
@@ -141,7 +148,8 @@ class TestUpdate:
 
         mock_update.assert_called_once_with(
             root=None, depth=5,
-            force=False, clean=False, recurse=False, lock=None)
+            force=False, clean=False, recurse=False, lock=None,
+            skip_changes=False)
 
     @patch('gitman.commands.update')
     def test_update_recursive(self, mock_update):
@@ -150,7 +158,8 @@ class TestUpdate:
 
         mock_update.assert_called_once_with(
             root=None, depth=5,
-            force=False, clean=False, recurse=True, lock=None)
+            force=False, clean=False, recurse=True, lock=None,
+            skip_changes=False)
 
     @patch('gitman.commands.update')
     def test_update_no_lock(self, mock_update):
@@ -159,7 +168,18 @@ class TestUpdate:
 
         mock_update.assert_called_once_with(
             root=None, depth=5,
-            force=False, clean=False, recurse=False, lock=False)
+            force=False, clean=False, recurse=False, lock=False,
+            skip_changes=False)
+
+    @patch('gitman.commands.update')
+    def test_update_skip_changes(self, mock_update):
+        """Verify the 'update' command with skip changes option."""
+        cli.main(['update', '--skip-changes'])
+
+        mock_update.assert_called_once_with(
+            root=None, depth=5,
+            force=False, clean=False, recurse=False, lock=None,
+            skip_changes=True)
 
     @patch('gitman.commands.update')
     def test_update_specific_sources(self, mock_install):
@@ -168,7 +188,8 @@ class TestUpdate:
 
         mock_install.assert_called_once_with(
             'foo', 'bar', root=None, depth=5,
-            force=False, clean=False, recurse=False, lock=None)
+            force=False, clean=False, recurse=False, lock=None,
+            skip_changes=False)
 
     @patch('gitman.commands.update')
     def test_update_with_depth(self, mock_update):
@@ -177,7 +198,8 @@ class TestUpdate:
 
         mock_update.assert_called_once_with(
             root=None, depth=10,
-            force=False, clean=False, recurse=False, lock=None)
+            force=False, clean=False, recurse=False, lock=None,
+            skip_changes=False)
 
 
 class TestList:

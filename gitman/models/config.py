@@ -64,7 +64,8 @@ class Config(yorm.ModelMixin):
 
     def install_dependencies(self, *names, depth=None,
                              update=True, recurse=False,
-                             force=False, fetch=False, clean=True):
+                             force=False, fetch=False, clean=True,
+                             skip_changes=False):
         """Download or update the specified dependencies."""
         if depth == 0:
             log.info("Skipped directory: %s", self.location_path)
@@ -87,7 +88,8 @@ class Config(yorm.ModelMixin):
                 log.info("Skipped dependency: %s", source.name)
                 continue
 
-            source.update_files(force=force, fetch=fetch, clean=clean)
+            source.update_files(force=force, fetch=fetch, clean=clean,
+                                skip_changes=skip_changes)
             source.create_link(self.root, force=force)
             common.newline()
             count += 1

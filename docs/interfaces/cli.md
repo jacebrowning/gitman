@@ -48,6 +48,13 @@ It will exit with an error if there are any uncommitted changes in dependencies 
 $ gitman install --force
 ```
 
+Alternatively it is possible to skip the update process only for dependencies that have uncommited changes.
+
+```sh
+$ gitman install --skip-changes
+```
+
+
 ## Update
 
 If any of the dependencies track a branch (rather than a specific commit), the current upstream version of that branch can be checked out by running:
@@ -78,6 +85,18 @@ or to additionally get the latest versions of all nested dependencies, run:
 
 ```sh
 $ gitman update --all
+```
+
+It will exit with an error if there are any uncommitted changes in dependencies or a post-install script fails. To overwrite all changes or ignore script failures, run:
+
+```sh
+$ gitman update --force
+```
+
+Alternatively it is possible to skip the update process only for dependencies that have uncommited changes.
+
+```sh
+$ gitman update --skip-changes
 ```
 
 ## List

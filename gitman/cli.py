@@ -35,6 +35,10 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
                          help="overwrite uncommitted changes in dependencies")
     options.add_argument('-c', '--clean', action='store_true',
                          help="delete ignored files in dependencies")
+    options.add_argument('-s', '--skip-changes', action='store_true',
+                         dest='skip_changes',
+                         help="skip uncommitted changes in dependencies")
+
     shared = {'formatter_class': common.WideHelpFormatter}
 
     # Main parser
@@ -139,7 +143,8 @@ def _get_command(function, namespace):  # pylint: disable=too-many-statements
         kwargs.update(root=namespace.root,
                       depth=namespace.depth,
                       force=namespace.force,
-                      clean=namespace.clean)
+                      clean=namespace.clean,
+                      skip_changes=namespace.skip_changes)
         if namespace.command == 'install':
             kwargs.update(fetch=namespace.fetch)
         if namespace.command == 'update':
@@ -189,7 +194,8 @@ def _run_command(function, args, kwargs):
         log.debug("Command canceled")
     except exceptions.UncommittedChanges as exception:
         _show_error(exception)
-        exit_message = "Run again with '--force' to discard changes"
+        exit_message = ("Run again with '--force' to discard changes "
+                        "or '--skip-changes' to skip changes")
     except exceptions.ScriptFailure as exception:
         _show_error(exception)
         exit_message = "Run again with '--force' to ignore script errors"
