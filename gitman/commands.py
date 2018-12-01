@@ -132,7 +132,8 @@ def update(*names, root=None, depth=None,
             common.show("Recording installed versions...",
                         color='message', log=False)
             common.newline()
-            config.lock_dependencies(*names, obey_existing=lock is None)
+            config.lock_dependencies(*names, obey_existing=lock is None,
+                                     skip_changes=skip_changes)
 
         if count:
             _run_scripts(*names, depth=depth, force=force, _config=config)

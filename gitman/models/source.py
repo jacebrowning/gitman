@@ -156,7 +156,8 @@ class Source(AttributeDictionary):
                 common.show(*lines, color='shell_output')
         common.newline()
 
-    def identify(self, allow_dirty=True, allow_missing=True):
+    def identify(self, allow_dirty=True, allow_missing=True,
+                 skip_changes=False):
         """Get the path and current repository URL and hash."""
         if os.path.isdir(self.name):
 
@@ -167,14 +168,23 @@ class Source(AttributeDictionary):
             path = os.getcwd()
             url = git.get_url(self.type)
             if git.changes(self.type,
-                           display_status=not allow_dirty, _show=True):
-                if not allow_dirty:
-                    msg = "Uncommitted changes in {}".format(os.getcwd())
-                    raise exceptions.UncommittedChanges(msg)
+                           display_status=not allow_dirty and not skip_changes,
+                           _show=not skip_changes):
 
-                common.show(self.DIRTY, color='git_dirty', log=False)
-                common.newline()
-                return path, url, self.DIRTY
+                if allow_dirty:
+                    common.show(self.DIRTY, color='git_dirty', log=False)
+                    common.newline()
+                    return path, url, self.DIRTY
+
+                if skip_changes:
+                    msg = ("Skipped lock due to uncommitted changes "
+                           "in {}").format(os.getcwd())
+                    common.show(msg, color='git_changes')
+                    common.newline()
+                    return path, url, self.DIRTY
+
+                msg = "Uncommitted changes in {}".format(os.getcwd())
+                raise exceptions.UncommittedChanges(msg)
 
             rev = git.get_hash(self.type, _show=True)
             common.show(rev, color='git_rev', log=False)
@@ -186,10 +196,20 @@ class Source(AttributeDictionary):
 
         raise self._invalid_repository
 
-    def lock(self, rev=None):
-        """Return a locked version of the current source."""
+    def lock(self, rev=None, allow_dirty=False, skip_changes=False):
+        """Create a locked source object.
+
+        Return a locked version of the current source if not dirty
+        otherwise None.
+        """
+
         if rev is None:
-            _, _, rev = self.identify(allow_dirty=False, allow_missing=False)
+            _, _, rev = self.identify(allow_dirty=allow_dirty,
+                                      allow_missing=False,
+                                      skip_changes=skip_changes)
+
+        if rev == self.DIRTY:
+            return None
 
         source = self.__class__(self.type, self.repo,
                                 self.name, rev,
