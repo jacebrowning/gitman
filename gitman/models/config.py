@@ -104,6 +104,7 @@ class Config(yorm.ModelMixin):
                     force=force,
                     fetch=fetch,
                     clean=clean,
+                    skip_changes=skip_changes
                 )
                 common.dedent()
 
