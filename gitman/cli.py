@@ -20,9 +20,10 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
     debug.add_argument('-V', '--version', action='version', version=VERSION)
     debug_group = debug.add_mutually_exclusive_group()
     debug_group.add_argument('-v', '--verbose', action='count', default=0,
-                       help="enable verbose logging")
+                             help="enable verbose logging")
     debug_group.add_argument('-q', '--quiet', action='store_const', const=-1,
-                       dest='verbose', help="only display errors and prompts")
+                             dest='verbose',
+                             help="only display errors and prompts")
     project = argparse.ArgumentParser(add_help=False)
     project.add_argument('-r', '--root', metavar='PATH',
                          help="root directory of the project")
@@ -35,10 +36,12 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
                          help="delete ignored files in dependencies")
     options_group = options.add_mutually_exclusive_group()
     options_group.add_argument('-f', '--force', action='store_true',
-                         help="overwrite uncommitted changes in dependencies")
+                               help=("overwrite uncommitted changes "
+                                     "in dependencies"))
     options_group.add_argument('-s', '--skip-changes', action='store_true',
-                         dest='skip_changes',
-                         help="skip dependencies with uncommitted changes")
+                               dest='skip_changes',
+                               help=("skip dependencies with "
+                                     "uncommitted changes"))
 
     shared = {'formatter_class': common.WideHelpFormatter}
 
