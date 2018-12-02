@@ -25,6 +25,10 @@ def main(args=None):
         help="overwrite uncommitted changes in dependencies",
     )
     parser.add_argument(
+        '-s', '--skip-changes', action='store_true', dest='skip_changes',
+        help="skip dependencies with uncommitted changes"
+    )
+    parser.add_argument(
         '-c', '--clean', action='store_true',
         help="delete ignored files when updating dependencies",
     )

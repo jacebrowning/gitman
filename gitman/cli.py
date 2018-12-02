@@ -18,11 +18,12 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
     # Shared options
     debug = argparse.ArgumentParser(add_help=False)
     debug.add_argument('-V', '--version', action='version', version=VERSION)
-    group = debug.add_mutually_exclusive_group()
-    group.add_argument('-v', '--verbose', action='count', default=0,
-                       help="enable verbose logging")
-    group.add_argument('-q', '--quiet', action='store_const', const=-1,
-                       dest='verbose', help="only display errors and prompts")
+    debug_group = debug.add_mutually_exclusive_group()
+    debug_group.add_argument('-v', '--verbose', action='count', default=0,
+                             help="enable verbose logging")
+    debug_group.add_argument('-q', '--quiet', action='store_const', const=-1,
+                             dest='verbose',
+                             help="only display errors and prompts")
     project = argparse.ArgumentParser(add_help=False)
     project.add_argument('-r', '--root', metavar='PATH',
                          help="root directory of the project")
@@ -31,10 +32,17 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
                        default=5, metavar="NUM",
                        help="limit the number of dependency levels")
     options = argparse.ArgumentParser(add_help=False)
-    options.add_argument('-f', '--force', action='store_true',
-                         help="overwrite uncommitted changes in dependencies")
     options.add_argument('-c', '--clean', action='store_true',
                          help="delete ignored files in dependencies")
+    options_group = options.add_mutually_exclusive_group()
+    options_group.add_argument('-f', '--force', action='store_true',
+                               help=("overwrite uncommitted changes "
+                                     "in dependencies"))
+    options_group.add_argument('-s', '--skip-changes', action='store_true',
+                               dest='skip_changes',
+                               help=("skip dependencies with "
+                                     "uncommitted changes"))
+
     shared = {'formatter_class': common.WideHelpFormatter}
 
     # Main parser
@@ -139,7 +147,8 @@ def _get_command(function, namespace):  # pylint: disable=too-many-statements
         kwargs.update(root=namespace.root,
                       depth=namespace.depth,
                       force=namespace.force,
-                      clean=namespace.clean)
+                      clean=namespace.clean,
+                      skip_changes=namespace.skip_changes)
         if namespace.command == 'install':
             kwargs.update(fetch=namespace.fetch)
         if namespace.command == 'update':
@@ -189,7 +198,8 @@ def _run_command(function, args, kwargs):
         log.debug("Command canceled")
     except exceptions.UncommittedChanges as exception:
         _show_error(exception)
-        exit_message = "Run again with '--force' to discard changes"
+        exit_message = ("Run again with '--force' to discard changes "
+                        "or '--skip-changes' to skip this dependency")
     except exceptions.ScriptFailure as exception:
         _show_error(exception)
         exit_message = "Run again with '--force' to ignore script errors"

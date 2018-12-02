@@ -64,7 +64,8 @@ class Config(yorm.ModelMixin):
 
     def install_dependencies(self, *names, depth=None,
                              update=True, recurse=False,
-                             force=False, fetch=False, clean=True):
+                             force=False, fetch=False, clean=True,
+                             skip_changes=False):
         """Download or update the specified dependencies."""
         if depth == 0:
             log.info("Skipped directory: %s", self.location_path)
@@ -87,7 +88,8 @@ class Config(yorm.ModelMixin):
                 log.info("Skipped dependency: %s", source.name)
                 continue
 
-            source.update_files(force=force, fetch=fetch, clean=clean)
+            source.update_files(force=force, fetch=fetch, clean=clean,
+                                skip_changes=skip_changes)
             source.create_link(self.root, force=force)
             common.newline()
             count += 1
@@ -102,6 +104,7 @@ class Config(yorm.ModelMixin):
                     force=force,
                     fetch=fetch,
                     clean=clean,
+                    skip_changes=skip_changes
                 )
                 common.dedent()
 
@@ -148,7 +151,8 @@ class Config(yorm.ModelMixin):
 
         return count
 
-    def lock_dependencies(self, *names, obey_existing=True):
+    def lock_dependencies(self, *names, obey_existing=True,
+                          skip_changes=False):
         """Lock down the immediate dependency versions."""
         sources = self._get_sources(use_locked=obey_existing).copy()
         sources_filter = list(names) if names else [s.name for s in sources]
@@ -163,13 +167,16 @@ class Config(yorm.ModelMixin):
                 log.info("Skipped dependency: %s", source.name)
                 continue
 
-            try:
-                index = self.sources_locked.index(source)
-            except ValueError:
-                self.sources_locked.append(source.lock())
-            else:
-                self.sources_locked[index] = source.lock()
-            count += 1
+            source_locked = source.lock(skip_changes=skip_changes)
+
+            if source_locked is not None:
+                try:
+                    index = self.sources_locked.index(source)
+                except ValueError:
+                    self.sources_locked.append(source_locked)
+                else:
+                    self.sources_locked[index] = source_locked
+                count += 1
 
             shell.cd(self.location_path, _show=False)
 
