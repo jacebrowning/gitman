@@ -48,12 +48,11 @@ It will exit with an error if there are any uncommitted changes in dependencies 
 $ gitman install --force
 ```
 
-Alternatively it is possible to skip the update process only for dependencies that have uncommited changes.
+Alternatively, it is possible to skip the update process for dependencies that have uncommitted changes:
 
 ```sh
 $ gitman install --skip-changes
 ```
-
 
 ## Update
 
@@ -93,7 +92,7 @@ It will exit with an error if there are any uncommitted changes in dependencies 
 $ gitman update --force
 ```
 
-Alternatively it is possible to skip the update process only for dependencies that have uncommited changes.
+Alternatively, it is possible to skip the update process only for dependencies that have uncommitted changes:
 
 ```sh
 $ gitman update --skip-changes

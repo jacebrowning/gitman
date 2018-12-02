@@ -66,7 +66,7 @@ def install(*names, root=None, depth=None,
                script errors can be ignored
     - `fetch`: indicates the latest branches should always be fetched
     - `clean`: indicates untracked files should be deleted from dependencies
-    - `skip_changes`: indicates dependencies with uncommited changes
+    - `skip_changes`: indicates dependencies with uncommitted changes
      should be skipped
     """
     log.info("%sInstalling dependencies: %s",
@@ -107,7 +107,7 @@ def update(*names, root=None, depth=None,
                script errors can be ignored
     - `clean`: indicates untracked files should be deleted from dependencies
     - `lock`: indicates updated dependency versions should be recorded
-    - `skip_changes`: indicates dependencies with uncommited changes
+    - `skip_changes`: indicates dependencies with uncommitted changes
      should be skipped
     """
     log.info("%s dependencies%s: %s",
