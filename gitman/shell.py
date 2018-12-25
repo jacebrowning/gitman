@@ -28,9 +28,11 @@ def call(name, *args, _show=True, _shell=False, _ignore=False):
     program = show(name, *args, stdout=_show)
 
     command = subprocess.run(
-        name if _shell else [name, *args], universal_newlines=True,
-        stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-        shell=_shell
+        name if _shell else [name, *args],
+        universal_newlines=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        shell=_shell,
     )
 
     output = [line.strip() for line in command.stdout.splitlines()]
@@ -47,9 +49,12 @@ def call(name, *args, _show=True, _shell=False, _ignore=False):
     message = (
         "An external program call failed." + "\n\n"
         "In working directory: " + os.getcwd() + "\n\n"
-        "The following command produced a non-zero return code:" + "\n\n" +
-        CMD_PREFIX + program + "\n" +
-        command.stdout.strip()
+        "The following command produced a non-zero return code:"
+        + "\n\n"
+        + CMD_PREFIX
+        + program
+        + "\n"
+        + command.stdout.strip()
     )
     raise ShellError(message, program=program, output=output)
 

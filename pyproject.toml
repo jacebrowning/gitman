@@ -1,0 +1,95 @@
+[tool.poetry]
+
+name = "gitman"
+version = "1.6a4"
+description = "A language-agnostic dependency manager using Git."
+
+license = "MIT"
+
+authors = ["Jace Browning <jacebrowning@gmail.com>"]
+
+readme = "README.md"
+
+homepage = "https://pypi.org/project/gitman"
+documentation = "https://gitman.readthedocs.io"
+repository = "https://github.com/jacebrowning/gitman"
+
+keywords = [
+    "git",
+    "version control",
+    "build systems",
+    "dependency management",
+    "submodules",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Software Development :: Version Control",
+    "Topic :: System :: Software Distribution",
+]
+
+[tool.poetry.dependencies]
+
+python = "^3.5"
+
+YORM = "^1.3"
+
+[tool.poetry.dev-dependencies]
+
+# Formatters
+black = { version = "=18.9b0", python = "^3.6" }
+isort = "=4.3.4"
+
+# Linters
+mypy = "*"
+pydocstyle = "*"
+pylint = "^2.0"
+
+# Testing
+pytest = "^3.3"
+pytest-cov = "*"
+pytest-describe = "*"
+pytest-expecter = "*"
+pytest-random = "*"
+freezegun = "*"
+
+# Reports
+coveragespace = "*"
+
+# Documentation
+mkdocs = "^1.0"
+pygments = "*"
+
+# Tooling
+pyinstaller = "*"
+sniffer = "*"
+MacFSEvents = { version = "*", platform = "darwin" }
+pync = { version = "*", platform = "darwin" }
+
+[tool.poetry.scripts]
+
+gitman = "gitman.cli:main"
+git-deps = "gitman.plugin:main"
+
+gdm = "gitman.cli:main" # legacy entry point
+
+[tool.black]
+
+py36 = true
+skip-string-normalization = true
+
+[build-system]
+
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

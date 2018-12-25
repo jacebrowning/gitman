@@ -11,7 +11,6 @@ from .conftest import FILES
 
 
 class TestConfig:
-
     def test_init_defaults(self):
         """Verify a config has a default filename and location."""
         config = Config('mock/root')
@@ -105,32 +104,29 @@ class TestConfig:
 
 
 def describe_config():
-
     @pytest.fixture
     def config():
         return Config('m/root', 'm.ext', 'm/location')
 
     def describe_get_path():
-
         def it_defaults_to_sources_location(config):
-            expect(config.get_path()) == \
-                os.path.normpath("m/root/m/location")
+            expect(config.get_path()) == os.path.normpath("m/root/m/location")
 
         def it_can_get_the_config_path(config):
-            expect(config.get_path('__config__')) == \
-                os.path.normpath("m/root/m.ext")
+            expect(config.get_path('__config__')) == os.path.normpath("m/root/m.ext")
 
         def it_can_get_log_path(config):
-            expect(config.get_path('__log__')) == \
-                os.path.normpath("m/root/m/location/gitman.log")
+            expect(config.get_path('__log__')) == os.path.normpath(
+                "m/root/m/location/gitman.log"
+            )
 
         def it_can_get_dependency_path(config):
-            expect(config.get_path('foobar')) == \
-                os.path.normpath("m/root/m/location/foobar")
+            expect(config.get_path('foobar')) == os.path.normpath(
+                "m/root/m/location/foobar"
+            )
 
 
 class TestLoad:
-
     def test_load_from_directory_with_config_file(self):
         config = load_config(FILES)
 

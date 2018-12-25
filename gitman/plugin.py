@@ -5,12 +5,12 @@
 import argparse
 import logging
 
-from . import NAME, PLUGIN, __version__, common
+from . import __version__, common
 from .cli import _get_command, _run_command
 
 
-PROG = 'git ' + PLUGIN
-DESCRIPTION = "Use {} (v{}) to install repostories.".format(NAME, __version__)
+PROG = 'git deps'
+DESCRIPTION = "Use GitMan (v{}) to install repositories.".format(__version__)
 
 log = logging.getLogger(__name__)
 
@@ -21,15 +21,22 @@ def main(args=None):
     # Main parser
     parser = argparse.ArgumentParser(prog=PROG, description=DESCRIPTION)
     parser.add_argument(
-        '-f', '--force', action='store_true',
+        '-f',
+        '--force',
+        action='store_true',
         help="overwrite uncommitted changes in dependencies",
     )
     parser.add_argument(
-        '-s', '--skip-changes', action='store_true', dest='skip_changes',
-        help="skip dependencies with uncommitted changes"
+        '-s',
+        '--skip-changes',
+        action='store_true',
+        dest='skip_changes',
+        help="skip dependencies with uncommitted changes",
     )
     parser.add_argument(
-        '-c', '--clean', action='store_true',
+        '-c',
+        '--clean',
+        action='store_true',
         help="delete ignored files when updating dependencies",
     )
 
@@ -39,29 +46,53 @@ def main(args=None):
 
     # Update option
     group.add_argument(
-        '-u', '--update', const='update',
-        help="update dependencies to the latest versions", **shared
+        '-u',
+        '--update',
+        const='update',
+        help="update dependencies to the latest versions",
+        **shared,
     )
-    parser.add_argument('-a', '--all', action='store_true', dest='recurse',
-                        help="include nested dependencies when updating")
-    parser.add_argument('-L', '--skip-lock',
-                        action='store_false', dest='lock', default=True,
-                        help="disable recording of updated versions")
+    parser.add_argument(
+        '-a',
+        '--all',
+        action='store_true',
+        dest='recurse',
+        help="include nested dependencies when updating",
+    )
+    parser.add_argument(
+        '-L',
+        '--skip-lock',
+        action='store_false',
+        dest='lock',
+        default=True,
+        help="disable recording of updated versions",
+    )
 
     # Display option
     group.add_argument(
-        '-l', '--list', const='list',
-        help="display the current version of each dependency", **shared
+        '-l',
+        '--list',
+        const='list',
+        help="display the current version of each dependency",
+        **shared,
     )
 
     # Uninstall option
     group.add_argument(
-        '-x', '--uninstall', const='uninstall',
-        help="delete all installed dependencies", **shared
+        '-x',
+        '--uninstall',
+        const='uninstall',
+        help="delete all installed dependencies",
+        **shared,
     )
-    parser.add_argument('-k', '--keep-location', action='store_true',
-                        dest='keep_location', default=False,
-                        help='keep top level folder location')
+    parser.add_argument(
+        '-k',
+        '--keep-location',
+        action='store_true',
+        dest='keep_location',
+        default=False,
+        help='keep top level folder location',
+    )
 
     # Parse arguments
     namespace = parser.parse_args(args=args)

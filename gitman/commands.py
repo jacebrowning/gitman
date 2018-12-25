@@ -19,6 +19,7 @@ def restore_cwd(func):
         result = func(*args, **kwargs)
         os.chdir(cwd)
         return result
+
     return wrapped
 
 
@@ -34,9 +35,11 @@ def init():
 
     else:
         config = Config()
-        source = Source('git',
-                        name="sample_dependency",
-                        repo="https://github.com/githubtraining/hellogitworld")
+        source = Source(
+            'git',
+            name="sample_dependency",
+            repo="https://github.com/githubtraining/hellogitworld",
+        )
         config.sources.append(source)
         source = source.lock(rev="ebbbf773431ba07510251bb03f9525c7bab2b13a")
         config.sources_locked.append(source)
@@ -53,8 +56,15 @@ def init():
 
 
 @restore_cwd
-def install(*names, root=None, depth=None,
-            force=False, fetch=False, clean=True, skip_changes=False):
+def install(
+    *names,
+    root=None,
+    depth=None,
+    force=False,
+    fetch=False,
+    clean=True,
+    skip_changes=False,
+):
     """Install dependencies for a project.
 
     Optional arguments:
@@ -69,9 +79,11 @@ def install(*names, root=None, depth=None,
     - `skip_changes`: indicates dependencies with uncommitted changes
      should be skipped
     """
-    log.info("%sInstalling dependencies: %s",
-             'force-' if force else '',
-             ', '.join(names) if names else '<all>')
+    log.info(
+        "%sInstalling dependencies: %s",
+        'force-' if force else '',
+        ', '.join(names) if names else '<all>',
+    )
     count = None
 
     config = load_config(root)
@@ -81,8 +93,13 @@ def install(*names, root=None, depth=None,
         common.show("Installing dependencies...", color='message', log=False)
         common.newline()
         count = config.install_dependencies(
-            *names, update=False, depth=depth,
-            force=force, fetch=fetch, clean=clean, skip_changes=skip_changes
+            *names,
+            update=False,
+            depth=depth,
+            force=force,
+            fetch=fetch,
+            clean=clean,
+            skip_changes=skip_changes,
         )
 
         if count:
@@ -92,9 +109,16 @@ def install(*names, root=None, depth=None,
 
 
 @restore_cwd
-def update(*names, root=None, depth=None,
-           recurse=False, force=False, clean=True, lock=None,  # pylint: disable=redefined-outer-name
-           skip_changes=False):
+def update(
+    *names,
+    root=None,
+    depth=None,
+    recurse=False,
+    force=False,
+    clean=True,
+    lock=None,  # pylint: disable=redefined-outer-name
+    skip_changes=False,
+):
     """Update dependencies for a project.
 
     Optional arguments:
@@ -110,10 +134,12 @@ def update(*names, root=None, depth=None,
     - `skip_changes`: indicates dependencies with uncommitted changes
      should be skipped
     """
-    log.info("%s dependencies%s: %s",
-             'Force updating' if force else 'Updating',
-             ', recursively' if recurse else '',
-             ', '.join(names) if names else '<all>')
+    log.info(
+        "%s dependencies%s: %s",
+        'Force updating' if force else 'Updating',
+        ', recursively' if recurse else '',
+        ', '.join(names) if names else '<all>',
+    )
     count = None
 
     config = load_config(root)
@@ -123,17 +149,22 @@ def update(*names, root=None, depth=None,
         common.show("Updating dependencies...", color='message', log=False)
         common.newline()
         count = config.install_dependencies(
-            *names, update=True, depth=depth,
-            recurse=recurse, force=force, fetch=True, clean=clean,
-            skip_changes=skip_changes
+            *names,
+            update=True,
+            depth=depth,
+            recurse=recurse,
+            force=force,
+            fetch=True,
+            clean=clean,
+            skip_changes=skip_changes,
         )
 
         if count and lock is not False:
-            common.show("Recording installed versions...",
-                        color='message', log=False)
+            common.show("Recording installed versions...", color='message', log=False)
             common.newline()
-            config.lock_dependencies(*names, obey_existing=lock is None,
-                                     skip_changes=skip_changes)
+            config.lock_dependencies(
+                *names, obey_existing=lock is None, skip_changes=skip_changes
+            )
 
         if count:
             _run_scripts(*names, depth=depth, force=force, _config=config)
@@ -176,13 +207,13 @@ def display(*, root=None, depth=None, allow_dirty=True):
 
     if config:
         common.newline()
-        common.show("Displaying current dependency versions...",
-                    color='message', log=False)
+        common.show(
+            "Displaying current dependency versions...", color='message', log=False
+        )
         common.newline()
         config.log(datetime.datetime.now().strftime("%F %T"))
         count = 0
-        for identity in config.get_dependencies(depth=depth,
-                                                allow_dirty=allow_dirty):
+        for identity in config.get_dependencies(depth=depth, allow_dirty=allow_dirty):
             count += 1
             config.log("{}: {} @ {}", *identity)
         config.log()
@@ -233,8 +264,7 @@ def delete(*, root=None, force=False, keep_location=False):
 
     if config:
         common.newline()
-        common.show("Checking for uncommitted changes...",
-                    color='message', log=False)
+        common.show("Checking for uncommitted changes...", color='message', log=False)
         common.newline()
         count = len(list(config.get_dependencies(allow_dirty=force)))
         common.dedent(level=0)

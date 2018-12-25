@@ -70,10 +70,7 @@ class TestPrograms:
         if os.name == 'nt':
             check_calls(mock_call, [])
         else:
-            check_calls(mock_call, [
-                "mkdir -p mock",
-                "ln -s mock/target mock/source",
-            ])
+            check_calls(mock_call, ["mkdir -p mock", "ln -s mock/target mock/source"])
 
     @patch('os.path.isfile', Mock(return_value=True))
     def test_rm_file(self, mock_call):

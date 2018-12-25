@@ -27,7 +27,6 @@ def location(tmpdir):
 
 
 def describe_show():
-
     @patch('gitman.common.show')
     def it_prints_location_by_default(show, location):
         cli.main(['show'])
@@ -38,9 +37,7 @@ def describe_show():
     def it_can_print_a_depenendcy_path(show, location):
         cli.main(['show', 'bar'])
 
-        expect(show.mock_calls) == [
-            call(os.path.join(location, "bar"), color='path'),
-        ]
+        expect(show.mock_calls) == [call(os.path.join(location, "bar"), color='path')]
 
     def it_exits_when_no_config_found(tmpdir):
         tmpdir.chdir()
@@ -50,7 +47,6 @@ def describe_show():
 
 
 def describe_edit():
-
     @patch('gitman.system.launch')
     def it_launches_the_config(launch, config):
         cli.main(['edit'])
