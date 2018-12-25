@@ -4,8 +4,8 @@ import os
 import yorm
 from yorm.types import SortedList, String
 
-from . import Source
 from .. import common, shell
+from .source import Source
 
 
 log = logging.getLogger(__name__)
