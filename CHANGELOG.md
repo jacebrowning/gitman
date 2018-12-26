@@ -2,6 +2,7 @@
 
 - Added `git svn` support. (@daniel-brosche)
 - Added `$GITMAN_CACHE_DISABLE` to disable repository mirrors. (@daniel-brosche)
+- **BREAKING**: Dropped support for Python 3.5.
 
 # 1.5 (2018-09-08)
 

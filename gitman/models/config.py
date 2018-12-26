@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import List
 
 import yorm
 from yorm.types import SortedList, String
@@ -25,8 +26,8 @@ class Config(yorm.ModelMixin):
         self.root = root or os.getcwd()
         self.filename = filename
         self.location = location
-        self.sources = []
-        self.sources_locked = []
+        self.sources: List[Source] = []
+        self.sources_locked: List[Source] = []
 
     def _on_post_load(self):
         for source in self.sources:
@@ -270,7 +271,7 @@ class Config(yorm.ModelMixin):
             log.info("No locked sources, defaulting to none...")
             return []
 
-        sources = []
+        sources: List[Source] = []
         if use_locked is False:
             sources = self.sources
         else:

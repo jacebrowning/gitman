@@ -61,8 +61,7 @@ poetry.lock: pyproject.toml
 .PHONY: format
 format: install
 	poetry run isort $(PACKAGES) --recursive --apply
-	# TODO: Enable after dropping Python 3.5 support
-	- poetry run black $(PACKAGES)
+	poetry run black $(PACKAGES)
 	@ echo
 
 .PHONY: check
@@ -71,8 +70,7 @@ ifdef CI
 	git diff --exit-code
 endif
 	poetry run pylint $(PACKAGES) --rcfile=.pylint.ini
-	# TODO: Enable after dropping Python 3.5 support
-	# poetry run mypy $(PACKAGES) --config-file=.mypy.ini
+	poetry run mypy $(PACKAGES) --config-file=.mypy.ini
 	poetry run pydocstyle $(PACKAGES) $(CONFIG)
 
 # TESTS #######################################################################

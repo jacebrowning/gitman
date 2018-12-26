@@ -98,15 +98,16 @@ class Source(AttributeDictionary):
                 if git.changes(
                     self.type, include_untracked=clean, display_status=False
                 ):
-                    msg = ("Skipped update due to uncommitted changes " "in {}").format(
-                        os.getcwd()
+                    common.show(
+                        f'Skipped update due to uncommitted changes in {os.getcwd()}',
+                        color='git_changes',
                     )
-                    common.show(msg, color='git_changes')
                     return
             else:
                 if git.changes(self.type, include_untracked=clean):
-                    msg = "Uncommitted changes in {}".format(os.getcwd())
-                    raise exceptions.UncommittedChanges(msg)
+                    raise exceptions.UncommittedChanges(
+                        f'Uncommitted changes in {os.getcwd()}'
+                    )
 
         # Fetch the desired revision
         if fetch or git.is_fetch_required(self.type, self.rev):

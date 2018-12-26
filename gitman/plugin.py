@@ -42,7 +42,6 @@ def main(args=None):
 
     # Options group
     group = parser.add_mutually_exclusive_group()
-    shared = dict(action='store_const', dest='command')
 
     # Update option
     group.add_argument(
@@ -50,7 +49,8 @@ def main(args=None):
         '--update',
         const='update',
         help="update dependencies to the latest versions",
-        **shared,
+        action='store_const',
+        dest='command',
     )
     parser.add_argument(
         '-a',
@@ -74,7 +74,8 @@ def main(args=None):
         '--list',
         const='list',
         help="display the current version of each dependency",
-        **shared,
+        action='store_const',
+        dest='command',
     )
 
     # Uninstall option
@@ -83,7 +84,8 @@ def main(args=None):
         '--uninstall',
         const='uninstall',
         help="delete all installed dependencies",
-        **shared,
+        action='store_const',
+        dest='command',
     )
     parser.add_argument(
         '-k',

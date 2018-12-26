@@ -5,6 +5,7 @@
 import argparse
 import logging
 import sys
+from typing import Dict, List
 
 from . import __version__, commands, common, exceptions
 
@@ -57,24 +58,22 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
         '-f',
         '--force',
         action='store_true',
-        help=("overwrite uncommitted changes " "in dependencies"),
+        help="overwrite uncommitted changes in dependencies",
     )
     options_group.add_argument(
         '-s',
         '--skip-changes',
         action='store_true',
         dest='skip_changes',
-        help=("skip dependencies with " "uncommitted changes"),
+        help="skip dependencies with uncommitted changes",
     )
-
-    shared = {'formatter_class': common.WideHelpFormatter}
 
     # Main parser
     parser = argparse.ArgumentParser(
         prog='gitman',
         description="A language-agnostic dependency manager using Git.",
         parents=[debug],
-        **shared,
+        formatter_class=common.WideHelpFormatter,
     )
     subs = parser.add_subparsers(help="", dest='command', metavar="<command>")
 
@@ -85,7 +84,7 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
         description=info.capitalize() + '.',
         help=info,
         parents=[debug],
-        **shared,
+        formatter_class=common.WideHelpFormatter,
     )
 
     # Install parser
@@ -95,7 +94,7 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
         description=info.capitalize() + '.',
         help=info,
         parents=[debug, project, depth, options],
-        **shared,
+        formatter_class=common.WideHelpFormatter,
     )
     sub.add_argument('name', nargs='*', help="list of dependencies names to install")
     sub.add_argument(
@@ -109,7 +108,7 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
         description=info.capitalize() + '.',
         help=info,
         parents=[debug, project, depth, options],
-        **shared,
+        formatter_class=common.WideHelpFormatter,
     )
     sub.add_argument('name', nargs='*', help="list of dependencies names to update")
     sub.add_argument(
@@ -135,7 +134,7 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
         description=info.capitalize() + '.',
         help=info,
         parents=[debug, project, depth],
-        **shared,
+        formatter_class=common.WideHelpFormatter,
     )
     sub.add_argument(
         '-D',
@@ -152,7 +151,7 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
         description=info.capitalize() + '.',
         help=info,
         parents=[debug, project],
-        **shared,
+        formatter_class=common.WideHelpFormatter,
     )
     sub.add_argument('name', nargs='*', help="list of dependency names to lock")
 
@@ -163,7 +162,7 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
         description=info.capitalize() + '.',
         help=info,
         parents=[debug, project],
-        **shared,
+        formatter_class=common.WideHelpFormatter,
     )
     sub.add_argument(
         '-f',
@@ -187,7 +186,7 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
         description=info.capitalize() + '.',
         help=info,
         parents=[debug, project],
-        **shared,
+        formatter_class=common.WideHelpFormatter,
     )
     sub.add_argument('name', nargs='*', help="display the path of this dependency")
     sub.add_argument(
@@ -207,7 +206,7 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
         description=info.capitalize() + '.',
         help=info,
         parents=[debug, project],
-        **shared,
+        formatter_class=common.WideHelpFormatter,
     )
 
     # Parse arguments
@@ -226,8 +225,8 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
 
 
 def _get_command(function, namespace):  # pylint: disable=too-many-statements
-    args = []
-    kwargs = {}
+    args: List = []
+    kwargs: Dict = {}
 
     if namespace.command == 'init':
         function = commands.init
