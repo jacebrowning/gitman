@@ -15,7 +15,8 @@ class WideHelpFormatter(argparse.HelpFormatter):
     """Command-line help text formatter with wider help text."""
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, max_help_position=40, **kwargs)
+        kwargs['max_help_position'] = 40
+        super().__init__(*args, **kwargs)
 
 
 class WarningFormatter(logging.Formatter):
@@ -81,8 +82,9 @@ def configure_logging(count=0):
     # Set a custom formatter
     logging.basicConfig(level=level)
     logging.captureWarnings(True)
-    formatter = WarningFormatter(default_format, verbose_format,
-                                 datefmt=settings.LOGGING_DATEFMT)
+    formatter = WarningFormatter(
+        default_format, verbose_format, datefmt=settings.LOGGING_DATEFMT
+    )
     logging.root.handlers[0].setFormatter(formatter)
     logging.getLogger('yorm').setLevel(max(level, settings.YORM_LOGGING_LEVEL))
 
@@ -165,14 +167,13 @@ def style(msg, name=None, *, _color_support=False):
         return msg
 
     if name == 'shell':
-        return msg.replace("$ ", COLORS.get(name) + "$ " + RESET)
+        return msg.replace("$ ", COLORS[name] + "$ " + RESET)
 
     color = COLORS.get(name)
     if color:
         return color + msg + RESET
 
     if msg:
-        assert color is not None, \
-            "Unknown style name requested: {!r}".format(name)
+        assert color is not None, "Unknown style name requested: {!r}".format(name)
 
     return msg

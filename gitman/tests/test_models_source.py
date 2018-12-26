@@ -14,7 +14,6 @@ def source():
 
 
 class TestSource:
-
     def test_init_defaults(self):
         """Verify a source has a default revision."""
         source = Source('git', 'http://example.com/foo/bar.git')
@@ -47,8 +46,7 @@ class TestSource:
 
     def test_repr(self, source):
         """Verify sources can be represented."""
-        assert "<source ['git'] 'repo' @ 'rev' in 'name' <- 'link'>" == \
-            repr(source)
+        assert "<source ['git'] 'repo' @ 'rev' in 'name' <- 'link'>" == repr(source)
 
     def test_repr_no_link(self, source):
         """Verify sources can be represented."""

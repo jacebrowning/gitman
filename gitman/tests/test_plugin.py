@@ -17,9 +17,14 @@ class TestMain:
         plugin.main([])
 
         assert [
-            call.install(root=None, depth=None,
-                         clean=False, fetch=True, force=False,
-                         skip_changes=False),
+            call.install(
+                root=None,
+                depth=None,
+                clean=False,
+                fetch=True,
+                force=False,
+                skip_changes=False,
+            ),
             call.install().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
@@ -31,9 +36,15 @@ class TestMain:
         plugin.main(['--update', '--clean'])
 
         assert [
-            call.update(root=None, depth=None,
-                        clean=True, force=False, recurse=False, lock=True,
-                        skip_changes=False),
+            call.update(
+                root=None,
+                depth=None,
+                clean=True,
+                force=False,
+                recurse=False,
+                lock=True,
+                skip_changes=False,
+            ),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
@@ -45,9 +56,15 @@ class TestMain:
         plugin.main(['--update', '--all'])
 
         assert [
-            call.update(root=None, depth=None,
-                        clean=False, force=False, recurse=True, lock=True,
-                        skip_changes=False),
+            call.update(
+                root=None,
+                depth=None,
+                clean=False,
+                force=False,
+                recurse=True,
+                lock=True,
+                skip_changes=False,
+            ),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
@@ -59,9 +76,15 @@ class TestMain:
         plugin.main(['--update', '--skip-lock'])
 
         assert [
-            call.update(root=None, depth=None,
-                        clean=False, force=False, recurse=False, lock=False,
-                        skip_changes=False),
+            call.update(
+                root=None,
+                depth=None,
+                clean=False,
+                force=False,
+                recurse=False,
+                lock=False,
+                skip_changes=False,
+            ),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
@@ -73,9 +96,15 @@ class TestMain:
         plugin.main(['--update', '--skip-changes'])
 
         assert [
-            call.update(root=None, depth=None,
-                        clean=False, force=False, recurse=False, lock=True,
-                        skip_changes=True),
+            call.update(
+                root=None,
+                depth=None,
+                clean=False,
+                force=False,
+                recurse=False,
+                lock=True,
+                skip_changes=True,
+            ),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 
@@ -87,8 +116,7 @@ class TestMain:
         plugin.main(['--list'])
 
         assert [
-            call.display(root=None, depth=None,
-                         allow_dirty=True),
+            call.display(root=None, depth=None, allow_dirty=True),
             call.display().__bool__(),  # command status check
         ] == mock_commands.mock_calls
 

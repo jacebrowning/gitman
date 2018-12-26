@@ -6,7 +6,6 @@ from gitman import commands
 
 
 def describe_install():
-
     def can_be_run_without_project(tmpdir):
         tmpdir.chdir()
 
@@ -14,7 +13,6 @@ def describe_install():
 
 
 def describe_update():
-
     def can_be_run_without_project(tmpdir):
         tmpdir.chdir()
 
@@ -22,7 +20,6 @@ def describe_update():
 
 
 def describe_display():
-
     def can_be_run_without_project(tmpdir):
         tmpdir.chdir()
 
@@ -30,7 +27,6 @@ def describe_display():
 
 
 def describe_lock():
-
     def can_be_run_without_project(tmpdir):
         tmpdir.chdir()
 
@@ -38,7 +34,6 @@ def describe_lock():
 
 
 def describe_delete():
-
     def can_be_run_without_project(tmpdir):
         tmpdir.chdir()
 
@@ -46,7 +41,6 @@ def describe_delete():
 
 
 def describe_show():
-
     def can_be_run_without_project(tmpdir):
         tmpdir.chdir()
 
@@ -54,7 +48,6 @@ def describe_show():
 
 
 def describe_edit():
-
     def can_be_run_without_project(tmpdir):
         tmpdir.chdir()
 

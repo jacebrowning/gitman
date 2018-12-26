@@ -1,10 +1,15 @@
-Unix: [![Build Status](https://travis-ci.org/jacebrowning/gitman.svg?branch=develop)](https://travis-ci.org/jacebrowning/gitman) Windows: [![Windows Build Status](https://img.shields.io/appveyor/ci/jacebrowning/gitman/develop.svg)](https://ci.appveyor.com/project/jacebrowning/gitman)<br>Metrics: [![Coverage Status](https://img.shields.io/coveralls/jacebrowning/gitman/develop.svg)](https://coveralls.io/r/jacebrowning/gitman) [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/jacebrowning/gitman.svg)](https://scrutinizer-ci.com/g/jacebrowning/gitman/?branch=develop)<br>Usage: [![PyPI Version](https://img.shields.io/pypi/v/GitMan.svg)](https://pypi.org/project/GitMan)
-
 # Overview
 
 GitMan is a language-agnostic dependency manager using Git. It aims to serve as a submodules replacement and provides advanced options for managing versions of nested Git repositories.
 
 ![demo](https://raw.githubusercontent.com/jacebrowning/gitman/develop/docs/demo.gif)
+
+[![Unix Build Status](https://img.shields.io/travis/jacebrowning/gitman/master.svg?label=unix)](https://travis-ci.org/jacebrowning/gitman)
+[![Windows Build Status](https://img.shields.io/appveyor/ci/jacebrowning/gitman/master.svg?label=window)](https://ci.appveyor.com/project/jacebrowning/gitman)
+[![Coverage Status](https://img.shields.io/coveralls/jacebrowning/gitman/master.svg)](https://coveralls.io/r/jacebrowning/gitman)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/jacebrowning/gitman.svg)](https://scrutinizer-ci.com/g/jacebrowning/gitman/?branch=master)
+[![PyPI Version](https://img.shields.io/pypi/v/GitMan.svg)](https://pypi.org/project/GitMan)
+[![PyPI License](https://img.shields.io/pypi/l/GitMan.svg)](https://pypi.org/project/GitMan)
 
 # Setup
 

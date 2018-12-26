@@ -22,8 +22,7 @@ def gitsvn(*args, **kwargs):
     return call('git', 'svn', *args, **kwargs)
 
 
-def clone(type, repo, path, *,
-          cache=settings.CACHE, sparse_paths=None, rev=None):
+def clone(type, repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None):
     """Clone a new Git repository."""
     log.debug("Creating a new repository...")
 
@@ -52,11 +51,13 @@ def clone(type, repo, path, *,
         git('-C', normpath, 'config', 'core.sparseCheckout', 'true')
         git('-C', normpath, 'remote', 'add', '-f', 'origin', sparse_paths_repo)
 
-        with open("%s/%s/.git/info/sparse-checkout" %
-                  (os.getcwd(), normpath), 'w') as fd:
+        with open(
+            "%s/%s/.git/info/sparse-checkout" % (os.getcwd(), normpath), 'w'
+        ) as fd:
             fd.writelines(sparse_paths)
-        with open("%s/%s/.git/objects/info/alternates" %
-                  (os.getcwd(), normpath), 'w') as fd:
+        with open(
+            "%s/%s/.git/objects/info/alternates" % (os.getcwd(), normpath), 'w'
+        ) as fd:
             fd.write("%s/objects" % sparse_paths_repo)
 
         # We use directly the revision requested here in order to respect,
@@ -145,7 +146,9 @@ def changes(type, include_untracked=False, display_status=True, _show=False):
     return status
 
 
-def update(type, repo, path, *, clean=True, fetch=False, rev=None):  # pylint: disable=redefined-outer-name,unused-argument
+def update(
+    type, repo, path, *, clean=True, fetch=False, rev=None
+):  # pylint: disable=redefined-outer-name,unused-argument
 
     if type == 'git-svn':
         # make deep clone here for simplification of sources.py
@@ -202,8 +205,7 @@ def get_hash(type, _show=False):
 
 def get_tag():
     """Get the current working tree's tag (if on a tag)."""
-    return git('describe', '--tags', '--exact-match',
-               _show=False, _ignore=True)[0]
+    return git('describe', '--tags', '--exact-match', _show=False, _ignore=True)[0]
 
 
 def is_fetch_required(type, rev):
@@ -212,9 +214,7 @@ def is_fetch_required(type, rev):
 
     assert type == 'git'
 
-    return rev not in (get_branch(),
-                       get_hash(type),
-                       get_tag())
+    return rev not in (get_branch(), get_hash(type), get_tag())
 
 
 def get_branch():
@@ -229,6 +229,7 @@ def _get_sha_from_rev(rev):
         branch = parts[0]
         date = parts[1].strip("{}")
         git('checkout', '--force', branch, _show=False)
-        rev = git('rev-list', '-n', '1', '--before={!r}'.format(date),
-                  branch, _show=False)[0]
+        rev = git(
+            'rev-list', '-n', '1', '--before={!r}'.format(date), branch, _show=False
+        )[0]
     return rev

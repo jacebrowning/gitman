@@ -10,7 +10,6 @@ from gitman.common import _Config
 
 
 class TestShowConsole:
-
     def setup_method(self, _):
         _Config.indent_level = 0
         _Config.verbosity = 0
@@ -19,19 +18,13 @@ class TestShowConsole:
     def test_show(self):
         common.show("Hello, world!", file=self.file, color=None)
 
-        assert [
-            call.write("Hello, world!"),
-            call.write("\n"),
-        ] == self.file.mock_calls
+        assert [call.write("Hello, world!"), call.write("\n")] == self.file.mock_calls
 
     def test_show_after_indent(self):
         common.indent()
         common.show("|\n", file=self.file, color=None)
 
-        assert [
-            call.write("  |\n"),
-            call.write("\n"),
-        ] == self.file.mock_calls
+        assert [call.write("  |\n"), call.write("\n")] == self.file.mock_calls
 
     def test_show_after_1_indent_2_dedent(self):
         common.indent()
@@ -39,14 +32,10 @@ class TestShowConsole:
         common.dedent()
         common.show("|\n", file=self.file, color=None)
 
-        assert [
-            call.write("|\n"),
-            call.write("\n"),
-        ] == self.file.mock_calls
+        assert [call.write("|\n"), call.write("\n")] == self.file.mock_calls
 
 
 class TestShowLog:
-
     def setup_method(self, _):
         _Config.indent_level = 0
         _Config.verbosity = 1
@@ -55,24 +44,18 @@ class TestShowLog:
     def test_show(self):
         common.show("Hello, world!", log=self.log, color=None)
 
-        assert [
-            call.info("Hello, world!"),
-        ] == self.log.mock_calls
+        assert [call.info("Hello, world!")] == self.log.mock_calls
 
     def test_show_errors(self):
         common.show("Oops", color='error', log=self.log)
 
-        expect(self.log.mock_calls) == [
-            call.error("Oops"),
-        ]
+        expect(self.log.mock_calls) == [call.error("Oops")]
 
     def test_show_after_indent(self):
         common.indent()
         common.show("|\n", log=self.log, color=None)
 
-        assert [
-            call.info("|"),
-        ] == self.log.mock_calls
+        assert [call.info("|")] == self.log.mock_calls
 
     def test_show_after_1_indent_2_dedent(self):
         common.indent()
@@ -80,13 +63,10 @@ class TestShowLog:
         common.dedent()
         common.show("|\n", log=self.log, color=None)
 
-        assert [
-            call.info("|"),
-        ] == self.log.mock_calls
+        assert [call.info("|")] == self.log.mock_calls
 
 
 class TestShowQuiet:
-
     def setup_method(self, _):
         _Config.indent_level = 0
         _Config.verbosity = -1
@@ -101,14 +81,12 @@ class TestShowQuiet:
 
 
 def describe_show():
-
     def it_requries_color_with_messages():
         with expect.raises(AssertionError):
             common.show("Hello, world!", 'foobar')
 
 
 def describe_style():
-
     def when_no_color_support():
         msg = common.style("_foo_")
 

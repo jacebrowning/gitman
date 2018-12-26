@@ -1,11 +1,12 @@
 import logging
 import os
+from typing import List
 
 import yorm
 from yorm.types import SortedList, String
 
-from . import Source
 from .. import common, shell
+from .source import Source
 
 
 log = logging.getLogger(__name__)
@@ -20,14 +21,13 @@ class Config(yorm.ModelMixin):
 
     LOG = "gitman.log"
 
-    def __init__(self, root=None,
-                 filename="gitman.yml", location="gitman_sources"):
+    def __init__(self, root=None, filename="gitman.yml", location="gitman_sources"):
         super().__init__()
         self.root = root or os.getcwd()
         self.filename = filename
         self.location = location
-        self.sources = []
-        self.sources_locked = []
+        self.sources: List[Source] = []
+        self.sources_locked: List[Source] = []
 
     def _on_post_load(self):
         for source in self.sources:
@@ -39,6 +39,7 @@ class Config(yorm.ModelMixin):
     def config_path(self):
         """Get the full path to the config file."""
         return os.path.normpath(os.path.join(self.root, self.filename))
+
     path = config_path
 
     @property
@@ -62,10 +63,17 @@ class Config(yorm.ModelMixin):
             return os.path.normpath(os.path.join(base, name))
         return base
 
-    def install_dependencies(self, *names, depth=None,
-                             update=True, recurse=False,
-                             force=False, fetch=False, clean=True,
-                             skip_changes=False):
+    def install_dependencies(
+        self,
+        *names,
+        depth=None,
+        update=True,
+        recurse=False,
+        force=False,
+        fetch=False,
+        clean=True,
+        skip_changes=False,
+    ):
         """Download or update the specified dependencies."""
         if depth == 0:
             log.info("Skipped directory: %s", self.location_path)
@@ -88,8 +96,9 @@ class Config(yorm.ModelMixin):
                 log.info("Skipped dependency: %s", source.name)
                 continue
 
-            source.update_files(force=force, fetch=fetch, clean=clean,
-                                skip_changes=skip_changes)
+            source.update_files(
+                force=force, fetch=fetch, clean=clean, skip_changes=skip_changes
+            )
             source.create_link(self.root, force=force)
             common.newline()
             count += 1
@@ -104,7 +113,7 @@ class Config(yorm.ModelMixin):
                     force=force,
                     fetch=fetch,
                     clean=clean,
-                    skip_changes=skip_changes
+                    skip_changes=skip_changes,
                 )
                 common.dedent()
 
@@ -140,8 +149,7 @@ class Config(yorm.ModelMixin):
                 if config:
                     common.indent()
                     count += config.run_scripts(
-                        depth=None if depth is None else max(0, depth - 1),
-                        force=force,
+                        depth=None if depth is None else max(0, depth - 1), force=force
                     )
                     common.dedent()
 
@@ -151,8 +159,7 @@ class Config(yorm.ModelMixin):
 
         return count
 
-    def lock_dependencies(self, *names, obey_existing=True,
-                          skip_changes=False):
+    def lock_dependencies(self, *names, obey_existing=True, skip_changes=False):
         """Lock down the immediate dependency versions."""
         sources = self._get_sources(use_locked=obey_existing).copy()
         sources_filter = list(names) if names else [s.name for s in sources]
@@ -264,7 +271,7 @@ class Config(yorm.ModelMixin):
             log.info("No locked sources, defaulting to none...")
             return []
 
-        sources = []
+        sources: List[Source] = []
         if use_locked is False:
             sources = self.sources
         else:
@@ -278,8 +285,7 @@ class Config(yorm.ModelMixin):
         extras = []
         for source in self.sources + self.sources_locked:
             if source not in sources:
-                log.info("Source %r missing from selected section",
-                         source.name)
+                log.info("Source %r missing from selected section", source.name)
                 extras.append(source)
 
         return sources + extras
