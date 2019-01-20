@@ -20,18 +20,16 @@ GitMan is a language-agnostic dependency manager using Git. It aims to serve as 
 
 ## Installation
 
-Install GitMan with pip:
+Install this tool globally:
 
-```sh
+```
 $ pip install gitman
 ```
 
-or directly from the source code:
+or add it to your [Poetry](https://poetry.eustace.io/) project:
 
-```sh
-$ git clone https://github.com/jacebrowning/gitman.git
-$ cd gitman
-$ python setup.py install
+```
+$ poetry add gitman
 ```
 
 ## Configuration
