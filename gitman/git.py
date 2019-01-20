@@ -230,6 +230,11 @@ def _get_sha_from_rev(rev):
         date = parts[1].strip("{}")
         git('checkout', '--force', branch, _show=False)
         rev = git(
-            'rev-list', '-n', '1', '--before={!r} --first-parent'.format(date), branch, _show=False
+            'rev-list',
+            '-n', '1',
+            '--before={!r}'.format(date),
+            '--first-parent',
+            branch,
+            _show=False
         )[0]
     return rev
