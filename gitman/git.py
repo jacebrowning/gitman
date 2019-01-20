@@ -231,10 +231,11 @@ def _get_sha_from_rev(rev):
         git('checkout', '--force', branch, _show=False)
         rev = git(
             'rev-list',
-            '-n', '1',
+            '-n',
+            '1',
             '--before={!r}'.format(date),
             '--first-parent',
             branch,
-            _show=False
+            _show=False,
         )[0]
     return rev
