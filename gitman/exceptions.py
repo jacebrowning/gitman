@@ -11,7 +11,7 @@ class ShellError(RuntimeError):
     def __init__(self, *args, **kwargs):
         self.program = kwargs.pop('program', None)
         self.output = kwargs.pop('output', None)
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)  # type: ignore
 
 
 class InvalidRepository(RuntimeError):
