@@ -8,7 +8,7 @@ environment:
       PYTHON_MINOR: 7
 
 cache:
-  - .venv -> Makefile
+  - .venv -> poetry.lock
 
 install:
   # Add Make and Python to the PATH
