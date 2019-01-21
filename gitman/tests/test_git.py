@@ -188,7 +188,10 @@ class TestGit:
                 "git stash",
                 "git clean --force -d -x",
                 "git checkout --force mock_branch",
-                "git rev-list -n 1 --before='2015-02-12 18:30:00' mock_branch",
+                (
+                    "git rev-list -n 1 --before='2015-02-12 18:30:00' "
+                    "--first-parent mock_branch"
+                ),
                 "git checkout --force abc123",
                 "git branch --set-upstream-to origin/abc123",
             ],
