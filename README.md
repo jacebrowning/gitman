@@ -1,4 +1,4 @@
-# Overview
+## Overview
 
 GitMan is a language-agnostic dependency manager using Git. It aims to serve as a submodules replacement and provides advanced options for managing versions of nested Git repositories.
 
@@ -11,14 +11,14 @@ GitMan is a language-agnostic dependency manager using Git. It aims to serve as 
 [![PyPI Version](https://img.shields.io/pypi/v/GitMan.svg)](https://pypi.org/project/GitMan)
 [![PyPI License](https://img.shields.io/pypi/l/GitMan.svg)](https://pypi.org/project/GitMan)
 
-# Setup
+## Setup
 
-## Requirements
+### Requirements
 
 * Python 3.6+
 * Git 2.8+ (with [stored credentials](http://gitman.readthedocs.io/en/latest/setup/git/))
 
-## Installation
+### Installation
 
 Install this tool globally:
 
@@ -32,7 +32,7 @@ or add it to your [Poetry](https://poetry.eustace.io/) project:
 $ poetry add gitman
 ```
 
-## Configuration
+### Configuration
 
 Generate a sample config file:
 
@@ -70,7 +70,7 @@ Ignore the dependency storage location:
 $ echo vendor/gitman >> .gitignore
 ```
 
-# Usage
+## Usage
 
 See the available commands:
 
@@ -78,7 +78,7 @@ See the available commands:
 $ gitman --help
 ```
 
-## Updating Dependencies
+### Updating Dependencies
 
 Get the latest versions of all dependencies:
 
@@ -102,7 +102,7 @@ where `rev` can be:
 * a branch: `master`
 * a `rev-parse` date: `'develop@{2015-06-18 10:30:59}'`
 
-## Restoring Previous Versions
+### Restoring Previous Versions
 
 Display the specific revisions that are currently installed:
 
@@ -116,7 +116,7 @@ Reinstall these specific versions at a later time:
 $ gitman install
 ```
 
-## Deleting Dependencies
+### Deleting Dependencies
 
 Remove all installed dependencies:
 
