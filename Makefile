@@ -121,13 +121,17 @@ docs: mkdocs uml ## Generate documentation and UML
 
 .PHONY: mkdocs
 mkdocs: install $(MKDOCS_INDEX)
-$(MKDOCS_INDEX): mkdocs.yml docs/*.md
+$(MKDOCS_INDEX): docs/requirements.txt mkdocs.yml docs/*.md
 	@ mkdir -p docs/about
 	@ cd docs && ln -sf ../README.md index.md
 	@ cd docs/about && ln -sf ../../CHANGELOG.md changelog.md
 	@ cd docs/about && ln -sf ../../CONTRIBUTING.md contributing.md
 	@ cd docs/about && ln -sf ../../LICENSE.md license.md
 	poetry run mkdocs build --clean --strict
+
+# Workaround: https://github.com/rtfd/readthedocs.org/issues/5090
+docs/requirements.txt: poetry.lock
+	poetry run pip freeze | grep mkdocs > $@
 
 .PHONY: uml
 uml: install docs/*.png
