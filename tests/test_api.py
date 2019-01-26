@@ -230,7 +230,6 @@ def describe_install():
             with pytest.raises(RuntimeError):
                 gitman.install(depth=1)
 
-        @pytest.mark.xfail(os.name == 'nt', reason="No symlinks on Windows")
         def it_overwrites_files_with_force(config_with_link):
             os.system("touch my_link")
 

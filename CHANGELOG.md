@@ -1,8 +1,12 @@
-# 1.6 (unreleased)
+# 1.7 (unreleased)
+
 - Added basic group support. (@daniel-brosche)
+
+# 1.6 (2019-01-26)
+
 - Added `git svn` support. (@daniel-brosche)
 - Added `$GITMAN_CACHE_DISABLE` to disable repository mirrors. (@daniel-brosche)
-- Added `--skip-changes` option to skip changed dependencies on install or update command (@daniel-brosche)
+- Added `--skip-changes` option to skip changed dependencies on install or update command. (@daniel-brosche)
 - **BREAKING**: Dropped support for Python 3.5.
 
 # 1.5 (2018-09-08)
