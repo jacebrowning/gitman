@@ -190,6 +190,8 @@ class Config(yorm.ModelMixin):
         if count:
             self.save()
 
+        common.dedent()
+
         return count
 
     def uninstall_dependencies(self):
