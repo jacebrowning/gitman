@@ -8,7 +8,6 @@ from gitman import system
 
 
 def describe_launch():
-
     @patch('platform.system', Mock(return_value="Windows"))
     @patch('gitman.system._launch_windows')
     def it_opens_files(startfile):

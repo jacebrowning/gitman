@@ -2,6 +2,7 @@ build:
   tests:
     override:
       - pylint-run --rcfile=.pylint.ini
+      - py-scrutinizer-run
   nodes:
     py35:
       environment:

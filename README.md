@@ -1,35 +1,38 @@
-Unix: [![Build Status](https://travis-ci.org/jacebrowning/gitman.svg?branch=develop)](https://travis-ci.org/jacebrowning/gitman) Windows: [![Windows Build Status](https://img.shields.io/appveyor/ci/jacebrowning/gitman/develop.svg)](https://ci.appveyor.com/project/jacebrowning/gitman)<br>Metrics: [![Coverage Status](https://img.shields.io/coveralls/jacebrowning/gitman/develop.svg)](https://coveralls.io/r/jacebrowning/gitman) [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/jacebrowning/gitman.svg)](https://scrutinizer-ci.com/g/jacebrowning/gitman/?branch=develop)<br>Usage: [![PyPI Version](https://img.shields.io/pypi/v/GitMan.svg)](https://pypi.org/project/GitMan)
-
-# Overview
+## Overview
 
 GitMan is a language-agnostic dependency manager using Git. It aims to serve as a submodules replacement and provides advanced options for managing versions of nested Git repositories.
 
 ![demo](https://raw.githubusercontent.com/jacebrowning/gitman/develop/docs/demo.gif)
 
-# Setup
+[![Unix Build Status](https://img.shields.io/travis/jacebrowning/gitman/master.svg?label=unix)](https://travis-ci.org/jacebrowning/gitman)
+[![Windows Build Status](https://img.shields.io/appveyor/ci/jacebrowning/gitman/master.svg?label=window)](https://ci.appveyor.com/project/jacebrowning/gitman)
+[![Coverage Status](https://img.shields.io/coveralls/jacebrowning/gitman/master.svg)](https://coveralls.io/r/jacebrowning/gitman)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/jacebrowning/gitman.svg)](https://scrutinizer-ci.com/g/jacebrowning/gitman/?branch=master)
+[![PyPI Version](https://img.shields.io/pypi/v/GitMan.svg)](https://pypi.org/project/GitMan)
+[![PyPI License](https://img.shields.io/pypi/l/GitMan.svg)](https://pypi.org/project/GitMan)
 
-## Requirements
+## Setup
 
-* Python 3.5+
+### Requirements
+
+* Python 3.6+
 * Git 2.8+ (with [stored credentials](http://gitman.readthedocs.io/en/latest/setup/git/))
 
-## Installation
+### Installation
 
-Install GitMan with pip:
+Install this tool globally:
 
-```sh
+```
 $ pip install gitman
 ```
 
-or directly from the source code:
+or add it to your [Poetry](https://poetry.eustace.io/) project:
 
-```sh
-$ git clone https://github.com/jacebrowning/gitman.git
-$ cd gitman
-$ python setup.py install
+```
+$ poetry add gitman
 ```
 
-## Configuration
+### Configuration
 
 Generate a sample config file:
 
@@ -67,7 +70,7 @@ Ignore the dependency storage location:
 $ echo vendor/gitman >> .gitignore
 ```
 
-# Usage
+## Usage
 
 See the available commands:
 
@@ -75,7 +78,7 @@ See the available commands:
 $ gitman --help
 ```
 
-## Updating Dependencies
+### Updating Dependencies
 
 Get the latest versions of all dependencies:
 
@@ -99,7 +102,7 @@ where `rev` can be:
 * a branch: `master`
 * a `rev-parse` date: `'develop@{2015-06-18 10:30:59}'`
 
-## Restoring Previous Versions
+### Restoring Previous Versions
 
 Display the specific revisions that are currently installed:
 
@@ -113,7 +116,7 @@ Reinstall these specific versions at a later time:
 $ gitman install
 ```
 
-## Deleting Dependencies
+### Deleting Dependencies
 
 Remove all installed dependencies:
 

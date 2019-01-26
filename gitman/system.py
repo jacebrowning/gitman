@@ -26,7 +26,8 @@ def launch(path):
 
 
 def _launch_windows(path):  # pragma: no cover (manual test)
-    os.startfile(path)  # pylint: disable=no-member
+    # pylint: disable=no-member
+    os.startfile(path)  # type: ignore
     return True
 
 

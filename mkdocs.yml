@@ -1,14 +1,17 @@
 site_name: GitMan
 site_description: A language-agnostic dependency manager using Git.
 site_author: Jace Browning
+
 repo_url: https://github.com/jacebrowning/gitman
+edit_uri: https://github.com/jacebrowning/gitman/edit/develop/docs
 
 theme: readthedocs
 
-pages:
+nav:
 - Home: index.md
 - Setup:
     - Git: setup/git.md
+    - Git SVN: setup/git-svn.md
     - Environment: setup/environment.md
 - Interfaces:
     - Command Line: interfaces/cli.md
@@ -20,6 +23,7 @@ pages:
   - Linking Feature Branches: use-cases/linked-features.md
   - Build System Integration: use-cases/build-integration.md
   - Sparse Checkouts: use-cases/sparse-checkouts.md
+  - Git SVN: use-cases/git-svn.md
 - About:
   - Release Notes: about/changelog.md
   - Contributing: about/contributing.md

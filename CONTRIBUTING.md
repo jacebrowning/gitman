@@ -1,15 +1,13 @@
-# For Contributors
+# Setup
 
-## Setup
-
-### Requirements
+## Requirements
 
 * Make:
     * Windows: http://mingw.org/download/installer
     * Mac: http://developer.apple.com/xcode
     * Linux: http://www.gnu.org/software/make
-* pipenv: http://docs.pipenv.org
-* Pandoc: http://johnmacfarlane.net/pandoc/installing.html
+* Python: `$ pyenv install`
+* Poetry: https://poetry.eustace.io/docs/#installation
 * Graphviz: http://www.graphviz.org/Download.php
 
 To confirm these system dependencies are configured correctly:
@@ -18,7 +16,7 @@ To confirm these system dependencies are configured correctly:
 $ make doctor
 ```
 
-### Installation
+## Installation
 
 Install project dependencies into a virtual environment:
 
@@ -26,25 +24,21 @@ Install project dependencies into a virtual environment:
 $ make install
 ```
 
-## Development Tasks
+# Development Tasks
 
-### Testing
+## Manual
 
-Manually run the tests:
+Run the tests:
 
 ```sh
 $ make test
 ```
 
-or keep them running on change:
+Run static analysis:
 
 ```sh
-$ make watch
+$ make check
 ```
-
-> In order to have OS X notifications, `brew install terminal-notifier`.
-
-### Documentation
 
 Build the documentation:
 
@@ -52,18 +46,17 @@ Build the documentation:
 $ make docs
 ```
 
-### Static Analysis
+## Automatic
 
-Run linters and static analyzers:
+Keep all of the above tasks running on change:
 
 ```sh
-$ make pylint
-$ make pycodestyle
-$ make pydocstyle
-$ make check  # includes all checks
+$ make watch
 ```
 
-## Continuous Integration
+> In order to have OS X notifications, `brew install terminal-notifier`.
+
+# Continuous Integration
 
 The CI server will report overall build status:
 
@@ -71,7 +64,7 @@ The CI server will report overall build status:
 $ make ci
 ```
 
-## Release Tasks
+# Release Tasks
 
 Release to PyPI:
 
