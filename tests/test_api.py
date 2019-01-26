@@ -105,6 +105,7 @@ def describe_init():
           link:
           scripts:
           -
+        groups: []
         """
         )
 
@@ -388,6 +389,7 @@ def describe_update():
           link:
           scripts:
           -
+        groups: []
         """
         )
 
@@ -425,6 +427,7 @@ def describe_update():
           link:
           scripts:
           -
+        groups: []
         """
         )
 
@@ -461,6 +464,7 @@ def describe_update():
           link:
           scripts:
           -
+        groups: []
         """
         )
 
@@ -498,6 +502,7 @@ def describe_update():
           link:
           scripts:
           -
+        groups: []
         """
         )
 
@@ -534,6 +539,7 @@ def describe_update():
           link:
           scripts:
           -
+        groups: []
         """
         )
 
@@ -596,6 +602,7 @@ def describe_lock():
           link:
           scripts:
           -
+        groups: []
         """
         ) == config.__mapper__.text
 
@@ -624,6 +631,7 @@ def describe_lock():
           link:
           scripts:
           -
+        groups: []
         """
         ) == config.__mapper__.text
 

@@ -18,7 +18,7 @@ To clone/checkout the specified dependencies, run:
 $ gitman install
 ```
 
-or filter the dependency list by directory name:
+or filter the dependency list by source or group name:
 
 ```sh
 $ gitman install <name1> <name2> <etc.>
@@ -62,7 +62,7 @@ If any of the dependencies track a branch (rather than a specific commit), the c
 $ gitman update
 ```
 
-or filter the dependency list by directory name:
+or filter the dependency list by source or group name:
 
 ```sh
 $ gitman update <name1> <name2> <etc.>
@@ -122,7 +122,7 @@ To manually record the exact version of each dependency, run:
 $ gitman lock
 ```
 
-or lock down specific dependencies:
+or lock down specific sources or groups:
 
 ```sh
 $ gitman lock <name1> <name2> <etc.>

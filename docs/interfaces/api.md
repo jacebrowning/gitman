@@ -21,7 +21,7 @@ gitman.install(*names, root=None, depth=None,
 
 with optional arguments:
 
-- `*names`: optional list of dependency directory names to filter on
+- `*names`: optional list of dependency source or group names to filter on
 - `root`: specifies the path to the root working tree
 - `depth`: number of levels of dependencies to traverse
 - `force`: indicates uncommitted changes can be overwritten and
@@ -41,7 +41,7 @@ gitman.update(*names, root=None, depth=None, recurse=False,
 
 with optional arguments:
 
-- `*names`: optional list of dependency directory names to filter on
+- `*names`: optional list of dependency source or group names to filter on
 - `root`: specifies the path to the root working tree
 - `depth`: number of levels of dependencies to traverse
 - `recurse`: indicates nested dependencies should also be updated
@@ -75,7 +75,7 @@ gitman.lock(*names, root=None)
 
 with optional arguments:
 
-- `*names`: optional list of dependency directory names to filter on
+- `*names`: optional list of dependency source or group names to filter on
 - `root`: specifies the path to the root working tree
 
 ## Uninstall
