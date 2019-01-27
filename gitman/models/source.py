@@ -1,51 +1,39 @@
 import os
+from dataclasses import dataclass, field
+from typing import List, Optional
 
 import log
-import yorm
-from yorm.types import AttributeDictionary, List, NullableString, String
 
 from .. import common, exceptions, git, shell
 
 
-@yorm.attr(name=String)
-@yorm.attr(type=String)
-@yorm.attr(repo=String)
-@yorm.attr(sparse_paths=List.of_type(String))
-@yorm.attr(rev=String)
-@yorm.attr(link=NullableString)
-@yorm.attr(scripts=List.of_type(String))
-class Source(AttributeDictionary):
+@dataclass
+class Source:
     """A dictionary of `git` and `ln` arguments."""
+
+    name: Optional[str]
+    type: str
+    repo: str
+    sparse_paths: List[str] = field(default_factory=list)
+    rev: str = 'master'
+    link: Optional[str] = None
+    scripts: List[str] = field(default_factory=list)
 
     DIRTY = '<dirty>'
     UNKNOWN = '<unknown>'
 
-    def __init__(
-        self,
-        type,
-        repo,
-        name=None,
-        rev='master',
-        link=None,
-        scripts=None,
-        sparse_paths=None,
-    ):
+    def __post_init__(self):
+        if self.name is None:
+            self.name = self._infer_name(self.repo)
 
-        super().__init__()
-        self.type = type or 'git'
-        self.repo = repo
-        self.name = self._infer_name(repo) if name is None else name
-        self.rev = rev
-        self.link = link
-        self.scripts = scripts or []
-        self.sparse_paths = sparse_paths or []
-
-        for key in ['name', 'repo', 'rev']:
-            if not self[key]:
-                msg = "'{}' required for {}".format(key, repr(self))
+        # TODO: Remove this?
+        for name in ['name', 'repo', 'rev']:
+            if not getattr(self, name):
+                msg = "'{}' required for {}".format(name, repr(self))
                 raise exceptions.InvalidConfig(msg)
 
     def _on_post_load(self):
+        # TODO: Remove this?
         self.type = self.type or 'git'
 
     def __repr__(self):
@@ -80,6 +68,7 @@ class Source(AttributeDictionary):
         log.info("Updating source files...")
 
         # Clone the repository if needed
+        assert self.name
         if not os.path.exists(self.name):
             git.clone(
                 self.type,
@@ -178,7 +167,7 @@ class Source(AttributeDictionary):
             raise self._invalid_repository
 
         # Check for scripts
-        if not self.scripts:
+        if not self.scripts or not self.scripts[0]:
             common.show("(no scripts to run)", color='shell_info')
             common.newline()
             return
@@ -201,6 +190,7 @@ class Source(AttributeDictionary):
 
     def identify(self, allow_dirty=True, allow_missing=True, skip_changes=False):
         """Get the path and current repository URL and hash."""
+        assert self.name
         if os.path.isdir(self.name):
 
             shell.cd(self.name)
@@ -257,18 +247,19 @@ class Source(AttributeDictionary):
             return None
 
         source = self.__class__(
-            self.type,
-            self.repo,
-            self.name,
-            rev,
-            self.link,
-            self.scripts,
-            self.sparse_paths,
+            type=self.type,
+            repo=self.repo,
+            name=self.name,
+            rev=rev,
+            link=self.link,
+            scripts=self.scripts,
+            sparse_paths=self.sparse_paths,
         )
         return source
 
     @property
     def _invalid_repository(self):
+        assert self.name
         path = os.path.join(os.getcwd(), self.name)
         msg = """
 

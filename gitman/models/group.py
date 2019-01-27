@@ -1,23 +1,21 @@
-import yorm
-from yorm.types import AttributeDictionary, List, String
+from dataclasses import dataclass
+from typing import List
 
 from .. import exceptions
 
 
-@yorm.attr(name=String)
-@yorm.attr(members=List.of_type(String))
-class Group(AttributeDictionary):
+@dataclass
+class Group:
     """A group with sources."""
 
-    def __init__(self, name, members):
+    name: str
+    members: List[str]
 
-        super().__init__()
-        self.name = name
-        self.members = members or []
-
-        for key in ['name', 'members']:
-            if not self[key]:
-                msg = "'{}' required for {}".format(key, repr(self))
+    def __post_init__(self):
+        # TODO: Remove this?
+        for name in ['name', 'members']:
+            if not getattr(self, name):
+                msg = "'{}' required for {}".format(name, repr(self))
                 raise exceptions.InvalidConfig(msg)
 
     def __repr__(self):

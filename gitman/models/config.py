@@ -1,33 +1,29 @@
 import os
-from typing import List
+from typing import List, Optional
 
 import log
-import yorm
-from yorm.types import SortedList, String
+from datafiles import datafile, field
 
 from .. import common, exceptions, shell
 from .group import Group
 from .source import Source
 
 
-@yorm.attr(location=String)
-@yorm.attr(sources=SortedList.of_type(Source))
-@yorm.attr(sources_locked=SortedList.of_type(Source))
-@yorm.attr(groups=SortedList.of_type(Group))
-@yorm.sync("{self.root}/{self.filename}", auto_save=False)
-class Config(yorm.ModelMixin):
+@datafile("{self.root}/{self.filename}", defaults=True, manual=True)
+class Config:
     """Specifies all dependencies for a project."""
 
-    LOG = "gitman.log"
+    root: Optional[str] = None
+    filename: str = "gitman.yml"
 
-    def __init__(self, root=None, filename="gitman.yml", location="gitman_sources"):
-        super().__init__()
-        self.root = root or os.getcwd()
-        self.filename = filename
-        self.location = location
-        self.sources: List[Source] = []
-        self.sources_locked: List[Source] = []
-        self.groups: List[Group] = []
+    location: str = "gitman_sources"
+    sources: List[Source] = field(default_factory=list)
+    sources_locked: List[Source] = field(default_factory=list)
+    groups: List[Group] = field(default_factory=list)
+
+    def __post_init__(self):
+        if self.root is None:
+            self.root = os.getcwd()
 
     def _on_post_load(self):
         for source in self.sources:
@@ -49,6 +45,7 @@ class Config(yorm.ModelMixin):
     @property
     def config_path(self):
         """Get the full path to the config file."""
+        assert self.root
         return os.path.normpath(os.path.join(self.root, self.filename))
 
     path = config_path
@@ -56,11 +53,12 @@ class Config(yorm.ModelMixin):
     @property
     def log_path(self):
         """Get the full path to the log file."""
-        return os.path.normpath(os.path.join(self.location_path, self.LOG))
+        return os.path.normpath(os.path.join(self.location_path, "gitman.log"))
 
     @property
     def location_path(self):
         """Get the full path to the dependency storage location."""
+        assert self.root
         return os.path.normpath(os.path.join(self.root, self.location))
 
     def get_path(self, name=None):
@@ -204,7 +202,7 @@ class Config(yorm.ModelMixin):
             shell.cd(self.location_path, _show=False)
 
         if count:
-            self.save()
+            self.datafile.save()
 
         common.dedent()
 
@@ -240,6 +238,7 @@ class Config(yorm.ModelMixin):
 
         for source in self.sources:
 
+            assert source.name
             yield os.path.join(self.location_path, source.name)
 
             shell.cd(self.location_path, _show=False)
