@@ -73,7 +73,7 @@ groups:
   members:
   - framework
   - trufflehog
-- name: ressources
+- name: resources
   members:
   - fontawesome
   - material-design-icons
@@ -129,7 +129,7 @@ $ gitman update framework
 * Update a dependency group
 
 ```sh
-$ gitman update ressources
+$ gitman update resources
 ```
 
 
