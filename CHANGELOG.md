@@ -1,3 +1,7 @@
+# 1.7 (unreleased)
+
+- Added basic group support. (@daniel-brosche)
+
 # 1.6 (2019-01-26)
 
 - Added `git svn` support. (@daniel-brosche)

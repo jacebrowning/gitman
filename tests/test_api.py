@@ -11,7 +11,7 @@ from freezegun import freeze_time
 
 import gitman
 from gitman import shell
-from gitman.exceptions import InvalidRepository, UncommittedChanges
+from gitman.exceptions import InvalidConfig, InvalidRepository, UncommittedChanges
 from gitman.models import Config
 
 from .utilities import strip
@@ -105,6 +105,7 @@ def describe_init():
           link:
           scripts:
           -
+        groups: []
         """
         )
 
@@ -387,6 +388,7 @@ def describe_update():
           link:
           scripts:
           -
+        groups: []
         """
         )
 
@@ -424,6 +426,7 @@ def describe_update():
           link:
           scripts:
           -
+        groups: []
         """
         )
 
@@ -460,6 +463,7 @@ def describe_update():
           link:
           scripts:
           -
+        groups: []
         """
         )
 
@@ -497,14 +501,126 @@ def describe_update():
           link:
           scripts:
           -
+        groups: []
         """
         )
 
-    def it_should_lock_all_dependencies_when_enabled(config):
-        gitman.update(depth=1, lock=True)
-
-        expect(config.__mapper__.text) == CONFIG + strip(
+    def it_should_not_allow_source_and_group_name_conflicts(config):
+        config.__mapper__.text = strip(
             """
+                location: deps
+                sources:
+                - name: gitman_1
+                  type: git
+                  repo: https://github.com/jacebrowning/gitman-demo
+                  rev: example-branch
+                - name: gitman_2
+                  type: git
+                  repo: https://github.com/jacebrowning/gitman-demo
+                  rev: example-branch
+                groups:
+                - name: gitman_1
+                  members:
+                  - gitman_1
+                  - gitman_2
+            """
+        )
+
+        with pytest.raises(InvalidConfig):
+            gitman.update(depth=1, lock=True)
+
+    def it_locks_previously_locked_dependnecies_by_group_name(config):
+        config.__mapper__.text = strip(
+            """
+        location: deps
+        sources:
+        - name: gitman_1
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          sparse_paths:
+          -
+          rev: example-branch
+          link:
+          scripts:
+          -
+        - name: gitman_2
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          sparse_paths:
+          -
+          rev: example-tag
+          link:
+          scripts:
+          -
+        - name: gitman_3
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          sparse_paths:
+          -
+          rev: example-tag
+          link:
+          scripts:
+          -
+        sources_locked:
+        - name: gitman_1
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          sparse_paths:
+          -
+          rev: (old revision)
+          link:
+          scripts:
+          -
+        - name: gitman_2
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          sparse_paths:
+          -
+          rev: (old revision)
+          link:
+          scripts:
+          -
+        groups:
+        - name: group_a
+          members:
+          - gitman_1
+          - gitman_2
+        """
+        )
+
+        gitman.update('group_a', depth=1)
+
+        expect(config.__mapper__.text) == strip(
+            """
+        location: deps
+        sources:
+        - name: gitman_1
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          sparse_paths:
+          -
+          rev: example-branch
+          link:
+          scripts:
+          -
+        - name: gitman_2
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          sparse_paths:
+          -
+          rev: example-tag
+          link:
+          scripts:
+          -
+        - name: gitman_3
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          sparse_paths:
+          -
+          rev: example-tag
+          link:
+          scripts:
+          -
         sources_locked:
         - name: gitman_1
           type: git
@@ -524,17 +640,47 @@ def describe_update():
           link:
           scripts:
           -
+        groups:
+        - name: group_a
+          members:
+          - gitman_1
+          - gitman_2
+        """
+        )
+
+    def it_merges_sources(config):
+        config.__mapper__.text = strip(
+            """
+        location: deps
+        sources:
+        - name: gitman_1
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          rev: example-branch
+          link:
+          scripts:
+          -
+        sources_locked:
+        - name: gitman_2
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          rev: example-branch
+          link:
+          scripts:
+          -
         - name: gitman_3
           type: git
           repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: 9bf18e16b956041f0267c21baad555a23237b52e
+          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
           link:
           scripts:
           -
         """
         )
+
+        expect(gitman.install(depth=1)) == True
+
+        expect(len(os.listdir(config.location))) == 3
 
 
 def describe_list():
@@ -595,6 +741,7 @@ def describe_lock():
           link:
           scripts:
           -
+        groups: []
         """
         ) == config.__mapper__.text
 
@@ -623,6 +770,7 @@ def describe_lock():
           link:
           scripts:
           -
+        groups: []
         """
         ) == config.__mapper__.text
 

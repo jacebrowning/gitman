@@ -5,7 +5,8 @@ from typing import List
 import yorm
 from yorm.types import SortedList, String
 
-from .. import common, shell
+from .. import common, exceptions, shell
+from .group import Group
 from .source import Source
 
 
@@ -15,6 +16,7 @@ log = logging.getLogger(__name__)
 @yorm.attr(location=String)
 @yorm.attr(sources=SortedList.of_type(Source))
 @yorm.attr(sources_locked=SortedList.of_type(Source))
+@yorm.attr(groups=SortedList.of_type(Group))
 @yorm.sync("{self.root}/{self.filename}", auto_save=False)
 class Config(yorm.ModelMixin):
     """Specifies all dependencies for a project."""
@@ -28,12 +30,24 @@ class Config(yorm.ModelMixin):
         self.location = location
         self.sources: List[Source] = []
         self.sources_locked: List[Source] = []
+        self.groups: List[Group] = []
 
     def _on_post_load(self):
         for source in self.sources:
             source._on_post_load()  # pylint: disable=protected-access
+
         for source in self.sources_locked:
             source._on_post_load()  # pylint: disable=protected-access
+
+        # check for conflicts between source names and group names
+        for source in self.sources:
+            for group in self.groups:
+                if source.name == group.name:
+                    msg = (
+                        "Name conflict detected between source name and "
+                        "group name \"{}\""
+                    ).format(source.name)
+                    raise exceptions.InvalidConfig(msg)
 
     @property
     def config_path(self):
@@ -80,7 +94,7 @@ class Config(yorm.ModelMixin):
             return 0
 
         sources = self._get_sources(use_locked=False if update else None)
-        sources_filter = list(names) if names else [s.name for s in sources]
+        sources_filter = self._get_sources_filter(*names, sources=sources)
 
         if not os.path.isdir(self.location_path):
             shell.mkdir(self.location_path)
@@ -133,7 +147,7 @@ class Config(yorm.ModelMixin):
             return 0
 
         sources = self._get_sources()
-        sources_filter = list(names) if names else [s.name for s in sources]
+        sources_filter = self._get_sources_filter(*names, sources=sources)
 
         shell.cd(self.location_path)
         common.newline()
@@ -162,7 +176,7 @@ class Config(yorm.ModelMixin):
     def lock_dependencies(self, *names, obey_existing=True, skip_changes=False):
         """Lock down the immediate dependency versions."""
         sources = self._get_sources(use_locked=obey_existing).copy()
-        sources_filter = list(names) if names else [s.name for s in sources]
+        sources_filter = self._get_sources_filter(*names, sources=sources)
 
         shell.cd(self.location_path)
         common.newline()
@@ -291,6 +305,21 @@ class Config(yorm.ModelMixin):
                 extras.append(source)
 
         return sources + extras
+
+    def _get_sources_filter(self, *names, sources):
+        """Get filtered sublist of sources."""
+        sources_filter = None
+
+        groups_filter = [group for group in self.groups if group.name in list(names)]
+
+        if groups_filter:
+            sources_filter = [
+                members for group in groups_filter for members in group.members
+            ]
+        else:
+            sources_filter = list(names) if names else [s.name for s in sources]
+
+        return sources_filter
 
 
 def load_config(start=None, *, search=True):

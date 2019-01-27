@@ -300,6 +300,9 @@ def _run_command(function, args, kwargs):
     except exceptions.ScriptFailure as exception:
         _show_error(exception)
         exit_message = "Run again with '--force' to ignore script errors"
+    except exceptions.InvalidConfig as exception:
+        _show_error(exception)
+        exit_message = "Adapt config and run again"
     finally:
         if exit_message:
             common.show(exit_message, color='message')

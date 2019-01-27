@@ -57,12 +57,24 @@ sources:
   repo: https://github.com/dxa4481/truffleHog
   rev: master
   scripts:
-  - chmod a+x truffleHog.py
+  - chmod a+x truffleHog/truffleHog.py
 - name: fontawesome
   repo: https://github.com/FortAwesome/Font-Awesome
   sparse_paths:
-  - fonts/*
+  - webfonts/*
   rev: master
+- name: material-design-icons
+  repo: https://github.com/google/material-design-icons.git
+  rev: master
+groups:
+- name: code
+  members:
+  - framework
+  - trufflehog
+- name: ressources
+  members:
+  - fontawesome
+  - material-design-icons
 ```
 
 Ignore the dependency storage location:
@@ -102,6 +114,22 @@ where `rev` can be:
 * a tag: `v1.0`
 * a branch: `master`
 * a `rev-parse` date: `'develop@{2015-06-18 10:30:59}'`
+
+
+Alternatively get the latest versions of certain dependencies or even dependency groups:
+
+* Update a single repository
+
+```sh
+$ gitman update framework
+```
+
+* Update a dependency group
+
+```sh
+$ gitman update ressources
+```
+
 
 ### Restoring Previous Versions
 
