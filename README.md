@@ -45,6 +45,7 @@ or manually create one (`gitman.yml` or `.gitman.yml`) in the root of your worki
 
 ```yaml
 location: vendor/gitman
+
 sources:
 - name: framework
   repo: https://github.com/kstenerud/iOS-Universal-Framework
@@ -66,6 +67,7 @@ sources:
 - name: material-design-icons
   repo: https://github.com/google/material-design-icons.git
   rev: master
+  
 groups:
 - name: code
   members:
