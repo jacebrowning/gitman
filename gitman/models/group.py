@@ -14,9 +14,6 @@ log = logging.getLogger(__name__)
 class Group(AttributeDictionary):
     """A group with sources."""
 
-    DIRTY = '<dirty>'
-    UNKNOWN = '<unknown>'
-
     def __init__(self, name, members):
 
         super().__init__()
