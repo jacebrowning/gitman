@@ -61,6 +61,13 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
         help="overwrite uncommitted changes in dependencies",
     )
     options_group.add_argument(
+        '-fi',
+        '--force-interactive',
+        action='store_true',
+        dest='force_interactive',
+        help="interactively overwrite uncommitted changes in dependencies",
+    )
+    options_group.add_argument(
         '-s',
         '--skip-changes',
         action='store_true',
@@ -238,6 +245,7 @@ def _get_command(function, namespace):  # pylint: disable=too-many-statements
             root=namespace.root,
             depth=namespace.depth,
             force=namespace.force,
+            force_interactive=namespace.force_interactive,
             clean=namespace.clean,
             skip_changes=namespace.skip_changes,
         )
@@ -294,7 +302,8 @@ def _run_command(function, args, kwargs):
     except exceptions.UncommittedChanges as exception:
         _show_error(exception)
         exit_message = (
-            "Run again with '--force' to discard changes "
+            "Run again with '--force' resp. '--force-interactive' to "
+            "discard changes "
             "or '--skip-changes' to skip this dependency"
         )
     except exceptions.ScriptFailure as exception:

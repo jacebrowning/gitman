@@ -72,7 +72,14 @@ class Source(AttributeDictionary):
     def __lt__(self, other):
         return self.name < other.name
 
-    def update_files(self, force=False, fetch=False, clean=True, skip_changes=False):
+    def update_files(
+        self,
+        force=False,
+        force_interactive=False,
+        fetch=False,
+        clean=True,
+        skip_changes=False,
+    ):
         """Ensure the source matches the specified revision."""
         log.info("Updating source files...")
 
@@ -103,6 +110,29 @@ class Source(AttributeDictionary):
                         color='git_changes',
                     )
                     return
+            elif force_interactive:
+                if git.changes(
+                    self.type, include_untracked=clean, display_status=False
+                ):
+                    common.show(
+                        f'Uncommitted changes found in {os.getcwd()}',
+                        color='git_changes',
+                    )
+
+                    while True:
+                        yn_input = str(
+                            input("Do you want to overwrite? (Y/N)[Y]: ")
+                        ).rstrip('\r\n')
+
+                        if yn_input.lower() == "y" or not yn_input:
+                            break
+
+                        if yn_input.lower() == "n":
+                            common.show(
+                                f'Skipped update in {os.getcwd()}', color='git_changes'
+                            )
+                            return
+
             else:
                 if git.changes(self.type, include_untracked=clean):
                     raise exceptions.UncommittedChanges(

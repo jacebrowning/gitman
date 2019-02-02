@@ -27,6 +27,13 @@ def main(args=None):
         help="overwrite uncommitted changes in dependencies",
     )
     parser.add_argument(
+        '-fi',
+        '--force-interactive',
+        action='store_true',
+        dest='force_interactive',
+        help="interactively overwrite uncommitted changes in dependencies",
+    )
+    parser.add_argument(
         '-s',
         '--skip-changes',
         action='store_true',

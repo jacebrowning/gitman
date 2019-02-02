@@ -62,6 +62,7 @@ def install(
     depth=None,
     force=False,
     fetch=False,
+    force_interactive=False,
     clean=True,
     skip_changes=False,
 ):
@@ -74,6 +75,8 @@ def install(
     - `depth`: number of levels of dependencies to traverse
     - `force`: indicates uncommitted changes can be overwritten and
                script errors can be ignored
+    - `force_interactive`: indicates uncommitted changes can be interactively
+    overwritten and script errors can be ignored
     - `fetch`: indicates the latest branches should always be fetched
     - `clean`: indicates untracked files should be deleted from dependencies
     - `skip_changes`: indicates dependencies with uncommitted changes
@@ -81,7 +84,7 @@ def install(
     """
     log.info(
         "%sInstalling dependencies: %s",
-        'force-' if force else '',
+        'force-' if force or force_interactive else '',
         ', '.join(names) if names else '<all>',
     )
     count = None
@@ -97,6 +100,7 @@ def install(
             update=False,
             depth=depth,
             force=force,
+            force_interactive=force_interactive,
             fetch=fetch,
             clean=clean,
             skip_changes=skip_changes,
@@ -115,6 +119,7 @@ def update(
     depth=None,
     recurse=False,
     force=False,
+    force_interactive=False,
     clean=True,
     lock=None,  # pylint: disable=redefined-outer-name
     skip_changes=False,
@@ -129,6 +134,8 @@ def update(
     - `recurse`: indicates nested dependencies should also be updated
     - `force`: indicates uncommitted changes can be overwritten and
                script errors can be ignored
+    - `force_interactive`: indicates uncommitted changes can be interactively
+    overwritten and script errors can be ignored
     - `clean`: indicates untracked files should be deleted from dependencies
     - `lock`: indicates updated dependency versions should be recorded
     - `skip_changes`: indicates dependencies with uncommitted changes
@@ -136,7 +143,7 @@ def update(
     """
     log.info(
         "%s dependencies%s: %s",
-        'Force updating' if force else 'Updating',
+        'Force updating' if force or force_interactive else 'Updating',
         ', recursively' if recurse else '',
         ', '.join(names) if names else '<all>',
     )
@@ -154,6 +161,7 @@ def update(
             depth=depth,
             recurse=recurse,
             force=force,
+            force_interactive=force_interactive,
             fetch=True,
             clean=clean,
             skip_changes=skip_changes,
@@ -163,7 +171,9 @@ def update(
             common.show("Recording installed versions...", color='message', log=False)
             common.newline()
             config.lock_dependencies(
-                *names, obey_existing=lock is None, skip_changes=skip_changes
+                *names,
+                obey_existing=lock is None,
+                skip_changes=skip_changes or force_interactive,
             )
 
         if count:
