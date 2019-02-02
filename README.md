@@ -33,6 +33,12 @@ or add it to your [Poetry](https://poetry.eustace.io/) project:
 $ poetry add gitman
 ```
 
+or build a single self contained gitman binary (using pyinstaller) that can be used locally or globally:
+
+```sh
+$ make exe
+```
+
 ### Configuration
 
 Generate a sample config file:
