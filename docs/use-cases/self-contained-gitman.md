@@ -8,7 +8,7 @@ In these scenarios, it can be helpful to use a self contained GitMan application
 It is possible to build a single self contained OS-specific GitMan binary using [PyInstaller](https://www.pyinstaller.org/) that can be used locally or globally. 
 Over this way it is possible to manage multiple different versions of GitMan on the same machine and to easily distribute the GitMan application (including all needed dependencies) by simply copying one single file.
 
-Following this approach, the GitMan.yml and the corresponding compatible version of the GitMan application can be managed side by side in the same repository to ensure 
+Following this approach, the gitman.yml and the corresponding compatible version of the GitMan application can be managed side by side in the same repository to ensure 
 reproducibility and easy distribution.
 
 
