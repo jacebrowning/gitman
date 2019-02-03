@@ -163,7 +163,7 @@ $(EXE_FILES): $(MODULES) $(PACKAGE).spec
 	poetry run pyinstaller $(PACKAGE).spec --noconfirm --clean
 
 $(PACKAGE).spec:
-	poetry run pyi-makespec $(PACKAGE)/__main__.py --onefile --windowed --additional-hooks-dir=gitman --name=$(PACKAGE)
+	poetry run pyi-makespec $(PACKAGE)/__main__.py --onefile --additional-hooks-dir=gitman --name=$(PACKAGE)
 
 # RELEASE #####################################################################
 
