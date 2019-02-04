@@ -55,13 +55,13 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
     )
     options_group = options.add_mutually_exclusive_group()
     options_group.add_argument(
-        '-f',
+        '-F',
         '--force',
         action='store_true',
         help="overwrite uncommitted changes in dependencies",
     )
     options_group.add_argument(
-        '-fi',
+        '-f',
         '--force-interactive',
         action='store_true',
         dest='force_interactive',
@@ -302,8 +302,7 @@ def _run_command(function, args, kwargs):
     except exceptions.UncommittedChanges as exception:
         _show_error(exception)
         exit_message = (
-            "Run again with '--force' resp. '--force-interactive' to "
-            "discard changes "
+            "Run again with --force/--force-interactive to discard changes "
             "or '--skip-changes' to skip this dependency"
         )
     except exceptions.ScriptFailure as exception:
