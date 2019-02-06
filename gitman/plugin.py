@@ -21,10 +21,17 @@ def main(args=None):
     # Main parser
     parser = argparse.ArgumentParser(prog=PROG, description=DESCRIPTION)
     parser.add_argument(
-        '-f',
+        '-F',
         '--force',
         action='store_true',
         help="overwrite uncommitted changes in dependencies",
+    )
+    parser.add_argument(
+        '-f',
+        '--force-interactive',
+        action='store_true',
+        dest='force_interactive',
+        help="interactively overwrite uncommitted changes in dependencies",
     )
     parser.add_argument(
         '-s',

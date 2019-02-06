@@ -1,6 +1,7 @@
 # 1.7 (unreleased)
 
 - Added basic group support. (@daniel-brosche)
+- Added `--force-interactive` option to interactively overwrite changed dependencies on install or update command. (@daniel-brosche)
 
 # 1.6 (2019-01-26)
 

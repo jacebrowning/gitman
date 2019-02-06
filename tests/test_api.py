@@ -1,5 +1,6 @@
 # pylint: disable=redefined-outer-name,unused-argument,unused-variable,singleton-comparison,expression-not-assigned,no-member
 
+import inspect
 import logging
 import os
 import shutil
@@ -645,6 +646,159 @@ def describe_update():
           members:
           - gitman_1
           - gitman_2
+        """
+        )
+
+    def it_should_not_lock_dependencies_changes_force_interactive_no(
+        config, monkeypatch
+    ):
+        def git_changes(
+            type, include_untracked=False, display_status=True, _show=False
+        ):
+            # always return True because changes won't be overwriten
+            return True
+
+        # patch the git.changes function to stimulate the
+        # force-interactive question (without changes no question)
+        monkeypatch.setattr('gitman.git.changes', git_changes)
+        # patch standard input function to return "n" for each call
+        # this is necessary to answer the force-interactive question
+        # with no to skip the force process
+        monkeypatch.setattr('builtins.input', lambda x: "n")
+
+        config.__mapper__.text = strip(
+            """
+        location: deps
+        sources:
+        - name: gitman_2
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          sparse_paths:
+          -
+          rev: example-tag
+          link:
+          scripts:
+          -
+        sources_locked:
+        - name: gitman_2
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          sparse_paths:
+          -
+          rev: (old revision)
+          link:
+          scripts:
+          -
+        groups: []
+        """
+        )
+
+        gitman.update(depth=1, force_interactive=True)
+
+        expect(config.__mapper__.text) == strip(
+            """
+        location: deps
+        sources:
+        - name: gitman_2
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          sparse_paths:
+          -
+          rev: example-tag
+          link:
+          scripts:
+          -
+        sources_locked:
+        - name: gitman_2
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          sparse_paths:
+          -
+          rev: (old revision)
+          link:
+          scripts:
+          -
+        groups: []
+        """
+        )
+
+    def it_locks_dependencies_changes_force_interactive_yes(config, monkeypatch):
+        def git_changes(
+            type, include_untracked=False, display_status=True, _show=False
+        ):
+
+            # get caller function name
+            caller = inspect.stack()[1].function
+            # if caller is update_files then we return True
+            # to simulate local changes
+            if caller == "update_files":
+                return True
+
+            # all other functions get False because after
+            # the force process there are logically no changes anymore
+            return False
+
+        # patch the git.changes function to stimulate the
+        # force-interactive question (without changes no question)
+        monkeypatch.setattr('gitman.git.changes', git_changes)
+        # patch standard input function to return "y" for each call
+        # this is necessary to answer the force-interactive question
+        # with yes todo the force process
+        monkeypatch.setattr('builtins.input', lambda x: "y")
+
+        config.__mapper__.text = strip(
+            """
+        location: deps
+        sources:
+        - name: gitman_2
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          sparse_paths:
+          -
+          rev: example-tag
+          link:
+          scripts:
+          -
+        sources_locked:
+        - name: gitman_2
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          sparse_paths:
+          -
+          rev: (old revision)
+          link:
+          scripts:
+          -
+        groups: []
+        """
+        )
+
+        gitman.update(depth=1, force_interactive=True)
+
+        expect(config.__mapper__.text) == strip(
+            """
+        location: deps
+        sources:
+        - name: gitman_2
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          sparse_paths:
+          -
+          rev: example-tag
+          link:
+          scripts:
+          -
+        sources_locked:
+        - name: gitman_2
+          type: git
+          repo: https://github.com/jacebrowning/gitman-demo
+          sparse_paths:
+          -
+          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+          link:
+          scripts:
+          -
+        groups: []
         """
         )
 

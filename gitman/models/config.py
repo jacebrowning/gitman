@@ -84,10 +84,11 @@ class Config(yorm.ModelMixin):
         update=True,
         recurse=False,
         force=False,
+        force_interactive=False,
         fetch=False,
         clean=True,
         skip_changes=False,
-    ):
+    ):  # pylint: disable=too-many-locals
         """Download or update the specified dependencies."""
         if depth == 0:
             log.info("Skipped directory: %s", self.location_path)
@@ -111,7 +112,11 @@ class Config(yorm.ModelMixin):
                 continue
 
             source.update_files(
-                force=force, fetch=fetch, clean=clean, skip_changes=skip_changes
+                force=force,
+                force_interactive=force_interactive,
+                fetch=fetch,
+                clean=clean,
+                skip_changes=skip_changes,
             )
             source.create_link(self.root, force=force)
             common.newline()
