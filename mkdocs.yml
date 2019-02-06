@@ -7,6 +7,10 @@ edit_uri: https://github.com/jacebrowning/gitman/edit/develop/docs
 
 theme: readthedocs
 
+markdown_extensions:
+  - codehilite:
+      linenums: True
+
 nav:
 - Home: index.md
 - Setup:

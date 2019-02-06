@@ -23,13 +23,13 @@ GitMan is a language-agnostic dependency manager using Git. It aims to serve as 
 
 Install this tool globally:
 
-```
+```shell
 $ pip install gitman
 ```
 
 or add it to your [Poetry](https://poetry.eustace.io/) project:
 
-```
+```shell
 $ poetry add gitman
 ```
 
@@ -37,7 +37,7 @@ $ poetry add gitman
 
 Generate a sample config file:
 
-```sh
+```shell
 $ gitman init
 ```
 
@@ -81,7 +81,7 @@ groups:
 
 Ignore the dependency storage location:
 
-```sh
+```shell
 $ echo vendor/gitman >> .gitignore
 ```
 
@@ -89,7 +89,7 @@ $ echo vendor/gitman >> .gitignore
 
 See the available commands:
 
-```sh
+```shell
 $ gitman --help
 ```
 
@@ -97,7 +97,7 @@ $ gitman --help
 
 Get the latest versions of all dependencies:
 
-```sh
+```shell
 $ gitman update
 ```
 
@@ -122,13 +122,13 @@ Alternatively get the latest versions of certain dependencies or even dependency
 
 * Update a single repository
 
-```sh
+```shell
 $ gitman update framework
 ```
 
 * Update a dependency group
 
-```sh
+```shell
 $ gitman update resources
 ```
 
@@ -137,13 +137,13 @@ $ gitman update resources
 
 Display the specific revisions that are currently installed:
 
-```sh
+```shell
 $ gitman list
 ```
 
 Reinstall these specific versions at a later time:
 
-```sh
+```shell
 $ gitman install
 ```
 
@@ -151,6 +151,6 @@ $ gitman install
 
 Remove all installed dependencies:
 
-```sh
+```shell
 $ gitman uninstall
 ```
