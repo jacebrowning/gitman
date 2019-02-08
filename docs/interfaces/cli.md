@@ -48,6 +48,12 @@ It will exit with an error if there are any uncommitted changes in dependencies 
 $ gitman install --force
 ```
 
+or to interactively overwrite changes, run:
+
+```sh
+$ gitman install --force-interactive
+```
+
 Alternatively, it is possible to skip the update process for dependencies that have uncommitted changes:
 
 ```sh
@@ -90,6 +96,12 @@ It will exit with an error if there are any uncommitted changes in dependencies 
 
 ```sh
 $ gitman update --force
+```
+
+or to interactively overwrite changes, run:
+
+```sh
+$ gitman install --force-interactive
 ```
 
 Alternatively, it is possible to skip the update process only for dependencies that have uncommitted changes:
