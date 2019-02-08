@@ -101,7 +101,7 @@ $ gitman update --force
 or to interactively overwrite changes, run:
 
 ```sh
-$ gitman install --force-interactive
+$ gitman update --force-interactive
 ```
 
 Alternatively, it is possible to skip the update process only for dependencies that have uncommitted changes:
