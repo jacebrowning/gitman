@@ -22,6 +22,18 @@ Git will exit with an error if there are any uncommitted changes in dependencies
 $ git deps --force
 ```
 
+or to interactively overwrite changes, run:
+
+```sh
+$ git deps --force-interactive
+```
+
+Alternatively, it is possible to skip the install process only for dependencies that have uncommitted changes:
+
+```sh
+$ git deps --skip-changes
+```
+
 ## Update
 
 If any of the dependencies track a branch (rather than a specific commit), the current upstream version of that branch can be checked out by running:
