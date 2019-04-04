@@ -1,6 +1,5 @@
 import logging
 import os
-import warnings
 
 import yorm
 from yorm.types import AttributeDictionary, List, NullableString, String
