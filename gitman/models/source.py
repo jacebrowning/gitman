@@ -155,10 +155,6 @@ class Source(AttributeDictionary):
 
         log.info("Creating a symbolic link...")
 
-        if os.name == 'nt':
-            warnings.warn("Symbolic links are not supported on Windows")
-            return
-
         target = os.path.join(root, self.link)
         source = os.path.relpath(os.getcwd(), os.path.dirname(target))
 
@@ -171,7 +167,7 @@ class Source(AttributeDictionary):
                 msg = "Preexisting link location at {}".format(target)
                 raise exceptions.UncommittedChanges(msg)
 
-        shell.ln(source, target)
+        os.symlink(source, target)
 
     def run_scripts(self, force=False):
         log.info("Running install scripts...")
