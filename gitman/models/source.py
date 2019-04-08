@@ -166,7 +166,7 @@ class Source(AttributeDictionary):
                 msg = "Preexisting link location at {}".format(target)
                 raise exceptions.UncommittedChanges(msg)
 
-        os.symlink(source, target)
+        shell.ln(source, target)
 
     def run_scripts(self, force=False):
         log.info("Running install scripts...")

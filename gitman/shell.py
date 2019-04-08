@@ -76,13 +76,10 @@ def cd(path, _show=True):
 
 
 def ln(source, target):
-    if os.name == 'nt':
-        log.warning("Symlinks are not supported on Windows")
-    else:
-        dirpath = os.path.dirname(target)
-        if not os.path.isdir(dirpath):
-            mkdir(dirpath)
-        call('ln', '-s', source, target)
+    dirpath = os.path.dirname(target)
+    if not os.path.isdir(dirpath):
+        mkdir(dirpath)
+    os.symlink(source, target)
 
 
 def rm(path):
