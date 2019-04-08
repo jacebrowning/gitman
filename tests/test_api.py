@@ -218,13 +218,11 @@ def describe_install():
 
             return config
 
-        @pytest.mark.xfail(os.name == 'nt', reason="No symlinks on Windows")
         def it_should_create_links(config_with_link):
             expect(gitman.install(depth=1)) == True
 
             expect(os.listdir()).contains('my_link')
 
-        @pytest.mark.xfail(os.name == 'nt', reason="No symlinks on Windows")
         def it_should_not_overwrite_files(config_with_link):
             os.system("touch my_link")
 
