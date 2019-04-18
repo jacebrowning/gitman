@@ -1,6 +1,5 @@
 import logging
 import os
-import warnings
 
 import yorm
 from yorm.types import AttributeDictionary, List, NullableString, String
@@ -154,10 +153,6 @@ class Source(AttributeDictionary):
             return
 
         log.info("Creating a symbolic link...")
-
-        if os.name == 'nt':
-            warnings.warn("Symbolic links are not supported on Windows")
-            return
 
         target = os.path.join(root, self.link)
         source = os.path.relpath(os.getcwd(), os.path.dirname(target))
