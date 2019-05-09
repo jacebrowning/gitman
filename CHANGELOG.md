@@ -2,7 +2,7 @@
 
 - Added basic group support. (@daniel-brosche)
 - Improved validity check of git repo (@mttjohnson)
-- Added rebuilding missing repo on `install` (@mttjohnson)
+- Added rebuilding missing repo on `install --force` (@mttjohnson)
 - Added `--force-interactive` option to interactively overwrite changed dependencies on install or update command. (@daniel-brosche)
 - **BREAKING**: Renamed `-f` alias to `-F` (`-f` now implies `--force-interactive`).
 

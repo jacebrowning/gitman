@@ -97,6 +97,7 @@ class Source(AttributeDictionary):
         if not git.valid():
             if force:
                 git.rebuild(self.type, self.repo)
+                fetch=True
             else:
                 raise self._invalid_repository
 
@@ -272,7 +273,11 @@ class Source(AttributeDictionary):
     @property
     def _invalid_repository(self):
         path = os.path.join(os.getcwd(), self.name)
-        msg = "Not a valid repository: {}".format(path)
+        msg = """
+            
+            Not a valid repository: {}
+            During install you can rebuild a repo with a missing .git directory using the --force option
+            """.format(path)
         return exceptions.InvalidRepository(msg)
 
     @staticmethod

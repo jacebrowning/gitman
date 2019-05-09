@@ -114,15 +114,15 @@ def valid():
     log.debug("Checking for a valid git top level...")
     gittoplevel = git('rev-parse', '--show-toplevel', _show=False)
     currentdir = pwd(_show=False)
-    if gittoplevel == currentdir:
+    if gittoplevel[0] == currentdir:
         return True
     else:
+        log.debug(f'git top level: {gittoplevel[0]} != current working directory: {currentdir}')
         return False
 
 
 def rebuild(type, repo):  # pylint: disable=unused-argument
     """Rebuild a missing repo .git directory"""
-    log.debug("Rebuilding mising git repo...")
 
     if type == 'git-svn':
         # unkown support
@@ -130,8 +130,10 @@ def rebuild(type, repo):  # pylint: disable=unused-argument
 
     assert type == 'git'
 
-    git('init')
-    git('remote', 'add', 'origin', repo)
+    common.show("Rebuilding mising git repo...", color='message')
+    git('init', _show=True)
+    git('remote', 'add', 'origin', repo, _show=True)
+    common.show("Rebuilt git repo...", color='message')
 
 
 def changes(type, include_untracked=False, display_status=True, _show=False):
