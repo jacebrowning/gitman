@@ -75,6 +75,15 @@ def cd(path, _show=True):
     os.chdir(path)
 
 
+def pwd(_show=True):
+    cwd = os.getcwd()
+    if os.name == 'nt':
+        show('cwd', '/D', cwd, stdout=_show)
+    else:
+        show('cwd', cwd, stdout=_show)
+    return cwd
+
+
 def ln(source, target):
     dirpath = os.path.dirname(target)
     if not os.path.isdir(dirpath):

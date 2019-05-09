@@ -8,7 +8,7 @@ from contextlib import suppress
 
 from . import common, settings
 from .exceptions import ShellError
-from .shell import call
+from .shell import call, pwd
 
 
 log = logging.getLogger(__name__)
@@ -101,15 +101,37 @@ def fetch(type, repo, path, rev=None):  # pylint: disable=unused-argument
 
 
 def valid():
-    """Confirm the current directory is a valid working tree."""
+    """Confirm the current directory is a valid working tree.
+    Ensure current directory is is the toplevel directory.
+    """
     log.debug("Checking for a valid working tree...")
 
     try:
         git('rev-parse', '--is-inside-work-tree', _show=False)
     except ShellError:
         return False
-    else:
+
+    log.debug("Checking for a valid git top level...")
+    gittoplevel = git('rev-parse', '--show-toplevel', _show=False)
+    currentdir = pwd(_show=False)
+    if gittoplevel == currentdir:
         return True
+    else:
+        return False
+
+
+def rebuild(type, repo):  # pylint: disable=unused-argument
+    """Rebuild a missing repo .git directory"""
+    log.debug("Rebuilding mising git repo...")
+
+    if type == 'git-svn':
+        # unkown support
+        return
+
+    assert type == 'git'
+
+    git('init')
+    git('remote', 'add', 'origin', repo)
 
 
 def changes(type, include_untracked=False, display_status=True, _show=False):

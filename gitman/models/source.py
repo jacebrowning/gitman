@@ -95,7 +95,10 @@ class Source(AttributeDictionary):
         # Enter the working tree
         shell.cd(self.name)
         if not git.valid():
-            raise self._invalid_repository
+            if force:
+                git.rebuild(self.type, self.repo)
+            else:
+                raise self._invalid_repository
 
         # Check for uncommitted changes
         if not force:
