@@ -53,6 +53,17 @@ class TestPrograms:
         mock_chdir.assert_called_once_with('mock/dirpath')
         check_calls(mock_call, [])
 
+    @patch('os.getcwd', Mock(return_value='mock/dirpath'))
+    @patch('os.chdir')
+    def test_pwd(self, mock_chdir, mock_call):
+        """Verify the commands to get current working directory."""
+        shell.cd('mock/dirpath')
+        mock_chdir.assert_called_once_with('mock/dirpath')
+        check_calls(mock_call, [])
+
+        cwd = shell.pwd()
+        expect(cwd) == 'mock/dirpath'
+
     @patch('os.path.isdir', Mock(return_value=True))
     @patch('os.symlink')
     def test_ln(self, mock_symlink, mock_call):

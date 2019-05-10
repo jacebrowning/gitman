@@ -102,8 +102,11 @@ def fetch(type, repo, path, rev=None):  # pylint: disable=unused-argument
 
 def valid():
     """Confirm the current directory is a valid working tree.
-    Ensure current directory is is the toplevel directory.
+
+    Checking both the git working tree exists and that the top leve
+    directory path matches the current directory path.
     """
+
     log.debug("Checking for a valid working tree...")
 
     try:
@@ -114,15 +117,22 @@ def valid():
     log.debug("Checking for a valid git top level...")
     gittoplevel = git('rev-parse', '--show-toplevel', _show=False)
     currentdir = pwd(_show=False)
+
+    status = False
     if gittoplevel[0] == currentdir:
-        return True
+        status = True
     else:
-        log.debug(f'git top level: {gittoplevel[0]} != current working directory: {currentdir}')
-        return False
+        log.debug(
+            "git top level: %s != current working directory: %s",
+            gittoplevel[0],
+            currentdir,
+        )
+        status = False
+    return status
 
 
 def rebuild(type, repo):  # pylint: disable=unused-argument
-    """Rebuild a missing repo .git directory"""
+    """Rebuild a missing repo .git directory."""
 
     if type == 'git-svn':
         # unkown support
