@@ -72,6 +72,76 @@ class TestSource:
 
         assert sources == sorted(sources)
 
+    @patch('os.path.exists', Mock(return_value=False))
+    @patch('gitman.shell.cd', Mock(return_value=True))
+    @patch('gitman.git.valid', Mock(return_value=True))
+    @patch('gitman.git.changes', Mock(return_value=False))
+    @patch('gitman.git.update')
+    @patch('gitman.git.fetch')
+    @patch('gitman.git.is_fetch_required')
+    @patch('gitman.git.clone')
+    def test_update_files(
+        self, mock_clone, mock_is_fetch_required, mock_fetch, mock_update
+    ):
+        """Verify update_files when path does not exist"""
+        source = Source('git', 'repo', 'name', rev='rev', link='link')
+        source.update_files()
+
+        mock_clone.assert_called_once_with(
+            'git', 'repo', 'name', rev='rev', sparse_paths=[]
+        )
+        mock_is_fetch_required.assert_called_once_with('git', 'rev')
+        mock_fetch.assert_called_once_with('git', 'repo', 'name', rev='rev')
+        mock_update.assert_called_once_with(
+            'git', 'repo', 'name', clean=True, fetch=False, rev='rev'
+        )
+
+    @patch('os.path.exists', Mock(return_value=True))
+    @patch('gitman.shell.cd', Mock(return_value=True))
+    @patch('gitman.git.valid', Mock(return_value=False))
+    @patch('gitman.git.changes', Mock(return_value=False))
+    @patch('gitman.git.update')
+    @patch('gitman.git.fetch')
+    @patch('gitman.git.is_fetch_required')
+    @patch('gitman.git.clone')
+    def test_update_files_invalid_repo(
+        self, mock_clone, mock_is_fetch_required, mock_fetch, mock_update
+    ):
+        """Verify update_files throws exception on invalid repo when not forced"""
+        source = Source('git', 'repo', 'name', rev='rev', link='link')
+
+        with pytest.raises(Exception):
+            source.update_files()
+
+        mock_clone.assert_not_called()
+        mock_is_fetch_required.assert_not_called()
+        mock_fetch.assert_not_called()
+        mock_update.assert_not_called()
+
+    @patch('os.path.exists', Mock(return_value=True))
+    @patch('gitman.shell.cd', Mock(return_value=True))
+    @patch('gitman.git.valid', Mock(return_value=False))
+    @patch('gitman.git.changes', Mock(return_value=False))
+    @patch('gitman.git.update')
+    @patch('gitman.git.fetch')
+    @patch('gitman.git.is_fetch_required')
+    @patch('gitman.git.rebuild')
+    @patch('gitman.git.clone')
+    def test_update_files_rebuild_git(
+        self, mock_clone, mock_rebuild, mock_is_fetch_required, mock_fetch, mock_update
+    ):
+        """Verify update_files rebuilds when invalid repo and force is passed"""
+        source = Source('git', 'repo', 'name', rev='rev', link='link')
+        source.update_files(force=True)
+
+        mock_clone.assert_not_called()
+        mock_rebuild.assert_called_once_with('git', 'repo')
+        mock_is_fetch_required.assert_not_called()
+        mock_fetch.assert_called_once_with('git', 'repo', 'name', rev='rev')
+        mock_update.assert_called_once_with(
+            'git', 'repo', 'name', clean=True, fetch=True, rev='rev'
+        )
+
     def test_identify_missing(self, source, tmpdir):
         """Verify a missing source identifies as unknown."""
         tmpdir.chdir()

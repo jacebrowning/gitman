@@ -135,7 +135,7 @@ def rebuild(type, repo):  # pylint: disable=unused-argument
     """Rebuild a missing repo .git directory."""
 
     if type == 'git-svn':
-        # unkown support
+        # ignore rebuild in case of git-svn
         return
 
     assert type == 'git'

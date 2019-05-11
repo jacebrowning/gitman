@@ -54,15 +54,13 @@ class TestPrograms:
         check_calls(mock_call, [])
 
     @patch('os.getcwd', Mock(return_value='mock/dirpath'))
-    @patch('os.chdir')
-    def test_pwd(self, mock_chdir, mock_call):
+    @patch('gitman.shell.show')
+    def test_pwd(self, mock_show, mock_call):
         """Verify the commands to get current working directory."""
-        shell.cd('mock/dirpath')
-        mock_chdir.assert_called_once_with('mock/dirpath')
+        result = shell.pwd()
+        mock_show.assert_called_once_with('cwd', 'mock/dirpath', stdout=True)
         check_calls(mock_call, [])
-
-        cwd = shell.pwd()
-        expect(cwd) == 'mock/dirpath'
+        assert 'mock/dirpath' == result
 
     @patch('os.path.isdir', Mock(return_value=True))
     @patch('os.symlink')

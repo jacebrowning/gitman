@@ -77,10 +77,7 @@ def cd(path, _show=True):
 
 def pwd(_show=True):
     cwd = os.getcwd()
-    if os.name == 'nt':
-        show('cwd', '/D', cwd, stdout=_show)
-    else:
-        show('cwd', cwd, stdout=_show)
+    show('cwd', cwd, stdout=_show)
     return cwd
 
 
