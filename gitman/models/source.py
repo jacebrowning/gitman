@@ -95,7 +95,11 @@ class Source(AttributeDictionary):
         # Enter the working tree
         shell.cd(self.name)
         if not git.valid():
-            raise self._invalid_repository
+            if force:
+                git.rebuild(self.type, self.repo)
+                fetch = True
+            else:
+                raise self._invalid_repository
 
         # Check for uncommitted changes
         if not force:
@@ -269,7 +273,13 @@ class Source(AttributeDictionary):
     @property
     def _invalid_repository(self):
         path = os.path.join(os.getcwd(), self.name)
-        msg = "Not a valid repository: {}".format(path)
+        msg = """
+            
+            Not a valid repository: {}
+            During install you can rebuild a repo with a missing .git directory using the --force option
+            """.format(
+            path
+        )
         return exceptions.InvalidRepository(msg)
 
     @staticmethod
