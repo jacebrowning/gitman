@@ -1,4 +1,4 @@
-# 1.7 (unreleased)
+# 1.7 (2019-08-07)
 
 - Added basic group support. (@daniel-brosche)
 - Improved validity check of git repo (@mttjohnson)
