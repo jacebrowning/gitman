@@ -77,3 +77,12 @@ sources_locked:
   link:
   scripts:
   -
+groups:
+- name: group_a
+  members:
+  - gitman_1
+  - gitman_4
+- name: group_b
+  members:
+  - gitman 2
+  - gitman_3

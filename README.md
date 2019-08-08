@@ -22,13 +22,13 @@ GitMan is a language-agnostic dependency manager using Git. It aims to serve as 
 
 Install this tool globally:
 
-```
+```shell
 $ pip install gitman
 ```
 
 or add it to your [Poetry](https://poetry.eustace.io/) project:
 
-```
+```shell
 $ poetry add gitman
 ```
 
@@ -36,7 +36,7 @@ $ poetry add gitman
 
 Generate a sample config file:
 
-```sh
+```shell
 $ gitman init
 ```
 
@@ -44,6 +44,7 @@ or manually create one (`gitman.yml` or `.gitman.yml`) in the root of your worki
 
 ```yaml
 location: vendor/gitman
+
 sources:
 - name: framework
   repo: https://github.com/kstenerud/iOS-Universal-Framework
@@ -56,17 +57,30 @@ sources:
   repo: https://github.com/dxa4481/truffleHog
   rev: master
   scripts:
-  - chmod a+x truffleHog.py
+  - chmod a+x truffleHog/truffleHog.py
 - name: fontawesome
   repo: https://github.com/FortAwesome/Font-Awesome
   sparse_paths:
-  - fonts/*
+  - webfonts/*
   rev: master
+- name: material-design-icons
+  repo: https://github.com/google/material-design-icons.git
+  rev: master
+  
+groups:
+- name: code
+  members:
+  - framework
+  - trufflehog
+- name: resources
+  members:
+  - fontawesome
+  - material-design-icons
 ```
 
 Ignore the dependency storage location:
 
-```sh
+```shell
 $ echo vendor/gitman >> .gitignore
 ```
 
@@ -74,7 +88,7 @@ $ echo vendor/gitman >> .gitignore
 
 See the available commands:
 
-```sh
+```shell
 $ gitman --help
 ```
 
@@ -82,7 +96,7 @@ $ gitman --help
 
 Get the latest versions of all dependencies:
 
-```sh
+```shell
 $ gitman update
 ```
 
@@ -102,17 +116,33 @@ where `rev` can be:
 * a branch: `master`
 * a `rev-parse` date: `'develop@{2015-06-18 10:30:59}'`
 
+
+Alternatively get the latest versions of certain dependencies or even dependency groups:
+
+* Update a single repository
+
+```shell
+$ gitman update framework
+```
+
+* Update a dependency group
+
+```shell
+$ gitman update resources
+```
+
+
 ### Restoring Previous Versions
 
 Display the specific revisions that are currently installed:
 
-```sh
+```shell
 $ gitman list
 ```
 
 Reinstall these specific versions at a later time:
 
-```sh
+```shell
 $ gitman install
 ```
 
@@ -120,6 +150,6 @@ $ gitman install
 
 Remove all installed dependencies:
 
-```sh
+```shell
 $ gitman uninstall
 ```

@@ -1,7 +1,7 @@
 [tool.poetry]
 
 name = "gitman"
-version = "1.6"
+version = "1.7"
 description = "A language-agnostic dependency manager using Git."
 
 license = "MIT"
@@ -56,7 +56,7 @@ pydocstyle = "*"
 pylint = "^2.0"
 
 # Testing
-pytest = "^3.3"
+pytest = "=4.2.0"
 pytest-cov = "*"
 pytest-describe = "*"
 pytest-expecter = "*"

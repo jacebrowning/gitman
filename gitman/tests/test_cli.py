@@ -73,6 +73,7 @@ class TestInstall:
             root=None,
             depth=5,
             force=False,
+            force_interactive=False,
             fetch=False,
             clean=False,
             skip_changes=False,
@@ -87,6 +88,7 @@ class TestInstall:
             root='mock/path/to/root',
             depth=5,
             force=False,
+            force_interactive=False,
             fetch=False,
             clean=False,
             skip_changes=False,
@@ -98,7 +100,13 @@ class TestInstall:
         cli.main(['install', '--force'])
 
         mock_install.assert_called_once_with(
-            root=None, depth=5, force=True, fetch=False, clean=False, skip_changes=False
+            root=None,
+            depth=5,
+            force=True,
+            force_interactive=False,
+            fetch=False,
+            clean=False,
+            skip_changes=False,
         )
 
     @patch('gitman.commands.install')
@@ -107,7 +115,13 @@ class TestInstall:
         cli.main(['install', '--fetch'])
 
         mock_install.assert_called_once_with(
-            root=None, depth=5, force=False, fetch=True, clean=False, skip_changes=False
+            root=None,
+            depth=5,
+            force=False,
+            force_interactive=False,
+            fetch=True,
+            clean=False,
+            skip_changes=False,
         )
 
     @patch('gitman.commands.install')
@@ -116,7 +130,13 @@ class TestInstall:
         cli.main(['install', '--clean'])
 
         mock_install.assert_called_once_with(
-            root=None, depth=5, force=False, fetch=False, clean=True, skip_changes=False
+            root=None,
+            depth=5,
+            force=False,
+            force_interactive=False,
+            fetch=False,
+            clean=True,
+            skip_changes=False,
         )
 
     @patch('gitman.commands.install')
@@ -130,6 +150,7 @@ class TestInstall:
             root=None,
             depth=5,
             force=False,
+            force_interactive=False,
             fetch=False,
             clean=False,
             skip_changes=False,
@@ -144,6 +165,7 @@ class TestInstall:
             root=None,
             depth=10,
             force=False,
+            force_interactive=False,
             fetch=False,
             clean=False,
             skip_changes=False,
@@ -170,6 +192,7 @@ class TestUpdate:
             root=None,
             depth=5,
             force=False,
+            force_interactive=False,
             clean=False,
             recurse=False,
             lock=None,
@@ -185,6 +208,7 @@ class TestUpdate:
             root=None,
             depth=5,
             force=False,
+            force_interactive=False,
             clean=False,
             recurse=True,
             lock=None,
@@ -200,6 +224,7 @@ class TestUpdate:
             root=None,
             depth=5,
             force=False,
+            force_interactive=False,
             clean=False,
             recurse=False,
             lock=False,
@@ -215,10 +240,43 @@ class TestUpdate:
             root=None,
             depth=5,
             force=False,
+            force_interactive=False,
             clean=False,
             recurse=False,
             lock=None,
             skip_changes=True,
+        )
+
+    @patch('gitman.commands.update')
+    def test_update_force(self, mock_update):
+        """Verify the 'update' command with force option."""
+        cli.main(['update', '--force'])
+
+        mock_update.assert_called_once_with(
+            root=None,
+            depth=5,
+            force=True,
+            force_interactive=False,
+            clean=False,
+            recurse=False,
+            lock=None,
+            skip_changes=False,
+        )
+
+    @patch('gitman.commands.update')
+    def test_update_force_interactive(self, mock_update):
+        """Verify the 'update' command with force-interactive option."""
+        cli.main(['update', '--force-interactive'])
+
+        mock_update.assert_called_once_with(
+            root=None,
+            depth=5,
+            force=False,
+            force_interactive=True,
+            clean=False,
+            recurse=False,
+            lock=None,
+            skip_changes=False,
         )
 
     @patch('gitman.commands.update')
@@ -232,6 +290,7 @@ class TestUpdate:
             root=None,
             depth=5,
             force=False,
+            force_interactive=False,
             clean=False,
             recurse=False,
             lock=None,
@@ -247,6 +306,7 @@ class TestUpdate:
             root=None,
             depth=10,
             force=False,
+            force_interactive=False,
             clean=False,
             recurse=False,
             lock=None,

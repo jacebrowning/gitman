@@ -99,10 +99,38 @@ class TestGit:
             ],
         )
 
-    def test_valid(self, mock_call):
-        """Verify the commands to check for a working tree."""
-        git.valid()
-        check_calls(mock_call, ["git rev-parse --is-inside-work-tree"])
+    @patch('os.getcwd', Mock(return_value='mock/outside_repo/nested_repo'))
+    def test_valid(self, _):
+        """Verify the commands to check for a working tree and is toplevel of repo."""
+        with patch(
+            'gitman.git.call', Mock(return_value=['mock/outside_repo/nested_repo'])
+        ):
+            assert True is git.valid()
+
+    @patch('os.getcwd', Mock(return_value='mock/outside_repo/nested_repo'))
+    def test_valid_false_outside_work_tree(self, _):
+        """Verify a shell error indicating it is not in a working tree returns false."""
+        with patch('gitman.git.call', Mock(side_effect=ShellError)):
+            assert False is git.valid()
+
+    @patch('os.getcwd', Mock(return_value='mock/outside_repo/nested_repo'))
+    def test_valid_false_current_not_toplevel(self, _):
+        """Verify git toplevel matches current directory"""
+        with patch('gitman.git.call', Mock(return_value=['mock/outside_repo'])):
+            assert False is git.valid()
+
+    def test_rebuild(self, mock_call):
+        """Verify the commands to rebuild a Git repository"""
+        git.rebuild('git', 'master@{2015-02-12 18:30:00}')
+        check_calls(
+            mock_call,
+            ["git init", "git remote add origin master@{2015-02-12 18:30:00}"],
+        )
+
+    def test_rebuild_gitsvn(self, mock_call):
+        """Verify the rebuild is ignored with git-svn type"""
+        git.rebuild('git-svn', 'master@{2015-02-12 18:30:00}')
+        check_calls(mock_call, [])
 
     def test_changes(self, mock_call):
         """Verify the commands to check for uncommitted changes."""

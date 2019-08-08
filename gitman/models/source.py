@@ -1,6 +1,5 @@
 import logging
 import os
-import warnings
 
 import yorm
 from yorm.types import AttributeDictionary, List, NullableString, String
@@ -72,7 +71,14 @@ class Source(AttributeDictionary):
     def __lt__(self, other):
         return self.name < other.name
 
-    def update_files(self, force=False, fetch=False, clean=True, skip_changes=False):
+    def update_files(
+        self,
+        force=False,
+        force_interactive=False,
+        fetch=False,
+        clean=True,
+        skip_changes=False,
+    ):
         """Ensure the source matches the specified revision."""
         log.info("Updating source files...")
 
@@ -89,7 +95,11 @@ class Source(AttributeDictionary):
         # Enter the working tree
         shell.cd(self.name)
         if not git.valid():
-            raise self._invalid_repository
+            if force:
+                git.rebuild(self.type, self.repo)
+                fetch = True
+            else:
+                raise self._invalid_repository
 
         # Check for uncommitted changes
         if not force:
@@ -103,6 +113,29 @@ class Source(AttributeDictionary):
                         color='git_changes',
                     )
                     return
+            elif force_interactive:
+                if git.changes(
+                    self.type, include_untracked=clean, display_status=False
+                ):
+                    common.show(
+                        f'Uncommitted changes found in {os.getcwd()}',
+                        color='git_changes',
+                    )
+
+                    while True:
+                        yn_input = str(
+                            input("Do you want to overwrite? (Y/N)[Y]: ")
+                        ).rstrip('\r\n')
+
+                        if yn_input.lower() == "y" or not yn_input:
+                            break
+
+                        if yn_input.lower() == "n":
+                            common.show(
+                                f'Skipped update in {os.getcwd()}', color='git_changes'
+                            )
+                            return
+
             else:
                 if git.changes(self.type, include_untracked=clean):
                     raise exceptions.UncommittedChanges(
@@ -124,10 +157,6 @@ class Source(AttributeDictionary):
             return
 
         log.info("Creating a symbolic link...")
-
-        if os.name == 'nt':
-            warnings.warn("Symbolic links are not supported on Windows")
-            return
 
         target = os.path.join(root, self.link)
         source = os.path.relpath(os.getcwd(), os.path.dirname(target))
@@ -244,7 +273,13 @@ class Source(AttributeDictionary):
     @property
     def _invalid_repository(self):
         path = os.path.join(os.getcwd(), self.name)
-        msg = "Not a valid repository: {}".format(path)
+        msg = """
+            
+            Not a valid repository: {}
+            During install you can rebuild a repo with a missing .git directory using the --force option
+            """.format(
+            path
+        )
         return exceptions.InvalidRepository(msg)
 
     @staticmethod

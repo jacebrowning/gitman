@@ -55,10 +55,17 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
     )
     options_group = options.add_mutually_exclusive_group()
     options_group.add_argument(
-        '-f',
+        '-F',
         '--force',
         action='store_true',
         help="overwrite uncommitted changes in dependencies",
+    )
+    options_group.add_argument(
+        '-f',
+        '--force-interactive',
+        action='store_true',
+        dest='force_interactive',
+        help="interactively overwrite uncommitted changes in dependencies",
     )
     options_group.add_argument(
         '-s',
@@ -238,6 +245,7 @@ def _get_command(function, namespace):  # pylint: disable=too-many-statements
             root=namespace.root,
             depth=namespace.depth,
             force=namespace.force,
+            force_interactive=namespace.force_interactive,
             clean=namespace.clean,
             skip_changes=namespace.skip_changes,
         )
@@ -294,12 +302,15 @@ def _run_command(function, args, kwargs):
     except exceptions.UncommittedChanges as exception:
         _show_error(exception)
         exit_message = (
-            "Run again with '--force' to discard changes "
+            "Run again with --force/--force-interactive to discard changes "
             "or '--skip-changes' to skip this dependency"
         )
     except exceptions.ScriptFailure as exception:
         _show_error(exception)
         exit_message = "Run again with '--force' to ignore script errors"
+    except exceptions.InvalidConfig as exception:
+        _show_error(exception)
+        exit_message = "Adapt config and run again"
     finally:
         if exit_message:
             common.show(exit_message, color='message')

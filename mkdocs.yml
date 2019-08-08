@@ -7,6 +7,10 @@ edit_uri: https://github.com/jacebrowning/gitman/edit/develop/docs
 
 theme: readthedocs
 
+markdown_extensions:
+  - codehilite:
+      linenums: True
+
 nav:
 - Home: index.md
 - Setup:
@@ -22,6 +26,7 @@ nav:
   - Tracking Branches: use-cases/branch-tracking.md
   - Linking Feature Branches: use-cases/linked-features.md
   - Build System Integration: use-cases/build-integration.md
+  - Self contained GitMan: use-cases/self-contained-gitman.md
   - Sparse Checkouts: use-cases/sparse-checkouts.md
   - Git SVN: use-cases/git-svn.md
 - About:

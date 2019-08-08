@@ -131,7 +131,7 @@ $(MKDOCS_INDEX): docs/requirements.txt mkdocs.yml docs/*.md
 
 # Workaround: https://github.com/rtfd/readthedocs.org/issues/5090
 docs/requirements.txt: poetry.lock
-	poetry run pip freeze | grep mkdocs > $@
+	@ poetry run pip freeze  -qqq | grep mkdocs > $@
 
 .PHONY: uml
 uml: install docs/*.png
@@ -148,7 +148,7 @@ mkdocs-live: mkdocs
 # BUILD #######################################################################
 
 DIST_FILES := dist/*.tar.gz dist/*.whl
-EXE_FILES := dist/$(PROJECT).*
+EXE_FILES := dist/$(PACKAGE).*
 
 .PHONY: dist
 dist: install $(DIST_FILES)
@@ -158,12 +158,12 @@ $(DIST_FILES): $(MODULES) pyproject.toml
 
 .PHONY: exe
 exe: install $(EXE_FILES)
-$(EXE_FILES): $(MODULES) $(PROJECT).spec
+$(EXE_FILES): $(MODULES) $(PACKAGE).spec
 	# For framework/shared support: https://github.com/yyuu/pyenv/wiki
-	poetry run pyinstaller $(PROJECT).spec --noconfirm --clean
+	poetry run pyinstaller $(PACKAGE).spec --noconfirm --clean
 
-$(PROJECT).spec:
-	poetry run pyi-makespec $(PACKAGE)/__main__.py --onefile --windowed --name=$(PROJECT)
+$(PACKAGE).spec:
+	poetry run pyi-makespec $(PACKAGE)/__main__.py --onefile --additional-hooks-dir=gitman --name=$(PACKAGE)
 
 # RELEASE #####################################################################
 

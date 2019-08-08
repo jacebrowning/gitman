@@ -75,14 +75,19 @@ def cd(path, _show=True):
     os.chdir(path)
 
 
-def ln(source, target):
+def pwd(_show=True):
+    cwd = os.getcwd()
     if os.name == 'nt':
-        log.warning("Symlinks are not supported on Windows")
-    else:
-        dirpath = os.path.dirname(target)
-        if not os.path.isdir(dirpath):
-            mkdir(dirpath)
-        call('ln', '-s', source, target)
+        cwd = cwd.replace(os.sep, '/')
+    show('cwd', cwd, stdout=_show)
+    return cwd
+
+
+def ln(source, target):
+    dirpath = os.path.dirname(target)
+    if not os.path.isdir(dirpath):
+        mkdir(dirpath)
+    os.symlink(source, target)
 
 
 def rm(path):

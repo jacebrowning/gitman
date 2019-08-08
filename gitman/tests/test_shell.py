@@ -53,24 +53,34 @@ class TestPrograms:
         mock_chdir.assert_called_once_with('mock/dirpath')
         check_calls(mock_call, [])
 
+    @patch('os.getcwd', Mock(return_value='mock/dirpath'))
+    @patch('gitman.shell.show')
+    def test_pwd(self, mock_show, mock_call):
+        """Verify the commands to get current working directory."""
+        result = shell.pwd()
+        mock_show.assert_called_once_with('cwd', 'mock/dirpath', stdout=True)
+        check_calls(mock_call, [])
+        assert 'mock/dirpath' == result
+
     @patch('os.path.isdir', Mock(return_value=True))
-    def test_ln(self, mock_call):
+    @patch('os.symlink')
+    def test_ln(self, mock_symlink, mock_call):
         """Verify the commands to create symbolic links."""
         shell.ln('mock/target', 'mock/source')
-        if os.name == 'nt':
-            check_calls(mock_call, [])
-        else:
-            check_calls(mock_call, ["ln -s mock/target mock/source"])
+        mock_symlink.assert_called_once_with('mock/target', 'mock/source')
+        check_calls(mock_call, [])
 
     @patch('os.path.isdir', Mock(return_value=False))
     @patch('os.path.exists', Mock(return_value=False))
-    def test_ln_missing_parent(self, mock_call):
+    @patch('os.symlink')
+    def test_ln_missing_parent(self, mock_symlink, mock_call):
         """Verify the commands to create symbolic links (missing parent)."""
         shell.ln('mock/target', 'mock/source')
+        mock_symlink.assert_called_once_with('mock/target', 'mock/source')
         if os.name == 'nt':
-            check_calls(mock_call, [])
+            check_calls(mock_call, ["mkdir mock"])
         else:
-            check_calls(mock_call, ["mkdir -p mock", "ln -s mock/target mock/source"])
+            check_calls(mock_call, ["mkdir -p mock"])
 
     @patch('os.path.isfile', Mock(return_value=True))
     def test_rm_file(self, mock_call):
