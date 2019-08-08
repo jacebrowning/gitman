@@ -1,25 +1,26 @@
 # 1.7 (2019-08-07)
 
-- Added basic group support. (@daniel-brosche)
-- Improved validity check of git repo (@mttjohnson)
-- Added rebuilding missing repo on `install --force` (@mttjohnson)
-- Added `--force-interactive` option to interactively overwrite changed dependencies on install or update command. (@daniel-brosche)
 - **BREAKING**: Renamed `-f` alias to `-F` (`-f` now implies `--force-interactive`).
+- Added `--force-interactive` option to interactively overwrite changed dependencies on install or update command. (@daniel-brosche)
+- Added basic group support. (@daniel-brosche)
+- Improved validity check of git repo. (@mttjohnson)
+- Added rebuilding missing repo on `install --force`. (@mttjohnson)
+- Added support for symlinks on Windows. (@sergey-shuyskiy)
 
 # 1.6 (2019-01-26)
 
+- **BREAKING**: Dropped support for Python 3.5.
 - Added `git svn` support. (@daniel-brosche)
 - Added `$GITMAN_CACHE_DISABLE` to disable repository mirrors. (@daniel-brosche)
 - Added `--skip-changes` option to skip changed dependencies on install or update command. (@daniel-brosche)
-- **BREAKING**: Dropped support for Python 3.5.
 
 # 1.5 (2018-09-08)
 
-- Added `--keep-location` option on `uninstall`. (@DavidWatkins)
-- Added feature to enable sparse checkouts. See the docs for further information. (@xenji)
 - **BREAKING**: Removed confusing `--lock` option on `update` command in favor of just using the `lock` command.
 - **BREAKING**: Renamed `--no-lock` to `--skip-lock` on `update` command.
 - **BREAKING**: Renamed `--no-dirty` to `--fail-if-dirty` on `list` command.
+- Added `--keep-location` option on `uninstall`. (@DavidWatkins)
+- Added feature to enable sparse checkouts. See the docs for further information. (@xenji)
 
 # 1.4 (2017-03-21)
 
