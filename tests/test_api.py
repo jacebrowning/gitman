@@ -1,11 +1,11 @@
 # pylint: disable=redefined-outer-name,unused-argument,unused-variable,singleton-comparison,expression-not-assigned,no-member
 
 import inspect
-import logging
 import os
 import shutil
 from contextlib import suppress
 
+import log
 import pytest
 from expecter import expect
 from freezegun import freeze_time
@@ -52,8 +52,6 @@ sources:
   scripts:
   -
 """.lstrip()
-
-log = logging.getLogger(__name__)
 
 
 @pytest.yield_fixture

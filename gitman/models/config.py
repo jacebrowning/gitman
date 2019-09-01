@@ -1,16 +1,13 @@
-import logging
 import os
 from typing import List
 
+import log
 import yorm
 from yorm.types import SortedList, String
 
 from .. import common, exceptions, shell
 from .group import Group
 from .source import Source
-
-
-log = logging.getLogger(__name__)
 
 
 @yorm.attr(location=String)

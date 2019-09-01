@@ -1,12 +1,7 @@
-import logging
-
 import yorm
 from yorm.types import AttributeDictionary, List, String
 
 from .. import exceptions
-
-
-log = logging.getLogger(__name__)
 
 
 @yorm.attr(name=String)

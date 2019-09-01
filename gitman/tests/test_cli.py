@@ -1,8 +1,8 @@
 # pylint: disable=no-self-use,unused-variable,expression-not-assigned
 
-import logging
 from unittest.mock import Mock, patch
 
+import log
 import pytest
 from expecter import expect
 
@@ -454,10 +454,10 @@ def describe_logging():
     @pytest.mark.parametrize("argument,verbosity", argument_verbosity)
     def at_each_level(argument, verbosity):
         def function(*args, **kwargs):
-            logging.debug(args)
-            logging.debug(kwargs)
-            logging.warning("warning")
-            logging.error("error")
+            log.debug(args)
+            log.debug(kwargs)
+            log.warning("warning")
+            log.error("error")
             return True
 
         cli.main([argument] if argument else [], function)

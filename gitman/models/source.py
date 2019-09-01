@@ -1,13 +1,10 @@
-import logging
 import os
 
+import log
 import yorm
 from yorm.types import AttributeDictionary, List, NullableString, String
 
 from .. import common, exceptions, git, shell
-
-
-log = logging.getLogger(__name__)
 
 
 @yorm.attr(name=String)
@@ -274,7 +271,7 @@ class Source(AttributeDictionary):
     def _invalid_repository(self):
         path = os.path.join(os.getcwd(), self.name)
         msg = """
-            
+
             Not a valid repository: {}
             During install you can rebuild a repo with a missing .git directory using the --force option
             """.format(
