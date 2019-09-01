@@ -1,17 +1,15 @@
 """Utilities to call Git commands."""
 
-import logging
 import os
 import re
 import shutil
 from contextlib import suppress
 
+import log
+
 from . import common, settings
 from .exceptions import ShellError
 from .shell import call, pwd
-
-
-log = logging.getLogger(__name__)
 
 
 def git(*args, **kwargs):
