@@ -48,8 +48,8 @@ minilog = "^1.2"
 [tool.poetry.dev-dependencies]
 
 # Formatters
-black = "=18.9b0"
-isort = "=4.3.4"
+black = "=19.10b0"
+isort = "=4.3.21"
 
 # Linters
 mypy = "*"
@@ -86,7 +86,7 @@ gdm = "gitman.cli:main" # legacy entry point
 
 [tool.black]
 
-py36 = true
+target-version = ["py36"]
 skip-string-normalization = true
 
 [build-system]
