@@ -1,4 +1,4 @@
-# 1.8 (beta)
+# 1.8 (2020-04-04)
 
 - Added support Python 3.8.
 
