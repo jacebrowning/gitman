@@ -1,8 +1,9 @@
 """Utilities to call shell programs."""
 
-import logging
 import os
 import subprocess
+
+import log
 
 from . import common
 from .exceptions import ShellError
@@ -10,8 +11,6 @@ from .exceptions import ShellError
 
 CMD_PREFIX = "$ "
 OUT_PREFIX = "> "
-
-log = logging.getLogger(__name__)
 
 
 def call(name, *args, _show=True, _shell=False, _ignore=False):

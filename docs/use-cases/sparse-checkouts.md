@@ -13,8 +13,8 @@ clone will only contain the `fonts` directory and it's children.
 
 ```yaml
 - name: fontawesome
-  repo: https://github.com/FortAwesome/Font-Awesome
+  repo: "https://github.com/FortAwesome/Font-Awesome"
   sparse_paths:
-  - fonts/*
+    - "fonts/*"
   rev: master
 ```

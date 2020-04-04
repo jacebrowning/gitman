@@ -3,14 +3,12 @@
 """Command-line interface."""
 
 import argparse
-import logging
 import sys
 from typing import Dict, List
 
+import log
+
 from . import __version__, commands, common, exceptions
-
-
-log = logging.getLogger(__name__)
 
 
 def main(args=None, function=None):  # pylint: disable=too-many-statements

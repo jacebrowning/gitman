@@ -3,7 +3,6 @@
 """Plugin for Git."""
 
 import argparse
-import logging
 
 from . import __version__, common
 from .cli import _get_command, _run_command
@@ -11,8 +10,6 @@ from .cli import _get_command, _run_command
 
 PROG = 'git deps'
 DESCRIPTION = "Use GitMan (v{}) to install repositories.".format(__version__)
-
-log = logging.getLogger(__name__)
 
 
 def main(args=None):

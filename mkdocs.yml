@@ -8,28 +8,27 @@ edit_uri: https://github.com/jacebrowning/gitman/edit/develop/docs
 theme: readthedocs
 
 markdown_extensions:
-  - codehilite:
-      linenums: True
+  - codehilite
 
 nav:
-- Home: index.md
-- Setup:
-    - Git: setup/git.md
-    - Git SVN: setup/git-svn.md
-    - Environment: setup/environment.md
-- Interfaces:
-    - Command Line: interfaces/cli.md
-    - Git Plugin: interfaces/plugin.md
-    - Package API: interfaces/api.md
-- Use Cases:
-  - Replacing Submodules: use-cases/submodules.md
-  - Tracking Branches: use-cases/branch-tracking.md
-  - Linking Feature Branches: use-cases/linked-features.md
-  - Build System Integration: use-cases/build-integration.md
-  - Self contained GitMan: use-cases/self-contained-gitman.md
-  - Sparse Checkouts: use-cases/sparse-checkouts.md
-  - Git SVN: use-cases/git-svn.md
-- About:
-  - Release Notes: about/changelog.md
-  - Contributing: about/contributing.md
-  - License: about/license.md
+  - Home: index.md
+  - Setup:
+      - Git: setup/git.md
+      - Git SVN: setup/git-svn.md
+      - Environment: setup/environment.md
+  - Interfaces:
+      - Command Line: interfaces/cli.md
+      - Git Plugin: interfaces/plugin.md
+      - Package API: interfaces/api.md
+  - Use Cases:
+      - Replacing Submodules: use-cases/submodules.md
+      - Tracking Branches: use-cases/branch-tracking.md
+      - Linking Feature Branches: use-cases/linked-features.md
+      - Build System Integration: use-cases/build-integration.md
+      - Self contained GitMan: use-cases/self-contained-gitman.md
+      - Sparse Checkouts: use-cases/sparse-checkouts.md
+      - Git SVN: use-cases/git-svn.md
+  - About:
+      - Release Notes: about/changelog.md
+      - Contributing: about/contributing.md
+      - License: about/license.md

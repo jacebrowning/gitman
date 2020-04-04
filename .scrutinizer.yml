@@ -3,13 +3,6 @@ build:
     override:
       - pylint-run --rcfile=.pylint.ini
       - py-scrutinizer-run
-  nodes:
-    py35:
-      environment:
-        python: 3.5.1
-    py36:
-      environment:
-        python: 3.6
 checks:
   python:
     code_rating: true

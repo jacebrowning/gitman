@@ -2,14 +2,12 @@
 
 import datetime
 import functools
-import logging
 import os
+
+import log
 
 from . import common, system
 from .models import Config, Source, load_config
-
-
-log = logging.getLogger(__name__)
 
 
 def restore_cwd(func):

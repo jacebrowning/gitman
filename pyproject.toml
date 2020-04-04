@@ -1,7 +1,7 @@
 [tool.poetry]
 
 name = "gitman"
-version = "1.7"
+version = "1.8"
 description = "A language-agnostic dependency manager using Git."
 
 license = "MIT"
@@ -32,6 +32,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
     "Topic :: Software Development",
     "Topic :: Software Development :: Build Tools",
     "Topic :: Software Development :: Version Control",
@@ -43,23 +44,24 @@ classifiers = [
 python = "^3.6"
 
 YORM = "^1.3"
+minilog = "^1.5"
 
 [tool.poetry.dev-dependencies]
 
 # Formatters
-black = "=18.9b0"
-isort = "=4.3.4"
+black = "=19.10b0"
+isort = "=4.3.21"
 
 # Linters
-mypy = "*"
+mypy = "^0.761"
 pydocstyle = "*"
-pylint = "^2.0"
+pylint = { git = "https://github.com/PyCQA/pylint", rev = "e169e83e52fedc6624235d45e8e8737294a0fedf" } # 2.4.5 has not yet been released
 
 # Testing
-pytest = "=4.2.0"
+pytest = "^5.1.2"
 pytest-cov = "*"
-pytest-describe = "*"
-pytest-expecter = "*"
+pytest-describe = { git = "https://github.com/jacebrowning/pytest-describe", branch = "pytest-5.4-support" }
+pytest-expecter = "^2.1"
 pytest-random = "*"
 freezegun = "*"
 
@@ -67,14 +69,15 @@ freezegun = "*"
 coveragespace = "*"
 
 # Documentation
-mkdocs = "^1.0"
-pygments = "*"
+mkdocs = "~1.0"
+pygments = "^2.5.2"
 
 # Tooling
 pyinstaller = "*"
 sniffer = "*"
 MacFSEvents = { version = "*", platform = "darwin" }
 pync = { version = "*", platform = "darwin" }
+rope = "^0.14.0"
 
 [tool.poetry.scripts]
 
@@ -85,7 +88,7 @@ gdm = "gitman.cli:main" # legacy entry point
 
 [tool.black]
 
-py36 = true
+target-version = ["py36"]
 skip-string-normalization = true
 
 [build-system]

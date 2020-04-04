@@ -15,20 +15,20 @@ GitMan is a language-agnostic dependency manager using Git. It aims to serve as 
 
 ### Requirements
 
-* Python 3.6+
-* Git 2.8+ (with [stored credentials](http://gitman.readthedocs.io/en/latest/setup/git/))
+- Python 3.6+
+- Git 2.8+ (with [stored credentials](http://gitman.readthedocs.io/en/latest/setup/git/))
 
 ### Installation
 
 Install this tool globally:
 
-```shell
+```sh
 $ pip install gitman
 ```
 
 or add it to your [Poetry](https://poetry.eustace.io/) project:
 
-```shell
+```sh
 $ poetry add gitman
 ```
 
@@ -36,7 +36,7 @@ $ poetry add gitman
 
 Generate a sample config file:
 
-```shell
+```sh
 $ gitman init
 ```
 
@@ -46,41 +46,41 @@ or manually create one (`gitman.yml` or `.gitman.yml`) in the root of your worki
 location: vendor/gitman
 
 sources:
-- name: framework
-  repo: https://github.com/kstenerud/iOS-Universal-Framework
-  rev: Mk5-end-of-life
-- name: coverage
-  repo: https://github.com/jonreid/XcodeCoverage
-  rev: master
-  link: Tools/XcodeCoverage
-- name: trufflehog
-  repo: https://github.com/dxa4481/truffleHog
-  rev: master
-  scripts:
-  - chmod a+x truffleHog/truffleHog.py
-- name: fontawesome
-  repo: https://github.com/FortAwesome/Font-Awesome
-  sparse_paths:
-  - webfonts/*
-  rev: master
-- name: material-design-icons
-  repo: https://github.com/google/material-design-icons.git
-  rev: master
-  
+  - name: framework
+    repo: https://github.com/kstenerud/iOS-Universal-Framework
+    rev: Mk5-end-of-life
+  - name: coverage
+    repo: https://github.com/jonreid/XcodeCoverage
+    rev: master
+    link: Tools/XcodeCoverage
+  - name: trufflehog
+    repo: https://github.com/dxa4481/truffleHog
+    rev: master
+    scripts:
+      - chmod a+x truffleHog/truffleHog.py
+  - name: fontawesome
+    repo: https://github.com/FortAwesome/Font-Awesome
+    sparse_paths:
+      - "webfonts/*"
+    rev: master
+  - name: material-design-icons
+    repo: https://github.com/google/material-design-icons.git
+    rev: master
+
 groups:
-- name: code
-  members:
-  - framework
-  - trufflehog
-- name: resources
-  members:
-  - fontawesome
-  - material-design-icons
+  - name: code
+    members:
+      - framework
+      - trufflehog
+  - name: resources
+    members:
+      - fontawesome
+      - material-design-icons
 ```
 
 Ignore the dependency storage location:
 
-```shell
+```sh
 $ echo vendor/gitman >> .gitignore
 ```
 
@@ -88,7 +88,7 @@ $ echo vendor/gitman >> .gitignore
 
 See the available commands:
 
-```shell
+```sh
 $ gitman --help
 ```
 
@@ -96,7 +96,7 @@ $ gitman --help
 
 Get the latest versions of all dependencies:
 
-```shell
+```sh
 $ gitman update
 ```
 
@@ -111,38 +111,36 @@ which will essentially:
 
 where `rev` can be:
 
-* all or part of a commit SHA: `123def`
-* a tag: `v1.0`
-* a branch: `master`
-* a `rev-parse` date: `'develop@{2015-06-18 10:30:59}'`
-
+- all or part of a commit SHA: `123def`
+- a tag: `v1.0`
+- a branch: `master`
+- a `rev-parse` date: `'develop@{2015-06-18 10:30:59}'`
 
 Alternatively get the latest versions of certain dependencies or even dependency groups:
 
-* Update a single repository
+- Update a single repository
 
-```shell
+```sh
 $ gitman update framework
 ```
 
-* Update a dependency group
+- Update a dependency group
 
-```shell
+```sh
 $ gitman update resources
 ```
-
 
 ### Restoring Previous Versions
 
 Display the specific revisions that are currently installed:
 
-```shell
+```sh
 $ gitman list
 ```
 
 Reinstall these specific versions at a later time:
 
-```shell
+```sh
 $ gitman install
 ```
 
@@ -150,6 +148,6 @@ $ gitman install
 
 Remove all installed dependencies:
 
-```shell
+```sh
 $ gitman uninstall
 ```

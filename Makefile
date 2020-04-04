@@ -45,13 +45,15 @@ DEPENDENCIES := $(VIRTUAL_ENV)/.poetry-$(shell bin/checksum pyproject.toml poetr
 install: $(DEPENDENCIES) .cache
 
 $(DEPENDENCIES): poetry.lock
-	@ poetry config settings.virtualenvs.in-project true
+	@ poetry config virtualenvs.in-project true
 	poetry install
 	@ touch $@
 
+ifndef CI
 poetry.lock: pyproject.toml
 	poetry lock
 	@ touch $@
+endif
 
 .cache:
 	@ mkdir -p .cache
@@ -69,8 +71,8 @@ check: install format  ## Run formaters, linters, and static analysis
 ifdef CI
 	git diff --exit-code
 endif
-	poetry run pylint $(PACKAGES) --rcfile=.pylint.ini
 	poetry run mypy $(PACKAGES) --config-file=.mypy.ini
+	poetry run pylint $(PACKAGES) --rcfile=.pylint.ini
 	poetry run pydocstyle $(PACKAGES) $(CONFIG)
 
 # TESTS #######################################################################
@@ -129,9 +131,9 @@ $(MKDOCS_INDEX): docs/requirements.txt mkdocs.yml docs/*.md
 	@ cd docs/about && ln -sf ../../LICENSE.md license.md
 	poetry run mkdocs build --clean --strict
 
-# Workaround: https://github.com/rtfd/readthedocs.org/issues/5090
 docs/requirements.txt: poetry.lock
-	@ poetry run pip freeze  -qqq | grep mkdocs > $@
+	@ poetry run pip freeze -qqq | grep mkdocs > $@
+	@ poetry run pip freeze -qqq | grep Pygments >> $@
 
 .PHONY: uml
 uml: install docs/*.png
@@ -140,8 +142,8 @@ docs/*.png: $(MODULES)
 	- mv -f classes_$(PACKAGE).png docs/classes.png
 	- mv -f packages_$(PACKAGE).png docs/packages.png
 
-.PHONY: mkdocs-live
-mkdocs-live: mkdocs
+.PHONY: mkdocs-serve
+mkdocs-serve: mkdocs
 	eval "sleep 3; bin/open http://127.0.0.1:8000" &
 	poetry run mkdocs serve
 

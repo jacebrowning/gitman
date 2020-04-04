@@ -4,6 +4,7 @@ import time
 import subprocess
 
 from sniffer.api import select_runnable, file_validator, runnable
+
 try:
     from pync import Notifier
 except ImportError:
@@ -31,7 +32,7 @@ class Options:
 @select_runnable('run_targets')
 @file_validator
 def python_files(filename):
-    return filename.endswith('.py')
+    return filename.endswith('.py') and '.py.' not in filename
 
 
 @select_runnable('run_targets')
