@@ -4,13 +4,13 @@ In order for `gitman` to interact with Git, it must be configured to store your 
 
 To test, trying cloning one of your private repositories:
 
-```shell
+```sh
 $ git clone https://github.com/<owner>/<repo>.git
 ```
 
 If you see:
 
-```shell
+```sh
 Username for 'https://github.com':
 ```
 
@@ -36,7 +36,7 @@ If you're using two-factory authentication on GitHub, you'll need to [provide a 
 
 You can also set up SSH keys (for [GitHub](https://help.github.com/articles/generating-ssh-keys/)) and use a different URL:
 
-```shell
+```sh
 $ git clone git@github.com:<owner>/<repo>.git
 ```
 
@@ -44,7 +44,7 @@ $ git clone git@github.com:<owner>/<repo>.git
 
 Finally, the repository URL itself can contain an OAuth token (for [GitHub](https://github.com/blog/1270-easier-builds-and-deployments-using-git-over-https-and-oauth)):
 
-```shell
+```sh
 $ git clone https://<token>@github.com/<owner>/<repo>.git
 ```
 

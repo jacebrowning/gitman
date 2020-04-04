@@ -6,11 +6,13 @@ environment:
       PYTHON_MINOR: 6
     - PYTHON_MAJOR: 3
       PYTHON_MINOR: 7
+    - PYTHON_MAJOR: 3
+      PYTHON_MINOR: 8
 
 cache:
   - .venv -> poetry.lock
 
-init: 
+init:
   - git config --global core.symlinks true
 
 install:

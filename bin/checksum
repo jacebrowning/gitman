@@ -6,14 +6,17 @@ import sys
 
 
 def run(paths):
-    hash_md5 = hashlib.md5()
+    sha = hashlib.sha1()
 
     for path in paths:
-        with open(path, 'rb') as f:
-            for chunk in iter(lambda: f.read(4096), b''):
-                hash_md5.update(chunk)
+        try:
+            with open(path, 'rb') as f:
+                for chunk in iter(lambda: f.read(4096), b''):
+                    sha.update(chunk)
+        except IOError:
+            sha.update(path.encode())
 
-    print(hash_md5.hexdigest())
+    print(sha.hexdigest())
 
 
 if __name__ == '__main__':

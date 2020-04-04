@@ -4,7 +4,7 @@ Many development projects use Subversion (SVN) to manage their source code. Itâ€
 
 One of Gitâ€™s great features is a bidirectional bridge to Subversion called `git svn`. This tool allows you to use Git as a valid client to a Subversion server, so you can use all the local features of Git and then push to a Subversion server as if you were using Subversion locally.
 
-The gitman git svn support allows you to resolve SVN source dependencies. The gitman does resolve a specified SVN revision (e.g. HEAD) of an SVN repository source dependency (from whole branches to particular subdirectories). 
+The gitman git svn support allows you to resolve SVN source dependencies. The gitman does resolve a specified SVN revision (e.g. HEAD) of an SVN repository source dependency (from whole branches to particular subdirectories).
 
 > **Important**
 >
@@ -22,31 +22,30 @@ Example Configuration:
 location: imports
 
 sources:
-- name: MyDirectory
-  type: git-svn
-  repo: http:http://my-svn-repo/trunk/MyDirectory
-  rev: HEAD
+  - name: MyDirectory
+    type: git-svn
+    repo: http:http://my-svn-repo/trunk/MyDirectory
+    rev: HEAD
 
-- name: MySecondDirectory
-  type: git-svn
-  repo: http:http://my-svn-repo/trunk/MySecondDirectory
-  rev: 72846
+  - name: MySecondDirectory
+    type: git-svn
+    repo: http:http://my-svn-repo/trunk/MySecondDirectory
+    rev: 72846
 
-- name: lz4
-  type: git
-  repo: https://github.com/lz4/lz4
-  rev: v1.8.1.2
-
+  - name: lz4
+    type: git
+    repo: https://github.com/lz4/lz4
+    rev: v1.8.1.2
 ```
 
 By default the repo source parameter `type` is `git`.
 
-> **Note** 
+> **Note**
 >
-> The gitman `git svn` support uses internally 
-> ```shell
+> The gitman `git svn` support uses internally
+>
+> ```sh
 > $ git svn clone -r <rev> <repo>
 > ```
+>
 > to resolve the individual SVN source dependency. In this matter only the specified svn revsion will be fetched (shallow history).
-
-
