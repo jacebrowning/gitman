@@ -1,6 +1,7 @@
 """Common exceptions, classes, and functions."""
 
 import argparse
+import logging
 import os
 import sys
 
@@ -17,7 +18,7 @@ class WideHelpFormatter(argparse.HelpFormatter):
         super().__init__(*args, **kwargs)
 
 
-class WarningFormatter(log.logging.Formatter):
+class WarningFormatter(logging.Formatter):
     """Logging formatter that displays verbose formatting for WARNING+."""
 
     def __init__(self, default_format, verbose_format, *args, **kwargs):
@@ -80,11 +81,11 @@ def configure_logging(count=0):
     # Set a custom formatter
     log.init(level=level)
     log.silence('yorm', allow_warning=True)
-    log.logging.captureWarnings(True)
+    logging.captureWarnings(True)
     formatter = WarningFormatter(
         default_format, verbose_format, datefmt=settings.LOGGING_DATEFMT
     )
-    log.logging.root.handlers[0].setFormatter(formatter)
+    logging.root.handlers[0].setFormatter(formatter)
 
     # Warn about excessive verbosity
     if count > _Config.MAX_VERBOSITY:

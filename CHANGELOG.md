@@ -1,3 +1,7 @@
+# 1.8 (beta)
+
+- Added support Python 3.8.
+
 # 1.7 (2019-08-07)
 
 - **BREAKING**: Renamed `-f` alias to `-F` (`-f` now implies `--force-interactive`).
@@ -173,8 +177,8 @@
 # 0.1.2 (2014-02-27)
 
 - Added `--force` argument to:
-    - overwrite uncommitted changes
-    - create symbolic links in place of directories
+  - overwrite uncommitted changes
+  - create symbolic links in place of directories
 - Added live shell command output with `-vv` argument.
 
 # 0.1 (2014-02-24)
