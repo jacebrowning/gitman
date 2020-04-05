@@ -2,8 +2,12 @@
 
 import os
 
+import datafiles
 import log
 
+
+# Serialization settings
+datafiles.settings.INDENT_YAML_BLOCKS = False
 
 # Cache settings
 CACHE = os.path.expanduser(os.getenv('GITMAN_CACHE', "~/.gitcache"))
@@ -19,7 +23,3 @@ DEFAULT_LOGGING_LEVEL = log.WARNING
 VERBOSE_LOGGING_LEVEL = log.INFO
 VERBOSE2_LOGGING_LEVEL = log.DEBUG
 LOGGING_DATEFMT = "%Y-%m-%d %H:%M"
-
-# 3rd party settings
-YORM_LOGGING_LEVEL = log.WARNING
-SH_LOGGING_LEVEL = log.WARNING

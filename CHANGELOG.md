@@ -1,3 +1,8 @@
+# 2.0 (alpha)
+
+- **BREAKING**: Dropped support for Python 3.6.
+- Switched to `datafiles` for YAML serialization.
+
 # 1.8 (2020-04-04)
 
 - Added support Python 3.8.

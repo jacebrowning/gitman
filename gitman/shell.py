@@ -26,7 +26,7 @@ def call(name, *args, _show=True, _shell=False, _ignore=False):
     """
     program = show(name, *args, stdout=_show)
 
-    command = subprocess.run(
+    command = subprocess.run(  # pylint: disable=subprocess-run-check
         name if _shell else [name, *args],
         universal_newlines=True,
         stdout=subprocess.PIPE,

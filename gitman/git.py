@@ -43,7 +43,7 @@ def clone(type, repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None
     if not settings.CACHE_DISABLE and not os.path.isdir(reference):
         git('clone', '--mirror', repo, reference)
 
-    if sparse_paths:
+    if sparse_paths and sparse_paths[0]:
         os.mkdir(normpath)
         git('-C', normpath, 'init')
         git('-C', normpath, 'config', 'core.sparseCheckout', 'true')
