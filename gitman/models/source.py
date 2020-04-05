@@ -25,9 +25,6 @@ class Source:
     def __post_init__(self):
         if self.name is None:
             self.name = self._infer_name(self.repo)
-
-    def _on_post_load(self):
-        # TODO: Remove this?
         self.type = self.type or 'git'
 
     def __repr__(self):

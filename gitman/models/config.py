@@ -25,23 +25,6 @@ class Config:
         if self.root is None:
             self.root = os.getcwd()
 
-    def _on_post_load(self):
-        for source in self.sources:
-            source._on_post_load()  # pylint: disable=protected-access
-
-        for source in self.sources_locked:
-            source._on_post_load()  # pylint: disable=protected-access
-
-        # check for conflicts between source names and group names
-        for source in self.sources:
-            for group in self.groups:
-                if source.name == group.name:
-                    msg = (
-                        "Name conflict detected between source name and "
-                        "group name \"{}\""
-                    ).format(source.name)
-                    raise exceptions.InvalidConfig(msg)
-
     @property
     def config_path(self):
         """Get the full path to the config file."""
@@ -60,6 +43,17 @@ class Config:
         """Get the full path to the dependency storage location."""
         assert self.root
         return os.path.normpath(os.path.join(self.root, self.location))
+
+    def validate(self):
+        """Check for conflicts between source names and group names."""
+        for source in self.sources:
+            for group in self.groups:
+                if source.name == group.name:
+                    msg = (
+                        "Name conflict detected between source name and "
+                        "group name \"{}\""
+                    ).format(source.name)
+                    raise exceptions.InvalidConfig(msg)
 
     def get_path(self, name=None):
         """Get the full path to a dependency or internal file."""
@@ -340,7 +334,7 @@ def load_config(start=None, *, search=True):
         for filename in os.listdir(path):
             if _valid_filename(filename):
                 config = Config(path, filename)
-                config._on_post_load()  # pylint: disable=protected-access
+                config.validate()
                 log.debug("Found config: %s", config.path)
                 return config
 
