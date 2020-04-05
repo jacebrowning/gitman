@@ -25,15 +25,6 @@ class Source:
     def __post_init__(self):
         if self.name is None:
             self.name = self._infer_name(self.repo)
-
-        # TODO: Remove this?
-        for name in ['name', 'repo', 'rev']:
-            if not getattr(self, name):
-                msg = "'{}' required for {}".format(name, repr(self))
-                raise exceptions.InvalidConfig(msg)
-
-    def _on_post_load(self):
-        # TODO: Remove this?
         self.type = self.type or 'git'
 
     def __repr__(self):

@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from typing import List
 
-from .. import exceptions
-
 
 @dataclass
 class Group:
@@ -10,13 +8,6 @@ class Group:
 
     name: str
     members: List[str]
-
-    def __post_init__(self):
-        # TODO: Remove this?
-        for name in ['name', 'members']:
-            if not getattr(self, name):
-                msg = "'{}' required for {}".format(name, repr(self))
-                raise exceptions.InvalidConfig(msg)
 
     def __repr__(self):
         return "<group {}>".format(self)
