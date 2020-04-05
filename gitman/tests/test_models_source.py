@@ -39,15 +39,6 @@ class TestSource:
 
         assert 'mock/link' == source.link
 
-    def test_init_error(self):
-        """Verify the repository, name, and rev are required."""
-        with pytest.raises(ValueError):
-            Source(type='git', repo='', name='mock_name', rev='master')
-        with pytest.raises(ValueError):
-            Source(type='git', repo='http://mock.git', name='', rev='master')
-        with pytest.raises(ValueError):
-            Source(type='git', repo='http://mock.git', name='mock_name', rev='')
-
     def test_repr(self, source):
         """Verify sources can be represented."""
         assert "<source ['git'] 'repo' @ 'rev' in 'name' <- 'link'>" == repr(source)

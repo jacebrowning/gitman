@@ -763,7 +763,7 @@ def describe_update():
         monkeypatch.setattr('gitman.git.changes', git_changes)
         # patch standard input function to return "y" for each call
         # this is necessary to answer the force-interactive question
-        # with yes todo the force process
+        # with yes to invoke the force process
         monkeypatch.setattr('builtins.input', lambda x: "y")
 
         config.datafile.text = strip(
