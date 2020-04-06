@@ -1,4 +1,4 @@
-# 2.0 (alpha)
+# 2.0 (beta)
 
 - **BREAKING**: Dropped support for Python 3.6.
 - Switched to `datafiles` for YAML serialization.

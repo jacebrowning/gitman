@@ -256,7 +256,7 @@ def get_branch():
 
 def _get_sha_from_rev(rev):
     """Get a rev-parse string's hash."""
-    if '@{' in rev:  # TODO: use regex for this
+    if '@{' in rev:
         parts = rev.split('@')
         branch = parts[0]
         date = parts[1].strip("{}")
