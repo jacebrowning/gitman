@@ -154,7 +154,7 @@ description = "File-based ORM for dataclasses."
 name = "datafiles"
 optional = false
 python-versions = ">=3.7,<4.0"
-version = "0.9b4"
+version = "0.9b5"
 
 [package.dependencies]
 PyYAML = ">=5.2,<6.0"
@@ -774,7 +774,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "04f8ec219dc14ddc092444d5b4d33cbe6da6ec7b17d81e2ed877578d90c5c92a"
+content-hash = "91eb561c8ec489ce34bf120d5bbda531e80655804ec645a8a53f1962716ad037"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -863,8 +863,8 @@ coveragespace = [
     {file = "coveragespace-3.1.1.tar.gz", hash = "sha256:c5862d04a91bec32fc7dd8487006922e144280dc05e75b26c38f4ffe4e760fb0"},
 ]
 datafiles = [
-    {file = "datafiles-0.9b4-py3-none-any.whl", hash = "sha256:ffe87fb360221c8b6c2661df35cc43ccf0314e9a81fc4c15b5410225dabab620"},
-    {file = "datafiles-0.9b4.tar.gz", hash = "sha256:27e7bad1c4cc1db60d759942ead8dce7c84be9d264734e4810ec23b1ef67cce9"},
+    {file = "datafiles-0.9b5-py3-none-any.whl", hash = "sha256:2a6be82fa6de6fb31477108d3a8aa9862168de2a1369dba09a4ecbdf1621936d"},
+    {file = "datafiles-0.9b5.tar.gz", hash = "sha256:9d455c9fbb6785161a85dc18a989cacff6c5ecb6a46452d763d7dc36da4bb3bd"},
 ]
 dis3 = [
     {file = "dis3-0.1.3-py2-none-any.whl", hash = "sha256:61f7720dd0d8749d23fda3d7227ce74d73da11c2fade993a67ab2f9852451b14"},

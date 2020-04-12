@@ -24,37 +24,37 @@ TMP = os.path.join(ROOT, 'tmp')
 CONFIG = """
 location: deps
 sources:
-- name: gitman_1
-  type: git
-  repo: https://github.com/jacebrowning/gitman-demo
-  sparse_paths:
-  -
-  rev: example-branch
-  link:
-  scripts:
-  -
-- name: gitman_2
-  type: git
-  repo: https://github.com/jacebrowning/gitman-demo
-  sparse_paths:
-  -
-  rev: example-tag
-  link:
-  scripts:
-  -
-- name: gitman_3
-  type: git
-  repo: https://github.com/jacebrowning/gitman-demo
-  sparse_paths:
-  -
-  rev: 9bf18e16b956041f0267c21baad555a23237b52e
-  link:
-  scripts:
-  -
+  - name: gitman_1
+    type: git
+    repo: https://github.com/jacebrowning/gitman-demo
+    sparse_paths:
+      -
+    rev: example-branch
+    link:
+    scripts:
+      -
+  - name: gitman_2
+    type: git
+    repo: https://github.com/jacebrowning/gitman-demo
+    sparse_paths:
+      -
+    rev: example-tag
+    link:
+    scripts:
+      -
+  - name: gitman_3
+    type: git
+    repo: https://github.com/jacebrowning/gitman-demo
+    sparse_paths:
+      -
+    rev: 9bf18e16b956041f0267c21baad555a23237b52e
+    link:
+    scripts:
+      -
 sources_locked:
--
+  -
 groups:
--
+  -
 """.lstrip()
 
 
@@ -90,27 +90,27 @@ def describe_init():
             """
         location: gitman_sources
         sources:
-        - name: sample_dependency
-          type: git
-          repo: https://github.com/githubtraining/hellogitworld
-          sparse_paths:
-          -
-          rev: master
-          link:
-          scripts:
-          -
+          - name: sample_dependency
+            type: git
+            repo: https://github.com/githubtraining/hellogitworld
+            sparse_paths:
+              -
+            rev: master
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: sample_dependency
-          type: git
-          repo: https://github.com/githubtraining/hellogitworld
-          sparse_paths:
-          -
-          rev: ebbbf773431ba07510251bb03f9525c7bab2b13a
-          link:
-          scripts:
-          -
+          - name: sample_dependency
+            type: git
+            repo: https://github.com/githubtraining/hellogitworld
+            sparse_paths:
+              -
+            rev: ebbbf773431ba07510251bb03f9525c7bab2b13a
+            link:
+            scripts:
+              -
         groups:
-        -
+          -
         """
         )
 
@@ -138,28 +138,28 @@ def describe_install():
             """
         location: deps
         sources:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          rev: example-branch
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            rev: example-branch
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          rev: example-branch
-          link:
-          scripts:
-          -
-        - name: gitman_3
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_3
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+            link:
+            scripts:
+              -
         """
         )
         config.datafile.load()
@@ -173,20 +173,20 @@ def describe_install():
             """
         location: deps
         sources:
-        - name: gitman_1
-          repo: https://github.com/jacebrowning/gitman-demo
-          rev: example-branch
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            repo: https://github.com/jacebrowning/gitman-demo
+            rev: example-branch
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+            link:
+            scripts:
+              -
         """
         )
         config.datafile.load()
@@ -213,12 +213,12 @@ def describe_install():
                 """
             location: deps
             sources:
-            - name: gitman_1
-              repo: https://github.com/jacebrowning/gitman-demo
-              rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-              link: my_link
-              scripts:
-              -
+              - name: gitman_1
+                repo: https://github.com/jacebrowning/gitman-demo
+                rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+                link: my_link
+                scripts:
+                  -
             """
             )
             config.datafile.load()
@@ -248,13 +248,13 @@ def describe_install():
                 """
             location: deps
             sources:
-            - name: gitman_1
-              type: git
-              repo: https://github.com/jacebrowning/gitman-demo
-              rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-              link:
-              scripts:
-              - make foobar
+              - name: gitman_1
+                type: git
+                repo: https://github.com/jacebrowning/gitman-demo
+                rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+                link:
+                scripts:
+                  - make foobar
             """
             )
             config.datafile.load()
@@ -275,15 +275,15 @@ def describe_install():
                 """
                     location: deps
                     sources:
-                    - name: gitman_1
-                      type: git
-                      repo: https://github.com/jacebrowning/gitman-demo
-                      sparse_paths:
-                      - src/*
-                      rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
-                      link:
-                      scripts:
-                      -
+                      - name: gitman_1
+                        type: git
+                        repo: https://github.com/jacebrowning/gitman-demo
+                        sparse_paths:
+                          - src/*
+                        rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
+                        link:
+                        scripts:
+                          -
                     """
             )
             config.datafile.load()
@@ -367,36 +367,36 @@ def describe_update():
             """
         location: deps
         sources:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-branch
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: (old revision)
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: (old revision)
+            link:
+            scripts:
+              -
         groups:
-        -
+          -
         """
         )
         config.datafile.load()
@@ -408,36 +408,36 @@ def describe_update():
             """
         location: deps
         sources:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-branch
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+            link:
+            scripts:
+              -
         groups:
-        -
+          -
         """
         )
 
@@ -446,36 +446,36 @@ def describe_update():
             """
         location: deps
         sources:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-branch
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: (old revision)
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: (old revision)
+            link:
+            scripts:
+              -
         groups:
-        -
+          -
         """
         )
         config.datafile.load()
@@ -486,36 +486,36 @@ def describe_update():
             """
         location: deps
         sources:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-branch
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: (old revision)
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: (old revision)
+            link:
+            scripts:
+              -
         groups:
-        -
+          -
         """
         )
 
@@ -524,19 +524,19 @@ def describe_update():
             """
                 location: deps
                 sources:
-                - name: gitman_1
-                  type: git
-                  repo: https://github.com/jacebrowning/gitman-demo
-                  rev: example-branch
-                - name: gitman_2
-                  type: git
-                  repo: https://github.com/jacebrowning/gitman-demo
-                  rev: example-branch
+                  - name: gitman_1
+                    type: git
+                    repo: https://github.com/jacebrowning/gitman-demo
+                    rev: example-branch
+                  - name: gitman_2
+                    type: git
+                    repo: https://github.com/jacebrowning/gitman-demo
+                    rev: example-branch
                 groups:
-                - name: gitman_1
-                  members:
-                  - gitman_1
-                  - gitman_2
+                  - name: gitman_1
+                    members:
+                      - gitman_1
+                      - gitman_2
             """
         )
         config.datafile.load()
@@ -549,57 +549,57 @@ def describe_update():
             """
         location: deps
         sources:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-branch
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
-        - name: gitman_3
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
+          - name: gitman_3
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: (old revision)
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: (old revision)
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: (old revision)
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: (old revision)
+            link:
+            scripts:
+              -
         groups:
-        - name: group_a
-          members:
-          - gitman_1
-          - gitman_2
+          - name: group_a
+            members:
+              - gitman_1
+              - gitman_2
         """
         )
         config.datafile.load()
@@ -611,57 +611,57 @@ def describe_update():
             """
         location: deps
         sources:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-branch
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
-        - name: gitman_3
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
+          - name: gitman_3
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+            link:
+            scripts:
+              -
         groups:
-        - name: group_a
-          members:
-          - gitman_1
-          - gitman_2
+          - name: group_a
+            members:
+              - gitman_1
+              - gitman_2
         """
         )
 
@@ -686,27 +686,27 @@ def describe_update():
             """
         location: deps
         sources:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: (old revision)
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: (old revision)
+            link:
+            scripts:
+              -
         groups:
-        -
+          -
         """
         )
         config.datafile.load()
@@ -717,27 +717,27 @@ def describe_update():
             """
         location: deps
         sources:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: (old revision)
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: (old revision)
+            link:
+            scripts:
+              -
         groups:
-        -
+          -
         """
         )
 
@@ -769,27 +769,27 @@ def describe_update():
             """
         location: deps
         sources:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: (old revision)
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: (old revision)
+            link:
+            scripts:
+              -
         groups:
-        -
+          -
         """
         )
         config.datafile.load()
@@ -801,27 +801,27 @@ def describe_update():
             """
         location: deps
         sources:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+            link:
+            scripts:
+              -
         groups:
-        -
+          -
         """
         )
 
@@ -830,28 +830,28 @@ def describe_update():
             """
         location: deps
         sources:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          rev: example-branch
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            rev: example-branch
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          rev: example-branch
-          link:
-          scripts:
-          -
-        - name: gitman_3
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_3
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+            link:
+            scripts:
+              -
         """
         )
         config.datafile.load()
@@ -894,33 +894,33 @@ def describe_lock():
             strip(
                 """
         sources_locked:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link:
-          scripts:
-          -
-        - name: gitman_3
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: 9bf18e16b956041f0267c21baad555a23237b52e
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+            link:
+            scripts:
+              -
+          - name: gitman_3
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 9bf18e16b956041f0267c21baad555a23237b52e
+            link:
+            scripts:
+              -
         """
             )
         )
@@ -934,24 +934,24 @@ def describe_lock():
             strip(
                 """
         sources_locked:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
-          link:
-          scripts:
-          -
-        - name: gitman_3
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: 9bf18e16b956041f0267c21baad555a23237b52e
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
+            link:
+            scripts:
+              -
+          - name: gitman_3
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 9bf18e16b956041f0267c21baad555a23237b52e
+            link:
+            scripts:
+              -
         """
             )
         )
