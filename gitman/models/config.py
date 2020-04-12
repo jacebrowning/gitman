@@ -355,4 +355,4 @@ def _valid_filename(filename):
     name, ext = os.path.splitext(filename.lower())
     if name.startswith('.'):
         name = name[1:]
-    return name in ['gitman', 'gdm'] and ext in ['.yml', '.yaml']
+    return name in {'gitman', 'gdm'} and ext in {'.yml', '.yaml'}

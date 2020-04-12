@@ -1,7 +1,7 @@
 [tool.poetry]
 
 name = "gitman"
-version = "2.0b1"
+version = "2.0b2"
 description = "A language-agnostic dependency manager using Git."
 
 license = "MIT"
@@ -42,7 +42,7 @@ classifiers = [
 
 python = "^3.7"
 
-datafiles = ">=0.7"
+datafiles = ">=0.9b4"
 minilog = "^1.5"
 
 [tool.poetry.dev-dependencies]
@@ -82,8 +82,6 @@ rope = "^0.14.0"
 
 gitman = "gitman.cli:main"
 git-deps = "gitman.plugin:main"
-
-gdm = "gitman.cli:main" # legacy entry point
 
 [tool.black]
 
