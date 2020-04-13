@@ -43,7 +43,7 @@ def clone(type, repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None
     if not settings.CACHE_DISABLE and not os.path.isdir(reference):
         git('clone', '--mirror', repo, reference)
 
-    if sparse_paths:
+    if sparse_paths and sparse_paths[0]:
         os.mkdir(normpath)
         git('-C', normpath, 'init')
         git('-C', normpath, 'config', 'core.sparseCheckout', 'true')
@@ -256,7 +256,7 @@ def get_branch():
 
 def _get_sha_from_rev(rev):
     """Get a rev-parse string's hash."""
-    if '@{' in rev:  # TODO: use regex for this
+    if '@{' in rev:
         parts = rev.split('@')
         branch = parts[0]
         date = parts[1].strip("{}")

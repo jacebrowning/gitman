@@ -10,13 +10,13 @@ from gitman.models import Source
 
 @pytest.fixture
 def source():
-    return Source('git', 'repo', 'name', rev='rev', link='link')
+    return Source(type='git', repo='repo', name='name', rev='rev', link='link')
 
 
 class TestSource:
     def test_init_defaults(self):
         """Verify a source has a default revision."""
-        source = Source('git', 'http://example.com/foo/bar.git')
+        source = Source(type='git', repo='http://example.com/foo/bar.git', name=None)
 
         assert 'http://example.com/foo/bar.git' == source.repo
         assert 'bar' == source.name
@@ -25,24 +25,19 @@ class TestSource:
 
     def test_init_rev(self):
         """Verify the revision can be customized."""
-        source = Source('git', 'http://mock.git', 'mock_name', 'v1.0')
+        source = Source(
+            type='git', repo='http://mock.git', name='mock_name', rev='v1.0'
+        )
 
         assert 'v1.0' == source.rev
 
     def test_init_link(self):
         """Verify the link can be set."""
-        source = Source('git', 'http://mock.git', 'mock_name', link='mock/link')
+        source = Source(
+            type='git', repo='http://mock.git', name='mock_name', link='mock/link'
+        )
 
         assert 'mock/link' == source.link
-
-    def test_init_error(self):
-        """Verify the repository, name, and rev are required."""
-        with pytest.raises(ValueError):
-            Source('git', '', name='mock_name', rev='master')
-        with pytest.raises(ValueError):
-            Source('git', 'http://mock.git', name='', rev='master')
-        with pytest.raises(ValueError):
-            Source('git', 'http://mock.git', name='mock_name', rev='')
 
     def test_repr(self, source):
         """Verify sources can be represented."""
@@ -63,11 +58,11 @@ class TestSource:
 
     def test_lt(self):
         sources = [
-            Source('git', 'http://github.com/owner/123.git'),
-            Source('git', 'bbb', name='456'),
-            Source('git', 'ccc', '456'),
-            Source('git', 'BBB', 'AAA'),
-            Source('git', 'AAA', 'AAA'),
+            Source(type='git', repo='http://github.com/owner/123.git', name=None),
+            Source(type='git', repo='bbb', name='456'),
+            Source(type='git', repo='ccc', name='456'),
+            Source(type='git', repo='BBB', name='AAA'),
+            Source(type='git', repo='AAA', name='AAA'),
         ]
 
         assert sources == sorted(sources)
@@ -84,7 +79,7 @@ class TestSource:
         self, mock_clone, mock_is_fetch_required, mock_fetch, mock_update
     ):
         """Verify update_files when path does not exist"""
-        source = Source('git', 'repo', 'name', rev='rev', link='link')
+        source = Source(type='git', repo='repo', name='name', rev='rev', link='link')
         source.update_files()
 
         mock_clone.assert_called_once_with(
@@ -108,7 +103,7 @@ class TestSource:
         self, mock_clone, mock_is_fetch_required, mock_fetch, mock_update
     ):
         """Verify update_files throws exception on invalid repo when not forced"""
-        source = Source('git', 'repo', 'name', rev='rev', link='link')
+        source = Source(type='git', repo='repo', name='name', rev='rev', link='link')
 
         with pytest.raises(Exception):
             source.update_files()
@@ -131,7 +126,7 @@ class TestSource:
         self, mock_clone, mock_rebuild, mock_is_fetch_required, mock_fetch, mock_update
     ):
         """Verify update_files rebuilds when invalid repo and force is passed"""
-        source = Source('git', 'repo', 'name', rev='rev', link='link')
+        source = Source(type='git', repo='repo', name='name', rev='rev', link='link')
         source.update_files(force=True)
 
         mock_clone.assert_not_called()

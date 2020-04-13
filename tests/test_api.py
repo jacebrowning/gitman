@@ -24,32 +24,36 @@ TMP = os.path.join(ROOT, 'tmp')
 CONFIG = """
 location: deps
 sources:
-- name: gitman_1
-  type: git
-  repo: https://github.com/jacebrowning/gitman-demo
-  sparse_paths:
+  - name: gitman_1
+    type: git
+    repo: https://github.com/jacebrowning/gitman-demo
+    sparse_paths:
+      -
+    rev: example-branch
+    link:
+    scripts:
+      -
+  - name: gitman_2
+    type: git
+    repo: https://github.com/jacebrowning/gitman-demo
+    sparse_paths:
+      -
+    rev: example-tag
+    link:
+    scripts:
+      -
+  - name: gitman_3
+    type: git
+    repo: https://github.com/jacebrowning/gitman-demo
+    sparse_paths:
+      -
+    rev: 9bf18e16b956041f0267c21baad555a23237b52e
+    link:
+    scripts:
+      -
+sources_locked:
   -
-  rev: example-branch
-  link:
-  scripts:
-  -
-- name: gitman_2
-  type: git
-  repo: https://github.com/jacebrowning/gitman-demo
-  sparse_paths:
-  -
-  rev: example-tag
-  link:
-  scripts:
-  -
-- name: gitman_3
-  type: git
-  repo: https://github.com/jacebrowning/gitman-demo
-  sparse_paths:
-  -
-  rev: 9bf18e16b956041f0267c21baad555a23237b52e
-  link:
-  scripts:
+groups:
   -
 """.lstrip()
 
@@ -66,7 +70,8 @@ def config():
 
     os.system("touch .git")
     config = Config(root=TMP)
-    config.__mapper__.text = CONFIG
+    config.datafile.text = CONFIG
+    config.datafile.load()
 
     log.debug("File listing: %s", os.listdir(TMP))
 
@@ -81,37 +86,38 @@ def describe_init():
 
         expect(gitman.init()) == True
 
-        expect(Config().__mapper__.text) == strip(
+        expect(Config().datafile.text) == strip(
             """
         location: gitman_sources
         sources:
-        - name: sample_dependency
-          type: git
-          repo: https://github.com/githubtraining/hellogitworld
-          sparse_paths:
-          -
-          rev: master
-          link:
-          scripts:
-          -
+          - name: sample_dependency
+            type: git
+            repo: https://github.com/githubtraining/hellogitworld
+            sparse_paths:
+              -
+            rev: master
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: sample_dependency
-          type: git
-          repo: https://github.com/githubtraining/hellogitworld
-          sparse_paths:
+          - name: sample_dependency
+            type: git
+            repo: https://github.com/githubtraining/hellogitworld
+            sparse_paths:
+              -
+            rev: ebbbf773431ba07510251bb03f9525c7bab2b13a
+            link:
+            scripts:
+              -
+        groups:
           -
-          rev: ebbbf773431ba07510251bb03f9525c7bab2b13a
-          link:
-          scripts:
-          -
-        groups: []
         """
         )
 
     def it_does_not_modify_existing_config_file(config):
         expect(gitman.init()) == False
 
-        expect(config.__mapper__.text) == CONFIG
+        expect(config.datafile.text) == CONFIG
 
 
 def describe_install():
@@ -125,63 +131,65 @@ def describe_install():
     def it_should_not_modify_config(config):
         expect(gitman.install('gitman_1', depth=1)) == True
 
-        expect(config.__mapper__.text) == CONFIG
+        expect(config.datafile.text) == CONFIG
 
     def it_merges_sources(config):
-        config.__mapper__.text = strip(
+        config.datafile.text = strip(
             """
         location: deps
         sources:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          rev: example-branch
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            rev: example-branch
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          rev: example-branch
-          link:
-          scripts:
-          -
-        - name: gitman_3
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_3
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+            link:
+            scripts:
+              -
         """
         )
+        config.datafile.load()
 
         expect(gitman.install(depth=1)) == True
 
         expect(len(os.listdir(config.location))) == 3
 
     def it_can_handle_missing_locked_sources(config):
-        config.__mapper__.text = strip(
+        config.datafile.text = strip(
             """
         location: deps
         sources:
-        - name: gitman_1
-          repo: https://github.com/jacebrowning/gitman-demo
-          rev: example-branch
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            repo: https://github.com/jacebrowning/gitman-demo
+            rev: example-branch
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+            link:
+            scripts:
+              -
         """
         )
+        config.datafile.load()
 
         expect(gitman.install('gitman_1', depth=1)) == True
 
@@ -201,18 +209,19 @@ def describe_install():
     def describe_links():
         @pytest.fixture
         def config_with_link(config):
-            config.__mapper__.text = strip(
+            config.datafile.text = strip(
                 """
             location: deps
             sources:
-            - name: gitman_1
-              repo: https://github.com/jacebrowning/gitman-demo
-              rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-              link: my_link
-              scripts:
-              -
+              - name: gitman_1
+                repo: https://github.com/jacebrowning/gitman-demo
+                rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+                link: my_link
+                scripts:
+                  -
             """
             )
+            config.datafile.load()
 
             return config
 
@@ -235,19 +244,20 @@ def describe_install():
     def describe_scripts():
         @pytest.fixture
         def config_with_scripts(config):
-            config.__mapper__.text = strip(
+            config.datafile.text = strip(
                 """
             location: deps
             sources:
-            - name: gitman_1
-              type: git
-              repo: https://github.com/jacebrowning/gitman-demo
-              rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-              link:
-              scripts:
-              - make foobar
+              - name: gitman_1
+                type: git
+                repo: https://github.com/jacebrowning/gitman-demo
+                rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+                link:
+                scripts:
+                  - make foobar
             """
             )
+            config.datafile.load()
 
             return config
 
@@ -261,21 +271,22 @@ def describe_install():
     def describe_sparse_paths():
         @pytest.fixture
         def config_with_scripts(config):
-            config.__mapper__.text = strip(
+            config.datafile.text = strip(
                 """
                     location: deps
                     sources:
-                    - name: gitman_1
-                      type: git
-                      repo: https://github.com/jacebrowning/gitman-demo
-                      sparse_paths:
-                      - src/*
-                      rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
-                      link:
-                      scripts:
-                      -
+                      - name: gitman_1
+                        type: git
+                        repo: https://github.com/jacebrowning/gitman-demo
+                        sparse_paths:
+                          - src/*
+                        rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
+                        link:
+                        scripts:
+                          -
                     """
             )
+            config.datafile.load()
 
             return config
 
@@ -300,7 +311,7 @@ def describe_uninstall():
 
         expect(os.path.exists(config.location)) == False
 
-    def it_should_not_fail_when_no_dependnecies_exist(config):
+    def it_should_not_fail_when_no_dependencies_exist(config):
         expect(os.path.isdir(config.location)) == False
 
         expect(gitman.uninstall()) == True
@@ -313,335 +324,344 @@ def describe_uninstall():
         gitman.uninstall()
         expect(os.path.exists(config.log_path)) == False
 
+    def describe_keep_location():
+        def it_deletes_dependencies_when_they_exist(config):
+            gitman.install('gitman_1', depth=1)
+            expect(os.path.isdir(config.location)) == True
 
-def describe_keep_location():
-    def it_deletes_dependencies_when_they_exist(config):
-        gitman.install('gitman_1', depth=1)
-        expect(os.path.isdir(config.location)) == True
+            expect(gitman.uninstall(keep_location=True)) == True
 
-        expect(gitman.uninstall(keep_location=True)) == True
+            path = os.path.join(config.location, 'gitman_1')
+            expect(os.path.exists(path)) == False
 
-        path = os.path.join(config.location, 'gitman_1')
-        expect(os.path.exists(path)) == False
+            expect(os.path.exists(config.location)) == True
 
-        expect(os.path.exists(config.location)) == True
+            gitman.uninstall()
 
-        gitman.uninstall()
+        def it_should_not_fail_when_no_dependencies_exist(config):
+            expect(os.path.isdir(config.location)) == False
 
-    def it_should_not_fail_when_no_dependencies_exist(config):
-        expect(os.path.isdir(config.location)) == False
+            expect(gitman.uninstall(keep_location=True)) == True
 
-        expect(gitman.uninstall(keep_location=True)) == True
+            gitman.uninstall()
 
-        gitman.uninstall()
+        def it_deletes_the_log_file(config):
+            gitman.install('gitman_1', depth=1)
+            gitman.list()
+            expect(os.path.exists(config.log_path)) == True
 
-    def it_deletes_the_log_file(config):
-        gitman.install('gitman_1', depth=1)
-        gitman.list()
-        expect(os.path.exists(config.log_path)) == True
+            gitman.uninstall(keep_location=True)
+            expect(os.path.exists(config.log_path)) == False
 
-        gitman.uninstall(keep_location=True)
-        expect(os.path.exists(config.log_path)) == False
-
-        gitman.uninstall()
+            gitman.uninstall()
 
 
 def describe_update():
     def it_should_not_modify_config(config):
         gitman.update('gitman_1', depth=1)
 
-        expect(config.__mapper__.text) == CONFIG
+        expect(config.datafile.text) == CONFIG
 
-    def it_locks_previously_locked_dependnecies(config):
-        config.__mapper__.text = strip(
+    def it_locks_previously_unlocked_dependencies(config):
+        config.datafile.text = strip(
             """
         location: deps
         sources:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-branch
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: (old revision)
+            link:
+            scripts:
+              -
+        groups:
           -
-          rev: (old revision)
-          link:
-          scripts:
-          -
-        groups: []
         """
         )
+        config.datafile.load()
 
         gitman.update(depth=1)
 
-        expect(config.__mapper__.text) == strip(
+        config.datafile.load()
+        expect(config.datafile.text) == strip(
             """
         location: deps
         sources:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-branch
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+            link:
+            scripts:
+              -
+        groups:
           -
-          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link:
-          scripts:
-          -
-        groups: []
         """
         )
 
-    def it_should_not_lock_dependnecies_when_disabled(config):
-        config.__mapper__.text = strip(
+    def it_should_not_lock_dependencies_when_disabled(config):
+        config.datafile.text = strip(
             """
         location: deps
         sources:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-branch
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: (old revision)
+            link:
+            scripts:
+              -
+        groups:
           -
-          rev: (old revision)
-          link:
-          scripts:
-          -
-        groups: []
         """
         )
+        config.datafile.load()
 
         gitman.update(depth=1, lock=False)
 
-        expect(config.__mapper__.text) == strip(
+        expect(config.datafile.text) == strip(
             """
         location: deps
         sources:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-branch
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: (old revision)
+            link:
+            scripts:
+              -
+        groups:
           -
-          rev: (old revision)
-          link:
-          scripts:
-          -
-        groups: []
         """
         )
 
     def it_should_not_allow_source_and_group_name_conflicts(config):
-        config.__mapper__.text = strip(
+        config.datafile.text = strip(
             """
                 location: deps
                 sources:
-                - name: gitman_1
-                  type: git
-                  repo: https://github.com/jacebrowning/gitman-demo
-                  rev: example-branch
-                - name: gitman_2
-                  type: git
-                  repo: https://github.com/jacebrowning/gitman-demo
-                  rev: example-branch
+                  - name: gitman_1
+                    type: git
+                    repo: https://github.com/jacebrowning/gitman-demo
+                    rev: example-branch
+                  - name: gitman_2
+                    type: git
+                    repo: https://github.com/jacebrowning/gitman-demo
+                    rev: example-branch
                 groups:
-                - name: gitman_1
-                  members:
-                  - gitman_1
-                  - gitman_2
+                  - name: gitman_1
+                    members:
+                      - gitman_1
+                      - gitman_2
             """
         )
+        config.datafile.load()
 
         with pytest.raises(InvalidConfig):
             gitman.update(depth=1, lock=True)
 
-    def it_locks_previously_locked_dependnecies_by_group_name(config):
-        config.__mapper__.text = strip(
+    def it_locks_previously_locked_dependencies_by_group_name(config):
+        config.datafile.text = strip(
             """
         location: deps
         sources:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-branch
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
-        - name: gitman_3
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
+          - name: gitman_3
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: (old revision)
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: (old revision)
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: (old revision)
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: (old revision)
+            link:
+            scripts:
+              -
         groups:
-        - name: group_a
-          members:
-          - gitman_1
-          - gitman_2
+          - name: group_a
+            members:
+              - gitman_1
+              - gitman_2
         """
         )
+        config.datafile.load()
 
         gitman.update('group_a', depth=1)
 
-        expect(config.__mapper__.text) == strip(
+        config.datafile.load()
+        expect(config.datafile.text) == strip(
             """
         location: deps
         sources:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-branch
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
-        - name: gitman_3
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
+          - name: gitman_3
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+            link:
+            scripts:
+              -
         groups:
-        - name: group_a
-          members:
-          - gitman_1
-          - gitman_2
+          - name: group_a
+            members:
+              - gitman_1
+              - gitman_2
         """
         )
 
@@ -662,59 +682,62 @@ def describe_update():
         # with no to skip the force process
         monkeypatch.setattr('builtins.input', lambda x: "n")
 
-        config.__mapper__.text = strip(
+        config.datafile.text = strip(
             """
         location: deps
         sources:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: (old revision)
+            link:
+            scripts:
+              -
+        groups:
           -
-          rev: (old revision)
-          link:
-          scripts:
-          -
-        groups: []
         """
         )
+        config.datafile.load()
 
         gitman.update(depth=1, force_interactive=True)
 
-        expect(config.__mapper__.text) == strip(
+        expect(config.datafile.text) == strip(
             """
         location: deps
         sources:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: (old revision)
+            link:
+            scripts:
+              -
+        groups:
           -
-          rev: (old revision)
-          link:
-          scripts:
-          -
-        groups: []
         """
         )
 
@@ -739,94 +762,99 @@ def describe_update():
         monkeypatch.setattr('gitman.git.changes', git_changes)
         # patch standard input function to return "y" for each call
         # this is necessary to answer the force-interactive question
-        # with yes todo the force process
+        # with yes to invoke the force process
         monkeypatch.setattr('builtins.input', lambda x: "y")
 
-        config.__mapper__.text = strip(
+        config.datafile.text = strip(
             """
         location: deps
         sources:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: (old revision)
+            link:
+            scripts:
+              -
+        groups:
           -
-          rev: (old revision)
-          link:
-          scripts:
-          -
-        groups: []
         """
         )
+        config.datafile.load()
 
         gitman.update(depth=1, force_interactive=True)
 
-        expect(config.__mapper__.text) == strip(
+        config.datafile.load()
+        expect(config.datafile.text) == strip(
             """
         location: deps
         sources:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: example-tag
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+            link:
+            scripts:
+              -
+        groups:
           -
-          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link:
-          scripts:
-          -
-        groups: []
         """
         )
 
     def it_merges_sources(config):
-        config.__mapper__.text = strip(
+        config.datafile.text = strip(
             """
         location: deps
         sources:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          rev: example-branch
-          link:
-          scripts:
-          -
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            rev: example-branch
+            link:
+            scripts:
+              -
         sources_locked:
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          rev: example-branch
-          link:
-          scripts:
-          -
-        - name: gitman_3
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link:
-          scripts:
-          -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_3
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+            link:
+            scripts:
+              -
         """
         )
+        config.datafile.load()
 
         expect(gitman.install(depth=1)) == True
 
@@ -861,68 +889,72 @@ def describe_lock():
         expect(gitman.update(depth=1, lock=False)) == True
         expect(gitman.lock()) == True
 
-        expect(config.__mapper__.text) == CONFIG + strip(
-            """
+        config.datafile.load()
+        expect(config.datafile.text).contains(
+            strip(
+                """
         sources_locked:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
-          link:
-          scripts:
-          -
-        - name: gitman_2
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-          link:
-          scripts:
-          -
-        - name: gitman_3
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: 9bf18e16b956041f0267c21baad555a23237b52e
-          link:
-          scripts:
-          -
-        groups: []
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+            link:
+            scripts:
+              -
+          - name: gitman_3
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 9bf18e16b956041f0267c21baad555a23237b52e
+            link:
+            scripts:
+              -
         """
-        ) == config.__mapper__.text
+            )
+        )
 
     def it_records_specified_dependencies(config):
         expect(gitman.update(depth=1, lock=False)) == True
         expect(gitman.lock('gitman_1', 'gitman_3')) == True
 
-        expect(config.__mapper__.text) == CONFIG + strip(
-            """
+        config.datafile.load()
+        expect(config.datafile.text).contains(
+            strip(
+                """
         sources_locked:
-        - name: gitman_1
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
-          link:
-          scripts:
-          -
-        - name: gitman_3
-          type: git
-          repo: https://github.com/jacebrowning/gitman-demo
-          sparse_paths:
-          -
-          rev: 9bf18e16b956041f0267c21baad555a23237b52e
-          link:
-          scripts:
-          -
-        groups: []
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
+            link:
+            scripts:
+              -
+          - name: gitman_3
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: 9bf18e16b956041f0267c21baad555a23237b52e
+            link:
+            scripts:
+              -
         """
-        ) == config.__mapper__.text
+            )
+        )
 
     def it_should_fail_on_dirty_repositories(config):
         expect(gitman.update(depth=1, lock=False)) == True
@@ -932,7 +964,7 @@ def describe_lock():
             with pytest.raises(UncommittedChanges):
                 gitman.lock()
 
-            expect(config.__mapper__.text).does_not_contain("<dirty>")
+            expect(config.datafile.text).does_not_contain("<dirty>")
 
         finally:
             shell.rm(os.path.join("deps", "gitman_1"))
@@ -944,7 +976,7 @@ def describe_lock():
         with pytest.raises(InvalidRepository):
             gitman.lock()
 
-        expect(config.__mapper__.text).does_not_contain("<unknown>")
+        expect(config.datafile.text).does_not_contain("<unknown>")
 
     def it_should_fail_on_invalid_repositories(config):
         shell.mkdir("deps")
@@ -955,7 +987,7 @@ def describe_lock():
             with pytest.raises(InvalidRepository):
                 gitman.lock()
 
-            expect(config.__mapper__.text).does_not_contain("<unknown>")
+            expect(config.datafile.text).does_not_contain("<unknown>")
 
         finally:
             shell.rm(os.path.join("deps", "gitman_1"))
