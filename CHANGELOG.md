@@ -1,4 +1,4 @@
-# 2.0 (beta)
+# 2.0 (2020-04-13)
 
 - **BREAKING**: Removed legacy `gdm` CLI entry point.
 - **BREAKING**: Dropped support for Python 3.6.
