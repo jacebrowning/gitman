@@ -79,8 +79,9 @@ def configure_logging(count=0):
         verbose_format = settings.VERBOSE2_LOGGING_FORMAT
 
     # Set a custom formatter
+    log.reset()
     log.init(level=level)
-    log.silence('yorm', allow_warning=True)
+    log.silence('datafiles', allow_warning=True)
     logging.captureWarnings(True)
     formatter = WarningFormatter(
         default_format, verbose_format, datefmt=settings.LOGGING_DATEFMT

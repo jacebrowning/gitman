@@ -27,7 +27,7 @@ def call(name, *args, _show=True, _show_stdout=True, _shell=False, _ignore=False
     """
     program = show(name, *args, stdout=_show)
 
-    command = subprocess.Popen(  # pylint: disable=subprocess-run-check
+    command = subprocess.Popen(
         name if _shell else [name, *args],
         universal_newlines=True,
         stdout=subprocess.PIPE,

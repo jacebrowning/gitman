@@ -34,14 +34,14 @@ def init():
     else:
         config = Config()
         source = Source(
-            'git',
+            type='git',
             name="sample_dependency",
             repo="https://github.com/githubtraining/hellogitworld",
         )
         config.sources.append(source)
         source = source.lock(rev="ebbbf773431ba07510251bb03f9525c7bab2b13a")
         config.sources_locked.append(source)
-        config.save()
+        config.datafile.save()
 
         msg = "Created sample config file: {}".format(config.path)
         common.show(msg, color='success')

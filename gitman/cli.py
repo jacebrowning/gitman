@@ -322,7 +322,6 @@ def _run_command(function, args, kwargs):
 
 
 def _show_error(exception):
-    # TODO: require level=, evaluate all calls to dedent()
     common.dedent(0)
     common.newline()
     common.show(str(exception), color='error')
