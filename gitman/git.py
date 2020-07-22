@@ -108,12 +108,12 @@ def valid():
     log.debug("Checking for a valid working tree...")
 
     try:
-        git('rev-parse', '--is-inside-work-tree', _show=False)
+        git('rev-parse', '--is-inside-work-tree', _show=False, _show_stdout=False)
     except ShellError:
         return False
 
     log.debug("Checking for a valid git top level...")
-    gittoplevel = git('rev-parse', '--show-toplevel', _show=False)
+    gittoplevel = git('rev-parse', '--show-toplevel', _show=False, _show_stdout=False)
     currentdir = pwd(_show=False)
 
     status = False
@@ -144,7 +144,7 @@ def rebuild(type, repo):  # pylint: disable=unused-argument
     common.show("Rebuilt git repo...", color='message')
 
 
-def changes(type, include_untracked=False, display_status=True, _show=False):
+def changes(type, include_untracked=False, display_status=True, _show=False, _show_stdout=False):
     """Determine if there are changes in the working tree."""
     status = False
 
@@ -156,13 +156,13 @@ def changes(type, include_untracked=False, display_status=True, _show=False):
 
     try:
         # Refresh changes
-        git('update-index', '-q', '--refresh', _show=False)
+        git('update-index', '-q', '--refresh', _show=False, _show_stdout=False)
 
         # Check for uncommitted changes
-        git('diff-index', '--quiet', 'HEAD', _show=_show)
+        git('diff-index', '--quiet', 'HEAD', _show=_show, _show_stdout=_show_stdout)
 
         # Check for untracked files
-        lines = git('ls-files', '--others', '--exclude-standard', _show=_show)
+        lines = git('ls-files', '--others', '--exclude-standard', _show=_show, _show_stdout=_show_stdout)
 
     except ShellError:
         status = True
@@ -172,7 +172,7 @@ def changes(type, include_untracked=False, display_status=True, _show=False):
 
     if status and display_status:
         with suppress(ShellError):
-            lines = git('status', _show=True)
+            lines = git('status', _show=True, _show_stdout=False)
             common.show(*lines, color='git_changes')
 
     return status
@@ -200,14 +200,14 @@ def update(
     assert type == 'git'
 
     # Update the working tree to the specified revision.
-    hide = {'_show': False, '_ignore': True}
+    hide = {'_show': False, '_show_stdout': False, '_ignore': True}
 
     git('stash', **hide)
     if clean:
-        git('clean', '--force', '-d', '-x', _show=False)
+        git('clean', '--force', '-d', '-x', _show=False, _show_stdout=False)
 
     rev = _get_sha_from_rev(rev)
-    git('checkout', '--force', rev)
+    git('checkout', '--force', rev, _show_stdout=False)
     git('branch', '--set-upstream-to', 'origin/' + rev, **hide)
 
     if fetch:
@@ -218,26 +218,26 @@ def update(
 def get_url(type):
     """Get the current repository's URL."""
     if type == 'git-svn':
-        return git('config', '--get', 'svn-remote.svn.url', _show=False)[0]
+        return git('config', '--get', 'svn-remote.svn.url', _show=False, _show_stdout=False)[0]
 
     assert type == 'git'
 
-    return git('config', '--get', 'remote.origin.url', _show=False)[0]
+    return git('config', '--get', 'remote.origin.url', _show=False, _show_stdout=False)[0]
 
 
-def get_hash(type, _show=False):
+def get_hash(type, _show=False, _show_stdout=False):
     """Get the current working tree's hash."""
     if type == 'git-svn':
         return ''.join(filter(str.isdigit, gitsvn('info', _show=_show)[4]))
 
     assert type == 'git'
 
-    return git('rev-parse', 'HEAD', _show=_show)[0]
+    return git('rev-parse', 'HEAD', _show=_show, _show_stdout=_show_stdout)[0]
 
 
 def get_tag():
     """Get the current working tree's tag (if on a tag)."""
-    return git('describe', '--tags', '--exact-match', _show=False, _ignore=True)[0]
+    return git('describe', '--tags', '--exact-match', _show=False, _show_stdout=False, _ignore=True)[0]
 
 
 def is_fetch_required(type, rev):
@@ -251,7 +251,7 @@ def is_fetch_required(type, rev):
 
 def get_branch():
     """Get the current working tree's branch."""
-    return git('rev-parse', '--abbrev-ref', 'HEAD', _show=False)[0]
+    return git('rev-parse', '--abbrev-ref', 'HEAD', _show=False, _show_stdout=False)[0]
 
 
 def _get_sha_from_rev(rev):
@@ -260,7 +260,7 @@ def _get_sha_from_rev(rev):
         parts = rev.split('@')
         branch = parts[0]
         date = parts[1].strip("{}")
-        git('checkout', '--force', branch, _show=False)
+        git('checkout', '--force', branch, _show=False, _show_stdout=False)
         rev = git(
             'rev-list',
             '-n',
@@ -269,5 +269,6 @@ def _get_sha_from_rev(rev):
             '--first-parent',
             branch,
             _show=False,
+            _show_stdout=False,
         )[0]
     return rev

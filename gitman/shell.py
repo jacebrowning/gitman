@@ -13,12 +13,13 @@ CMD_PREFIX = "$ "
 OUT_PREFIX = "> "
 
 
-def call(name, *args, _show=True, _shell=False, _ignore=False):
+def call(name, *args, _show=True, _show_stdout=True, _shell=False, _ignore=False):
     """Call a program with arguments.
 
     :param name: name of program to call
     :param args: list of command-line arguments
     :param _show: display the call on stdout
+    :param _show_stdout: display stdout of the call on stdout
     :param _shell: force executing the program into a real shell
                    a Windows shell command (i.e: dir, echo) needs a real shell
                    but not a regular program (i.e: calc, git)
@@ -26,7 +27,7 @@ def call(name, *args, _show=True, _shell=False, _ignore=False):
     """
     program = show(name, *args, stdout=_show)
 
-    command = subprocess.run(  # pylint: disable=subprocess-run-check
+    command = subprocess.Popen(  # pylint: disable=subprocess-run-check
         name if _shell else [name, *args],
         universal_newlines=True,
         stdout=subprocess.PIPE,
@@ -34,16 +35,30 @@ def call(name, *args, _show=True, _shell=False, _ignore=False):
         shell=_shell,
     )
 
-    output = [line.strip() for line in command.stdout.splitlines()]
-    for line in output:
-        log.debug(OUT_PREFIX + line)
+    # Poll process.stdout to show stdout live
+    complete_output = []
+    while True:
+        output = command.stdout.readline()
+        if output == '' and command.poll() is not None:
+            break
+        
+        if output != '':
+            output=output.strip()
+        else:
+            continue
+            
+        complete_output.append(output)
+        if _show_stdout:
+            common.show(output, color='shell_output')
+        else:
+            log.debug(OUT_PREFIX + output)
 
     if command.returncode == 0:
-        return output
+        return complete_output
 
     if _ignore:
         log.debug("Ignored error from call to '%s'", name)
-        return output
+        return complete_output
 
     message = (
         "An external program call failed." + "\n\n"
@@ -52,10 +67,9 @@ def call(name, *args, _show=True, _shell=False, _ignore=False):
         + "\n\n"
         + CMD_PREFIX
         + program
-        + "\n"
-        + command.stdout.strip()
+        + "\n".join(complete_output)
     )
-    raise ShellError(message, program=program, output=output)
+    raise ShellError(message, program=program, output=complete_output)
 
 
 def mkdir(path):
