@@ -142,7 +142,7 @@ class Config(yorm.ModelMixin):
 
         return count
 
-    def run_scripts(self, *names, depth=None, force=False):
+    def run_scripts(self, *names, depth=None, force=False, show_shell_stdout=False):
         """Run scripts for the specified dependencies."""
         if depth == 0:
             log.info("Skipped directory: %s", self.location_path)
@@ -158,7 +158,7 @@ class Config(yorm.ModelMixin):
         count = 0
         for source in sources:
             if source.name in sources_filter:
-                source.run_scripts(force=force)
+                source.run_scripts(force=force, show_shell_stdout=show_shell_stdout)
                 count += 1
 
                 config = load_config(search=False)
