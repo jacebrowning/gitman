@@ -105,7 +105,9 @@ def install(
         )
 
         if count:
-            _run_scripts(*names, depth=depth, force=force, _config=config, show_shell_stdout=True)
+            _run_scripts(
+                *names, depth=depth, force=force, _config=config, show_shell_stdout=True
+            )
 
     return _display_result("install", "Installed", count)
 
@@ -175,12 +177,16 @@ def update(
             )
 
         if count:
-            _run_scripts(*names, depth=depth, force=force, _config=config, show_shell_stdout=True)
+            _run_scripts(
+                *names, depth=depth, force=force, _config=config, show_shell_stdout=True
+            )
 
     return _display_result("update", "Updated", count)
 
 
-def _run_scripts(*names, depth=None, force=False, _config=None, show_shell_stdout=False):
+def _run_scripts(
+    *names, depth=None, force=False, _config=None, show_shell_stdout=False
+):
     """Run post-install scripts.
 
     Optional arguments:
@@ -195,7 +201,9 @@ def _run_scripts(*names, depth=None, force=False, _config=None, show_shell_stdou
 
     common.show("Running scripts...", color='message', log=False)
     common.newline()
-    _config.run_scripts(*names, depth=depth, force=force, show_shell_stdout=show_shell_stdout)
+    _config.run_scripts(
+        *names, depth=depth, force=force, show_shell_stdout=show_shell_stdout
+    )
 
 
 @restore_cwd

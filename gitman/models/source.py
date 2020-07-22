@@ -166,7 +166,7 @@ class Source:
         # Run all scripts
         for script in self.scripts:
             try:
-                lines = shell.call(script, _shell=True, _show_stdout=show_shell_stdout)
+                shell.call(script, _shell=True, _show_stdout=show_shell_stdout)
             except exceptions.ShellError as exc:
                 common.show(*exc.output, color='shell_error')
                 cmd = exc.program

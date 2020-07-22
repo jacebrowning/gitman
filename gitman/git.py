@@ -144,7 +144,9 @@ def rebuild(type, repo):  # pylint: disable=unused-argument
     common.show("Rebuilt git repo...", color='message')
 
 
-def changes(type, include_untracked=False, display_status=True, _show=False, _show_stdout=False):
+def changes(
+    type, include_untracked=False, display_status=True, _show=False, _show_stdout=False
+):
     """Determine if there are changes in the working tree."""
     status = False
 
@@ -162,7 +164,13 @@ def changes(type, include_untracked=False, display_status=True, _show=False, _sh
         git('diff-index', '--quiet', 'HEAD', _show=_show, _show_stdout=_show_stdout)
 
         # Check for untracked files
-        lines = git('ls-files', '--others', '--exclude-standard', _show=_show, _show_stdout=_show_stdout)
+        lines = git(
+            'ls-files',
+            '--others',
+            '--exclude-standard',
+            _show=_show,
+            _show_stdout=_show_stdout,
+        )
 
     except ShellError:
         status = True
@@ -218,11 +226,15 @@ def update(
 def get_url(type):
     """Get the current repository's URL."""
     if type == 'git-svn':
-        return git('config', '--get', 'svn-remote.svn.url', _show=False, _show_stdout=False)[0]
+        return git(
+            'config', '--get', 'svn-remote.svn.url', _show=False, _show_stdout=False
+        )[0]
 
     assert type == 'git'
 
-    return git('config', '--get', 'remote.origin.url', _show=False, _show_stdout=False)[0]
+    return git('config', '--get', 'remote.origin.url', _show=False, _show_stdout=False)[
+        0
+    ]
 
 
 def get_hash(type, _show=False, _show_stdout=False):
@@ -237,7 +249,14 @@ def get_hash(type, _show=False, _show_stdout=False):
 
 def get_tag():
     """Get the current working tree's tag (if on a tag)."""
-    return git('describe', '--tags', '--exact-match', _show=False, _show_stdout=False, _ignore=True)[0]
+    return git(
+        'describe',
+        '--tags',
+        '--exact-match',
+        _show=False,
+        _show_stdout=False,
+        _ignore=True,
+    )[0]
 
 
 def is_fetch_required(type, rev):

@@ -41,12 +41,12 @@ def call(name, *args, _show=True, _show_stdout=True, _shell=False, _ignore=False
         output = command.stdout.readline()
         if output == '' and command.poll() is not None:
             break
-        
+
         if output != '':
-            output=output.strip()
+            output = output.strip()
         else:
             continue
-            
+
         complete_output.append(output)
         if _show_stdout:
             common.show(output, color='shell_output')
