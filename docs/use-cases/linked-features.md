@@ -12,7 +12,7 @@ location: vendor/gitman
 sources:
 - name: api
   repo: https://github.com/example/api
-  rev: develop
+  rev: main
 sources_locked:
 - name: api
   repo: https://github.com/example/api
