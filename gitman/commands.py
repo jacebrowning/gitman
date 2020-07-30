@@ -105,7 +105,9 @@ def install(
         )
 
         if count:
-            _run_scripts(*names, depth=depth, force=force, _config=config)
+            _run_scripts(
+                *names, depth=depth, force=force, _config=config, show_shell_stdout=True
+            )
 
     return _display_result("install", "Installed", count)
 
@@ -175,12 +177,16 @@ def update(
             )
 
         if count:
-            _run_scripts(*names, depth=depth, force=force, _config=config)
+            _run_scripts(
+                *names, depth=depth, force=force, _config=config, show_shell_stdout=True
+            )
 
     return _display_result("update", "Updated", count)
 
 
-def _run_scripts(*names, depth=None, force=False, _config=None):
+def _run_scripts(
+    *names, depth=None, force=False, _config=None, show_shell_stdout=False
+):
     """Run post-install scripts.
 
     Optional arguments:
@@ -188,13 +194,16 @@ def _run_scripts(*names, depth=None, force=False, _config=None):
     - `*names`: optional list of dependency directory names filter on
     - `depth`: number of levels of dependencies to traverse
     - `force`: indicates script errors can be ignored
+    - `show_shell_stdout`: allows to print realtime output from shell commands
 
     """
     assert _config, "'_config' is required"
 
     common.show("Running scripts...", color='message', log=False)
     common.newline()
-    _config.run_scripts(*names, depth=depth, force=force)
+    _config.run_scripts(
+        *names, depth=depth, force=force, show_shell_stdout=show_shell_stdout
+    )
 
 
 @restore_cwd

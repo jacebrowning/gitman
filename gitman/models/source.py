@@ -149,7 +149,7 @@ class Source:
 
         shell.ln(source, target)
 
-    def run_scripts(self, force=False):
+    def run_scripts(self, force=False, show_shell_stdout=False):
         log.info("Running install scripts...")
 
         # Enter the working tree
@@ -166,7 +166,7 @@ class Source:
         # Run all scripts
         for script in self.scripts:
             try:
-                lines = shell.call(script, _shell=True)
+                shell.call(script, _shell=True, _show_stdout=show_shell_stdout)
             except exceptions.ShellError as exc:
                 common.show(*exc.output, color='shell_error')
                 cmd = exc.program
@@ -175,8 +175,6 @@ class Source:
                 else:
                     msg = "Command '{}' failed in {}".format(cmd, os.getcwd())
                     raise exceptions.ScriptFailure(msg)
-            else:
-                common.show(*lines, color='shell_output')
         common.newline()
 
     def identify(self, allow_dirty=True, allow_missing=True, skip_changes=False):
