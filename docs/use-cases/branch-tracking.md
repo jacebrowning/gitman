@@ -11,7 +11,7 @@ location: vendor/gitman
 sources:
 - name: api
   repo: https://github.com/example/api
-  rev: develop
+  rev: main
 sources_locked:
 - name: api
   repo: https://github.com/example/api
@@ -35,7 +35,7 @@ tests
 
 In the config file, the `sources_locked` section identifies that commit `b27308` of the API was last used to test this web app -- the last time `$ gitman update` was run.
 
-The `sources` section identifies that the `develop` branch should be used when checking out a new version of the API.
+The `sources` section identifies that the `main` branch should be used when checking out a new version of the API.
 
 ## Development Workflow
 

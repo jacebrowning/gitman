@@ -1,3 +1,7 @@
+# 2.1 (beta)
+
+- Added realtime display of script output. (@spurnvoj)
+
 # 2.0 (2020-04-13)
 
 - **BREAKING**: Removed legacy `gdm` CLI entry point.

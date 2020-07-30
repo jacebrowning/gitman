@@ -30,7 +30,7 @@ location: vendor/gitman
 sources:
 - name: lib_foo
   repo: https://github.com/example/lib_foo
-  rev: develop
+  rev: main
 - name: lib_bar
   repo: https://github.com/example/lib_bar
   rev: master
