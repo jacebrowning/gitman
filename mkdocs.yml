@@ -25,9 +25,10 @@ nav:
       - Tracking Branches: use-cases/branch-tracking.md
       - Linking Feature Branches: use-cases/linked-features.md
       - Build System Integration: use-cases/build-integration.md
-      - Self contained GitMan: use-cases/self-contained-gitman.md
       - Sparse Checkouts: use-cases/sparse-checkouts.md
-      - Git SVN: use-cases/git-svn.md
+  - Extras:
+      - Git SVN Bridge: extras/git-svn.md
+      - Self-Contained GitMan: extras/self-contained-gitman.md
   - About:
       - Release Notes: about/changelog.md
       - Contributing: about/contributing.md
