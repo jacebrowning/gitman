@@ -172,7 +172,7 @@ def changes(type, include_untracked=False, display_status=True, _show=False):
 
     if status and display_status:
         with suppress(ShellError):
-            lines = git('status', _show=True, _show_stdout=False)
+            lines = git('status', _show=True, _stream=False)
             common.show(*lines, color='git_changes')
 
     return status
@@ -207,7 +207,7 @@ def update(
         git('clean', '--force', '-d', '-x', _show=False)
 
     rev = _get_sha_from_rev(rev)
-    git('checkout', '--force', rev, _show_stdout=False)
+    git('checkout', '--force', rev, _stream=False)
     git('branch', '--set-upstream-to', 'origin/' + rev, **hide)
 
     if fetch:

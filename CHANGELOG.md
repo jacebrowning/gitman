@@ -1,6 +1,6 @@
 # 2.1 (beta)
 
-- Added realtime display of script output. (@spurnvoj)
+- Added realtime display of shell calls. (@spurnvoj)
 
 # 2.0 (2020-04-13)
 
