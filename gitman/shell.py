@@ -25,6 +25,9 @@ def call(name, *args, _show=True, _show_stdout=True, _shell=False, _ignore=False
                    but not a regular program (i.e: calc, git)
     :param _ignore: ignore non-zero return codes
     """
+    if not _show:
+        _show_stdout = False
+
     program = show(name, *args, stdout=_show)
 
     command = subprocess.Popen(  # pylint: disable=subprocess-run-check
