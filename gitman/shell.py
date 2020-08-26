@@ -13,18 +13,21 @@ CMD_PREFIX = "$ "
 OUT_PREFIX = "> "
 
 
-def call(name, *args, _show=True, _show_stdout=True, _shell=False, _ignore=False):
+def call(name, *args, _show=True, _stream=True, _shell=False, _ignore=False):
     """Call a program with arguments.
 
     :param name: name of program to call
     :param args: list of command-line arguments
-    :param _show: display the call on stdout
-    :param _show_stdout: display stdout of the call on stdout
+    :param _show: display the call arguments
+    :param _stream: stream realtime output of the call
     :param _shell: force executing the program into a real shell
                    a Windows shell command (i.e: dir, echo) needs a real shell
                    but not a regular program (i.e: calc, git)
     :param _ignore: ignore non-zero return codes
     """
+    if not _show:
+        _stream = False
+
     program = show(name, *args, stdout=_show)
 
     command = subprocess.Popen(  # pylint: disable=subprocess-run-check
@@ -48,7 +51,7 @@ def call(name, *args, _show=True, _show_stdout=True, _shell=False, _ignore=False
             continue
 
         complete_output.append(output)
-        if _show_stdout:
+        if _stream:
             common.show(output, color='shell_output')
         else:
             log.debug(OUT_PREFIX + output)
