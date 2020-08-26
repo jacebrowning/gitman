@@ -232,7 +232,7 @@ def get_hash(type, _show=False):
 
     assert type == 'git'
 
-    return git('rev-parse', 'HEAD', _show=_show)[0]
+    return git('rev-parse', 'HEAD', _show=_show, _stream=False)[0]
 
 
 def get_tag():

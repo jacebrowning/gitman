@@ -168,7 +168,10 @@ class Source:
             try:
                 shell.call(script, _shell=True, _stream=show_shell_stdout)
             except exceptions.ShellError as exc:
-                common.show(*exc.output, color='shell_error')
+                if show_shell_stdout:
+                    common.show('(script returned an error)', color='shell_error')
+                else:
+                    common.show(*exc.output, color='shell_error')
                 cmd = exc.program
                 if force:
                     log.debug("Ignored error from call to '%s'", cmd)
