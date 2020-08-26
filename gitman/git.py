@@ -162,7 +162,9 @@ def changes(type, include_untracked=False, display_status=True, _show=False):
         git('diff-index', '--quiet', 'HEAD', _show=_show)
 
         # Check for untracked files
-        lines = git('ls-files', '--others', '--exclude-standard', _show=_show)
+        lines = git(
+            'ls-files', '--others', '--exclude-standard', _show=_show, _stream=False
+        )
 
     except ShellError:
         status = True
