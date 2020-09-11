@@ -1,4 +1,4 @@
-# 2.1 (beta)
+# 2.1 (2020-09-10)
 
 - Added realtime display of shell calls. (@spurnvoj)
 

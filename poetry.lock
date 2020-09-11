@@ -154,13 +154,13 @@ description = "File-based ORM for dataclasses."
 name = "datafiles"
 optional = false
 python-versions = ">=3.7,<4.0"
-version = "0.11b4"
+version = "0.11"
 
 [package.dependencies]
 PyYAML = ">=5.2,<6.0"
 cached_property = ">=1.5,<2.0"
 classproperties = ">=0.1.3,<0.2.0"
-minilog = ">=2.0b1,<3.0"
+minilog = ">=2.0,<3.0"
 parse = ">=1.12,<2.0"
 "ruamel.yaml" = ">=0.16.10,<0.17.0"
 tomlkit = ">=0.5.3,<0.6.0"
@@ -328,7 +328,7 @@ description = "Minimalistic wrapper for Python logging."
 name = "minilog"
 optional = false
 python-versions = ">=3.6,<4.0"
-version = "2.0b1"
+version = "2.0"
 
 [[package]]
 category = "dev"
@@ -404,7 +404,7 @@ description = "parse() is the opposite of format()"
 name = "parse"
 optional = false
 python-versions = "*"
-version = "1.17.0"
+version = "1.18.0"
 
 [[package]]
 category = "dev"
@@ -823,7 +823,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "8e7d3651b6cf0f577ef3bebf56778d106c0f371ffcf6b2e9175ccf48bb73ffd9"
+content-hash = "68062875c2cf4d65293fa4c843a3e5332d66df2c9b70c8d70206816ac814b13a"
 lock-version = "1.0"
 python-versions = "^3.7"
 
@@ -916,8 +916,8 @@ coveragespace = [
     {file = "coveragespace-3.1.1.tar.gz", hash = "sha256:c5862d04a91bec32fc7dd8487006922e144280dc05e75b26c38f4ffe4e760fb0"},
 ]
 datafiles = [
-    {file = "datafiles-0.11b4-py3-none-any.whl", hash = "sha256:56f0ac323b0b4b160b58cc73ff361b8bc2e3a61e9ba12928c6a77aa4322cb916"},
-    {file = "datafiles-0.11b4.tar.gz", hash = "sha256:c0434d7680db36f5800a82a3da7f590d674123275f00fc70a94990727fbdd35b"},
+    {file = "datafiles-0.11-py3-none-any.whl", hash = "sha256:5763bf2d40f664daae54ce1273657005ecb4b8a42e4d77b54eb5cd3c2c61451d"},
+    {file = "datafiles-0.11.tar.gz", hash = "sha256:9c4ae5fed1cd8e19e21027c12eac4c1e73066a4c5d5dcaab998adbaae0784d6b"},
 ]
 docopt = [
     {file = "docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"},
@@ -1022,8 +1022,8 @@ mccabe = [
     {file = "mccabe-0.6.1.tar.gz", hash = "sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"},
 ]
 minilog = [
-    {file = "minilog-2.0b1-py3-none-any.whl", hash = "sha256:3500f683ac68eb87ba8c6e689c9a83fc509f6ce2d0221711003b13966c4c8b66"},
-    {file = "minilog-2.0b1.tar.gz", hash = "sha256:e6478c2c98e9af09c7ad1b55d89c1ed890342b7da39c54654aaa761812af2c55"},
+    {file = "minilog-2.0-py3-none-any.whl", hash = "sha256:891ad346bdd63aee4c210faa688497f7ba412cf52a54fb6cba6bf511a34a5138"},
+    {file = "minilog-2.0.tar.gz", hash = "sha256:58499302bca86cf507eb3c3dfa3853de9389bfde275ba5155bdc3b4551175918"},
 ]
 mkdocs = [
     {file = "mkdocs-1.0.4-py2.py3-none-any.whl", hash = "sha256:8cc8b38325456b9e942c981a209eaeb1e9f3f77b493ad755bfef889b9c8d356a"},
@@ -1063,7 +1063,7 @@ packaging = [
     {file = "packaging-20.4.tar.gz", hash = "sha256:4357f74f47b9c12db93624a82154e9b120fa8293699949152b22065d556079f8"},
 ]
 parse = [
-    {file = "parse-1.17.0.tar.gz", hash = "sha256:c7806139a481ec8c8336a54418894c8b201314f8ecc63e55f438f4b72bdc4485"},
+    {file = "parse-1.18.0.tar.gz", hash = "sha256:91666032d6723dc5905248417ef0dc9e4c51df9526aaeef271eacad6491f06a4"},
 ]
 pathspec = [
     {file = "pathspec-0.8.0-py2.py3-none-any.whl", hash = "sha256:7d91249d21749788d07a2d0f94147accd8f845507400749ea19c1ec9054a12b0"},
