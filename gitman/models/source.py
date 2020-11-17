@@ -60,7 +60,13 @@ class Source:
 
         # Clone the repository if needed
         assert self.name
-        if not os.path.exists(self.name):
+        valid_checkout_dir = False
+        if os.path.isdir(self.name):
+            valid_checkout_dir = len(os.listdir(self.name)) == 0
+        else:
+            valid_checkout_dir = True
+
+        if valid_checkout_dir:
             git.clone(
                 self.type,
                 self.repo,

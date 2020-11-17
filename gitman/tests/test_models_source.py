@@ -91,7 +91,8 @@ class TestSource:
             'git', 'repo', 'name', clean=True, fetch=False, rev='rev'
         )
 
-    @patch('os.path.exists', Mock(return_value=True))
+    @patch('os.path.isdir', Mock(return_value=True))
+    @patch('os.listdir', Mock(return_value=['test_file']))
     @patch('gitman.shell.cd', Mock(return_value=True))
     @patch('gitman.git.valid', Mock(return_value=False))
     @patch('gitman.git.changes', Mock(return_value=False))
@@ -113,7 +114,8 @@ class TestSource:
         mock_fetch.assert_not_called()
         mock_update.assert_not_called()
 
-    @patch('os.path.exists', Mock(return_value=True))
+    @patch('os.path.isdir', Mock(return_value=True))
+    @patch('os.listdir', Mock(return_value=['test_file']))
     @patch('gitman.shell.cd', Mock(return_value=True))
     @patch('gitman.git.valid', Mock(return_value=False))
     @patch('gitman.git.changes', Mock(return_value=False))

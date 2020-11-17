@@ -236,6 +236,13 @@ def describe_install():
             with pytest.raises(RuntimeError):
                 gitman.install(depth=1)
 
+        def it_should_not_overwrite_non_empty_directories(config_with_link):
+            os.system("mkdir my_link")
+            os.system("touch mylink/my_link")
+
+            with pytest.raises(RuntimeError):
+                gitman.install(depth=1)
+
         def it_overwrites_files_with_force(config_with_link):
             os.system("touch my_link")
 
