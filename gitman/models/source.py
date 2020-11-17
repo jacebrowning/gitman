@@ -61,7 +61,6 @@ class Source:
         # Clone the repository if needed
         assert self.name
         valid_checkout_dir = False
-        # if os.path.exists(self.name):
         if os.path.isdir(self.name):
             valid_checkout_dir = len(os.listdir(self.name)) == 0
         else:
