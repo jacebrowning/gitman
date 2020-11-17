@@ -53,9 +53,9 @@ black = "=19.10b0"
 isort = "=4.3.21"
 
 # Linters
-mypy = "^0.761"
+mypy = "~0.790"
 pydocstyle = "*"
-pylint = { git = "https://github.com/PyCQA/pylint", rev = "e169e83e52fedc6624235d45e8e8737294a0fedf" } # 2.4.5 has not yet been released
+pylint = "~2.6.0"
 
 # Testing
 pytest = "^5.1.2"
