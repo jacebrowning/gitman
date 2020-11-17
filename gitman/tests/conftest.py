@@ -17,6 +17,7 @@ FILES = os.path.join(ROOT, 'files')
 def pytest_configure(config):
     terminal = config.pluginmanager.getplugin('terminal')
     terminal.TerminalReporter.showfspath = False
+    log.init()
     log.silence('gitman.shell', allow_info=True)
     log.silence('datafiles', allow_warning=True)
 
