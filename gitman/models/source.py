@@ -60,7 +60,7 @@ class Source:
 
         # Clone the repository if needed
         assert self.name
-        if not os.path.exists(self.name):
+        if not os.path.exists(self.name) or len(os.listdir(self.name)) == 0:
             git.clone(
                 self.type,
                 self.repo,
