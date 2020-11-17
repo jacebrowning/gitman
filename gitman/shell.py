@@ -41,6 +41,7 @@ def call(name, *args, _show=True, _stream=True, _shell=False, _ignore=False):
     # Poll process.stdout to show stdout live
     complete_output = []
     while True:
+        assert command.stdout
         output = command.stdout.readline()
         if output == '' and command.poll() is not None:
             break
