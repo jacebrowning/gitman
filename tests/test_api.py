@@ -231,7 +231,8 @@ def describe_install():
             expect(os.listdir()).contains('my_link')
 
         def it_should_not_overwrite_files(config_with_link):
-            os.system("touch my_link")
+            os.system("mkdir my_link")
+            os.system("touch mylink/my_link")
 
             with pytest.raises(RuntimeError):
                 gitman.install(depth=1)
