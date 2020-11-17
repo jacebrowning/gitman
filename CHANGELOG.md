@@ -1,3 +1,7 @@
+# 2.2 (beta)
+
+- Fixed handling of empty directories as checkout locations. (@Erich-McMillan)
+
 # 2.1 (2020-09-10)
 
 - Added realtime display of shell calls. (@spurnvoj)
