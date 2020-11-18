@@ -890,6 +890,22 @@ def describe_list():
             end='\n\n',
         )
 
+    @freeze_time("2012-01-14 12:00:02")
+    def it_handles_missing_dependencies(config):
+        gitman.list()
+
+        with open(config.log_path) as stream:
+            contents = stream.read().replace(TMP, "tmp").replace('\\', '/')
+        expect(contents) == strip(
+            """
+        2012-01-14 12:00:02
+        tmp/deps: <missing> @ <unknown>
+        tmp/deps: <missing> @ <unknown>
+        tmp/deps: <missing> @ <unknown>
+        """,
+            end='\n\n',
+        )
+
 
 def describe_lock():
     def it_records_all_versions_when_no_arguments(config):

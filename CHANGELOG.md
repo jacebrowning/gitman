@@ -1,6 +1,7 @@
 # 2.2 (beta)
 
 - Fixed handling of empty directories as checkout locations. (@Erich-McMillan)
+- Fixed `list` command to handle missing dependencies.
 
 # 2.1 (2020-09-10)
 
