@@ -26,7 +26,7 @@ class Config:
             self.root = os.getcwd()
 
     @property
-    def config_path(self):
+    def config_path(self) -> str:
         """Get the full path to the config file."""
         assert self.root
         return os.path.normpath(os.path.join(self.root, self.filename))
@@ -34,12 +34,12 @@ class Config:
     path = config_path
 
     @property
-    def log_path(self):
+    def log_path(self) -> str:
         """Get the full path to the log file."""
         return os.path.normpath(os.path.join(self.location_path, "gitman.log"))
 
     @property
-    def location_path(self):
+    def location_path(self) -> str:
         """Get the full path to the dependency storage location."""
         assert self.root
         return os.path.normpath(os.path.join(self.root, self.location))
@@ -271,6 +271,7 @@ class Config:
 
     def log(self, message="", *args):
         """Append a message to the log file."""
+        os.makedirs(self.location_path, exist_ok=True)
         with open(self.log_path, 'a') as outfile:
             outfile.write(message.format(*args) + '\n')
 
