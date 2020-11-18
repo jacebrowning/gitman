@@ -20,13 +20,12 @@ GitMan is a language-agnostic dependency manager using Git. It aims to serve as 
 
 ### Installation
 
-Install this tool globally:
+Install this tool globally with [pipx](https://pipxproject.github.io/pipx/) (or pip):
 
 ```sh
-$ pip install gitman
+$ pipx install gitman
 ```
-
-or add it to your [Poetry](https://poetry.eustace.io/) project:
+or add it to your [Poetry](https://python-poetry.org/docs/) project:
 
 ```sh
 $ poetry add gitman
@@ -116,15 +115,13 @@ where `rev` can be:
 - a branch: `main`
 - a `rev-parse` date: `'main@{2015-06-18 10:30:59}'`
 
-Alternatively get the latest versions of certain dependencies or even dependency groups:
-
-- Update a single repository
+Alternatively, get the latest versions of specific dependencies:
 
 ```sh
 $ gitman update framework
 ```
 
-- Update a dependency group
+or named groups:
 
 ```sh
 $ gitman update resources
@@ -132,7 +129,7 @@ $ gitman update resources
 
 ### Restoring Previous Versions
 
-Display the specific revisions that are currently installed:
+Display the versions that are currently installed:
 
 ```sh
 $ gitman list
