@@ -4,6 +4,7 @@ import argparse
 import logging
 import os
 import sys
+import time
 
 import log
 
@@ -126,6 +127,9 @@ def show(
 
     color = kwargs.pop('color', None)
 
+    if color == 'message':
+        time.sleep(settings.RECORDING_DELAY)
+
     for message in messages:
         if _Config.verbosity == 0:
             text = ' ' * 2 * _Config.indent_level + style(message, color)
@@ -137,6 +141,9 @@ def show(
                     log.error(message)
                 else:
                     log.info(message)
+
+    if color == 'message':
+        time.sleep(settings.RECORDING_DELAY)
 
 
 BOLD = '\033[1m'
