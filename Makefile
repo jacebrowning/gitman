@@ -26,10 +26,35 @@ watch: install .clean-test ## Continuously run all CI tasks when files chanage
 .PHONY: demo
 demo: install
 	poetry run gitman install --force  # some scripts have intentional errors
+ifdef RECORDING
+	@ sleep 2
+	@ clear
+	@ sleep 1
+endif
 	poetry run gitman update --force  # some scripts have intentional errors
+ifdef RECORDING
+	@ sleep 2
+	@ clear
+	@ sleep 1
+endif
 	poetry run gitman list
+ifdef RECORDING
+	@ sleep 2
+	@ clear
+	@ sleep 1
+endif
 	poetry run gitman lock
+ifdef RECORDING
+	@ sleep 2
+	@ clear
+	@ sleep 1
+endif
 	poetry run gitman uninstall
+ifdef RECORDING
+	@ sleep 2
+	@ clear
+	@ sleep 1
+endif
 
 # SYSTEM DEPENDENCIES #########################################################
 
@@ -141,6 +166,13 @@ docs/*.png: $(MODULES)
 	poetry run pyreverse $(PACKAGE) -p $(PACKAGE) -a 1 -f ALL -o png --ignore tests
 	- mv -f classes_$(PACKAGE).png docs/classes.png
 	- mv -f packages_$(PACKAGE).png docs/packages.png
+
+docs/demo.gif: docs/demo.cast
+	asciicast2gif $< $@
+docs/demo.cast:
+	resize -s 30 127
+	poetry run asciinema rec $@ --overwrite --command "make demo RECORDING=true" --title "GitMan Demo"
+	poetry run asciinema upload $@
 
 .PHONY: mkdocs-serve
 mkdocs-serve: mkdocs
