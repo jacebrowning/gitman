@@ -120,9 +120,6 @@ def valid():
     currentdir = os.path.normpath(os.path.normcase(pwd(_show=False)))
     status = False
 
-    log.debug("gittoplevel = %s", gittoplevel)
-    log.debug("currentdir = %s", currentdir)
-
     if gittoplevel == currentdir:
         status = True
     else:
