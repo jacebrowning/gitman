@@ -1,5 +1,6 @@
 # 2.2 (beta)
 
+- Fixed working tree validation to ignore case. (@sch0125)
 - Fixed handling of empty directories as checkout locations. (@Erich-McMillan)
 - Fixed `list` command to handle missing dependencies.
 

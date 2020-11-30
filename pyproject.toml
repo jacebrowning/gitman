@@ -1,7 +1,7 @@
 [tool.poetry]
 
 name = "gitman"
-version = "2.2b2"
+version = "2.2b3"
 description = "A language-agnostic dependency manager using Git."
 
 license = "MIT"
