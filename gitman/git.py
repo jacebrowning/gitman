@@ -125,7 +125,7 @@ def valid():
     else:
         log.debug(
             "git top level: %s != current working directory: %s",
-            gittoplevel[0],
+            gittoplevel,
             currentdir,
         )
         status = False
