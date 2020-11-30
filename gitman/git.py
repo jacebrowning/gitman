@@ -117,7 +117,7 @@ def valid():
     currentdir = pwd(_show=False)
 
     status = False
-    if gittoplevel[0] == currentdir:
+    if os.path.normpath(os.path.normcase(gittoplevel[0])) == os.path.normpath(os.path.normcase(currentdir)):
         status = True
     else:
         log.debug(
