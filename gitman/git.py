@@ -113,11 +113,17 @@ def valid():
         return False
 
     log.debug("Checking for a valid git top level...")
-    gittoplevel = git('rev-parse', '--show-toplevel', _show=False)
-    currentdir = pwd(_show=False)
+    gittoplevel = os.path.normpath(os.path.normcase(
+                    git('rev-parse', '--show-toplevel', _show=False)[0]))
 
+    currentdir = os.path.normpath(os.path.normcase(
+                    pwd(_show=False)))
     status = False
-    if os.path.normpath(os.path.normcase(gittoplevel[0])) == os.path.normpath(os.path.normcase(currentdir)):
+
+    log.debug("gittoplevel = %s", gittoplevel)
+    log.debug("currentdir = %s", currentdir)
+
+    if gittoplevel == currentdir:
         status = True
     else:
         log.debug(
