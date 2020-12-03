@@ -55,6 +55,7 @@ sources_locked:
   -
 groups:
   -
+default_group: ''
 """.lstrip()
 
 
@@ -109,6 +110,7 @@ def describe_init():
             link:
             scripts:
               -
+        default_group: ''
         groups:
           -
         """
@@ -445,6 +447,7 @@ def describe_update():
               -
         groups:
           -
+        default_group: ''
         """
         )
 
@@ -523,6 +526,7 @@ def describe_update():
               -
         groups:
           -
+        default_group: ''
         """
         )
 
@@ -669,6 +673,7 @@ def describe_update():
             members:
               - gitman_1
               - gitman_2
+        default_group: ''
         """
         )
 
@@ -745,6 +750,7 @@ def describe_update():
               -
         groups:
           -
+        default_group: ''
         """
         )
 
@@ -829,6 +835,7 @@ def describe_update():
               -
         groups:
           -
+        default_group: ''
         """
         )
 

@@ -19,6 +19,7 @@ class Config:
     location: str = "gitman_sources"
     sources: List[Source] = field(default_factory=list)
     sources_locked: List[Source] = field(default_factory=list)
+    default_group: str = field(default_factory=str)
     groups: List[Group] = field(default_factory=list)
 
     def __post_init__(self):
@@ -302,11 +303,19 @@ class Config:
 
         return sources + extras
 
+    def _get_default_group(self, names):
+        """Get default group if names is empty or 'default' is specified."""
+        use_default = 'default' in names or not names
+        default_groups = [group for group in self.groups if group.name == self.default_group and use_default]
+
+        return default_groups
+
     def _get_sources_filter(self, *names, sources):
         """Get filtered sublist of sources."""
         sources_filter = None
-
         groups_filter = [group for group in self.groups if group.name in list(names)]
+        groups_filter += self._get_default_group(list(names))
+        log.info(f"groups_filter: {groups_filter}")
 
         if groups_filter:
             sources_filter = [
