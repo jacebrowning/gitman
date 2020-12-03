@@ -78,6 +78,7 @@ class Config:
         fetch=False,
         clean=True,
         skip_changes=False,
+        all=False,
     ):  # pylint: disable=too-many-locals
         """Download or update the specified dependencies."""
         if depth == 0:
@@ -85,7 +86,7 @@ class Config:
             return 0
 
         sources = self._get_sources(use_locked=False if update else None)
-        sources_filter = self._get_sources_filter(*names, sources=sources)
+        sources_filter = self._get_sources_filter(*names, sources=sources, all=all)
 
         if not os.path.isdir(self.location_path):
             shell.mkdir(self.location_path)
@@ -123,6 +124,7 @@ class Config:
                     fetch=fetch,
                     clean=clean,
                     skip_changes=skip_changes,
+                    all=all,
                 )
                 common.dedent()
 
@@ -142,7 +144,7 @@ class Config:
             return 0
 
         sources = self._get_sources()
-        sources_filter = self._get_sources_filter(*names, sources=sources)
+        sources_filter = self._get_sources_filter(*names, sources=sources, all=False)
 
         shell.cd(self.location_path)
         common.newline()
@@ -171,7 +173,7 @@ class Config:
     def lock_dependencies(self, *names, obey_existing=True, skip_changes=False):
         """Lock down the immediate dependency versions."""
         sources = self._get_sources(use_locked=obey_existing).copy()
-        sources_filter = self._get_sources_filter(*names, sources=sources)
+        sources_filter = self._get_sources_filter(*names, sources=sources, all=False)
 
         shell.cd(self.location_path)
         common.newline()
@@ -304,18 +306,23 @@ class Config:
         return sources + extras
 
     def _get_default_group(self, names):
-        """Get default group if names is empty or 'default' is specified."""
-        use_default = 'default' in names or not names
-        default_groups = [group for group in self.groups if group.name == self.default_group and use_default]
+        """Get default group if names is empty."""
+        use_default = not names
+        default_groups = [
+            group
+            for group in self.groups
+            if group.name == self.default_group and use_default
+        ]
 
         return default_groups
 
-    def _get_sources_filter(self, *names, sources):
+    def _get_sources_filter(self, *names, sources, all):
         """Get filtered sublist of sources."""
         sources_filter = None
+
         groups_filter = [group for group in self.groups if group.name in list(names)]
-        groups_filter += self._get_default_group(list(names))
-        log.info(f"groups_filter: {groups_filter}")
+        if not all:
+            groups_filter += self._get_default_group(list(names))
 
         if groups_filter:
             sources_filter = [

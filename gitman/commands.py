@@ -63,6 +63,7 @@ def install(
     force_interactive=False,
     clean=True,
     skip_changes=False,
+    all=False,
 ):
     """Install dependencies for a project.
 
@@ -102,6 +103,7 @@ def install(
             fetch=fetch,
             clean=clean,
             skip_changes=skip_changes,
+            all=all,
         )
 
         if count:
@@ -123,6 +125,7 @@ def update(
     clean=True,
     lock=None,  # pylint: disable=redefined-outer-name
     skip_changes=False,
+    all=False,
 ):
     """Update dependencies for a project.
 
@@ -165,6 +168,7 @@ def update(
             fetch=True,
             clean=clean,
             skip_changes=skip_changes,
+            all=all,
         )
 
         if count and lock is not False:
