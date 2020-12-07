@@ -122,6 +122,7 @@ def main(args=None):
 
     # Modify arguments to match CLI interface
     if not namespace.command:
+        # Default to install to remain compatable with older interface
         namespace.command = 'install'
     namespace.name = []
     namespace.root = None
