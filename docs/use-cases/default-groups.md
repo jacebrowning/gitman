@@ -1,17 +1,18 @@
 # Specifying a Default Group
 
-Using the `default_group` attribute in gitman.yml specifies which group of 
-dependencies to install if no inputs are provided to `gitman install`. If 
-if is set to a blank string, `default_group: ''`, then all sources are 
+Using the `default_group` attribute in gitman.yml specifies which group of
+dependencies to install if no inputs are provided to `gitman install`. If
+if is set to a blank string, `default_group: ''`, then all sources are
 installed.
 
 When nested gitman projects are used default groups are installed if they
 exist. In the case of the following project layout:
 
-Project A gitman.yml
+Project A's configuration file:
 
 ```yaml
 location: dependencies
+
 sources:
   - name: b
     type: git
@@ -19,10 +20,11 @@ sources:
     rev: master
 ```
 
-Project B gitman.yml
+Project B's configuration file:
 
 ```yaml
 location: dependencies
+
 sources:
   - name: c
     type: git
@@ -32,18 +34,19 @@ sources:
     type: git
     repo: https://project_d
     rev: master
-  groups:
-    - name: group_c_d
-      members:
-        - c
-        - d
-    - name: group_d
-      members:
-        - d
-  - default_group: 'group_d'
+
+groups:
+  - name: group_c_d
+    members:
+      - c
+      - d
+  - name: group_d
+    members:
+      - d
+
+default_group: group_d
 ```
 
 When `gitman install` is invoked from project A then project B is installed.
 As project B is installed the default group `group_d` will be installed, unless
-`gitman install -n` or `gitman install --no-defaults` is specified which will result in all of project B's
-dependencies (both c and d) being installed.
+`gitman install -n` or `gitman install --no-defaults` is specified which will result in all of project B's dependencies (both c and d) being installed.

@@ -76,7 +76,7 @@ groups:
       - fontawesome
       - material-design-icons
 
-default_group: 'code'
+default_group: code
 ```
 
 Ignore the dependency storage location:
