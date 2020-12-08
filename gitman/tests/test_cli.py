@@ -77,7 +77,7 @@ class TestInstall:
             fetch=False,
             clean=False,
             skip_changes=False,
-            all=False,
+            skip_default_group=False,
         )
 
     @patch('gitman.commands.install')
@@ -93,7 +93,7 @@ class TestInstall:
             fetch=False,
             clean=False,
             skip_changes=False,
-            all=False,
+            skip_default_group=False,
         )
 
     @patch('gitman.commands.install')
@@ -109,7 +109,7 @@ class TestInstall:
             fetch=False,
             clean=False,
             skip_changes=False,
-            all=False,
+            skip_default_group=False,
         )
 
     @patch('gitman.commands.install')
@@ -125,7 +125,7 @@ class TestInstall:
             fetch=True,
             clean=False,
             skip_changes=False,
-            all=False,
+            skip_default_group=False,
         )
 
     @patch('gitman.commands.install')
@@ -141,7 +141,7 @@ class TestInstall:
             fetch=False,
             clean=True,
             skip_changes=False,
-            all=False,
+            skip_default_group=False,
         )
 
     @patch('gitman.commands.install')
@@ -159,7 +159,7 @@ class TestInstall:
             fetch=False,
             clean=False,
             skip_changes=False,
-            all=False,
+            skip_default_group=False,
         )
 
     @patch('gitman.commands.install')
@@ -175,7 +175,7 @@ class TestInstall:
             fetch=False,
             clean=False,
             skip_changes=False,
-            all=False,
+            skip_default_group=False,
         )
 
     @patch('gitman.commands.install', Mock())

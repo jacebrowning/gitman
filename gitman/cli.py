@@ -255,7 +255,9 @@ def _get_command(function, namespace):  # pylint: disable=too-many-statements
             skip_changes=namespace.skip_changes,
         )
         if namespace.command == 'install':
-            kwargs.update(fetch=namespace.fetch, all=namespace.no_defaults)
+            kwargs.update(
+                fetch=namespace.fetch, skip_default_group=namespace.no_defaults
+            )
         if namespace.command == 'update':
             kwargs.update(recurse=namespace.recurse, lock=namespace.lock)
 

@@ -25,7 +25,7 @@ class TestMain:
                 force=False,
                 force_interactive=False,
                 skip_changes=False,
-                all=False,
+                skip_default_group=False,
             ),
             call.install().__bool__(),  # command status check
         ] == mock_commands.mock_calls

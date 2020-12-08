@@ -414,7 +414,7 @@ def describe_install():  # pylint: disable=too-many-statements
             ) == True
 
         def it_installs_all_sources_when_all_specified(config_with_default_group):
-            expect(gitman.install(depth=1, force=True, all=True)) == True
+            expect(gitman.install(depth=1, force=True, skip_default_group=True)) == True
             expect(
                 os.path.exists(
                     os.path.join(config_with_default_group.location, 'gitman_1')
