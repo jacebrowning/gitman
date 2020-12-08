@@ -19,6 +19,7 @@ class Config:
     location: str = "gitman_sources"
     sources: List[Source] = field(default_factory=list)
     sources_locked: List[Source] = field(default_factory=list)
+    default_group: str = field(default_factory=str)
     groups: List[Group] = field(default_factory=list)
 
     def __post_init__(self):
@@ -77,6 +78,7 @@ class Config:
         fetch=False,
         clean=True,
         skip_changes=False,
+        skip_default_group=False,
     ):  # pylint: disable=too-many-locals
         """Download or update the specified dependencies."""
         if depth == 0:
@@ -84,7 +86,9 @@ class Config:
             return 0
 
         sources = self._get_sources(use_locked=False if update else None)
-        sources_filter = self._get_sources_filter(*names, sources=sources)
+        sources_filter = self._get_sources_filter(
+            *names, sources=sources, skip_default_group=skip_default_group
+        )
 
         if not os.path.isdir(self.location_path):
             shell.mkdir(self.location_path)
@@ -122,6 +126,7 @@ class Config:
                     fetch=fetch,
                     clean=clean,
                     skip_changes=skip_changes,
+                    skip_default_group=skip_default_group,
                 )
                 common.dedent()
 
@@ -141,7 +146,9 @@ class Config:
             return 0
 
         sources = self._get_sources()
-        sources_filter = self._get_sources_filter(*names, sources=sources)
+        sources_filter = self._get_sources_filter(
+            *names, sources=sources, skip_default_group=False
+        )
 
         shell.cd(self.location_path)
         common.newline()
@@ -170,7 +177,9 @@ class Config:
     def lock_dependencies(self, *names, obey_existing=True, skip_changes=False):
         """Lock down the immediate dependency versions."""
         sources = self._get_sources(use_locked=obey_existing).copy()
-        sources_filter = self._get_sources_filter(*names, sources=sources)
+        sources_filter = self._get_sources_filter(
+            *names, sources=sources, skip_default_group=False
+        )
 
         shell.cd(self.location_path)
         common.newline()
@@ -302,11 +311,24 @@ class Config:
 
         return sources + extras
 
-    def _get_sources_filter(self, *names, sources):
+    def _get_default_group(self, names):
+        """Get default group if names is empty."""
+        use_default = not names
+        default_groups = [
+            group
+            for group in self.groups
+            if group.name == self.default_group and use_default
+        ]
+
+        return default_groups
+
+    def _get_sources_filter(self, *names, sources, skip_default_group):
         """Get filtered sublist of sources."""
         sources_filter = None
 
         groups_filter = [group for group in self.groups if group.name in list(names)]
+        if not skip_default_group:
+            groups_filter += self._get_default_group(list(names))
 
         if groups_filter:
             sources_filter = [

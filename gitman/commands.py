@@ -63,6 +63,7 @@ def install(
     force_interactive=False,
     clean=True,
     skip_changes=False,
+    skip_default_group=False,
 ):
     """Install dependencies for a project.
 
@@ -79,6 +80,8 @@ def install(
     - `clean`: indicates untracked files should be deleted from dependencies
     - `skip_changes`: indicates dependencies with uncommitted changes
      should be skipped
+    - `skip_default_group`: indicates default_group should be skipped if
+     `*names` is empty
     """
     log.info(
         "%sInstalling dependencies: %s",
@@ -102,6 +105,7 @@ def install(
             fetch=fetch,
             clean=clean,
             skip_changes=skip_changes,
+            skip_default_group=skip_default_group,
         )
 
         if count:
@@ -123,6 +127,7 @@ def update(
     clean=True,
     lock=None,  # pylint: disable=redefined-outer-name
     skip_changes=False,
+    skip_default_group=False,
 ):
     """Update dependencies for a project.
 
@@ -140,6 +145,8 @@ def update(
     - `lock`: indicates updated dependency versions should be recorded
     - `skip_changes`: indicates dependencies with uncommitted changes
      should be skipped
+    - `skip_default_group`: indicates default_group should be skipped if
+     `*names` is empty
     """
     log.info(
         "%s dependencies%s: %s",
@@ -165,6 +172,7 @@ def update(
             fetch=True,
             clean=clean,
             skip_changes=skip_changes,
+            skip_default_group=skip_default_group,
         )
 
         if count and lock is not False:

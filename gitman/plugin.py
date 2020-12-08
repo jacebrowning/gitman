@@ -47,6 +47,23 @@ def main(args=None):
     # Options group
     group = parser.add_mutually_exclusive_group()
 
+    # Install option
+    group.add_argument(
+        '-i',
+        '--install',
+        const='install',
+        help='get the specified versions of all dependencies',
+        action='store_const',
+        dest='command',
+    )
+    parser.add_argument(
+        '-n',
+        '--no-defaults',
+        help='override default groups and install all dependencies if none specified',
+        action='store_true',
+        dest='no_defaults',
+    )
+
     # Update option
     group.add_argument(
         '-u',
@@ -105,6 +122,7 @@ def main(args=None):
 
     # Modify arguments to match CLI interface
     if not namespace.command:
+        # Default to install to remain compatable with older interface
         namespace.command = 'install'
     namespace.name = []
     namespace.root = None

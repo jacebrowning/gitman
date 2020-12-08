@@ -55,6 +55,7 @@ sources_locked:
   -
 groups:
   -
+default_group: ''
 """.lstrip()
 
 
@@ -109,6 +110,7 @@ def describe_init():
             link:
             scripts:
               -
+        default_group: ''
         groups:
           -
         """
@@ -120,7 +122,7 @@ def describe_init():
         expect(config.datafile.text) == CONFIG
 
 
-def describe_install():
+def describe_install():  # pylint: disable=too-many-statements
     def it_creates_missing_directories(config):
         shell.rm(config.location)
 
@@ -308,6 +310,122 @@ def describe_install():
             expect(dir_listing).contains('src')
             expect(len(dir_listing) == 1)
 
+    def describe_default_group():
+        @pytest.fixture
+        def config_with_default_group(config):
+            config.datafile.text = strip(
+                """
+        location: deps
+        sources:
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
+        groups:
+          - name: main
+            members:
+              - gitman_1
+          - name: secondary
+            members:
+              - gitman_2
+        default_group: 'main'
+        """
+            )
+            config.datafile.load()
+
+            return config
+
+        @pytest.fixture
+        def config_without_default_group(config):
+            config.datafile.text = strip(
+                """
+        location: deps
+        sources:
+          - name: gitman_1
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-branch
+            link:
+            scripts:
+              -
+          - name: gitman_2
+            type: git
+            repo: https://github.com/jacebrowning/gitman-demo
+            sparse_paths:
+              -
+            rev: example-tag
+            link:
+            scripts:
+              -
+        groups:
+          - name: main
+            members:
+              - gitman_1
+          - name: secondary
+            members:
+              - gitman_2
+        default_group: ''
+        """
+            )
+            config.datafile.load()
+
+            return config
+
+        def it_installs_default_group(config_with_default_group):
+            expect(gitman.install(depth=1, force=True)) == True
+            expect(
+                os.path.exists(
+                    os.path.join(config_with_default_group.location, 'gitman_1')
+                )
+            ) == True
+            expect(
+                os.path.exists(
+                    os.path.join(config_with_default_group.location, 'gitman_2')
+                )
+            ) == False
+
+        def it_installs_all_sources_when_no_default_group(config_without_default_group):
+            expect(gitman.install(depth=1, force=True)) == True
+            expect(
+                os.path.exists(
+                    os.path.join(config_without_default_group.location, 'gitman_1')
+                )
+            ) == True
+            expect(
+                os.path.exists(
+                    os.path.join(config_without_default_group.location, 'gitman_2')
+                )
+            ) == True
+
+        def it_installs_all_sources_when_all_specified(config_with_default_group):
+            expect(gitman.install(depth=1, force=True, skip_default_group=True)) == True
+            expect(
+                os.path.exists(
+                    os.path.join(config_with_default_group.location, 'gitman_1')
+                )
+            ) == True
+            expect(
+                os.path.exists(
+                    os.path.join(config_with_default_group.location, 'gitman_2')
+                )
+            ) == True
+
 
 def describe_uninstall():
     def it_deletes_dependencies_when_they_exist(config):
@@ -445,6 +563,7 @@ def describe_update():
               -
         groups:
           -
+        default_group: ''
         """
         )
 
@@ -523,6 +642,7 @@ def describe_update():
               -
         groups:
           -
+        default_group: ''
         """
         )
 
@@ -669,6 +789,7 @@ def describe_update():
             members:
               - gitman_1
               - gitman_2
+        default_group: ''
         """
         )
 
@@ -745,6 +866,7 @@ def describe_update():
               -
         groups:
           -
+        default_group: ''
         """
         )
 
@@ -829,6 +951,7 @@ def describe_update():
               -
         groups:
           -
+        default_group: ''
         """
         )
 

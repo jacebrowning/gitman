@@ -105,6 +105,13 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
     sub.add_argument(
         '-e', '--fetch', action='store_true', help="always fetch the latest branches"
     )
+    sub.add_argument(
+        '-n',
+        '--no-defaults',
+        help='override default groups and install all dependencies if none specified',
+        action='store_true',
+        dest='no_defaults',
+    )
 
     # Update parser
     info = "update dependencies to the latest versions"
@@ -248,7 +255,9 @@ def _get_command(function, namespace):  # pylint: disable=too-many-statements
             skip_changes=namespace.skip_changes,
         )
         if namespace.command == 'install':
-            kwargs.update(fetch=namespace.fetch)
+            kwargs.update(
+                fetch=namespace.fetch, skip_default_group=namespace.no_defaults
+            )
         if namespace.command == 'update':
             kwargs.update(recurse=namespace.recurse, lock=namespace.lock)
 

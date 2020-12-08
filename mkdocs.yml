@@ -26,6 +26,7 @@ nav:
       - Linking Feature Branches: use-cases/linked-features.md
       - Build System Integration: use-cases/build-integration.md
       - Sparse Checkouts: use-cases/sparse-checkouts.md
+      - Default Groups: use-cases/default-groups.md
   - Extras:
       - Git SVN Bridge: extras/git-svn.md
       - Self-Contained GitMan: extras/self-contained-gitman.md
