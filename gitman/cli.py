@@ -108,7 +108,7 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
     sub.add_argument(
         '-n',
         '--no-defaults',
-        help='override default groups and install all dependencies',
+        help='override default groups and install all dependencies if none specified',
         action='store_true',
         dest='no_defaults',
     )
