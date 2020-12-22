@@ -313,18 +313,18 @@ class Config:
 
     def _get_sources_filter(self, *names, sources, skip_default_group):
         """Get filtered sublist of sources."""
-        names = list(names)
+        names_list = list(names)
 
-        if not names and not skip_default_group:
-            names.append(self.default_group)
+        if not names_list and not skip_default_group:
+            names_list.append(self.default_group)
 
         # Add sources from groups
-        groups_filter = [group for group in self.groups if group.name in names]
+        groups_filter = [group for group in self.groups if group.name in names_list]
         sources_filter = [member for group in groups_filter for member in group.members]
 
         # Add independent sources
         sources_filter.extend(
-            [source.name for source in sources if source.name in names]
+            [source.name for source in sources if source.name in names_list]
         )
 
         if not sources_filter:
