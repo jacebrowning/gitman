@@ -4,6 +4,7 @@
 - Fixed handling of empty directories as checkout locations. (@Erich-McMillan)
 - Fixed `list` command to handle missing dependencies.
 - Added an option to specify a default group. (@Erich-McMillan)
+- Fixed `install` command to handle both groups and sources. (@brandonaut)
 
 # 2.1 (2020-09-10)
 
