@@ -350,23 +350,25 @@ def describe_install():  # pylint: disable=too-many-statements
             return config
 
         def install_with_group_and_source_is_successful(config_with_group):
-            expect(gitman.install("main_group", "gitman_2", depth=1, force=True)) == True
             expect(
-                os.path.exists(
-                    os.path.join(config_with_group.location, 'gitman_1')
-                )
+                gitman.install("main_group", "gitman_2", depth=1, force=True)
             ) == True
             expect(
-                os.path.exists(
-                    os.path.join(config_with_group.location, 'gitman_2')
-                )
+                os.path.exists(os.path.join(config_with_group.location, 'gitman_1'))
+            ) == True
+            expect(
+                os.path.exists(os.path.join(config_with_group.location, 'gitman_2'))
             ) == True
 
         def groups_with_redundant_deps_install_successfully(config_with_group):
-            expect(gitman.install("main_group", "super_group", depth=1, force=True)) == True
+            expect(
+                gitman.install("main_group", "super_group", depth=1, force=True)
+            ) == True
 
         def group_and_redundant_source_install_successfully(config_with_group):
-            expect(gitman.install("main_group", "gitman_1", depth=1, force=True)) == True
+            expect(
+                gitman.install("main_group", "gitman_1", depth=1, force=True)
+            ) == True
 
     def describe_default_group():
         @pytest.fixture

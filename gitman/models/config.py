@@ -320,12 +320,12 @@ class Config:
 
         # Add sources from groups
         groups_filter = [group for group in self.groups if group.name in names]
-        sources_filter = [
-            member for group in groups_filter for member in group.members
-        ]
+        sources_filter = [member for group in groups_filter for member in group.members]
 
         # Add independent sources
-        sources_filter.extend([source.name for source in sources if source.name in names])
+        sources_filter.extend(
+            [source.name for source in sources if source.name in names]
+        )
 
         if not sources_filter:
             sources_filter = [source.name for source in sources]
