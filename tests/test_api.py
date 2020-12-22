@@ -310,6 +310,66 @@ def describe_install():  # pylint: disable=too-many-statements
             expect(dir_listing).contains('src')
             expect(len(dir_listing) == 1)
 
+    def describe_mixed_names():
+        @pytest.fixture
+        def config_with_group(config):
+            config.datafile.text = strip(
+                """
+                location: deps
+                sources:
+                  - name: gitman_1
+                    type: git
+                    repo: https://github.com/jacebrowning/gitman-demo
+                    sparse_paths:
+                      -
+                    rev: example-branch
+                    link:
+                    scripts:
+                      -
+                  - name: gitman_2
+                    type: git
+                    repo: https://github.com/jacebrowning/gitman-demo
+                    sparse_paths:
+                      -
+                    rev: example-tag
+                    link:
+                    scripts:
+                      -
+                groups:
+                  - name: main_group
+                    members:
+                      - gitman_1
+                  - name: super_group
+                    members:
+                    - gitman_1
+                    - gitman_2
+                """
+            )
+            config.datafile.load()
+
+            return config
+
+        def install_with_group_and_source_is_successful(config_with_group):
+            expect(
+                gitman.install("main_group", "gitman_2", depth=1, force=True)
+            ) == True
+            expect(
+                os.path.exists(os.path.join(config_with_group.location, 'gitman_1'))
+            ) == True
+            expect(
+                os.path.exists(os.path.join(config_with_group.location, 'gitman_2'))
+            ) == True
+
+        def groups_with_redundant_deps_install_successfully(config_with_group):
+            expect(
+                gitman.install("main_group", "super_group", depth=1, force=True)
+            ) == True
+
+        def group_and_redundant_source_install_successfully(config_with_group):
+            expect(
+                gitman.install("main_group", "gitman_1", depth=1, force=True)
+            ) == True
+
     def describe_default_group():
         @pytest.fixture
         def config_with_default_group(config):

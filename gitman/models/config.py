@@ -311,33 +311,26 @@ class Config:
 
         return sources + extras
 
-    def _get_default_group(self, names):
-        """Get default group if names is empty."""
-        use_default = not names
-        default_groups = [
-            group
-            for group in self.groups
-            if group.name == self.default_group and use_default
-        ]
-
-        return default_groups
-
     def _get_sources_filter(self, *names, sources, skip_default_group):
         """Get filtered sublist of sources."""
-        sources_filter = None
+        names_list = list(names)
 
-        groups_filter = [group for group in self.groups if group.name in list(names)]
-        if not skip_default_group:
-            groups_filter += self._get_default_group(list(names))
+        if not names_list and not skip_default_group:
+            names_list.append(self.default_group)
 
-        if groups_filter:
-            sources_filter = [
-                members for group in groups_filter for members in group.members
-            ]
-        else:
-            sources_filter = list(names) if names else [s.name for s in sources]
+        # Add sources from groups
+        groups_filter = [group for group in self.groups if group.name in names_list]
+        sources_filter = [member for group in groups_filter for member in group.members]
 
-        return sources_filter
+        # Add independent sources
+        sources_filter.extend(
+            [source.name for source in sources if source.name in names_list]
+        )
+
+        if not sources_filter:
+            sources_filter = [source.name for source in sources]
+
+        return list(set(sources_filter))
 
 
 def load_config(start=None, *, search=True):
