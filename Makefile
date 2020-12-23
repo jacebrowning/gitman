@@ -25,35 +25,40 @@ watch: install .clean-test ## Continuously run all CI tasks when files chanage
 
 .PHONY: demo
 demo: install
-	poetry run gitman install --force  # some scripts have intentional errors
+	@ echo gitman update
+	@ poetry run gitman update
 ifdef RECORDING_DELAY
 	@ sleep $(RECORDING_DELAY)
 	@ sleep $(RECORDING_DELAY)
 	@ clear
 	@ sleep $(RECORDING_DELAY)
 endif
-	poetry run gitman update --force  # some scripts have intentional errors
+	@ echo gitman list
+	@ poetry run gitman list
 ifdef RECORDING_DELAY
 	@ sleep $(RECORDING_DELAY)
 	@ sleep $(RECORDING_DELAY)
 	@ clear
 	@ sleep $(RECORDING_DELAY)
 endif
-	poetry run gitman list
+	@ echo gitman lock
+	@ poetry run gitman lock
 ifdef RECORDING_DELAY
 	@ sleep $(RECORDING_DELAY)
 	@ sleep $(RECORDING_DELAY)
 	@ clear
 	@ sleep $(RECORDING_DELAY)
 endif
-	poetry run gitman lock
+	@ echo gitman install
+	@ poetry run gitman install
 ifdef RECORDING_DELAY
 	@ sleep $(RECORDING_DELAY)
 	@ sleep $(RECORDING_DELAY)
 	@ clear
 	@ sleep $(RECORDING_DELAY)
 endif
-	poetry run gitman uninstall
+	@ echo gitman uninstall
+	@ poetry run gitman uninstall
 ifdef RECORDING_DELAY
 	@ sleep $(RECORDING_DELAY)
 	@ sleep $(RECORDING_DELAY)
@@ -176,7 +181,7 @@ docs/demo.gif: docs/demo.cast
 	asciicast2gif $< $@
 docs/demo.cast: Makefile
 	resize -s 61 127
-	poetry run asciinema rec $@ --overwrite --command "make demo RECORDING_DELAY=1" --title "GitMan Demo"
+	poetry run asciinema rec $@ --overwrite --command "make demo CI=true RECORDING_DELAY=1" --title "GitMan Demo"
 	poetry run asciinema upload $@
 
 .PHONY: mkdocs-serve
