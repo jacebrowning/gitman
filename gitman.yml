@@ -44,7 +44,7 @@ sources_locked:
     repo: https://github.com/jacebrowning/gitman-demo
     sparse_paths:
       -
-    rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
+    rev: dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0
     link:
     scripts:
       - cat .noserc
@@ -86,3 +86,4 @@ groups:
     members:
       - gitman 2
       - gitman_3
+default_group: ''

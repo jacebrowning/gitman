@@ -50,7 +50,7 @@ class TestConfig:
 
         deps = list(config.get_dependencies())
         assert 7 == len(deps)
-        assert '1de84ca1d315f81b035cd7b0ecf87ca2025cdacd' == deps[0][2]
+        assert 'dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0' == deps[0][2]
         assert '050290bca3f14e13fd616604202b579853e7bfb0' == deps[1][2]
         assert 'fb693447579235391a45ca170959b5583c5042d8' == deps[2][2]
         # master branch always changes --------------------- deps[3][2]

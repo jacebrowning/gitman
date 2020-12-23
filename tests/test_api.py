@@ -831,7 +831,7 @@ def describe_update():
             repo: https://github.com/jacebrowning/gitman-demo
             sparse_paths:
               -
-            rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
+            rev: dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0
             link:
             scripts:
               -
@@ -1062,7 +1062,7 @@ def describe_list():
         expect(contents) == strip(
             """
         2012-01-14 12:00:01
-        tmp/deps/gitman_1: https://github.com/jacebrowning/gitman-demo @ 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
+        tmp/deps/gitman_1: https://github.com/jacebrowning/gitman-demo @ dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0
         tmp/deps/gitman_1/gitman_sources/gdm_3: https://github.com/jacebrowning/gdm-demo @ 050290bca3f14e13fd616604202b579853e7bfb0
         tmp/deps/gitman_1/gitman_sources/gdm_3/gitman_sources/gdm_3: https://github.com/jacebrowning/gdm-demo @ fb693447579235391a45ca170959b5583c5042d8
         tmp/deps/gitman_1/gitman_sources/gdm_3/gitman_sources/gdm_4: https://github.com/jacebrowning/gdm-demo @ 63ddfd82d308ddae72d31b61cb8942c898fa05b5
@@ -1105,7 +1105,7 @@ def describe_lock():
             repo: https://github.com/jacebrowning/gitman-demo
             sparse_paths:
               -
-            rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
+            rev: dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0
             link:
             scripts:
               -
@@ -1145,7 +1145,7 @@ def describe_lock():
             repo: https://github.com/jacebrowning/gitman-demo
             sparse_paths:
               -
-            rev: 1de84ca1d315f81b035cd7b0ecf87ca2025cdacd
+            rev: dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0
             link:
             scripts:
               -
