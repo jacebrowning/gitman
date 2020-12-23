@@ -28,8 +28,8 @@ nav:
       - Sparse Checkouts: use-cases/sparse-checkouts.md
       - Default Groups: use-cases/default-groups.md
   - Extras:
-      - Git SVN Bridge: extras/git-svn.md
-      - Self-Contained GitMan: extras/self-contained-gitman.md
+      - Git SVN Bridge: extras/git-svn-bridge.md
+      - Bundled Application: extras/bundled-application.md
   - About:
       - Release Notes: about/changelog.md
       - Contributing: about/contributing.md

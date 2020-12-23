@@ -4,17 +4,15 @@ Many development projects use Subversion (SVN) to manage their source code. Itâ€
 
 One of Gitâ€™s great features is a bidirectional bridge to Subversion called `git svn`. This tool allows you to use Git as a valid client to a Subversion server, so you can use all the local features of Git and then push to a Subversion server as if you were using Subversion locally.
 
-The gitman git svn support allows you to resolve SVN source dependencies. The gitman does resolve a specified SVN revision (e.g. HEAD) of an SVN repository source dependency (from whole branches to particular subdirectories).
-
 > **Important**
 >
-> The gitman `git svn` support does currently not track any changes in the imported svn repository.
-> The focus of this feature is to just import svn dependencies
+> The GitMan `git svn` support does currently not track any changes in the imported SVN repository.
+> The focus of this feature is to just import SVN dependencies
 > in a readonly fashion.
 > In this matter any changes in the imported svn repository
-> will be overridden by an update/install process (like an implicit `--force` for each gitman command).
+> will be overridden by an update/install process (like an implicit `--force` for each GitMan command).
 
-To import svn repositories it is required to specify the repo source parameter `type` to `git-svn` for the corresponding entries.
+To import SVN repositories it is required to specify the repo source parameter `type` to `git-svn` for the corresponding entries.
 
 Example Configuration:
 
@@ -38,14 +36,14 @@ sources:
     rev: v1.8.1.2
 ```
 
-By default the repo source parameter `type` is `git`.
+By default, the `repo` source parameter `type` is `git`.
 
 > **Note**
 >
-> The gitman `git svn` support uses internally
+> The GitMan `git svn` support internally uses:
 >
-> ```sh
+> ```
 > $ git svn clone -r <rev> <repo>
 > ```
 >
-> to resolve the individual SVN source dependency. In this matter only the specified svn revsion will be fetched (shallow history).
+> to resolve the individual SVN source dependency. In this matter, only the specified SVN revision will be fetched (shallow history).
