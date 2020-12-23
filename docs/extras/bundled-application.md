@@ -27,25 +27,26 @@ Depending on the local system it may need further steps to do.
 
 ### Linux prerequisites
 
-- install the corresponding python developer package
+Install the corresponding python developer package.
 
-  - Debian based distros (e.g. Mint, Ubuntu, Xubuntu):
+**Debian-based distros (e.g. Mint, Ubuntu, Xubuntu)**
 
-    ```sh
-    sudo apt-get install python-dev
-    ```
+```sh
+$ sudo apt-get install python-dev
+```
 
-    In cases where multiple python versions are installed it is may
-    helpful to specify the concrete version of the python developer package like:
+In cases where multiple python versions are installed it is may
+helpful to specify the concrete version of the python developer package like:
 
-    ```sh
-    sudo apt-get install python3.7-dev
-    ```
+```sh
+$ sudo apt-get install python3.7-dev
+```
 
-  - Fedora based distros (e.g. CentOS):
-    ```sh
-    yum install python-devel
-    ```
+**Fedora-based distros (e.g. CentOS)**
+
+```sh
+$ yum install python-devel
+```
 
 ### Windows  prerequisites
 
