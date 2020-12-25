@@ -91,6 +91,12 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
         parents=[debug],
         formatter_class=common.WideHelpFormatter,
     )
+    sub.add_argument(
+        '-f',
+        '--force',
+        action='store_true',
+        help="create config file even if parent exists",
+    )
 
     # Install parser
     info = "get the specified versions of all dependencies"
@@ -242,6 +248,9 @@ def _get_command(function, namespace):  # pylint: disable=too-many-statements
 
     if namespace.command == 'init':
         function = commands.init
+        kwargs.update(
+            force=namespace.force,
+        )
 
     elif namespace.command in ['install', 'update']:
         function = getattr(commands, namespace.command)
@@ -256,10 +265,14 @@ def _get_command(function, namespace):  # pylint: disable=too-many-statements
         )
         if namespace.command == 'install':
             kwargs.update(
-                fetch=namespace.fetch, skip_default_group=namespace.no_defaults
+                fetch=namespace.fetch,
+                skip_default_group=namespace.no_defaults,
             )
         if namespace.command == 'update':
-            kwargs.update(recurse=namespace.recurse, lock=namespace.lock)
+            kwargs.update(
+                recurse=namespace.recurse,
+                lock=namespace.lock,
+            )
 
     elif namespace.command == 'list':
         function = commands.display
@@ -272,7 +285,9 @@ def _get_command(function, namespace):  # pylint: disable=too-many-statements
     elif namespace.command == 'lock':
         function = getattr(commands, namespace.command)
         args = namespace.name
-        kwargs.update(root=namespace.root)
+        kwargs.update(
+            root=namespace.root,
+        )
 
     elif namespace.command == 'uninstall':
         function = commands.delete
@@ -285,7 +300,9 @@ def _get_command(function, namespace):  # pylint: disable=too-many-statements
     elif namespace.command == 'show':
         function = commands.show
         args = namespace.name
-        kwargs.update(root=namespace.root)
+        kwargs.update(
+            root=namespace.root,
+        )
         if namespace.config:
             args.append('__config__')
         if namespace.log:
@@ -293,7 +310,9 @@ def _get_command(function, namespace):  # pylint: disable=too-many-statements
 
     elif namespace.command == 'edit':
         function = commands.edit
-        kwargs.update(root=namespace.root)
+        kwargs.update(
+            root=namespace.root,
+        )
 
     return function, args, kwargs
 
