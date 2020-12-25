@@ -150,3 +150,9 @@ Remove all installed dependencies:
 ```sh
 $ gitman uninstall
 ```
+
+## Resources
+
+- [Source code](https://github.com/jacebrowning/gitman)
+- [Issue tracker](https://github.com/jacebrowning/gitman/issues)
+- [Release history](https://github.com/jacebrowning/gitman/blob/main/CHANGELOG.md)
