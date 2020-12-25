@@ -21,13 +21,19 @@ def restore_cwd(func):
     return wrapped
 
 
-def init():
-    """Create a new config file for the project."""
+def init(*, force: bool = False):
+    """Create a new config file for the project.
+
+    Optional arguments:
+
+    - `force`: indicates config file should always be generated
+
+    """
     success = False
 
     config = load_config()
 
-    if config:
+    if config and not force:
         msg = "Configuration file already exists: {}".format(config.path)
         common.show(msg, color='error')
 
@@ -295,7 +301,7 @@ def delete(*, root=None, force=False, keep_location=False):
         common.dedent(level=0)
         common.show("Deleting all dependencies...", color='message', log=False)
         common.newline()
-        if keep_location:
+        if keep_location or config.location == '.':
             config.clean_dependencies()
         else:
             config.uninstall_dependencies()

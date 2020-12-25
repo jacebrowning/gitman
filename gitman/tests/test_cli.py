@@ -58,7 +58,7 @@ class TestInit:
         """Verify the 'install' command can be run."""
         cli.main(['init'])
 
-        mock_init.assert_called_once_with()
+        mock_init.assert_called_once_with(force=False)
 
 
 class TestInstall:
