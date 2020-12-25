@@ -1,10 +1,11 @@
-# 2.2 (beta)
+# 2.2 (2020-12-24)
 
 - Fixed working tree validation to ignore case. (@sch0125)
 - Fixed handling of empty directories as checkout locations. (@Erich-McMillan)
 - Fixed `list` command to handle missing dependencies.
 - Added an option to specify a default group. (@Erich-McMillan)
 - Fixed `install` command to handle both groups and sources. (@brandonaut)
+- Fixed deletion of the project directory when `location: .` is used.
 
 # 2.1 (2020-09-10)
 
