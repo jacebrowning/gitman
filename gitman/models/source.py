@@ -25,6 +25,8 @@ class Source:
     def __post_init__(self):
         if self.name is None:
             self.name = self.repo.split('/')[-1].split('.')[0]
+        else:
+            self.name = str(self.name)
         self.type = self.type or 'git'
 
     def __repr__(self):
