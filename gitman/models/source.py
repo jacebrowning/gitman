@@ -12,8 +12,8 @@ class Source:
     """A dictionary of `git` and `ln` arguments."""
 
     name: Optional[str]
-    type: str
     repo: str
+    type: str = 'git'
     sparse_paths: List[str] = field(default_factory=list)
     rev: str = 'main'
     link: Optional[str] = None
