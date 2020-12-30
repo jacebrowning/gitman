@@ -11,12 +11,14 @@ from .. import common, exceptions, git, shell
 class Source:
     """A dictionary of `git` and `ln` arguments."""
 
-    name: Optional[str]
-    type: str
-    repo: str
+    repo: str = ''
+    name: Optional[str] = None
+    rev: str = 'main'
+
+    type: str = 'git'
     sparse_paths: List[str] = field(default_factory=list)
-    rev: str = 'master'
     link: Optional[str] = None
+
     scripts: List[str] = field(default_factory=list)
 
     DIRTY = '<dirty>'
@@ -24,7 +26,9 @@ class Source:
 
     def __post_init__(self):
         if self.name is None:
-            self.name = self._infer_name(self.repo)
+            self.name = self.repo.split('/')[-1].split('.')[0]
+        else:
+            self.name = str(self.name)
         self.type = self.type or 'git'
 
     def __repr__(self):
@@ -267,9 +271,3 @@ class Source:
             path
         )
         return exceptions.InvalidRepository(msg)
-
-    @staticmethod
-    def _infer_name(repo):
-        filename = repo.split('/')[-1]
-        name = filename.split('.')[0]
-        return name

@@ -18,17 +18,18 @@ To get the same behavior using `gitman`, first delete the `.gitmodules` file and
 
 ```yaml
 location: .gitman
+
 sources:
-- name: my_dependency
-  repo: <URL of my_dependency's repository>
-  rev: a943a702d06f34599aee1f8da8ef9f7296031d69
-  link: vendor/my_depenendy
+  - repo: <URL of my_dependency repository>
+    name: my_dependency
+    rev: a943a702d06f34599aee1f8da8ef9f7296031d69
+    link: vendor/my_depenendy
 ```
 
 Add `.gitman` to your `.gitignore` file and overwrite the old submodule location by running:
 
 ```sh
-gitman install --force
+$ gitman install --force
 ```
 
 Now `<root>/vendor/my_dependency` will be a symbolic link that points to an ignored working tree of `my_dependency` at revision `a943a7`.

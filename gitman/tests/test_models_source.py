@@ -20,8 +20,14 @@ class TestSource:
 
         assert 'http://example.com/foo/bar.git' == source.repo
         assert 'bar' == source.name
-        assert 'master' == source.rev
+        assert 'main' == source.rev
         assert None is source.link
+
+    def test_init_name_as_path(self, tmp_path):
+        """Verify the name can be a path."""
+        source = Source(type='git', repo='http://example.com', name=tmp_path)
+
+        assert isinstance(source.name, str)
 
     def test_init_rev(self):
         """Verify the revision can be customized."""

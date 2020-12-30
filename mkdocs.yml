@@ -13,24 +13,25 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Setup:
-      - Git: setup/git.md
-      - Git SVN: setup/git-svn.md
-      - Environment: setup/environment.md
+    - Git: setup/git.md
+    - Git SVN: setup/git-svn.md
+    - Environment: setup/environment.md
   - Interfaces:
-      - Command Line: interfaces/cli.md
-      - Git Plugin: interfaces/plugin.md
-      - Package API: interfaces/api.md
+    - Command Line: interfaces/cli.md
+    - Git Plugin: interfaces/plugin.md
+    - Package API: interfaces/api.md
+    - Models: interfaces/models.md
   - Use Cases:
-      - Replacing Submodules: use-cases/submodules.md
-      - Tracking Branches: use-cases/branch-tracking.md
-      - Linking Feature Branches: use-cases/linked-features.md
-      - Build System Integration: use-cases/build-integration.md
-      - Sparse Checkouts: use-cases/sparse-checkouts.md
-      - Default Groups: use-cases/default-groups.md
+    - Replacing Submodules: use-cases/submodules.md
+    - Tracking Branches: use-cases/branch-tracking.md
+    - Linking Feature Branches: use-cases/linked-features.md
+    - Build System Integration: use-cases/build-integration.md
+    - Sparse Checkouts: use-cases/sparse-checkouts.md
+    - Default Groups: use-cases/default-groups.md
   - Extras:
-      - Git SVN Bridge: extras/git-svn-bridge.md
-      - Bundled Application: extras/bundled-application.md
+    - Git SVN Bridge: extras/git-svn-bridge.md
+    - Bundled Application: extras/bundled-application.md
   - About:
-      - Release Notes: about/changelog.md
-      - Contributing: about/contributing.md
-      - License: about/license.md
+    - Release Notes: about/changelog.md
+    - Contributing: about/contributing.md
+    - License: about/license.md

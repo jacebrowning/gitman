@@ -20,19 +20,19 @@ Example Configuration:
 location: imports
 
 sources:
-  - name: MyDirectory
+  - repo: http:http://my-svn-repo/trunk/MyDirectory
+    name: MyDirectory
     type: git-svn
-    repo: http:http://my-svn-repo/trunk/MyDirectory
     rev: HEAD
 
-  - name: MySecondDirectory
+  - repo: http:http://my-svn-repo/trunk/MySecondDirectory
+    name: MySecondDirectory
     type: git-svn
-    repo: http:http://my-svn-repo/trunk/MySecondDirectory
     rev: 72846
 
-  - name: lz4
+  - repo: https://github.com/lz4/lz4
+    name: lz4
     type: git
-    repo: https://github.com/lz4/lz4
     rev: v1.8.1.2
 ```
 

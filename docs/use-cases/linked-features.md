@@ -9,13 +9,15 @@ By manually modifying the `sources_locked` section, a particular version of the 
 
 ```yaml
 location: vendor/gitman
+
 sources:
-- name: api
-  repo: https://github.com/example/api
+- repo: https://github.com/example/api
+  name: api
   rev: main
+
 sources_locked:
-- name: api
-  repo: https://github.com/example/api
+- repo: https://github.com/example/api
+  name: api
   rev: feature/authenticate-with-github  # related feature branch in the API
 ```
 

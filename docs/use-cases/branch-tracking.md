@@ -8,13 +8,15 @@ A web app's `gitman.yml` might look something like:
 
 ```yaml
 location: vendor/gitman
+
 sources:
-- name: api
-  repo: https://github.com/example/api
+- repo: https://github.com/example/api
+  name: api
   rev: main
+
 sources_locked:
-- name: api
-  repo: https://github.com/example/api
+- repo: https://github.com/example/api
+  name: api
   rev: b2730855c9efaaa7448b25b82e5a4363785c83ed
 ```
 

@@ -448,7 +448,7 @@ snowballstemmer = "*"
 
 [[package]]
 name = "pygments"
-version = "2.7.2"
+version = "2.7.3"
 description = "Pygments is a syntax highlighting package written in Python."
 category = "dev"
 optional = false
@@ -794,7 +794,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "fd13e9afbdbda1d01d4db41faafb9233ce899624dbe7925df77ae4b4a448b9f5"
+content-hash = "b503c2e57f1a4d8f763614d7190bd3fc196319d91841f3591bbc86b15d1eca6a"
 
 [metadata.files]
 altgraph = [
@@ -1053,8 +1053,8 @@ pydocstyle = [
     {file = "pydocstyle-5.1.1.tar.gz", hash = "sha256:19b86fa8617ed916776a11cd8bc0197e5b9856d5433b777f51a3defe13075325"},
 ]
 pygments = [
-    {file = "Pygments-2.7.2-py3-none-any.whl", hash = "sha256:88a0bbcd659fcb9573703957c6b9cff9fab7295e6e76db54c9d00ae42df32773"},
-    {file = "Pygments-2.7.2.tar.gz", hash = "sha256:381985fcc551eb9d37c52088a32914e00517e57f4a21609f48141ba08e193fa0"},
+    {file = "Pygments-2.7.3-py3-none-any.whl", hash = "sha256:f275b6c0909e5dafd2d6269a656aa90fa58ebf4a74f8fcf9053195d226b24a08"},
+    {file = "Pygments-2.7.3.tar.gz", hash = "sha256:ccf3acacf3782cbed4a989426012f1c535c9a90d3a7fc3f16d231b9372d2b716"},
 ]
 pyinstaller = [
     {file = "pyinstaller-4.0.tar.gz", hash = "sha256:970beb07115761d5e4ec317c1351b712fd90ae7f23994db914c633281f99bab0"},
