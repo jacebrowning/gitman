@@ -14,9 +14,8 @@ Project A's configuration file:
 location: dependencies
 
 sources:
-  - name: b
-    type: git
-    repo: https://project_b
+  - repo: http://project_b
+    name: b
     rev: master
 ```
 
@@ -26,13 +25,11 @@ Project B's configuration file:
 location: dependencies
 
 sources:
-  - name: c
-    type: git
-    repo: https://project_c
+  - repo: http://project_c
+    name: c
     rev: master
-  - name: d
-    type: git
-    repo: https://project_d
+  - repo: http://project_d
+    name: d
     rev: master
 
 groups:

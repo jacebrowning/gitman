@@ -1,6 +1,10 @@
 # Package API
 
-All of the [command-line interface](cli.md) functionality is available from the Python package by importing `gitman`.
+All of the [command-line interface](cli.md) functionality is available from the Python package:
+
+```python
+import gitman
+```
 
 ## Init
 

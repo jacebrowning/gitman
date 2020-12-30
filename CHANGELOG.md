@@ -1,3 +1,7 @@
+# 2.3 (beta)
+
+- Updated default arguments to `Source` model for improved library usage.
+
 # 2.2 (2020-12-24)
 
 - Fixed working tree validation to ignore case. (@sch0125)

@@ -12,9 +12,9 @@ The following example configuration will clone the full font-awesome repo into t
 clone will only contain the `fonts` directory and it's children.
 
 ```yaml
-- name: fontawesome
-  repo: "https://github.com/FortAwesome/Font-Awesome"
+- repo: "https://github.com/FortAwesome/Font-Awesome"
+  name: fontawesome
+  rev: master
   sparse_paths:
     - "fonts/*"
-  rev: master
 ```

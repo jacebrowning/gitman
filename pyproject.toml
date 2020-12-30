@@ -1,7 +1,7 @@
 [tool.poetry]
 
 name = "gitman"
-version = "2.2"
+version = "2.3b1"
 description = "A language-agnostic dependency manager using Git."
 
 license = "MIT"
@@ -70,7 +70,7 @@ coveragespace = "*"
 
 # Documentation
 mkdocs = "~1.0"
-pygments = "^2.5.2"
+pygments = "^2.7.3"
 
 # Tooling
 pyinstaller = "*"
