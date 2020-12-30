@@ -96,7 +96,7 @@ def describe_init():
             repo: https://github.com/githubtraining/hellogitworld
             sparse_paths:
               -
-            rev: master
+            rev: main
             link:
             scripts:
               -

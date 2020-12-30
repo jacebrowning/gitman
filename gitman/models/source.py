@@ -15,7 +15,7 @@ class Source:
     type: str
     repo: str
     sparse_paths: List[str] = field(default_factory=list)
-    rev: str = 'master'
+    rev: str = 'main'
     link: Optional[str] = None
     scripts: List[str] = field(default_factory=list)
 
@@ -24,7 +24,7 @@ class Source:
 
     def __post_init__(self):
         if self.name is None:
-            self.name = self._infer_name(self.repo)
+            self.name = self.repo.split('/')[-1].split('.')[0]
         self.type = self.type or 'git'
 
     def __repr__(self):
@@ -267,9 +267,3 @@ class Source:
             path
         )
         return exceptions.InvalidRepository(msg)
-
-    @staticmethod
-    def _infer_name(repo):
-        filename = repo.split('/')[-1]
-        name = filename.split('.')[0]
-        return name

@@ -20,7 +20,7 @@ class TestSource:
 
         assert 'http://example.com/foo/bar.git' == source.repo
         assert 'bar' == source.name
-        assert 'master' == source.rev
+        assert 'main' == source.rev
         assert None is source.link
 
     def test_init_rev(self):
