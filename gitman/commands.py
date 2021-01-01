@@ -1,24 +1,12 @@
 """Functions to manage the installation of dependencies."""
 
 import datetime
-import functools
-import os
 
 import log
 
 from . import common, system
+from .decorators import preserve_cwd
 from .models import Config, Source, load_config
-
-
-def restore_cwd(func):
-    @functools.wraps(func)
-    def wrapped(*args, **kwargs):
-        cwd = os.getcwd()
-        result = func(*args, **kwargs)
-        os.chdir(cwd)
-        return result
-
-    return wrapped
 
 
 def init(*, force: bool = False):
@@ -59,7 +47,7 @@ def init(*, force: bool = False):
     return success
 
 
-@restore_cwd
+@preserve_cwd
 def install(
     *names,
     root=None,
@@ -122,7 +110,7 @@ def install(
     return _display_result("install", "Installed", count)
 
 
-@restore_cwd
+@preserve_cwd
 def update(
     *names,
     root=None,
@@ -220,7 +208,7 @@ def _run_scripts(
     )
 
 
-@restore_cwd
+@preserve_cwd
 def display(*, root=None, depth=None, allow_dirty=True):
     """Display installed dependencies for a project.
 
@@ -252,7 +240,7 @@ def display(*, root=None, depth=None, allow_dirty=True):
     return _display_result("display", "Displayed", count)
 
 
-@restore_cwd
+@preserve_cwd
 def lock(*names, root=None):
     """Lock current dependency versions for a project.
 
@@ -277,7 +265,7 @@ def lock(*names, root=None):
     return _display_result("lock", "Locked", count)
 
 
-@restore_cwd
+@preserve_cwd
 def delete(*, root=None, force=False, keep_location=False):
     """Delete dependencies for a project.
 
