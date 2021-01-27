@@ -158,8 +158,8 @@ $(MKDOCS_INDEX): docs/requirements.txt mkdocs.yml docs/*.md
 	poetry run mkdocs build --clean --strict
 
 docs/requirements.txt: poetry.lock
-	@ poetry run pip list --format=freeze | grep mkdocs > $@
-	@ poetry run pip list --format=freeze | grep Pygments >> $@
+	poetry export --dev --without-hashes | grep mkdocs > $@
+	poetry export --dev --without-hashes | grep pygments >> $@
 
 .PHONY: uml
 uml: install docs/*.png
