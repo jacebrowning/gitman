@@ -4,7 +4,7 @@ GitMan is a language-agnostic dependency manager using Git. It aims to serve as 
 
 [![Demo](https://raw.githubusercontent.com/jacebrowning/gitman/main/docs/demo.gif)](https://asciinema.org/a/y3VenEKfLreczVpaLPbnU6AEQ)
 
-[![Unix Build Status](https://img.shields.io/travis/jacebrowning/gitman/main.svg?label=unix)](https://travis-ci.org/jacebrowning/gitman)
+[![Unix Build Status](https://img.shields.io/travis/com/jacebrowning/gitman/main.svg?label=unix)](https://travis-ci.com/jacebrowning/gitman)
 [![Windows Build Status](https://img.shields.io/appveyor/ci/jacebrowning/gitman/main.svg?label=window)](https://ci.appveyor.com/project/jacebrowning/gitman)
 [![Coverage Status](https://img.shields.io/coveralls/jacebrowning/gitman/main.svg)](https://coveralls.io/r/jacebrowning/gitman)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/jacebrowning/gitman.svg)](https://scrutinizer-ci.com/g/jacebrowning/gitman/?branch=main)
