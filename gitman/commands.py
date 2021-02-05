@@ -28,9 +28,9 @@ def init(*, force: bool = False):
     else:
         config = Config()
         source = Source(
-            type='git',
-            name="sample_dependency",
             repo="https://github.com/githubtraining/hellogitworld",
+            name="sample_dependency",
+            rev="master",
         )
         config.sources.append(source)
         source = source.lock(rev="ebbbf773431ba07510251bb03f9525c7bab2b13a")

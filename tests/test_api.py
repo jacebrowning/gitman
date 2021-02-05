@@ -93,7 +93,7 @@ def describe_init():
         sources:
           - repo: https://github.com/githubtraining/hellogitworld
             name: sample_dependency
-            rev: main
+            rev: master
             type: git
             sparse_paths:
               -
