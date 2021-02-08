@@ -31,6 +31,8 @@ sources:
     sparse_paths:
       -
     link:
+    links:
+      -
     scripts:
       -
   - repo: https://github.com/jacebrowning/gitman-demo
@@ -40,6 +42,8 @@ sources:
     sparse_paths:
       -
     link:
+    links:
+      -
     scripts:
       -
   - repo: https://github.com/jacebrowning/gitman-demo
@@ -49,6 +53,8 @@ sources:
     sparse_paths:
       -
     link:
+    links:
+      -
     scripts:
       -
 sources_locked:
@@ -98,6 +104,8 @@ def describe_init():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
         sources_locked:
@@ -108,6 +116,8 @@ def describe_init():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
         default_group: ''
@@ -145,6 +155,8 @@ def describe_install():  # pylint: disable=too-many-statements
             type: git
             rev: example-branch
             link:
+            links:
+              -
             scripts:
               -
         sources_locked:
@@ -153,6 +165,8 @@ def describe_install():  # pylint: disable=too-many-statements
             type: git
             rev: example-branch
             link:
+            links:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -160,6 +174,8 @@ def describe_install():  # pylint: disable=too-many-statements
             type: git
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
             link:
+            links:
+              -
             scripts:
               -
         """
@@ -180,6 +196,8 @@ def describe_install():  # pylint: disable=too-many-statements
             type: git
             rev: example-branch
             link:
+            links:
+              -
             scripts:
               -
         sources_locked:
@@ -188,6 +206,8 @@ def describe_install():  # pylint: disable=too-many-statements
             type: git
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
             link:
+            links:
+              -
             scripts:
               -
         """
@@ -220,6 +240,8 @@ def describe_install():  # pylint: disable=too-many-statements
                 repo: https://github.com/jacebrowning/gitman-demo
                 rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
                 link: my_link
+                links:
+                  -
                 scripts:
                   -
             """
@@ -263,6 +285,8 @@ def describe_install():  # pylint: disable=too-many-statements
                 repo: https://github.com/jacebrowning/gitman-demo
                 rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
                 link:
+                links:
+                  -
                 scripts:
                   - make foobar
             """
@@ -292,6 +316,8 @@ def describe_install():  # pylint: disable=too-many-statements
                           - src/*
                         rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
                         link:
+                        links:
+                          -
                         scripts:
                           -
                     """
@@ -325,6 +351,8 @@ def describe_install():  # pylint: disable=too-many-statements
                       -
                     rev: example-branch
                     link:
+                    links:
+                      -
                     scripts:
                       -
                   - name: gitman_2
@@ -334,6 +362,8 @@ def describe_install():  # pylint: disable=too-many-statements
                       -
                     rev: example-tag
                     link:
+                    links:
+                      -
                     scripts:
                       -
                 groups:
@@ -385,6 +415,8 @@ def describe_install():  # pylint: disable=too-many-statements
               -
             rev: example-branch
             link:
+            links:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -394,6 +426,8 @@ def describe_install():  # pylint: disable=too-many-statements
               -
             rev: example-tag
             link:
+            links:
+              -
             scripts:
               -
         groups:
@@ -423,6 +457,8 @@ def describe_install():  # pylint: disable=too-many-statements
               -
             rev: example-branch
             link:
+            links:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -432,6 +468,8 @@ def describe_install():  # pylint: disable=too-many-statements
               -
             rev: example-tag
             link:
+            links:
+              -
             scripts:
               -
         groups:
@@ -560,6 +598,8 @@ def describe_update():
               -
             rev: example-branch
             link:
+            links:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -569,6 +609,8 @@ def describe_update():
               -
             rev: example-tag
             link:
+            links:
+              -
             scripts:
               -
         sources_locked:
@@ -579,6 +621,8 @@ def describe_update():
               -
             rev: (old revision)
             link:
+            links:
+              -
             scripts:
               -
         groups:
@@ -601,6 +645,8 @@ def describe_update():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -610,6 +656,8 @@ def describe_update():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
         sources_locked:
@@ -620,6 +668,8 @@ def describe_update():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
         groups:
@@ -640,6 +690,8 @@ def describe_update():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -649,6 +701,8 @@ def describe_update():
               -
             rev: example-tag
             link:
+            links:
+              -
             scripts:
               -
         sources_locked:
@@ -659,6 +713,8 @@ def describe_update():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
         groups:
@@ -680,6 +736,8 @@ def describe_update():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -689,6 +747,8 @@ def describe_update():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
         sources_locked:
@@ -699,6 +759,8 @@ def describe_update():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
         groups:
@@ -744,6 +806,8 @@ def describe_update():
               -
             rev: example-branch
             link:
+            links:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -753,6 +817,8 @@ def describe_update():
               -
             rev: example-tag
             link:
+            links:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -762,6 +828,8 @@ def describe_update():
               -
             rev: example-tag
             link:
+            links:
+              -
             scripts:
               -
         sources_locked:
@@ -772,6 +840,8 @@ def describe_update():
               -
             rev: (old revision)
             link:
+            links:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -781,6 +851,8 @@ def describe_update():
               -
             rev: (old revision)
             link:
+            links:
+              -
             scripts:
               -
         groups:
@@ -806,6 +878,8 @@ def describe_update():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -815,6 +889,8 @@ def describe_update():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -824,6 +900,8 @@ def describe_update():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
         sources_locked:
@@ -834,6 +912,8 @@ def describe_update():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -843,6 +923,8 @@ def describe_update():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
         groups:
@@ -882,6 +964,8 @@ def describe_update():
               -
             rev: example-tag
             link:
+            links:
+              -
             scripts:
               -
         sources_locked:
@@ -892,6 +976,8 @@ def describe_update():
               -
             rev: (old revision)
             link:
+            links:
+              -
             scripts:
               -
         groups:
@@ -913,6 +999,8 @@ def describe_update():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
         sources_locked:
@@ -923,6 +1011,8 @@ def describe_update():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
         groups:
@@ -966,6 +1056,8 @@ def describe_update():
               -
             rev: example-tag
             link:
+            links:
+              -
             scripts:
               -
         sources_locked:
@@ -976,6 +1068,8 @@ def describe_update():
               -
             rev: (old revision)
             link:
+            links:
+              -
             scripts:
               -
         groups:
@@ -998,6 +1092,8 @@ def describe_update():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
         sources_locked:
@@ -1008,6 +1104,8 @@ def describe_update():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
         groups:
@@ -1026,6 +1124,8 @@ def describe_update():
             type: git
             rev: example-branch
             link:
+            links:
+              -
             scripts:
               -
         sources_locked:
@@ -1034,6 +1134,8 @@ def describe_update():
             type: git
             rev: example-branch
             link:
+            links:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -1041,6 +1143,8 @@ def describe_update():
             type: git
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
             link:
+            links:
+              -
             scripts:
               -
         """
@@ -1108,6 +1212,8 @@ def describe_lock():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -1117,6 +1223,8 @@ def describe_lock():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -1126,6 +1234,8 @@ def describe_lock():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
         """
@@ -1148,6 +1258,8 @@ def describe_lock():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -1157,6 +1269,8 @@ def describe_lock():
             sparse_paths:
               -
             link:
+            links:
+              -
             scripts:
               -
         """
