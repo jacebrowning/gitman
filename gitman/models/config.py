@@ -339,6 +339,10 @@ def load_config(start=None, *, search=True):
     if start:
         start = os.path.abspath(start)
     else:
+        # Support SUBST drives on windows
+        realpath = os.path.realpath(os.getcwd())
+        if realpath != os.getcwd():
+            os.chdir(realpath)
         start = os.getcwd()
 
     if search:
