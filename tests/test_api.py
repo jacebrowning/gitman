@@ -273,6 +273,53 @@ def describe_install():  # pylint: disable=too-many-statements
 
             expect(gitman.install(depth=1, force=True)) == True
 
+    def describe_multi_links():
+        @pytest.fixture
+        def config_with_links(config):
+            config.datafile.text = strip(
+                """
+            location: deps
+            sources:
+              - name: gitman_1
+                repo: https://github.com/jacebrowning/gitman-demo
+                rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+                link:
+                links:
+                  - source: gitman_sources/gmd_3
+                    target: gmd_3
+                  - source: gitman_sources/gmd_4
+                    target: gmd_4
+                scripts:
+                  -
+            """
+            )
+            config.datafile.load()
+
+            return config
+
+        def it_should_create_links(config_with_links):
+            expect(gitman.install(depth=1)) == True
+            expect(os.listdir()).contains('gmd_3')
+            expect(os.listdir()).contains('gmd_4')
+
+        def it_should_not_overwrite_files(config_with_links):
+            os.system("touch gmd_3")
+
+            with pytest.raises(RuntimeError):
+                gitman.install(depth=1)
+
+        def it_should_not_overwrite_non_empty_directories(config_with_links):
+            os.system("mkdir gmd_3")
+            os.system("touch gmd_3/my_link")
+
+            with pytest.raises(RuntimeError):
+                gitman.install(depth=1)
+
+        def it_overwrites_files_with_force(config_with_links):
+            os.system("touch gmd_3")
+
+            expect(gitman.install(depth=1, force=True)) == True
+
     def describe_scripts():
         @pytest.fixture
         def config_with_scripts(config):
