@@ -24,7 +24,7 @@ class Source:
     type: str = 'git'
     sparse_paths: List[str] = field(default_factory=list)
     link: Optional[str] = None
-    links: Optional[List[Link]] = field(default_factory=list)
+    links: List[Link] = field(default_factory=list)
 
     scripts: List[str] = field(default_factory=list)
 
