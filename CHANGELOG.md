@@ -1,6 +1,8 @@
 # 2.3 (beta)
 
 - Updated default arguments to `Source` model for improved library usage.
+- Added support for multiple symbolic `links` per repo. (@gunechristensen)
+  - **WARNING**: `link` may be deprecated in a future release.
 
 # 2.2 (2020-12-24)
 
