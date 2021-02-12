@@ -8,6 +8,12 @@ from .. import common, exceptions, git, shell
 
 
 @dataclass
+class Link:
+    source: str = ''
+    target: str = ''
+
+
+@dataclass
 class Source:
     """A dictionary of `git` and `ln` arguments."""
 
@@ -18,6 +24,7 @@ class Source:
     type: str = 'git'
     sparse_paths: List[str] = field(default_factory=list)
     link: Optional[str] = None
+    links: List[Link] = field(default_factory=list)
 
     scripts: List[str] = field(default_factory=list)
 
@@ -138,26 +145,25 @@ class Source:
             self.type, self.repo, self.name, fetch=fetch, clean=clean, rev=self.rev
         )
 
+    def create_links(self, root, force=False):
+        """Create links from the source to target directory."""
+        if not self.links:
+            return
+
+        for link in self.links:
+            target = os.path.join(root, os.path.normpath(link.target))
+            relpath = os.path.relpath(os.getcwd(), os.path.dirname(target))
+            source = os.path.join(relpath, os.path.normpath(link.source))
+            create_sym_link(source, target, force)
+
     def create_link(self, root, force=False):
         """Create a link from the target name to the current directory."""
         if not self.link:
             return
 
-        log.info("Creating a symbolic link...")
-
-        target = os.path.join(root, self.link)
+        target = os.path.join(root, os.path.normpath(self.link))
         source = os.path.relpath(os.getcwd(), os.path.dirname(target))
-
-        if os.path.islink(target):
-            os.remove(target)
-        elif os.path.exists(target):
-            if force:
-                shell.rm(target)
-            else:
-                msg = "Preexisting link location at {}".format(target)
-                raise exceptions.UncommittedChanges(msg)
-
-        shell.ln(source, target)
+        create_sym_link(source, target, force)
 
     def run_scripts(self, force=False, show_shell_stdout=False):
         log.info("Running install scripts...")
@@ -271,3 +277,18 @@ class Source:
             path
         )
         return exceptions.InvalidRepository(msg)
+
+
+def create_sym_link(source, target, force):
+    log.info("Creating a symbolic link...")
+
+    if os.path.islink(target):
+        os.remove(target)
+    elif os.path.exists(target):
+        if force:
+            shell.rm(target)
+        else:
+            msg = "Preexisting link location at {}".format(target)
+            raise exceptions.UncommittedChanges(msg)
+
+    shell.ln(source, target)
