@@ -339,7 +339,9 @@ def load_config(start=None, *, search=True):
     if start:
         start = os.path.abspath(start)
     else:
-        start = os.getcwd()
+        # Handle if cwd is the root of a virtual drive on windows
+        start = os.path.realpath(os.getcwd())
+        os.chdir(start)
 
     if search:
         log.debug("Searching for config...")
