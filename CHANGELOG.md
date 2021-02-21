@@ -1,3 +1,8 @@
+# 3.0 (alpha)
+
+- Added support for virtual drives on Windows. (@gunechristensen)
+- Dropped support for Python 3.7.
+
 # 2.3 (beta)
 
 - Updated default arguments to `Source` model for improved library usage.
