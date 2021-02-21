@@ -1,6 +1,4 @@
 import os
-import sys
-from pathlib import Path
 from typing import List, Optional
 
 import log
@@ -341,12 +339,9 @@ def load_config(start=None, *, search=True):
     if start:
         start = os.path.abspath(start)
     else:
-        if os.name == 'nt':
-            is_subst, realpath = _detect_windows_subst_drive()
-            if is_subst:
-                os.chdir(realpath)
-
-        start = os.getcwd()
+        # Handle if cwd is the root of a virtual drive on windows
+        start = os.path.realpath(os.getcwd())
+        os.chdir(start)
 
     if search:
         log.debug("Searching for config...")
@@ -380,19 +375,3 @@ def _valid_filename(filename):
     if name.startswith('.'):
         name = name[1:]
     return name in {'gitman', 'gdm'} and ext in {'.yml', '.yaml'}
-
-
-def _detect_windows_subst_drive():
-    """Detect if gitman is started the from root of a virtual drive."""
-    cwd = os.getcwd()
-    major, minor, *_ = sys.version_info
-    if major == 3 and minor >= 8:
-        realpath = os.path.realpath(cwd)
-    else:
-        # Versions <3.8 don't resolve symbolic links and junction on windows
-        realpath = os.fspath(Path(cwd).resolve())
-
-    if realpath != cwd:
-        return True, realpath
-
-    return False, None
