@@ -145,6 +145,8 @@ class Config:
         if depth == 0:
             log.info("Skipped directory: %s", self.location_path)
             return 0
+        
+        repo_path = shell.pwd()
 
         sources = self._get_sources()
         sources_filter = self._get_sources_filter(
@@ -158,8 +160,8 @@ class Config:
         count = 0
         for source in sources:
             if source.name in sources_filter:
-                source.run_scripts(force=force, show_shell_stdout=show_shell_stdout)
-                count += 1
+                path = os.path.join(self.location_path, source.name)
+                shell.cd(path, _show=True)
 
                 config = load_config(search=False)
                 if config:
@@ -169,8 +171,10 @@ class Config:
                     )
                     common.dedent()
 
-                shell.cd(self.location_path, _show=False)
+                source.run_scripts(force=force, show_shell_stdout=show_shell_stdout)
+                count += 1
 
+        shell.cd(repo_path)
         common.dedent()
 
         return count

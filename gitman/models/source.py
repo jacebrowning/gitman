@@ -169,7 +169,6 @@ class Source:
         log.info("Running install scripts...")
 
         # Enter the working tree
-        shell.cd(self.name)
         if not git.valid():
             raise self._invalid_repository
 
