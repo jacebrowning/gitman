@@ -145,7 +145,7 @@ class Config:
         if depth == 0:
             log.info("Skipped directory: %s", self.location_path)
             return 0
-        
+
         repo_path = shell.pwd()
 
         sources = self._get_sources()
