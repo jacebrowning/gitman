@@ -2,6 +2,7 @@
 
 - Added support for virtual drives on Windows. (@gunechristensen)
 - Dropped support for Python 3.7.
+- Updated scripts installation to be depth-first. (@mrpossoms)
 
 # 2.3 (beta)
 
