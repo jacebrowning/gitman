@@ -5,6 +5,7 @@ import log
 from datafiles import datafile, field
 
 from .. import common, exceptions, shell
+from ..decorators import preserve_cwd
 from .group import Group
 from .source import Source
 
@@ -140,13 +141,12 @@ class Config:
 
         return count
 
+    @preserve_cwd
     def run_scripts(self, *names, depth=None, force=False, show_shell_stdout=False):
         """Run scripts for the specified dependencies."""
         if depth == 0:
             log.info("Skipped directory: %s", self.location_path)
             return 0
-
-        repo_path = shell.pwd()
 
         sources = self._get_sources()
         sources_filter = self._get_sources_filter(
@@ -160,21 +160,22 @@ class Config:
         count = 0
         for source in sources:
             if source.name in sources_filter:
-                path = os.path.join(self.location_path, source.name)
-                shell.cd(path, _show=True)
+                shell.cd(source.name)
 
                 config = load_config(search=False)
                 if config:
                     common.indent()
-                    count += config.run_scripts(
-                        depth=None if depth is None else max(0, depth - 1), force=force
-                    )
+                    remaining_depth = None if depth is None else max(0, depth - 1)
+                    if remaining_depth:
+                        common.newline()
+                    count += config.run_scripts(depth=remaining_depth, force=force)
                     common.dedent()
 
                 source.run_scripts(force=force, show_shell_stdout=show_shell_stdout)
                 count += 1
 
-        shell.cd(repo_path)
+                shell.cd(self.location_path, _show=False)
+
         common.dedent()
 
         return count
