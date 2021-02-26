@@ -3,6 +3,8 @@ environment:
     RANDOM_SEED: 0
   matrix:
     - PYTHON_MAJOR: 3
+      PYTHON_MINOR: 7
+    - PYTHON_MAJOR: 3
       PYTHON_MINOR: 8
     # TODO: Enable this when Python 3.9 is available in the default images
     # - PYTHON_MAJOR: 3
