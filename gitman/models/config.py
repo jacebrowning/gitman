@@ -1,4 +1,5 @@
 import os
+import sys
 from typing import List, Optional
 
 import log
@@ -341,12 +342,7 @@ class Config:
 
 def load_config(start=None, *, search=True):
     """Load the config for the current project."""
-    if start:
-        start = os.path.abspath(start)
-    else:
-        # Handle if cwd is the root of a virtual drive on windows
-        start = os.path.realpath(os.getcwd())
-        os.chdir(start)
+    start = os.path.abspath(start) if start else _resolve_current_directory()
 
     if search:
         log.debug("Searching for config...")
@@ -373,6 +369,16 @@ def load_config(start=None, *, search=True):
         log.debug("No config found in: %s", start)
 
     return None
+
+
+def _resolve_current_directory():
+    start = os.getcwd()
+    if sys.version_info < (3, 8) and os.name == "nt":
+        log.warn("Python 3.8+ is required to resolve virtual drives on Windows")
+    else:
+        start = os.path.realpath(start)
+        os.chdir(start)
+    return start
 
 
 def _valid_filename(filename):
