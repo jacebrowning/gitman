@@ -50,7 +50,8 @@ sources:
     rev: Mk5-end-of-life
   - repo: https://github.com/jonreid/XcodeCoverage
     name: coverage
-    link: Tools/XcodeCoverage
+    links:
+      - target: Tools/XcodeCoverage
   - repo: https://github.com/dxa4481/truffleHog
     name: trufflehog
     rev: master

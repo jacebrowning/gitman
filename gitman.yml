@@ -6,9 +6,10 @@ sources:
     type: git
     sparse_paths:
       -
-    link: demo/example
+    link:
     links:
-      -
+      - source: ''
+        target: demo/example
     scripts:
       - cat .noserc
       - make foobar
@@ -53,7 +54,7 @@ sources_locked:
     type: git
     sparse_paths:
       -
-    link: demo/example
+    link:
     links:
       -
     scripts:
