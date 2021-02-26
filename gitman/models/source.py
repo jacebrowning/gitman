@@ -1,4 +1,5 @@
 import os
+import warnings
 from dataclasses import dataclass, field
 from typing import List, Optional
 
@@ -37,6 +38,11 @@ class Source:
         else:
             self.name = str(self.name)
         self.type = self.type or 'git'
+        if self.link:
+            warnings.warn(
+                "'link' will be replaced with 'links' in version 3.0",
+                DeprecationWarning,
+            )
 
     def __repr__(self):
         return "<source {}>".format(self)
