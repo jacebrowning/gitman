@@ -23,7 +23,8 @@ sources:
   - repo: <URL of my_dependency repository>
     name: my_dependency
     rev: a943a702d06f34599aee1f8da8ef9f7296031d69
-    link: vendor/my_depenendy
+    links:
+      - target: vendor/my_depenendy
 ```
 
 Add `.gitman` to your `.gitignore` file and overwrite the old submodule location by running:

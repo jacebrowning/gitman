@@ -1,10 +1,8 @@
 # 3.0 (alpha)
 
-- Added support for virtual drives on Windows. (@gunechristensen)
 - Dropped support for Python 3.7.
-- Updated scripts installation to be depth-first. (@mrpossoms)
 
-# 2.3 (beta)
+# 2.3 (2021-02-26)
 
 - Updated default arguments to `Source` model for improved library usage.
 - Added support for multiple symbolic `links` per repo. (@gunechristensen)
