@@ -52,7 +52,7 @@ def clone(type, repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None
         with open(
             "%s/%s/.git/info/sparse-checkout" % (os.getcwd(), normpath), 'w'
         ) as fd:
-            fd.writelines(sparse_paths)
+            fd.write("\n".join(sparse_paths))
         with open(
             "%s/%s/.git/objects/info/alternates" % (os.getcwd(), normpath), 'w'
         ) as fd:
