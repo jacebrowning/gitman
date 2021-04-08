@@ -1,6 +1,7 @@
 # 3.0 (alpha)
 
 - Dropped support for Python 3.7.
+- Fixed handling of multiple sparse paths. (@SamMousa)
 
 # 2.3 (2021-02-26)
 
