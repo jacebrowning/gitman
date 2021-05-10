@@ -30,12 +30,14 @@ def call(name, *args, _show=True, _stream=True, _shell=False, _ignore=False):
 
     program = show(name, *args, stdout=_show)
 
-    # PyInstaller saves the original value to *_ORIG, then modifies the search path so that the bundled libraries
-    # are found first by the bundled code.
-    # But if your code executes a system program, you often do not want that this system program loads your bundled
-    # libraries (that are maybe not compatible with your system program) - it rather should load the correct libraries
-    # from the system locations like it usually does.
-    # Thus you need to restore the original path before creating the subprocess with the system program
+    # PyInstaller saves the original value to *_ORIG, then modifies the search
+    # path so that the bundled libraries are found first by the bundled code.
+    # But if your code executes a system program, you often do not want that
+    # this system program loads your bundled libraries (that are maybe not
+    # compatible with your system program) - it rather should load the correct
+    # libraries from the system locations like it usually does.
+    # Thus you need to restore the original path before creating the subprocess
+    # with the system program
     # https://github.com/pyinstaller/pyinstaller/blob/483c819d6a256b58db6740696a901bd41c313f0c/doc/runtime-information.rst#ld_library_path--libpath-considerations
     env = dict(os.environ)  # make a copy of the environment
     lp_key = 'LD_LIBRARY_PATH'  # for Linux and *BSD.
