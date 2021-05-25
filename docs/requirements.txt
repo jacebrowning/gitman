@@ -1,2 +1,2 @@
 mkdocs==1.0.4; (python_full_version >= "2.7.9" and python_full_version < "3.0.0") or (python_full_version >= "3.4.0")
-pygments==2.7.4; python_version >= "3.5"
+pygments==2.8.1; python_version >= "3.5"
