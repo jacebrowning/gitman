@@ -1,3 +1,7 @@
+# 3.0 (beta)
+
+- Removed `link` feature in favor of `links`.
+
 # 2.3.2 (2021-04-08)
 
 - Fixed handling of multiple sparse paths. (@SamMousa)

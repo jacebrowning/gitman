@@ -113,7 +113,6 @@ class Config:
                 clean=clean,
                 skip_changes=skip_changes,
             )
-            source.create_link(self.root, force=force)
             source.create_links(self.root, force=force)
             common.newline()
             count += 1
