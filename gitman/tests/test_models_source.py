@@ -10,7 +10,7 @@ from gitman.models import Source
 
 @pytest.fixture
 def source():
-    return Source(type='git', repo='repo', name='name', rev='rev', link='link')
+    return Source(type='git', repo='repo', name='name', rev='rev')
 
 
 class TestSource:
@@ -21,7 +21,6 @@ class TestSource:
         assert 'http://example.com/foo/bar.git' == source.repo
         assert 'bar' == source.name
         assert 'main' == source.rev
-        assert None is source.link
 
     def test_init_name_as_path(self, tmp_path):
         """Verify the name can be a path."""
@@ -37,22 +36,8 @@ class TestSource:
 
         assert 'v1.0' == source.rev
 
-    def test_init_link(self):
-        """Verify the link can be set."""
-        source = Source(
-            type='git', repo='http://mock.git', name='mock_name', link='mock/link'
-        )
-
-        assert 'mock/link' == source.link
-
     def test_repr(self, source):
         """Verify sources can be represented."""
-        assert "<source ['git'] 'repo' @ 'rev' in 'name' <- 'link'>" == repr(source)
-
-    def test_repr_no_link(self, source):
-        """Verify sources can be represented."""
-        source.link = None
-
         assert "<source ['git'] 'repo' @ 'rev' in 'name'>" == repr(source)
 
     def test_eq(self, source):
@@ -85,7 +70,7 @@ class TestSource:
         self, mock_clone, mock_is_fetch_required, mock_fetch, mock_update
     ):
         """Verify update_files when path does not exist"""
-        source = Source(type='git', repo='repo', name='name', rev='rev', link='link')
+        source = Source(type='git', repo='repo', name='name', rev='rev')
         source.update_files()
 
         mock_clone.assert_called_once_with(
@@ -110,7 +95,7 @@ class TestSource:
         self, mock_clone, mock_is_fetch_required, mock_fetch, mock_update
     ):
         """Verify update_files throws exception on invalid repo when not forced"""
-        source = Source(type='git', repo='repo', name='name', rev='rev', link='link')
+        source = Source(type='git', repo='repo', name='name', rev='rev')
 
         with pytest.raises(Exception):
             source.update_files()
@@ -134,7 +119,7 @@ class TestSource:
         self, mock_clone, mock_rebuild, mock_is_fetch_required, mock_fetch, mock_update
     ):
         """Verify update_files rebuilds when invalid repo and force is passed"""
-        source = Source(type='git', repo='repo', name='name', rev='rev', link='link')
+        source = Source(type='git', repo='repo', name='name', rev='rev')
         source.update_files(force=True)
 
         mock_clone.assert_not_called()

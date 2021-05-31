@@ -30,7 +30,6 @@ sources:
     type: git
     sparse_paths:
       -
-    link:
     links:
       -
     scripts:
@@ -41,7 +40,6 @@ sources:
     type: git
     sparse_paths:
       -
-    link:
     links:
       -
     scripts:
@@ -52,7 +50,6 @@ sources:
     type: git
     sparse_paths:
       -
-    link:
     links:
       -
     scripts:
@@ -103,7 +100,6 @@ def describe_init():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -115,7 +111,6 @@ def describe_init():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -154,7 +149,6 @@ def describe_install():  # pylint: disable=too-many-statements
             name: gitman_1
             type: git
             rev: example-branch
-            link:
             links:
               -
             scripts:
@@ -164,7 +158,6 @@ def describe_install():  # pylint: disable=too-many-statements
             name: gitman_2
             type: git
             rev: example-branch
-            link:
             links:
               -
             scripts:
@@ -173,7 +166,6 @@ def describe_install():  # pylint: disable=too-many-statements
             name: gitman_3
             type: git
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-            link:
             links:
               -
             scripts:
@@ -195,7 +187,6 @@ def describe_install():  # pylint: disable=too-many-statements
             name: gitman_1
             type: git
             rev: example-branch
-            link:
             links:
               -
             scripts:
@@ -205,7 +196,6 @@ def describe_install():  # pylint: disable=too-many-statements
             name: gitman_2
             type: git
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-            link:
             links:
               -
             scripts:
@@ -239,9 +229,8 @@ def describe_install():  # pylint: disable=too-many-statements
               - name: gitman_1
                 repo: https://github.com/jacebrowning/gitman-demo
                 rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-                link: my_link
                 links:
-                  -
+                  - target: my_link
                 scripts:
                   -
             """
@@ -283,7 +272,6 @@ def describe_install():  # pylint: disable=too-many-statements
               - name: gitman_1
                 repo: https://github.com/jacebrowning/gitman-demo
                 rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-                link:
                 links:
                   - source: gitman_sources/gmd_3
                     target: gmd_3
@@ -331,7 +319,6 @@ def describe_install():  # pylint: disable=too-many-statements
                 type: git
                 repo: https://github.com/jacebrowning/gitman-demo
                 rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-                link:
                 links:
                   -
                 scripts:
@@ -362,7 +349,6 @@ def describe_install():  # pylint: disable=too-many-statements
                         sparse_paths:
                           - src/*
                         rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
-                        link:
                         links:
                           -
                         scripts:
@@ -397,7 +383,6 @@ def describe_install():  # pylint: disable=too-many-statements
                     sparse_paths:
                       -
                     rev: example-branch
-                    link:
                     links:
                       -
                     scripts:
@@ -408,7 +393,6 @@ def describe_install():  # pylint: disable=too-many-statements
                     sparse_paths:
                       -
                     rev: example-tag
-                    link:
                     links:
                       -
                     scripts:
@@ -461,7 +445,6 @@ def describe_install():  # pylint: disable=too-many-statements
             sparse_paths:
               -
             rev: example-branch
-            link:
             links:
               -
             scripts:
@@ -472,7 +455,6 @@ def describe_install():  # pylint: disable=too-many-statements
             sparse_paths:
               -
             rev: example-tag
-            link:
             links:
               -
             scripts:
@@ -503,7 +485,6 @@ def describe_install():  # pylint: disable=too-many-statements
             sparse_paths:
               -
             rev: example-branch
-            link:
             links:
               -
             scripts:
@@ -514,7 +495,6 @@ def describe_install():  # pylint: disable=too-many-statements
             sparse_paths:
               -
             rev: example-tag
-            link:
             links:
               -
             scripts:
@@ -644,7 +624,6 @@ def describe_update():
             sparse_paths:
               -
             rev: example-branch
-            link:
             links:
               -
             scripts:
@@ -655,7 +634,6 @@ def describe_update():
             sparse_paths:
               -
             rev: example-tag
-            link:
             links:
               -
             scripts:
@@ -667,7 +645,6 @@ def describe_update():
             sparse_paths:
               -
             rev: (old revision)
-            link:
             links:
               -
             scripts:
@@ -691,7 +668,6 @@ def describe_update():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -702,7 +678,6 @@ def describe_update():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -714,7 +689,6 @@ def describe_update():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -736,7 +710,6 @@ def describe_update():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -747,7 +720,6 @@ def describe_update():
             sparse_paths:
               -
             rev: example-tag
-            link:
             links:
               -
             scripts:
@@ -759,7 +731,6 @@ def describe_update():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -782,7 +753,6 @@ def describe_update():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -793,7 +763,6 @@ def describe_update():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -805,7 +774,6 @@ def describe_update():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -852,7 +820,6 @@ def describe_update():
             sparse_paths:
               -
             rev: example-branch
-            link:
             links:
               -
             scripts:
@@ -863,7 +830,6 @@ def describe_update():
             sparse_paths:
               -
             rev: example-tag
-            link:
             links:
               -
             scripts:
@@ -874,7 +840,6 @@ def describe_update():
             sparse_paths:
               -
             rev: example-tag
-            link:
             links:
               -
             scripts:
@@ -886,7 +851,6 @@ def describe_update():
             sparse_paths:
               -
             rev: (old revision)
-            link:
             links:
               -
             scripts:
@@ -897,7 +861,6 @@ def describe_update():
             sparse_paths:
               -
             rev: (old revision)
-            link:
             links:
               -
             scripts:
@@ -924,7 +887,6 @@ def describe_update():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -935,7 +897,6 @@ def describe_update():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -946,7 +907,6 @@ def describe_update():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -958,7 +918,6 @@ def describe_update():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -969,7 +928,6 @@ def describe_update():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -1010,7 +968,6 @@ def describe_update():
             sparse_paths:
               -
             rev: example-tag
-            link:
             links:
               -
             scripts:
@@ -1022,7 +979,6 @@ def describe_update():
             sparse_paths:
               -
             rev: (old revision)
-            link:
             links:
               -
             scripts:
@@ -1045,7 +1001,6 @@ def describe_update():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -1057,7 +1012,6 @@ def describe_update():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -1102,7 +1056,6 @@ def describe_update():
             sparse_paths:
               -
             rev: example-tag
-            link:
             links:
               -
             scripts:
@@ -1114,7 +1067,6 @@ def describe_update():
             sparse_paths:
               -
             rev: (old revision)
-            link:
             links:
               -
             scripts:
@@ -1138,7 +1090,6 @@ def describe_update():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -1150,7 +1101,6 @@ def describe_update():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -1170,7 +1120,6 @@ def describe_update():
             name: gitman_1
             type: git
             rev: example-branch
-            link:
             links:
               -
             scripts:
@@ -1180,7 +1129,6 @@ def describe_update():
             name: gitman_2
             type: git
             rev: example-branch
-            link:
             links:
               -
             scripts:
@@ -1189,7 +1137,6 @@ def describe_update():
             name: gitman_3
             type: git
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
-            link:
             links:
               -
             scripts:
@@ -1258,7 +1205,6 @@ def describe_lock():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -1269,7 +1215,6 @@ def describe_lock():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -1280,7 +1225,6 @@ def describe_lock():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -1304,7 +1248,6 @@ def describe_lock():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:
@@ -1315,7 +1258,6 @@ def describe_lock():
             type: git
             sparse_paths:
               -
-            link:
             links:
               -
             scripts:

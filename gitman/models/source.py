@@ -1,5 +1,4 @@
 import os
-import warnings
 from dataclasses import dataclass, field
 from typing import List, Optional
 
@@ -24,7 +23,6 @@ class Source:
 
     type: str = 'git'
     sparse_paths: List[str] = field(default_factory=list)
-    link: Optional[str] = None
     links: List[Link] = field(default_factory=list)
 
     scripts: List[str] = field(default_factory=list)
@@ -38,22 +36,13 @@ class Source:
         else:
             self.name = str(self.name)
         self.type = self.type or 'git'
-        if self.link:
-            warnings.warn(
-                "'link' will be replaced with 'links' in version 3.0",
-                DeprecationWarning,
-            )
 
     def __repr__(self):
         return "<source {}>".format(self)
 
     def __str__(self):
         pattern = "['{t}'] '{r}' @ '{v}' in '{d}'"
-        if self.link:
-            pattern += " <- '{s}'"
-        return pattern.format(
-            t=self.type, r=self.repo, v=self.rev, d=self.name, s=self.link
-        )
+        return pattern.format(t=self.type, r=self.repo, v=self.rev, d=self.name)
 
     def __eq__(self, other):
         return self.name == other.name
@@ -162,15 +151,6 @@ class Source:
             source = os.path.join(relpath, os.path.normpath(link.source))
             create_sym_link(source, target, force)
 
-    def create_link(self, root, force=False):
-        """Create a link from the target name to the current directory."""
-        if not self.link:
-            return
-
-        target = os.path.join(root, os.path.normpath(self.link))
-        source = os.path.relpath(os.getcwd(), os.path.dirname(target))
-        create_sym_link(source, target, force)
-
     def run_scripts(self, force=False, show_shell_stdout=False):
         log.info("Running install scripts...")
 
@@ -264,7 +244,7 @@ class Source:
             repo=self.repo,
             name=self.name,
             rev=rev,
-            link=self.link,
+            links=self.links,
             scripts=self.scripts,
             sparse_paths=self.sparse_paths,
         )
