@@ -4,9 +4,11 @@ sources:
   type: git
   name: gitman_1
   rev: fb693447579235391a45ca170959b5583c5042d8
-  link: src/gitman_a
+  links:
+    - target: src/gitman_a
 - repo: https://github.com/jacebrowning/gitman
   type: git
   name: gitman_2
   rev: master
-  link: src/gitman_b
+  links:
+    - target: src/gitman_b

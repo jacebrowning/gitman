@@ -1,4 +1,4 @@
-# 3.0 (beta)
+# 3.0 (2021-06-02)
 
 - Removed `link` feature in favor of `links`.
 
