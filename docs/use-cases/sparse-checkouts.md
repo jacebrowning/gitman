@@ -1,4 +1,4 @@
-# Using sparse checkouts
+# Using Sparse Checkouts
 
 For some use-cases, especially when dealing with monorepos, it can be useful to limit the paths that are checked out
 from the reference repository. It is important to note, that this influences only the shape of the project local

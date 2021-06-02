@@ -1,8 +1,8 @@
-# Using multiple links
+# Using Multiple Links
 
 This feature can be used to create as many symbolic links as you need from one repository.
 
-## The syntax
+## The Syntax
 
 Let's say we have a simple project structure:
 
@@ -32,7 +32,7 @@ This will result in the following symbolic links:
 - `<root>/vendor/partial_repo` -> `<root>/.gitman/my_dependency/include`
 - `<root>/vendor/full_repo` -> `<root>/.gitman/my_dependency`
 
-## Alternative syntax
+## Alternative Syntax
 
 ```yaml
 location: vendor
