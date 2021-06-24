@@ -9,13 +9,25 @@ from datafiles import datafile, field
 from .. import common, exceptions, shell
 from ..decorators import preserve_cwd
 from .group import Group
-from .source import Source
+from .source import Source, create_sym_link
 
+# TODO: use __post_init__ instead of _on_post_load
+# TODO: create links for nested dependencies if flat recursive is used
+# TODO: create relative nested symlinks 
+# Use Case 1 all flat recursive -> recursive all repos in a flat way
+# Use Case 2 flat recursive top level -> recursive-nested bottom level: gather all repos globally and create nested links
+# -> gitman -> imports
+#       - waf-prototyping
+#       - lib
+#       - libex
+# Use Case 3 flat recursive top level -> flat bottom level: clone in a flat way but abort recursive resolution in the next stage
+global_resolver = None
 
 @datafile("{self.root}/{self.filename}", defaults=True, manual=True)
 class Config:
     RESOLVER_RECURSIVE_NESTED = "recursive-nested"
     RESOLVER_RECURSIVE_FLAT = "recursive-flat"
+    RESOLVER_RECURSIVE_FLAT_NESTED_LINKS = "recursive-flat-nested-links"
     RESOLVER_FLAT = "flat"
 
     """Specifies all dependencies for a project."""
@@ -28,30 +40,43 @@ class Config:
     sources_locked: List[Source] = field(default_factory=list)
     default_group: str = field(default_factory=str)
     groups: List[Group] = field(default_factory=list)
-    processed_sources: List[Source] = field(default_factory=list)
-    location_path : str = None
+
 
     def __post_init__(self):
         if self.root is None:
             self.root = os.getcwd()
+        
+        # used only internally and should not be serialized
+        setattr(self, 'location_path', None)
+        processed_sources: List[Source] = []
+        setattr(self, 'processed_sources', processed_sources)
+        
         if self.location_path is None:
         	self.location_path = os.path.normpath(os.path.join(self.root, self.location))
 
     def _on_post_load(self):
+        global global_resolver
+
         # update location path because default location may different then loaded value
         self.location_path = os.path.normpath(os.path.join(self.root, self.location))
 
         # check if any of the valid resolver values is set 
         # if not then set RESOLVER_RECURSIVE_NESTED as default
         if (self.resolver != Config.RESOLVER_RECURSIVE_NESTED and
-                self.resolver != Config.RESOLVER_RECURSIVE_FLAT and
-                self.resolver != Config.RESOLVER_FLAT):
-            self.resolver = Config.RESOLVER_RECURSIVE_NESTED
+            self.resolver != Config.RESOLVER_RECURSIVE_FLAT and 
+            self.resolver != Config.RESOLVER_RECURSIVE_FLAT_NESTED_LINKS and 
+            self.resolver != Config.RESOLVER_FLAT):
+            msg = "Unknown resolver name \"{}\"".format(self.resolver)
+            raise exceptions.InvalidConfig(msg)
 
         for source in self.sources:
             source._on_post_load()  # pylint: disable=protected-access
         for source in self.sources_locked:
             source._on_post_load()  # pylint: disable=protected-access
+
+        # set global resolve if not already set
+        if global_resolver is None:
+            global_resolver = self.resolver
 
     @property
     def config_path(self) -> str:
@@ -106,36 +131,43 @@ class Config:
             log.info("Skipped directory: %s", self.location_path)
             return 0
 
-        sources = self._get_sources(use_locked=False if update else None)
-        sources_filter = self._get_sources_filter(
-            *names, sources=sources, skip_default_group=skip_default_group
-        )
+        sources = None 
+        sources_filter = None
 
-        if self.resolver == Config.RESOLVER_RECURSIVE_FLAT:
+        if self.resolver == Config.RESOLVER_RECURSIVE_FLAT or self.resolver == Config.RESOLVER_RECURSIVE_FLAT_NESTED_LINKS:
+            sources = self._get_sources(use_locked=False if update else None, use_extra=False)
+            sources_filter = self._get_sources_filter(
+                *names, sources=sources, skip_default_group=skip_default_group
+            )
+
             # gather flat sources and check for rev conflicts
             for source in sources:
-                is_srcname_found = False
                 for processed_source in self.processed_sources:
                     if source.name == processed_source.name: # check if current source was already processed
-                        is_srcname_found = True
                         if (source.rev != processed_source.rev or 
                             source.repo != processed_source.repo):
-                            error_msg = ("Repo/rev conflict encountered in"
+                            error_msg = ("Repo/rev conflict encountered in "
                                          "flat hierarchy while updating {}\n"
                                          "Details: {} conflict with {}"
                                          ).format(self.root, 
                                                   str(processed_source), 
                                                   str(source))
                             raise exceptions.InvalidConfig(error_msg)               
-                        # new source name detected -> store new source name to list (cache) used to check for rev conflicts 
-                if not is_srcname_found: # source.name != processed_source.name and source.repo != processed_source.repo:
-                    self.processed_sources.append(source)
+                
+                # new source name detected -> store new source name to list (cache) used to check for rev conflicts 
+                # source.name != processed_source.name and source.repo != processed_source.repo:
+                self.processed_sources.append(source)
         else:
+            sources = self._get_sources(use_locked=False if update else None)
+            sources_filter = self._get_sources_filter(
+                *names, sources=sources, skip_default_group=skip_default_group
+            )
+
             for source in sources:
                 for processed_source in self.processed_sources:
                     if source.name == processed_source.name: # check if current source was already processed
-                        error_msg = ("Repo/rev conflict encountered in"
-                                    "flat hierarchy while updating {}\n"
+                        error_msg = ("Repo conflict encountered "
+                                    "while updating {}\n"
                                     "Details: {} conflict with {}"
                                     ).format(self.root, 
                                             str(processed_source), 
@@ -177,12 +209,13 @@ class Config:
             if config:
                 common.indent()
                 
-                if self.resolver == Config.RESOLVER_RECURSIVE_FLAT:
+                if self.resolver == Config.RESOLVER_RECURSIVE_FLAT or self.resolver == Config.RESOLVER_RECURSIVE_FLAT_NESTED_LINKS:
                     # Top level preference for flat hierarchy should 
                     # forward / propagate resolver settings
                     config.resolver = self.resolver
                     # forward / override default location -> always use root location
                     # to install dependencies all into the same folder
+                    org_location_path = config.location_path
                     config.location_path = self.location_path 
                     # forward processed sources list to check for global conflicts
                     config.processed_sources = self.processed_sources
@@ -197,6 +230,14 @@ class Config:
                     skip_changes=skip_changes,
                     skip_default_group=skip_default_group,
                 )
+
+                # create nested symlinks 
+                if self.resolver == Config.RESOLVER_RECURSIVE_FLAT_NESTED_LINKS:
+                    for source in config.sources:
+                        link_src = os.path.join(self.location_path, source.name)
+                        link_target = os.path.join(org_location_path, source.name)
+                        create_sym_link(link_src, link_target, True)
+
                 common.dedent()
 
             shell.cd(self.location_path, _show=False)
@@ -240,7 +281,7 @@ class Config:
                     if remaining_depth:
                         common.newline()
                     
-                    if self.resolver == Config.RESOLVER_RECURSIVE_FLAT:
+                    if self.resolver == Config.RESOLVER_RECURSIVE_FLAT or self.resolver == Config.RESOLVER_RECURSIVE_FLAT_NESTED_LINKS:
                         # Top level preference for flat hierarchy should 
                         # always propagate resolver settings
                         config.resolver = self.resolver
@@ -264,7 +305,8 @@ class Config:
 
     def lock_dependencies(self, *names, obey_existing=True, skip_changes=False):
         """Lock down the immediate dependency versions."""
-        sources = self._get_sources(use_locked=obey_existing).copy()
+        flat_recursive=self.resolver == Config.RESOLVER_RECURSIVE_FLAT or Config.RESOLVER_RECURSIVE_FLAT_NESTED_LINKS
+        sources = self._get_sources(use_locked=obey_existing, flat_recursive=flat_recursive).copy()
         sources_filter = self._get_sources_filter(
             *names, sources=sources, skip_default_group=False
         )
@@ -277,6 +319,7 @@ class Config:
         common.indent()
 
         count = 0
+     
         for source in sources:
             if source.name not in sources_filter:
                 log.info("Skipped dependency: %s", source.name)
@@ -375,7 +418,7 @@ class Config:
         with open(self.log_path, 'a') as outfile:
             outfile.write(message.format(*args) + '\n')
 
-    def _get_sources(self, *, use_locked=None):
+    def _get_sources(self, *, use_locked=None, use_extra=True, recursive = False):
         """Merge source lists using the requested section as the base."""
         if use_locked is True:
             if self.sources_locked:
@@ -396,18 +439,19 @@ class Config:
 
         extras = []
 
-        all_sources = self.sources + self.sources_locked
-
-        if self.resolver == Config.RESOLVER_RECURSIVE_FLAT:
-            # here is some extra work to do because all dependencies that are resolved in 
-            # flat hierarchy are needed to resolved in a safe manner to lock them all
-            # in the sources_locked section
-            # self.processed_sources contains the complete list of all resolved sources 
-            # only if an update process has been completed (basically this is the desired list to return)
-            # but this is not the case when directly a lock operation has been executed
-            # therefore we need to do some generic stuff here which is idependently from update process
-            pass
-        else:
+        if recursive:
+            recursive_sources = sources
+            for source in sources:
+                config = load_config(start=os.path.join(self.location_path, source.name), search=False)
+                if config:
+                    recursive_sources = recursive_sources + config._get_sources(use_locked=use_locked, flat_recursive=True)
+        
+            for source in recursive_sources:
+                if source not in sources:
+                    extras.append(source)
+        
+        if use_extra:
+            all_sources = self.sources + self.sources_locked
             for source in all_sources:
                 if source not in sources:
                     log.info("Source %r missing from selected section",
@@ -415,6 +459,7 @@ class Config:
                     extras.append(source)
 
         return sources + extras
+
 
     def _get_sources_filter(self, *names, sources, skip_default_group):
         """Get filtered sublist of sources."""
