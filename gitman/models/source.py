@@ -37,9 +37,6 @@ class Source:
             self.name = str(self.name)
         self.type = self.type or 'git'
 
-    def _on_post_load(self):
-        pass
-
     def __repr__(self):
         return "<source {}>".format(self)
 

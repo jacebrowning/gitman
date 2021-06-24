@@ -11,17 +11,7 @@ from ..decorators import preserve_cwd
 from .group import Group
 from .source import Source, create_sym_link
 
-# TODO: use __post_init__ instead of _on_post_load
-# TODO: create links for nested dependencies if flat recursive is used
-# TODO: create relative nested symlinks 
-# Use Case 1 all flat recursive -> recursive all repos in a flat way
-# Use Case 2 flat recursive top level -> recursive-nested bottom level: gather all repos globally and create nested links
-# -> gitman -> imports
-#       - waf-prototyping
-#       - lib
-#       - libex
-# Use Case 3 flat recursive top level -> flat bottom level: clone in a flat way but abort recursive resolution in the next stage
-global_resolver = None
+
 
 @datafile("{self.root}/{self.filename}", defaults=True, manual=True)
 class Config:
@@ -50,15 +40,11 @@ class Config:
         setattr(self, 'location_path', None)
         processed_sources: List[Source] = []
         setattr(self, 'processed_sources', processed_sources)
-        
+        registered_sources: List[Source] = []
+        setattr(self, 'registered_sources', registered_sources)
+
         if self.location_path is None:
         	self.location_path = os.path.normpath(os.path.join(self.root, self.location))
-
-    def _on_post_load(self):
-        global global_resolver
-
-        # update location path because default location may different then loaded value
-        self.location_path = os.path.normpath(os.path.join(self.root, self.location))
 
         # check if any of the valid resolver values is set 
         # if not then set RESOLVER_RECURSIVE_NESTED as default
@@ -68,15 +54,14 @@ class Config:
             self.resolver != Config.RESOLVER_FLAT):
             msg = "Unknown resolver name \"{}\"".format(self.resolver)
             raise exceptions.InvalidConfig(msg)
-
-        for source in self.sources:
-            source._on_post_load()  # pylint: disable=protected-access
-        for source in self.sources_locked:
-            source._on_post_load()  # pylint: disable=protected-access
-
+        
         # set global resolve if not already set
         if global_resolver is None:
             global_resolver = self.resolver
+
+    def __post_load__(self):
+        # update location path because default location may different then loaded value
+        self.location_path = os.path.normpath(os.path.join(self.root, self.location)) 
 
     @property
     def config_path(self) -> str:
@@ -141,22 +126,43 @@ class Config:
             )
 
             # gather flat sources and check for rev conflicts
+            new_sources : List[Source] = []
             for source in sources:
-                for processed_source in self.processed_sources:
-                    if source.name == processed_source.name: # check if current source was already processed
-                        if (source.rev != processed_source.rev or 
-                            source.repo != processed_source.repo):
+                add_source : bool = True
+                for registered_source in self.registered_sources:
+                    if source.name == registered_source.name: # check if current source was already processed
+                        if (source.rev != registered_source.rev or 
+                            source.repo != registered_source.repo):
+                            # we skip the detected recursed branch rev if we install locked sources
+                            # always the toplevel rev is leading and to ensure creation order
+                            # we process the locked version next instead of the noted rev
+                            if not update:
+                                # check if we have already processed the matched source
+                                if not registered_source in self.processed_sources:
+                                    new_sources.append(registered_source)
+                                else:
+                                    # already processed therefore we don't care anymore
+                                    sources_filter.remove(source.name)
+
+                                add_source = False
+                                continue
+
                             error_msg = ("Repo/rev conflict encountered in "
-                                         "flat hierarchy while updating {}\n"
-                                         "Details: {} conflict with {}"
-                                         ).format(self.root, 
-                                                  str(processed_source), 
-                                                  str(source))
+                                        "flat hierarchy while updating {}\n"
+                                        "Details: {} conflict with {}"
+                                        ).format(self.root, 
+                                                str(registered_source), 
+                                                str(source))
                             raise exceptions.InvalidConfig(error_msg)               
                 
                 # new source name detected -> store new source name to list (cache) used to check for rev conflicts 
-                # source.name != processed_source.name and source.repo != processed_source.repo:
-                self.processed_sources.append(source)
+                if add_source:
+                    self.registered_sources.append(source)
+                    new_sources.append(source)
+
+            # assign filtered and collected sources 
+            sources = new_sources
+
         else:
             sources = self._get_sources(use_locked=False if update else None)
             sources_filter = self._get_sources_filter(
@@ -164,17 +170,17 @@ class Config:
             )
 
             for source in sources:
-                for processed_source in self.processed_sources:
-                    if source.name == processed_source.name: # check if current source was already processed
+                for registered_source in self.registered_sources:
+                    if source.name == registered_source.name: # check if current source was already processed
                         error_msg = ("Repo conflict encountered "
                                     "while updating {}\n"
                                     "Details: {} conflict with {}"
                                     ).format(self.root, 
-                                            str(processed_source), 
+                                            str(registered_source), 
                                             str(source))
                         raise exceptions.InvalidConfig(error_msg)               
                 
-                self.processed_sources.append(source)
+                self.registered_sources.append(source)
 
         if not os.path.isdir(self.location_path):
             shell.mkdir(self.location_path)
@@ -190,6 +196,10 @@ class Config:
                 log.info("Skipped dependency: %s", source.name)
                 continue
 
+            # check if source has not already been processed
+            if source in self.processed_sources:
+                continue
+
             source.update_files(
                 force=force,
                 force_interactive=force_interactive,
@@ -198,6 +208,10 @@ class Config:
                 skip_changes=skip_changes,
             )
             source.create_links(self.root, force=force)
+            
+            # store processed source
+            self.processed_sources.append(source)
+
             common.newline()
             count += 1
 
@@ -217,8 +231,10 @@ class Config:
                     # to install dependencies all into the same folder
                     org_location_path = config.location_path
                     config.location_path = self.location_path 
-                    # forward processed sources list to check for global conflicts
+                    # forward registered and processed sources list to check for global conflicts
+                    config.registered_sources = self.registered_sources
                     config.processed_sources = self.processed_sources
+                    
                 
                 count += config.install_dependencies(
                     depth=None if depth is None else max(0, depth - 1),
@@ -305,14 +321,14 @@ class Config:
 
     def lock_dependencies(self, *names, obey_existing=True, skip_changes=False):
         """Lock down the immediate dependency versions."""
-        flat_recursive=self.resolver == Config.RESOLVER_RECURSIVE_FLAT or Config.RESOLVER_RECURSIVE_FLAT_NESTED_LINKS
-        sources = self._get_sources(use_locked=obey_existing, flat_recursive=flat_recursive).copy()
+        recursive = self.resolver == Config.RESOLVER_RECURSIVE_FLAT or self.resolver == Config.RESOLVER_RECURSIVE_FLAT_NESTED_LINKS
+        sources = self._get_sources(use_locked=obey_existing, recursive=recursive).copy()
         sources_filter = self._get_sources_filter(
             *names, sources=sources, skip_default_group=False
         )
 
         if not os.path.isdir(self.location_path):
-            raise exceptions.InvalidRepository("No dependecies resolved")
+            raise exceptions.InvalidRepository("No dependencies resolved")
 
         shell.cd(self.location_path)
         common.newline()
@@ -444,7 +460,7 @@ class Config:
             for source in sources:
                 config = load_config(start=os.path.join(self.location_path, source.name), search=False)
                 if config:
-                    recursive_sources = recursive_sources + config._get_sources(use_locked=use_locked, flat_recursive=True)
+                    recursive_sources = recursive_sources + config._get_sources(use_locked=use_locked, use_extra=False, recursive=True)
         
             for source in recursive_sources:
                 if source not in sources:
@@ -497,7 +513,7 @@ def load_config(start=None, *, search=True):
         for filename in os.listdir(path):
             if _valid_filename(filename):
                 config = Config(path, filename)
-                config._on_post_load()  # pylint: disable=protected-access
+                config.__post_load__()
                 config.validate()
                 log.debug("Found config: %s", config.path)
                 return config
