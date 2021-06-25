@@ -336,7 +336,10 @@ def _run_command(function, args, kwargs):
         exit_message = "Run again with '--force' to ignore script errors"
     except exceptions.InvalidConfig as exception:
         _show_error(exception)
-        exit_message = "Check the gitman config of the already imported repositories and the repository that raises the conflict error"
+        exit_message = (
+            "Check the gitman config of the already imported "
+            "repositories and the repository that raises the conflict error"
+        )
     finally:
         if exit_message:
             common.show(exit_message, color='message')
