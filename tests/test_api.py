@@ -23,6 +23,7 @@ TMP = os.path.join(ROOT, 'tmp')
 
 CONFIG = """
 location: deps
+resolver: recursive-nested
 sources:
   - repo: https://github.com/jacebrowning/gitman-demo
     name: gitman_1
@@ -93,6 +94,7 @@ def describe_init():
         expect(Config().datafile.text) == strip(
             """
         location: gitman_sources
+        resolver: recursive-nested
         sources:
           - repo: https://github.com/githubtraining/hellogitworld
             name: sample_dependency
@@ -144,6 +146,7 @@ def describe_install():  # pylint: disable=too-many-statements
         config.datafile.text = strip(
             """
         location: deps
+        resolver: recursive-nested
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
@@ -182,6 +185,7 @@ def describe_install():  # pylint: disable=too-many-statements
         config.datafile.text = strip(
             """
         location: deps
+        resolver: recursive-nested
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
@@ -225,6 +229,7 @@ def describe_install():  # pylint: disable=too-many-statements
             config.datafile.text = strip(
                 """
             location: deps
+            resolver: recursive-nested
             sources:
               - name: gitman_1
                 repo: https://github.com/jacebrowning/gitman-demo
@@ -268,6 +273,7 @@ def describe_install():  # pylint: disable=too-many-statements
             config.datafile.text = strip(
                 """
             location: deps
+            resolver: recursive-nested
             sources:
               - name: gitman_1
                 repo: https://github.com/jacebrowning/gitman-demo
@@ -314,6 +320,7 @@ def describe_install():  # pylint: disable=too-many-statements
             config.datafile.text = strip(
                 """
             location: deps
+            resolver: recursive-nested
             sources:
               - name: gitman_1
                 type: git
@@ -342,6 +349,7 @@ def describe_install():  # pylint: disable=too-many-statements
             config.datafile.text = strip(
                 """
                     location: deps
+                    resolver: recursive-nested
                     sources:
                       - name: gitman_1
                         type: git
@@ -376,6 +384,7 @@ def describe_install():  # pylint: disable=too-many-statements
             config.datafile.text = strip(
                 """
                 location: deps
+                resolver: recursive-nested
                 sources:
                   - name: gitman_1
                     type: git
@@ -438,6 +447,7 @@ def describe_install():  # pylint: disable=too-many-statements
             config.datafile.text = strip(
                 """
         location: deps
+        resolver: recursive-nested
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
@@ -478,6 +488,7 @@ def describe_install():  # pylint: disable=too-many-statements
             config.datafile.text = strip(
                 """
         location: deps
+        resolver: recursive-nested
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
@@ -617,6 +628,7 @@ def describe_update():
         config.datafile.text = strip(
             """
         location: deps
+        resolver: recursive-nested
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
@@ -661,6 +673,7 @@ def describe_update():
         expect(config.datafile.text) == strip(
             """
         location: deps
+        resolver: recursive-nested
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
@@ -703,6 +716,7 @@ def describe_update():
         config.datafile.text = strip(
             """
         location: deps
+        resolver: recursive-nested
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
@@ -746,6 +760,7 @@ def describe_update():
         expect(config.datafile.text) == strip(
             """
         location: deps
+        resolver: recursive-nested
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
@@ -788,6 +803,7 @@ def describe_update():
         config.datafile.text = strip(
             """
         location: deps
+        resolver: recursive-nested
         sources:
           - name: gitman_1
             type: git
@@ -813,6 +829,7 @@ def describe_update():
         config.datafile.text = strip(
             """
         location: deps
+        resolver: recursive-nested
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
@@ -880,6 +897,7 @@ def describe_update():
         expect(config.datafile.text) == strip(
             """
         location: deps
+        resolver: recursive-nested
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
@@ -961,6 +979,7 @@ def describe_update():
         config.datafile.text = strip(
             """
         location: deps
+        resolver: recursive-nested
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -994,6 +1013,7 @@ def describe_update():
         expect(config.datafile.text) == strip(
             """
         location: deps
+        resolver: recursive-nested
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -1049,6 +1069,7 @@ def describe_update():
         config.datafile.text = strip(
             """
         location: deps
+        resolver: recursive-nested
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -1083,6 +1104,7 @@ def describe_update():
         expect(config.datafile.text) == strip(
             """
         location: deps
+        resolver: recursive-nested
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -1115,6 +1137,7 @@ def describe_update():
         config.datafile.text = strip(
             """
         location: deps
+        resolver: recursive-nested
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
