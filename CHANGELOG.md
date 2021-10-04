@@ -1,3 +1,7 @@
+# 3.0.1 (2021-10-04)
+
+- Updated dependencies.
+
 # 3.0 (2021-06-02)
 
 - Removed `link` feature in favor of `links`.
