@@ -1,3 +1,7 @@
+# 3.1 (unreleased)
+
+- Updated `--force-interactive` prompt to default to keeping changes.
+
 # 3.0.1 (2021-10-04)
 
 - Updated dependencies.
