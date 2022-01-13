@@ -9,8 +9,8 @@ class ShellError(RuntimeError):
     """Raised when a shell call has a non-zero return code."""
 
     def __init__(self, *args, **kwargs):
-        self.program = kwargs.pop('program', None)
-        self.output = kwargs.pop('output', None)
+        self.program = kwargs.pop("program", None)
+        self.output = kwargs.pop("output", None)
         super().__init__(*args, **kwargs)  # type: ignore
 
 

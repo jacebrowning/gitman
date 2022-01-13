@@ -3,10 +3,9 @@
 import logging
 import os
 
-
 # Cache settings
-CACHE = os.path.expanduser(os.getenv('GITMAN_CACHE', "~/.gitcache"))
-CACHE_DISABLE = bool(os.getenv('GITMAN_CACHE_DISABLE'))
+CACHE = os.path.expanduser(os.getenv("GITMAN_CACHE", "~/.gitcache"))
+CACHE_DISABLE = bool(os.getenv("GITMAN_CACHE_DISABLE"))
 
 # Logging settings
 DEFAULT_LOGGING_FORMAT = "%(message)s"
@@ -20,4 +19,4 @@ VERBOSE2_LOGGING_LEVEL = logging.DEBUG
 LOGGING_DATEFMT = "%Y-%m-%d %H:%M"
 
 # Display settings
-RECORDING_DELAY = int(os.getenv('RECORDING_DELAY', "0"))
+RECORDING_DELAY = int(os.getenv("RECORDING_DELAY", "0"))

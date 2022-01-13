@@ -7,7 +7,7 @@ from gitman.models import Group
 
 @pytest.fixture
 def group():
-    return Group('foo', ['bar', 'qux'])
+    return Group("foo", ["bar", "qux"])
 
 
 def test_str_contains_name(group, expect):

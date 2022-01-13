@@ -13,9 +13,9 @@ def launch(path):
     log.info("Opening %s", path)
     try:
         function = {
-            'Windows': _launch_windows,
-            'Darwin': _launch_mac,
-            'Linux': _launch_linux,
+            "Windows": _launch_windows,
+            "Darwin": _launch_mac,
+            "Linux": _launch_linux,
         }[name]
     except KeyError:
         raise RuntimeError("Unrecognized platform: {}".format(name)) from None
@@ -30,8 +30,8 @@ def _launch_windows(path):  # pragma: no cover (manual test)
 
 
 def _launch_mac(path):  # pragma: no cover (manual test)
-    return subprocess.call(['open', path]) == 0
+    return subprocess.call(["open", path]) == 0
 
 
 def _launch_linux(path):  # pragma: no cover (manual test)
-    return subprocess.call(['xdg-open', path]) == 0
+    return subprocess.call(["xdg-open", path]) == 0

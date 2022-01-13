@@ -47,7 +47,7 @@ class TestShowLog:
         assert [call.info("Hello, world!")] == self.log.mock_calls
 
     def test_show_errors(self):
-        common.show("Oops", color='error', log=self.log)
+        common.show("Oops", color="error", log=self.log)
 
         expect(self.log.mock_calls) == [call.error("Oops")]
 
@@ -83,7 +83,7 @@ class TestShowQuiet:
 def describe_show():
     def it_requries_color_with_messages():
         with expect.raises(AssertionError):
-            common.show("Hello, world!", 'foobar')
+            common.show("Hello, world!", "foobar")
 
 
 def describe_style():
@@ -98,15 +98,15 @@ def describe_style():
         expect(msg) == ""
 
     def when_shell():
-        msg = common.style("$ _foo_", 'shell', _color_support=True)
+        msg = common.style("$ _foo_", "shell", _color_support=True)
 
         expect(msg) == "\x1b[1m\x1b[32m$ \x1b[0m_foo_"
 
     def when_color():
-        msg = common.style("_foo_", 'message', _color_support=True)
+        msg = common.style("_foo_", "message", _color_support=True)
 
         expect(msg) == "\x1b[1m\x1b[37m_foo_\x1b[0m"
 
     def when_unknown_color():
         with expect.raises(AssertionError):
-            common.style("_foo_", 'bar', _color_support=True)
+            common.style("_foo_", "bar", _color_support=True)

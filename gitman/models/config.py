@@ -54,16 +54,16 @@ class Config:
                 if source.name == group.name:
                     msg = (
                         "Name conflict detected between source name and "
-                        "group name \"{}\""
+                        'group name "{}"'
                     ).format(source.name)
                     raise exceptions.InvalidConfig(msg)
 
     def get_path(self, name=None):
         """Get the full path to a dependency or internal file."""
         base = self.location_path
-        if name == '__config__':
+        if name == "__config__":
             return self.path
-        if name == '__log__':
+        if name == "__log__":
             return self.log_path
         if name:
             return os.path.normpath(os.path.join(base, name))
@@ -136,7 +136,7 @@ class Config:
 
         common.dedent()
         if sources_filter:
-            log.error("No such dependency: %s", ' '.join(sources_filter))
+            log.error("No such dependency: %s", " ".join(sources_filter))
             return 0
 
         return count
@@ -287,8 +287,8 @@ class Config:
     def log(self, message="", *args):
         """Append a message to the log file."""
         os.makedirs(self.location_path, exist_ok=True)
-        with open(self.log_path, 'a') as outfile:
-            outfile.write(message.format(*args) + '\n')
+        with open(self.log_path, "a") as outfile:
+            outfile.write(message.format(*args) + "\n")
 
     def _get_sources(self, *, use_locked=None):
         """Merge source lists using the requested section as the base."""
@@ -382,6 +382,6 @@ def _resolve_current_directory():
 
 def _valid_filename(filename):
     name, ext = os.path.splitext(filename.lower())
-    if name.startswith('.'):
+    if name.startswith("."):
         name = name[1:]
-    return name in {'gitman', 'gdm'} and ext in {'.yml', '.yaml'}
+    return name in {"gitman", "gdm"} and ext in {".yml", ".yaml"}

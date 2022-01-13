@@ -8,7 +8,6 @@ import log
 from . import common
 from .exceptions import ShellError
 
-
 CMD_PREFIX = "$ "
 OUT_PREFIX = "> "
 
@@ -40,8 +39,8 @@ def call(name, *args, _show=True, _stream=True, _shell=False, _ignore=False):
     # with the system program
     # https://github.com/pyinstaller/pyinstaller/blob/483c819d6a256b58db6740696a901bd41c313f0c/doc/runtime-information.rst#ld_library_path--libpath-considerations
     env = dict(os.environ)  # make a copy of the environment
-    lp_key = 'LD_LIBRARY_PATH'  # for Linux and *BSD.
-    lp_orig = env.get(lp_key + '_ORIG')  # pyinstaller >= 20160820 has this
+    lp_key = "LD_LIBRARY_PATH"  # for Linux and *BSD.
+    lp_orig = env.get(lp_key + "_ORIG")  # pyinstaller >= 20160820 has this
     if lp_orig is not None:
         env[lp_key] = lp_orig  # restore the original, unmodified value
     else:
@@ -61,17 +60,17 @@ def call(name, *args, _show=True, _stream=True, _shell=False, _ignore=False):
     while True:
         assert command.stdout
         output = command.stdout.readline()
-        if output == '' and command.poll() is not None:
+        if output == "" and command.poll() is not None:
             break
 
-        if output != '':
+        if output != "":
             output = output.strip()
         else:
             continue
 
         complete_output.append(output)
         if _stream:
-            common.show(output, color='shell_output')
+            common.show(output, color="shell_output")
         else:
             log.debug(OUT_PREFIX + output)
 
@@ -96,25 +95,25 @@ def call(name, *args, _show=True, _stream=True, _shell=False, _ignore=False):
 
 def mkdir(path):
     if not os.path.exists(path):
-        if os.name == 'nt':
+        if os.name == "nt":
             call("mkdir " + path, _shell=True)
         else:
-            call('mkdir', '-p', path)
+            call("mkdir", "-p", path)
 
 
 def cd(path, _show=True):
-    if os.name == 'nt':
-        show('cd', '/D', path, stdout=_show)
+    if os.name == "nt":
+        show("cd", "/D", path, stdout=_show)
     else:
-        show('cd', path, stdout=_show)
+        show("cd", path, stdout=_show)
     os.chdir(path)
 
 
 def pwd(_show=True):
     cwd = os.getcwd()
-    if os.name == 'nt':
-        cwd = cwd.replace(os.sep, '/')
-    show('cwd', cwd, stdout=_show)
+    if os.name == "nt":
+        cwd = cwd.replace(os.sep, "/")
+    show("cwd", cwd, stdout=_show)
     return cwd
 
 
@@ -126,19 +125,19 @@ def ln(source, target):
 
 
 def rm(path):
-    if os.name == 'nt':
+    if os.name == "nt":
         if os.path.isfile(path):
             call("del /Q /F " + path, _shell=True)
         elif os.path.isdir(path):
             call("rmdir /Q /S " + path, _shell=True)
     else:
-        call('rm', '-rf', path)
+        call("rm", "-rf", path)
 
 
 def show(name, *args, stdout=True):
-    program = ' '.join([name, *args])
+    program = " ".join([name, *args])
     if stdout:
-        common.show(CMD_PREFIX + program, color='shell')
+        common.show(CMD_PREFIX + program, color="shell")
     else:
         log.debug(CMD_PREFIX + program)
     return program

@@ -2,14 +2,8 @@
 
 from pkg_resources import get_distribution
 
-from .commands import (  # pylint: disable=redefined-builtin
-    delete as uninstall,
-    display as list,
-    init,
-    install,
-    lock,
-    update,
-)
+from .commands import delete as uninstall  # pylint: disable=redefined-builtin
+from .commands import display as list
+from .commands import init, install, lock, update
 
-
-__version__ = get_distribution('gitman').version
+__version__ = get_distribution("gitman").version

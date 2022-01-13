@@ -15,7 +15,7 @@ class WideHelpFormatter(argparse.HelpFormatter):
     """Command-line help text formatter with wider help text."""
 
     def __init__(self, *args, **kwargs):
-        kwargs['max_help_position'] = 40
+        kwargs["max_help_position"] = 40
         super().__init__(*args, **kwargs)
 
 
@@ -81,7 +81,7 @@ def configure_logging(count=0):
 
     # Set a custom formatter
     log.init(level=level)
-    log.silence('datafiles', allow_warning=True)
+    log.silence("datafiles", allow_warning=True)
     logging.captureWarnings(True)
     formatter = WarningFormatter(
         default_format, verbose_format, datefmt=settings.LOGGING_DATEFMT
@@ -123,46 +123,46 @@ def show(
 ):
     """Write to standard output or error if enabled."""
     if any(messages):
-        assert 'color' in kwargs, "Color is required"
+        assert "color" in kwargs, "Color is required"
 
-    color = kwargs.pop('color', None)
+    color = kwargs.pop("color", None)
 
-    if color == 'message':
+    if color == "message":
         time.sleep(settings.RECORDING_DELAY)
 
     for message in messages:
         if _Config.verbosity == 0:
-            text = ' ' * 2 * _Config.indent_level + style(message, color)
+            text = " " * 2 * _Config.indent_level + style(message, color)
             print(text, file=file)
         elif _Config.verbosity >= 1:
             message = message.strip()
             if message and log:
-                if color == 'error':
+                if color == "error":
                     log.error(message)
                 else:
                     log.info(message)
 
-    if color == 'message':
+    if color == "message":
         time.sleep(settings.RECORDING_DELAY)
 
 
 def prompt(message: str) -> str:
-    message = ' ' * 2 * _Config.indent_level + style(message, 'prompt')
+    message = " " * 2 * _Config.indent_level + style(message, "prompt")
     return input(message).strip().lower()
 
 
-BOLD = '\033[1m'
-RED = '\033[31m'
-GREEN = '\033[32m'
-YELLOW = '\033[33m'
-BLUE = '\033[34m'
-MAGENTA = '\033[35m'
-CYAN = '\033[36m'
-WHITE = '\033[37m'
-RESET = '\033[0m'
+BOLD = "\033[1m"
+RED = "\033[31m"
+GREEN = "\033[32m"
+YELLOW = "\033[33m"
+BLUE = "\033[34m"
+MAGENTA = "\033[35m"
+CYAN = "\033[36m"
+WHITE = "\033[37m"
+RESET = "\033[0m"
 
 COLORS = dict(
-    path='',
+    path="",
     git_rev=BOLD + BLUE,
     git_dirty=BOLD + MAGENTA,
     git_changes=YELLOW,
@@ -178,12 +178,12 @@ COLORS = dict(
 
 
 def style(msg, name=None, *, _color_support=False):
-    is_tty = hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()
-    supports_ansi = sys.platform != 'win32' or 'ANSICON' in os.environ
+    is_tty = hasattr(sys.stdout, "isatty") and sys.stdout.isatty()
+    supports_ansi = sys.platform != "win32" or "ANSICON" in os.environ
     if not (is_tty and supports_ansi) and not _color_support:
         return msg
 
-    if name == 'shell':
+    if name == "shell":
         return msg.replace("$ ", COLORS[name] + "$ " + RESET)
 
     color = COLORS.get(name)

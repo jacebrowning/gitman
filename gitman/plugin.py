@@ -7,8 +7,7 @@ import argparse
 from . import __version__, common
 from .cli import _get_command, _run_command
 
-
-PROG = 'git deps'
+PROG = "git deps"
 DESCRIPTION = "Use GitMan (v{}) to install repositories.".format(__version__)
 
 
@@ -18,29 +17,29 @@ def main(args=None):
     # Main parser
     parser = argparse.ArgumentParser(prog=PROG, description=DESCRIPTION)
     parser.add_argument(
-        '-F',
-        '--force',
-        action='store_true',
+        "-F",
+        "--force",
+        action="store_true",
         help="overwrite uncommitted changes in dependencies",
     )
     parser.add_argument(
-        '-f',
-        '--force-interactive',
-        action='store_true',
-        dest='force_interactive',
+        "-f",
+        "--force-interactive",
+        action="store_true",
+        dest="force_interactive",
         help="interactively overwrite uncommitted changes in dependencies",
     )
     parser.add_argument(
-        '-s',
-        '--skip-changes',
-        action='store_true',
-        dest='skip_changes',
+        "-s",
+        "--skip-changes",
+        action="store_true",
+        dest="skip_changes",
         help="skip dependencies with uncommitted changes",
     )
     parser.add_argument(
-        '-c',
-        '--clean',
-        action='store_true',
+        "-c",
+        "--clean",
+        action="store_true",
         help="delete ignored files when updating dependencies",
     )
 
@@ -49,72 +48,72 @@ def main(args=None):
 
     # Install option
     group.add_argument(
-        '-i',
-        '--install',
-        const='install',
-        help='get the specified versions of all dependencies',
-        action='store_const',
-        dest='command',
+        "-i",
+        "--install",
+        const="install",
+        help="get the specified versions of all dependencies",
+        action="store_const",
+        dest="command",
     )
     parser.add_argument(
-        '-n',
-        '--no-defaults',
-        help='override default groups and install all dependencies if none specified',
-        action='store_true',
-        dest='no_defaults',
+        "-n",
+        "--no-defaults",
+        help="override default groups and install all dependencies if none specified",
+        action="store_true",
+        dest="no_defaults",
     )
 
     # Update option
     group.add_argument(
-        '-u',
-        '--update',
-        const='update',
+        "-u",
+        "--update",
+        const="update",
         help="update dependencies to the latest versions",
-        action='store_const',
-        dest='command',
+        action="store_const",
+        dest="command",
     )
     parser.add_argument(
-        '-a',
-        '--all',
-        action='store_true',
-        dest='recurse',
+        "-a",
+        "--all",
+        action="store_true",
+        dest="recurse",
         help="include nested dependencies when updating",
     )
     parser.add_argument(
-        '-L',
-        '--skip-lock',
-        action='store_false',
-        dest='lock',
+        "-L",
+        "--skip-lock",
+        action="store_false",
+        dest="lock",
         default=True,
         help="disable recording of updated versions",
     )
 
     # Display option
     group.add_argument(
-        '-l',
-        '--list',
-        const='list',
+        "-l",
+        "--list",
+        const="list",
         help="display the current version of each dependency",
-        action='store_const',
-        dest='command',
+        action="store_const",
+        dest="command",
     )
 
     # Uninstall option
     group.add_argument(
-        '-x',
-        '--uninstall',
-        const='uninstall',
+        "-x",
+        "--uninstall",
+        const="uninstall",
         help="delete all installed dependencies",
-        action='store_const',
-        dest='command',
+        action="store_const",
+        dest="command",
     )
     parser.add_argument(
-        '-k',
-        '--keep-location',
-        action='store_true',
-        dest='keep_location',
+        "-k",
+        "--keep-location",
+        action="store_true",
+        dest="keep_location",
         default=False,
-        help='keep top level folder location',
+        help="keep top level folder location",
     )
 
     # Parse arguments
@@ -123,7 +122,7 @@ def main(args=None):
     # Modify arguments to match CLI interface
     if not namespace.command:
         # Default to install to remain compatable with older interface
-        namespace.command = 'install'
+        namespace.command = "install"
     namespace.name = []
     namespace.root = None
     namespace.depth = None
@@ -138,5 +137,5 @@ def main(args=None):
     _run_command(function, args, kwargs)
 
 
-if __name__ == '__main__':  # pragma: no cover (manual test)
+if __name__ == "__main__":  # pragma: no cover (manual test)
     main()

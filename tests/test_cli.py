@@ -13,7 +13,7 @@ from gitman import cli
 def config(tmpdir):
     tmpdir.chdir()
     path = str(tmpdir.join("gdm.yml"))
-    open(path, 'w').close()
+    open(path, "w").close()
     return path
 
 
@@ -21,35 +21,35 @@ def config(tmpdir):
 def location(tmpdir):
     tmpdir.chdir()
     path = str(tmpdir.join("gdm.yml"))
-    with open(path, 'w') as outfile:
+    with open(path, "w") as outfile:
         outfile.write("location: foo")
     return str(tmpdir.join("foo"))
 
 
 def describe_show():
-    @patch('gitman.common.show')
+    @patch("gitman.common.show")
     def it_prints_location_by_default(show, location):
-        cli.main(['show'])
+        cli.main(["show"])
 
-        expect(show.mock_calls) == [call(location, color='path')]
+        expect(show.mock_calls) == [call(location, color="path")]
 
-    @patch('gitman.common.show')
+    @patch("gitman.common.show")
     def it_can_print_a_depenendcy_path(show, location):
-        cli.main(['show', 'bar'])
+        cli.main(["show", "bar"])
 
-        expect(show.mock_calls) == [call(os.path.join(location, "bar"), color='path')]
+        expect(show.mock_calls) == [call(os.path.join(location, "bar"), color="path")]
 
     def it_exits_when_no_config_found(tmpdir):
         tmpdir.chdir()
 
         with expect.raises(SystemExit):
-            cli.main(['show'])
+            cli.main(["show"])
 
 
 def describe_edit():
-    @patch('gitman.system.launch')
+    @patch("gitman.system.launch")
     def it_launches_the_config(launch, config):
-        cli.main(['edit'])
+        cli.main(["edit"])
 
         expect(launch.mock_calls) == [call(config), call().__bool__()]
 
@@ -57,4 +57,4 @@ def describe_edit():
         tmpdir.chdir()
 
         with expect.raises(SystemExit):
-            cli.main(['edit'])
+            cli.main(["edit"])

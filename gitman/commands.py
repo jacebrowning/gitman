@@ -23,7 +23,7 @@ def init(*, force: bool = False):
 
     if config and not force:
         msg = "Configuration file already exists: {}".format(config.path)
-        common.show(msg, color='error')
+        common.show(msg, color="error")
 
     else:
         config = Config()
@@ -38,11 +38,11 @@ def init(*, force: bool = False):
         config.datafile.save()
 
         msg = "Created sample config file: {}".format(config.path)
-        common.show(msg, color='success')
+        common.show(msg, color="success")
         success = True
 
     msg = "To edit this config file, run: gitman edit"
-    common.show(msg, color='message')
+    common.show(msg, color="message")
 
     return success
 
@@ -79,8 +79,8 @@ def install(
     """
     log.info(
         "%sInstalling dependencies: %s",
-        'force-' if force or force_interactive else '',
-        ', '.join(names) if names else '<all>',
+        "force-" if force or force_interactive else "",
+        ", ".join(names) if names else "<all>",
     )
     count = None
 
@@ -88,7 +88,7 @@ def install(
 
     if config:
         common.newline()
-        common.show("Installing dependencies...", color='message', log=False)
+        common.show("Installing dependencies...", color="message", log=False)
         common.newline()
         count = config.install_dependencies(
             *names,
@@ -144,9 +144,9 @@ def update(
     """
     log.info(
         "%s dependencies%s: %s",
-        'Force updating' if force or force_interactive else 'Updating',
-        ', recursively' if recurse else '',
-        ', '.join(names) if names else '<all>',
+        "Force updating" if force or force_interactive else "Updating",
+        ", recursively" if recurse else "",
+        ", ".join(names) if names else "<all>",
     )
     count = None
 
@@ -154,7 +154,7 @@ def update(
 
     if config:
         common.newline()
-        common.show("Updating dependencies...", color='message', log=False)
+        common.show("Updating dependencies...", color="message", log=False)
         common.newline()
         count = config.install_dependencies(
             *names,
@@ -170,7 +170,7 @@ def update(
         )
 
         if count and lock is not False:
-            common.show("Recording installed versions...", color='message', log=False)
+            common.show("Recording installed versions...", color="message", log=False)
             common.newline()
             config.lock_dependencies(
                 *names,
@@ -201,7 +201,7 @@ def _run_scripts(
     """
     assert _config, "'_config' is required"
 
-    common.show("Running scripts...", color='message', log=False)
+    common.show("Running scripts...", color="message", log=False)
     common.newline()
     _config.run_scripts(
         *names, depth=depth, force=force, show_shell_stdout=show_shell_stdout
@@ -227,7 +227,7 @@ def display(*, root=None, depth=None, allow_dirty=True):
     if config:
         common.newline()
         common.show(
-            "Displaying current dependency versions...", color='message', log=False
+            "Displaying current dependency versions...", color="message", log=False
         )
         common.newline()
         config.log(datetime.datetime.now().strftime("%F %T"))
@@ -257,7 +257,7 @@ def lock(*names, root=None):
 
     if config:
         common.newline()
-        common.show("Locking dependencies...", color='message', log=False)
+        common.show("Locking dependencies...", color="message", log=False)
         common.newline()
         count = config.lock_dependencies(*names, obey_existing=False)
         common.dedent(level=0)
@@ -283,13 +283,13 @@ def delete(*, root=None, force=False, keep_location=False):
 
     if config:
         common.newline()
-        common.show("Checking for uncommitted changes...", color='message', log=False)
+        common.show("Checking for uncommitted changes...", color="message", log=False)
         common.newline()
         count = len(list(config.get_dependencies(allow_dirty=force)))
         common.dedent(level=0)
-        common.show("Deleting all dependencies...", color='message', log=False)
+        common.show("Deleting all dependencies...", color="message", log=False)
         common.newline()
-        if keep_location or config.location == '.':
+        if keep_location or config.location == ".":
             config.clean_dependencies()
         else:
             config.uninstall_dependencies()
@@ -313,7 +313,7 @@ def show(*names, root=None):
         return False
 
     for name in names or [None]:
-        common.show(config.get_path(name), color='path')
+        common.show(config.get_path(name), color="path")
 
     return True
 

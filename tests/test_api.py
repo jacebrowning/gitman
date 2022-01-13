@@ -17,9 +17,8 @@ from gitman.models import Config
 
 from .utilities import strip
 
-
 ROOT = os.path.join(os.path.dirname(os.path.dirname(__file__)))
-TMP = os.path.join(ROOT, 'tmp')
+TMP = os.path.join(ROOT, "tmp")
 
 CONFIG = """
 location: deps
@@ -131,12 +130,12 @@ def describe_install():  # pylint: disable=too-many-statements
     def it_creates_missing_directories(config):
         shell.rm(config.location)
 
-        expect(gitman.install('gitman_1', depth=1)) == True
+        expect(gitman.install("gitman_1", depth=1)) == True
 
-        expect(os.listdir(config.location)) == ['gitman_1']
+        expect(os.listdir(config.location)) == ["gitman_1"]
 
     def it_should_not_modify_config(config):
-        expect(gitman.install('gitman_1', depth=1)) == True
+        expect(gitman.install("gitman_1", depth=1)) == True
 
         expect(config.datafile.text) == CONFIG
 
@@ -204,9 +203,9 @@ def describe_install():  # pylint: disable=too-many-statements
         )
         config.datafile.load()
 
-        expect(gitman.install('gitman_1', depth=1)) == True
+        expect(gitman.install("gitman_1", depth=1)) == True
 
-        expect(os.listdir(config.location)) == ['gitman_1']
+        expect(os.listdir(config.location)) == ["gitman_1"]
 
     def it_detects_invalid_repositories(config):
         shell.rm(os.path.join("deps", "gitman_1", ".git"))
@@ -214,7 +213,7 @@ def describe_install():  # pylint: disable=too-many-statements
 
         try:
             with pytest.raises(InvalidRepository):
-                expect(gitman.install('gitman_1', depth=1)) == False
+                expect(gitman.install("gitman_1", depth=1)) == False
 
         finally:
             shell.rm(os.path.join("deps", "gitman_1"))
@@ -242,7 +241,7 @@ def describe_install():  # pylint: disable=too-many-statements
         def it_should_create_links(config_with_link):
             expect(gitman.install(depth=1)) == True
 
-            expect(os.listdir()).contains('my_link')
+            expect(os.listdir()).contains("my_link")
 
         def it_should_not_overwrite_files(config_with_link):
             os.system("touch my_link")
@@ -287,8 +286,8 @@ def describe_install():  # pylint: disable=too-many-statements
 
         def it_should_create_links(config_with_links):
             expect(gitman.install(depth=1)) == True
-            expect(os.listdir()).contains('gmd_3')
-            expect(os.listdir()).contains('gmd_4')
+            expect(os.listdir()).contains("gmd_3")
+            expect(os.listdir()).contains("gmd_4")
 
         def it_should_not_overwrite_files(config_with_links):
             os.system("touch gmd_3")
@@ -362,12 +361,12 @@ def describe_install():  # pylint: disable=too-many-statements
         def it_successfully_materializes_the_repo(config):
             expect(gitman.install(depth=1, force=True)) == True
             dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
-            expect(dir_listing).contains('src')
+            expect(dir_listing).contains("src")
 
         def it_contains_only_the_sparse_paths(config):
             expect(gitman.install(depth=1, force=True)) == True
             dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
-            expect(dir_listing).contains('src')
+            expect(dir_listing).contains("src")
             expect(len(dir_listing) == 1)
 
     def describe_mixed_names():
@@ -416,10 +415,10 @@ def describe_install():  # pylint: disable=too-many-statements
                 gitman.install("main_group", "gitman_2", depth=1, force=True)
             ) == True
             expect(
-                os.path.exists(os.path.join(config_with_group.location, 'gitman_1'))
+                os.path.exists(os.path.join(config_with_group.location, "gitman_1"))
             ) == True
             expect(
-                os.path.exists(os.path.join(config_with_group.location, 'gitman_2'))
+                os.path.exists(os.path.join(config_with_group.location, "gitman_2"))
             ) == True
 
         def groups_with_redundant_deps_install_successfully(config_with_group):
@@ -517,12 +516,12 @@ def describe_install():  # pylint: disable=too-many-statements
             expect(gitman.install(depth=1, force=True)) == True
             expect(
                 os.path.exists(
-                    os.path.join(config_with_default_group.location, 'gitman_1')
+                    os.path.join(config_with_default_group.location, "gitman_1")
                 )
             ) == True
             expect(
                 os.path.exists(
-                    os.path.join(config_with_default_group.location, 'gitman_2')
+                    os.path.join(config_with_default_group.location, "gitman_2")
                 )
             ) == False
 
@@ -530,12 +529,12 @@ def describe_install():  # pylint: disable=too-many-statements
             expect(gitman.install(depth=1, force=True)) == True
             expect(
                 os.path.exists(
-                    os.path.join(config_without_default_group.location, 'gitman_1')
+                    os.path.join(config_without_default_group.location, "gitman_1")
                 )
             ) == True
             expect(
                 os.path.exists(
-                    os.path.join(config_without_default_group.location, 'gitman_2')
+                    os.path.join(config_without_default_group.location, "gitman_2")
                 )
             ) == True
 
@@ -543,19 +542,19 @@ def describe_install():  # pylint: disable=too-many-statements
             expect(gitman.install(depth=1, force=True, skip_default_group=True)) == True
             expect(
                 os.path.exists(
-                    os.path.join(config_with_default_group.location, 'gitman_1')
+                    os.path.join(config_with_default_group.location, "gitman_1")
                 )
             ) == True
             expect(
                 os.path.exists(
-                    os.path.join(config_with_default_group.location, 'gitman_2')
+                    os.path.join(config_with_default_group.location, "gitman_2")
                 )
             ) == True
 
 
 def describe_uninstall():
     def it_deletes_dependencies_when_they_exist(config):
-        gitman.install('gitman_1', depth=1)
+        gitman.install("gitman_1", depth=1)
         expect(os.path.isdir(config.location)) == True
 
         expect(gitman.uninstall()) == True
@@ -568,7 +567,7 @@ def describe_uninstall():
         expect(gitman.uninstall()) == True
 
     def it_deletes_the_log_file(config):
-        gitman.install('gitman_1', depth=1)
+        gitman.install("gitman_1", depth=1)
         gitman.list()
         expect(os.path.exists(config.log_path)) == True
 
@@ -577,12 +576,12 @@ def describe_uninstall():
 
     def describe_keep_location():
         def it_deletes_dependencies_when_they_exist(config):
-            gitman.install('gitman_1', depth=1)
+            gitman.install("gitman_1", depth=1)
             expect(os.path.isdir(config.location)) == True
 
             expect(gitman.uninstall(keep_location=True)) == True
 
-            path = os.path.join(config.location, 'gitman_1')
+            path = os.path.join(config.location, "gitman_1")
             expect(os.path.exists(path)) == False
 
             expect(os.path.exists(config.location)) == True
@@ -597,7 +596,7 @@ def describe_uninstall():
             gitman.uninstall()
 
         def it_deletes_the_log_file(config):
-            gitman.install('gitman_1', depth=1)
+            gitman.install("gitman_1", depth=1)
             gitman.list()
             expect(os.path.exists(config.log_path)) == True
 
@@ -609,7 +608,7 @@ def describe_uninstall():
 
 def describe_update():
     def it_should_not_modify_config(config):
-        gitman.update('gitman_1', depth=1)
+        gitman.update("gitman_1", depth=1)
 
         expect(config.datafile.text) == CONFIG
 
@@ -874,7 +873,7 @@ def describe_update():
         )
         config.datafile.load()
 
-        gitman.update('group_a', depth=1)
+        gitman.update("group_a", depth=1)
 
         config.datafile.load()
         expect(config.datafile.text) == strip(
@@ -952,11 +951,11 @@ def describe_update():
 
         # patch the git.changes function to stimulate the
         # force-interactive question (without changes no question)
-        monkeypatch.setattr('gitman.git.changes', git_changes)
+        monkeypatch.setattr("gitman.git.changes", git_changes)
         # patch standard input function to return "n" for each call
         # this is necessary to answer the force-interactive question
         # with no to skip the force process
-        monkeypatch.setattr('builtins.input', lambda x: "n")
+        monkeypatch.setattr("builtins.input", lambda x: "n")
 
         config.datafile.text = strip(
             """
@@ -1040,11 +1039,11 @@ def describe_update():
 
         # patch the git.changes function to stimulate the
         # force-interactive question (without changes no question)
-        monkeypatch.setattr('gitman.git.changes', git_changes)
+        monkeypatch.setattr("gitman.git.changes", git_changes)
         # patch standard input function to return "y" for each call
         # this is necessary to answer the force-interactive question
         # with yes to invoke the force process
-        monkeypatch.setattr('builtins.input', lambda x: "y")
+        monkeypatch.setattr("builtins.input", lambda x: "y")
 
         config.datafile.text = strip(
             """
@@ -1157,7 +1156,7 @@ def describe_list():
         gitman.list()
 
         with open(config.log_path) as stream:
-            contents = stream.read().replace(TMP, "tmp").replace('\\', '/')
+            contents = stream.read().replace(TMP, "tmp").replace("\\", "/")
         expect(contents) == strip(
             """
         2012-01-14 12:00:01
@@ -1169,7 +1168,7 @@ def describe_list():
         tmp/deps/gitman_2: https://github.com/jacebrowning/gitman-demo @ 7bd138fe7359561a8c2ff9d195dff238794ccc04
         tmp/deps/gitman_3: https://github.com/jacebrowning/gitman-demo @ 9bf18e16b956041f0267c21baad555a23237b52e
         """,
-            end='\n\n',
+            end="\n\n",
         )
 
     @freeze_time("2012-01-14 12:00:02")
@@ -1177,7 +1176,7 @@ def describe_list():
         gitman.list()
 
         with open(config.log_path) as stream:
-            contents = stream.read().replace(TMP, "tmp").replace('\\', '/')
+            contents = stream.read().replace(TMP, "tmp").replace("\\", "/")
         expect(contents) == strip(
             """
         2012-01-14 12:00:02
@@ -1185,7 +1184,7 @@ def describe_list():
         tmp/deps: <missing> @ <unknown>
         tmp/deps: <missing> @ <unknown>
         """,
-            end='\n\n',
+            end="\n\n",
         )
 
 
@@ -1235,7 +1234,7 @@ def describe_lock():
 
     def it_records_specified_dependencies(config):
         expect(gitman.update(depth=1, lock=False)) == True
-        expect(gitman.lock('gitman_1', 'gitman_3')) == True
+        expect(gitman.lock("gitman_1", "gitman_3")) == True
 
         config.datafile.load()
         expect(config.datafile.text).contains(

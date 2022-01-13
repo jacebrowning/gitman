@@ -9,33 +9,33 @@ from .. import common, exceptions, git, shell
 
 @dataclass
 class Link:
-    source: str = ''
-    target: str = ''
+    source: str = ""
+    target: str = ""
 
 
 @dataclass
 class Source:
     """A dictionary of `git` and `ln` arguments."""
 
-    repo: str = ''
+    repo: str = ""
     name: Optional[str] = None
-    rev: str = 'main'
+    rev: str = "main"
 
-    type: str = 'git'
+    type: str = "git"
     sparse_paths: List[str] = field(default_factory=list)
     links: List[Link] = field(default_factory=list)
 
     scripts: List[str] = field(default_factory=list)
 
-    DIRTY = '<dirty>'
-    UNKNOWN = '<unknown>'
+    DIRTY = "<dirty>"
+    UNKNOWN = "<unknown>"
 
     def __post_init__(self):
         if self.name is None:
-            self.name = self.repo.split('/')[-1].split('.')[0]
+            self.name = self.repo.split("/")[-1].split(".")[0]
         else:
             self.name = str(self.name)
-        self.type = self.type or 'git'
+        self.type = self.type or "git"
 
     def __repr__(self):
         return "<source {}>".format(self)
@@ -98,8 +98,8 @@ class Source:
                     self.type, include_untracked=clean, display_status=False
                 ):
                     common.show(
-                        f'Skipped update due to uncommitted changes in {os.getcwd()}',
-                        color='git_changes',
+                        f"Skipped update due to uncommitted changes in {os.getcwd()}",
+                        color="git_changes",
                     )
                     return
             elif force_interactive:
@@ -107,8 +107,8 @@ class Source:
                     self.type, include_untracked=clean, display_status=False
                 ):
                     common.show(
-                        f'Uncommitted changes found in {os.getcwd()}',
-                        color='git_changes',
+                        f"Uncommitted changes found in {os.getcwd()}",
+                        color="git_changes",
                     )
 
                     while True:
@@ -117,14 +117,14 @@ class Source:
                             break
                         if response in ("n", ""):
                             common.show(
-                                f'Skipped update in {os.getcwd()}', color='git_changes'
+                                f"Skipped update in {os.getcwd()}", color="git_changes"
                             )
                             return
 
             else:
                 if git.changes(self.type, include_untracked=clean):
                     raise exceptions.UncommittedChanges(
-                        f'Uncommitted changes in {os.getcwd()}'
+                        f"Uncommitted changes in {os.getcwd()}"
                     )
 
         # Fetch the desired revision
@@ -156,7 +156,7 @@ class Source:
 
         # Check for scripts
         if not self.scripts or not self.scripts[0]:
-            common.show("(no scripts to run)", color='shell_info')
+            common.show("(no scripts to run)", color="shell_info")
             common.newline()
             return
 
@@ -166,9 +166,9 @@ class Source:
                 shell.call(script, _shell=True, _stream=show_shell_stdout)
             except exceptions.ShellError as exc:
                 if show_shell_stdout:
-                    common.show('(script returned an error)', color='shell_error')
+                    common.show("(script returned an error)", color="shell_error")
                 else:
-                    common.show(*exc.output, color='shell_error')
+                    common.show(*exc.output, color="shell_error")
                 cmd = exc.program
                 if force:
                     log.debug("Ignored error from call to '%s'", cmd)
@@ -195,7 +195,7 @@ class Source:
             ):
 
                 if allow_dirty:
-                    common.show(self.DIRTY, color='git_dirty', log=False)
+                    common.show(self.DIRTY, color="git_dirty", log=False)
                     common.newline()
                     return path, url, self.DIRTY
 
@@ -203,7 +203,7 @@ class Source:
                     msg = ("Skipped lock due to uncommitted changes " "in {}").format(
                         os.getcwd()
                     )
-                    common.show(msg, color='git_changes')
+                    common.show(msg, color="git_changes")
                     common.newline()
                     return path, url, self.DIRTY
 
@@ -211,12 +211,12 @@ class Source:
                 raise exceptions.UncommittedChanges(msg)
 
             rev = git.get_hash(self.type, _show=True)
-            common.show(rev, color='git_rev', log=False)
+            common.show(rev, color="git_rev", log=False)
             common.newline()
             return path, url, rev
 
         if allow_missing:
-            return os.getcwd(), '<missing>', self.UNKNOWN
+            return os.getcwd(), "<missing>", self.UNKNOWN
 
         raise self._invalid_repository
 

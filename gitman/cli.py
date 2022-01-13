@@ -17,28 +17,28 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
     # Shared options
     debug = argparse.ArgumentParser(add_help=False)
     debug.add_argument(
-        '-V', '--version', action='version', version="GitMan v" + __version__
+        "-V", "--version", action="version", version="GitMan v" + __version__
     )
     debug_group = debug.add_mutually_exclusive_group()
     debug_group.add_argument(
-        '-v', '--verbose', action='count', default=0, help="enable verbose logging"
+        "-v", "--verbose", action="count", default=0, help="enable verbose logging"
     )
     debug_group.add_argument(
-        '-q',
-        '--quiet',
-        action='store_const',
+        "-q",
+        "--quiet",
+        action="store_const",
         const=-1,
-        dest='verbose',
+        dest="verbose",
         help="only display errors and prompts",
     )
     project = argparse.ArgumentParser(add_help=False)
     project.add_argument(
-        '-r', '--root', metavar='PATH', help="root directory of the project"
+        "-r", "--root", metavar="PATH", help="root directory of the project"
     )
     depth = argparse.ArgumentParser(add_help=False)
     depth.add_argument(
-        '-d',
-        '--depth',
+        "-d",
+        "--depth",
         type=common.positive_int,
         default=5,
         metavar="NUM",
@@ -46,101 +46,101 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
     )
     options = argparse.ArgumentParser(add_help=False)
     options.add_argument(
-        '-c',
-        '--clean',
-        action='store_true',
+        "-c",
+        "--clean",
+        action="store_true",
         help="delete ignored files in dependencies",
     )
     options_group = options.add_mutually_exclusive_group()
     options_group.add_argument(
-        '-F',
-        '--force',
-        action='store_true',
+        "-F",
+        "--force",
+        action="store_true",
         help="overwrite uncommitted changes in dependencies",
     )
     options_group.add_argument(
-        '-f',
-        '--force-interactive',
-        action='store_true',
-        dest='force_interactive',
+        "-f",
+        "--force-interactive",
+        action="store_true",
+        dest="force_interactive",
         help="interactively overwrite uncommitted changes in dependencies",
     )
     options_group.add_argument(
-        '-s',
-        '--skip-changes',
-        action='store_true',
-        dest='skip_changes',
+        "-s",
+        "--skip-changes",
+        action="store_true",
+        dest="skip_changes",
         help="skip dependencies with uncommitted changes",
     )
 
     # Main parser
     parser = argparse.ArgumentParser(
-        prog='gitman',
+        prog="gitman",
         description="A language-agnostic dependency manager using Git.",
         parents=[debug],
         formatter_class=common.WideHelpFormatter,
     )
-    subs = parser.add_subparsers(help="", dest='command', metavar="<command>")
+    subs = parser.add_subparsers(help="", dest="command", metavar="<command>")
 
     # Init parser
     info = "create a new config file for the project"
     sub = subs.add_parser(
-        'init',
-        description=info.capitalize() + '.',
+        "init",
+        description=info.capitalize() + ".",
         help=info,
         parents=[debug],
         formatter_class=common.WideHelpFormatter,
     )
     sub.add_argument(
-        '-f',
-        '--force',
-        action='store_true',
+        "-f",
+        "--force",
+        action="store_true",
         help="create config file even if parent exists",
     )
 
     # Install parser
     info = "get the specified versions of all dependencies"
     sub = subs.add_parser(
-        'install',
-        description=info.capitalize() + '.',
+        "install",
+        description=info.capitalize() + ".",
         help=info,
         parents=[debug, project, depth, options],
         formatter_class=common.WideHelpFormatter,
     )
-    sub.add_argument('name', nargs='*', help="list of dependencies names to install")
+    sub.add_argument("name", nargs="*", help="list of dependencies names to install")
     sub.add_argument(
-        '-e', '--fetch', action='store_true', help="always fetch the latest branches"
+        "-e", "--fetch", action="store_true", help="always fetch the latest branches"
     )
     sub.add_argument(
-        '-n',
-        '--no-defaults',
-        help='override default groups and install all dependencies if none specified',
-        action='store_true',
-        dest='no_defaults',
+        "-n",
+        "--no-defaults",
+        help="override default groups and install all dependencies if none specified",
+        action="store_true",
+        dest="no_defaults",
     )
 
     # Update parser
     info = "update dependencies to the latest versions"
     sub = subs.add_parser(
-        'update',
-        description=info.capitalize() + '.',
+        "update",
+        description=info.capitalize() + ".",
         help=info,
         parents=[debug, project, depth, options],
         formatter_class=common.WideHelpFormatter,
     )
-    sub.add_argument('name', nargs='*', help="list of dependencies names to update")
+    sub.add_argument("name", nargs="*", help="list of dependencies names to update")
     sub.add_argument(
-        '-a',
-        '--all',
-        action='store_true',
-        dest='recurse',
+        "-a",
+        "--all",
+        action="store_true",
+        dest="recurse",
         help="also update all nested dependencies",
     )
     sub.add_argument(
-        '-L',
-        '--skip-lock',
-        action='store_false',
-        dest='lock',
+        "-L",
+        "--skip-lock",
+        action="store_false",
+        dest="lock",
         default=None,
         help="disable recording of updated versions",
     )
@@ -148,80 +148,80 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
     # List parser
     info = "display the current version of each dependency"
     sub = subs.add_parser(
-        'list',
-        description=info.capitalize() + '.',
+        "list",
+        description=info.capitalize() + ".",
         help=info,
         parents=[debug, project, depth],
         formatter_class=common.WideHelpFormatter,
     )
     sub.add_argument(
-        '-D',
-        '--fail-if-dirty',
-        action='store_false',
-        dest='allow_dirty',
+        "-D",
+        "--fail-if-dirty",
+        action="store_false",
+        dest="allow_dirty",
         help="fail if a source has uncommitted changes",
     )
 
     # Lock parser
     info = "lock the current version of each dependency"
     sub = subs.add_parser(
-        'lock',
-        description=info.capitalize() + '.',
+        "lock",
+        description=info.capitalize() + ".",
         help=info,
         parents=[debug, project],
         formatter_class=common.WideHelpFormatter,
     )
-    sub.add_argument('name', nargs='*', help="list of dependency names to lock")
+    sub.add_argument("name", nargs="*", help="list of dependency names to lock")
 
     # Uninstall parser
     info = "delete all installed dependencies"
     sub = subs.add_parser(
-        'uninstall',
-        description=info.capitalize() + '.',
+        "uninstall",
+        description=info.capitalize() + ".",
         help=info,
         parents=[debug, project],
         formatter_class=common.WideHelpFormatter,
     )
     sub.add_argument(
-        '-f',
-        '--force',
-        action='store_true',
+        "-f",
+        "--force",
+        action="store_true",
         help="delete uncommitted changes in dependencies",
     )
     sub.add_argument(
-        '-k',
-        '--keep-location',
-        dest='keep_location',
+        "-k",
+        "--keep-location",
+        dest="keep_location",
         default=False,
-        action='store_true',
+        action="store_true",
         help="keep top level folder location",
     )
 
     # Show parser
     info = "display the path of a dependency or internal file"
     sub = subs.add_parser(
-        'show',
-        description=info.capitalize() + '.',
+        "show",
+        description=info.capitalize() + ".",
         help=info,
         parents=[debug, project],
         formatter_class=common.WideHelpFormatter,
     )
-    sub.add_argument('name', nargs='*', help="display the path of this dependency")
+    sub.add_argument("name", nargs="*", help="display the path of this dependency")
     sub.add_argument(
-        '-c',
-        '--config',
-        action='store_true',
+        "-c",
+        "--config",
+        action="store_true",
         help="display the path of the config file",
     )
     sub.add_argument(
-        '-l', '--log', action='store_true', help="display the path of the log file"
+        "-l", "--log", action="store_true", help="display the path of the log file"
     )
 
     # Edit parser
     info = "open the config file in the default editor"
     sub = subs.add_parser(
-        'edit',
-        description=info.capitalize() + '.',
+        "edit",
+        description=info.capitalize() + ".",
         help=info,
         parents=[debug, project],
         formatter_class=common.WideHelpFormatter,
@@ -246,13 +246,13 @@ def _get_command(function, namespace):  # pylint: disable=too-many-statements
     args: List = []
     kwargs: Dict = {}
 
-    if namespace.command == 'init':
+    if namespace.command == "init":
         function = commands.init
         kwargs.update(
             force=namespace.force,
         )
 
-    elif namespace.command in ['install', 'update']:
+    elif namespace.command in ["install", "update"]:
         function = getattr(commands, namespace.command)
         args = namespace.name
         kwargs.update(
@@ -263,18 +263,18 @@ def _get_command(function, namespace):  # pylint: disable=too-many-statements
             clean=namespace.clean,
             skip_changes=namespace.skip_changes,
         )
-        if namespace.command == 'install':
+        if namespace.command == "install":
             kwargs.update(
                 fetch=namespace.fetch,
                 skip_default_group=namespace.no_defaults,
             )
-        if namespace.command == 'update':
+        if namespace.command == "update":
             kwargs.update(
                 recurse=namespace.recurse,
                 lock=namespace.lock,
             )
 
-    elif namespace.command == 'list':
+    elif namespace.command == "list":
         function = commands.display
         kwargs.update(
             root=namespace.root,
@@ -282,14 +282,14 @@ def _get_command(function, namespace):  # pylint: disable=too-many-statements
             allow_dirty=namespace.allow_dirty,
         )
 
-    elif namespace.command == 'lock':
+    elif namespace.command == "lock":
         function = getattr(commands, namespace.command)
         args = namespace.name
         kwargs.update(
             root=namespace.root,
         )
 
-    elif namespace.command == 'uninstall':
+    elif namespace.command == "uninstall":
         function = commands.delete
         kwargs.update(
             root=namespace.root,
@@ -297,18 +297,18 @@ def _get_command(function, namespace):  # pylint: disable=too-many-statements
             keep_location=namespace.keep_location,
         )
 
-    elif namespace.command == 'show':
+    elif namespace.command == "show":
         function = commands.show
         args = namespace.name
         kwargs.update(
             root=namespace.root,
         )
         if namespace.config:
-            args.append('__config__')
+            args.append("__config__")
         if namespace.log:
-            args.append('__log__')
+            args.append("__log__")
 
-    elif namespace.command == 'edit':
+    elif namespace.command == "edit":
         function = commands.edit
         kwargs.update(
             root=namespace.root,
@@ -321,7 +321,7 @@ def _run_command(function, args, kwargs):
     success = False
     exit_message = None
     try:
-        log.debug("Running %s command...", getattr(function, '__name__', 'a'))
+        log.debug("Running %s command...", getattr(function, "__name__", "a"))
         success = function(*args, **kwargs)
     except KeyboardInterrupt:
         log.debug("Command canceled")
@@ -339,7 +339,7 @@ def _run_command(function, args, kwargs):
         exit_message = "Adapt config and run again"
     finally:
         if exit_message:
-            common.show(exit_message, color='message')
+            common.show(exit_message, color="message")
             common.newline()
 
     if success:
@@ -352,9 +352,9 @@ def _run_command(function, args, kwargs):
 def _show_error(exception):
     common.dedent(0)
     common.newline()
-    common.show(str(exception), color='error')
+    common.show(str(exception), color="error")
     common.newline()
 
 
-if __name__ == '__main__':  # pragma: no cover (manual test)
+if __name__ == "__main__":  # pragma: no cover (manual test)
     main()
