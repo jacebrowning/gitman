@@ -112,14 +112,10 @@ class Source:
                     )
 
                     while True:
-                        yn_input = str(
-                            input("Do you want to overwrite? (Y/N)[Y]: ")
-                        ).rstrip('\r\n')
-
-                        if yn_input.lower() == "y" or not yn_input:
+                        response = common.prompt("Do you want to overwrite? (y/n): ")
+                        if response == "y":
                             break
-
-                        if yn_input.lower() == "n":
+                        if response in ("n", ""):
                             common.show(
                                 f'Skipped update in {os.getcwd()}', color='git_changes'
                             )

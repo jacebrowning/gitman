@@ -146,6 +146,11 @@ def show(
         time.sleep(settings.RECORDING_DELAY)
 
 
+def prompt(message: str) -> str:
+    message = ' ' * 2 * _Config.indent_level + style(message, 'prompt')
+    return input(message).strip().lower()
+
+
 BOLD = '\033[1m'
 RED = '\033[31m'
 GREEN = '\033[32m'
@@ -166,6 +171,7 @@ COLORS = dict(
     shell_output=CYAN,
     shell_error=YELLOW,
     message=BOLD + WHITE,
+    prompt=BOLD + WHITE,
     success=BOLD + GREEN,
     error=BOLD + RED,
 )
