@@ -8,8 +8,9 @@ GitMan is a language-agnostic dependency manager using Git. It aims to serve as 
 [![Windows Build Status](https://img.shields.io/appveyor/ci/jacebrowning/gitman/main.svg?label=window)](https://ci.appveyor.com/project/jacebrowning/gitman)
 [![Coverage Status](https://img.shields.io/coveralls/jacebrowning/gitman/main.svg)](https://coveralls.io/r/jacebrowning/gitman)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/jacebrowning/gitman.svg)](https://scrutinizer-ci.com/g/jacebrowning/gitman/?branch=main)
-[![PyPI Version](https://img.shields.io/pypi/v/GitMan.svg)](https://pypi.org/project/GitMan)
-[![PyPI License](https://img.shields.io/pypi/l/GitMan.svg)](https://pypi.org/project/GitMan)
+[![PyPI License](https://img.shields.io/pypi/l/gitman.svg)](https://pypi.org/project/gitman)
+[![PyPI Version](https://img.shields.io/pypi/v/gitman.svg)](https://pypi.org/project/gitman)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/gitman.svg?color=orange)](https://pypistats.org/packages/gitman)
 
 ## Setup
 
