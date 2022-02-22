@@ -32,6 +32,7 @@ def call(name, *args, _show=True, _stream=True, _shell=False, _ignore=False):
 
     command = subprocess.Popen(  # pylint: disable=subprocess-run-check
         name if _shell else [name, *args],
+        encoding='utf-8',
         universal_newlines=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
