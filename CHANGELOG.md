@@ -1,6 +1,7 @@
-# 3.1 (unreleased)
+# 3.1 (2022-02-23)
 
 - Updated `--force-interactive` prompt to default to keeping changes.
+- Fixed handling of unicode in commit messages on Windows. (@sch0125)
 
 # 3.0.1 (2021-10-04)
 
