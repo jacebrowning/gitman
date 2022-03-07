@@ -260,7 +260,7 @@ def get_branch():
 
 
 def get_object_rev(object_name):
-    """Get the revision associated with the object specified"""
+    """Get the revision associated with the object specified."""
     log_results = git("log", object_name, "-n", "1")
     commit_sha = log_results[0].replace("commit ", "")
     return commit_sha
