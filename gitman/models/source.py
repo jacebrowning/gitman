@@ -231,6 +231,10 @@ class Source:
             _, _, rev = self.identify(
                 allow_dirty=allow_dirty, allow_missing=False, skip_changes=skip_changes
             )
+        else:
+            shell.cd(self.name)
+            rev = git.get_object_rev(rev)
+            print(rev)
 
         if rev == self.DIRTY:
             return None
