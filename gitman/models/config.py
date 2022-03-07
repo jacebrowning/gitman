@@ -183,10 +183,10 @@ class Config:
     def split_name_and_rev(self, name_rev):
         true_name = name_rev
         rev = None
-        if '@' in name_rev:
-                name_split = name_rev.split('@')
-                true_name = name_split[0]
-                rev = name_split[1]
+        if "@" in name_rev:
+            name_split = name_rev.split("@")
+            true_name = name_split[0]
+            rev = name_split[1]
         return true_name, rev
 
     def remap_names_and_revs(self, names):
@@ -224,7 +224,7 @@ class Config:
 
             rev = None
             if source.name in source_to_install_revs.keys():
-               rev = source_to_install_revs[source.name]
+                rev = source_to_install_revs[source.name]
             source_locked = source.lock(skip_changes=skip_changes, rev=rev)
 
             if source_locked is not None:
