@@ -33,7 +33,7 @@ def init(*, force: bool = False):
             rev="master",
         )
         config.sources.append(source)
-        source = source.lock(rev="ebbbf773431ba07510251bb03f9525c7bab2b13a")
+        source = source.lock(rev="ebbbf773431ba07510251bb03f9525c7bab2b13a", verify_rev=False)
         config.sources_locked.append(source)
         config.datafile.save()
 
