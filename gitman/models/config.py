@@ -180,7 +180,8 @@ class Config:
 
         return count
 
-    def split_name_and_rev(self, name_rev):
+    @classmethod
+    def split_name_and_rev(cls, name_rev):
         true_name = name_rev
         rev = None
         if "@" in name_rev:
@@ -189,12 +190,13 @@ class Config:
             rev = name_split[1]
         return true_name, rev
 
-    def remap_names_and_revs(self, names):
+    @classmethod
+    def remap_names_and_revs(cls, names):
 
         name_rev_map = {}
 
         for name in names:
-            base_name, rev = self.split_name_and_rev(name)
+            base_name, rev = cls.split_name_and_rev(name)
             name_rev_map[base_name] = rev
 
         return name_rev_map.keys(), name_rev_map
