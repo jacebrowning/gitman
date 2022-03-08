@@ -12,7 +12,12 @@ from freezegun import freeze_time
 
 import gitman
 from gitman import shell
-from gitman.exceptions import InvalidConfig, InvalidRepository, UncommittedChanges
+from gitman.exceptions import (
+    InvalidConfig,
+    InvalidRepository,
+    ShellError,
+    UncommittedChanges,
+)
 from gitman.models import Config
 
 from .utilities import strip
@@ -1300,3 +1305,28 @@ def describe_lock():
 
         finally:
             shell.rm(os.path.join("deps", "gitman_1"))
+
+    def it_should_lock_repository_to_user_specified_rev(config):
+        expect(gitman.update(depth=1, lock=False)) == True
+
+        expect(gitman.lock("gitman_1@master")) == True
+        config.datafile.load()
+        expect(config.datafile.text).contains(
+            "63ddfd82d308ddae72d31b61cb8942c898fa05b5"
+        )
+
+    def it_should_lock_repository_to_latest_rev_in_user_specified_reference(config):
+        expect(gitman.update(depth=1, lock=False)) == True
+
+        expect(gitman.lock("gitman_1@63ddfd82d308ddae72d31b61cb8942c898fa05b5")) == True
+
+        config.datafile.load()
+        expect(config.datafile.text).contains(
+            "63ddfd82d308ddae72d31b61cb8942c898fa05b5"
+        )
+
+    def it_should_fail_to_lock_to_invalid_user_specified_reference(config):
+        expect(gitman.update(depth=1, lock=False)) == True
+
+        with pytest.raises(ShellError):
+            gitman.lock("gitman_1@deadbeef_ref")
