@@ -1300,3 +1300,27 @@ def describe_lock():
 
         finally:
             shell.rm(os.path.join("deps", "gitman_1"))
+
+    def it_should_lock_repository_to_user_specified_rev(config):
+        expect(gitman.update(depth=1, lock=False)) == True
+
+        expect(gitman.lock("gitman_1@master")) == True
+        config.datafile.load()
+        expect(config.datafile.text).contains(
+            "63ddfd82d308ddae72d31b61cb8942c898fa05b5"
+        )
+
+    def it_should_lock_repository_to_latest_rev_in_user_specified_reference(config):
+        expect(gitman.update(depth=1, lock=False)) == True
+
+        expect(gitman.lock("gitman_1@63ddfd82d308ddae72d31b61cb8942c898fa05b5")) == True
+
+        config.datafile.load()
+        expect(config.datafile.text).contains(
+            "63ddfd82d308ddae72d31b61cb8942c898fa05b5"
+        )
+
+    def it_should_skip_lock_to_invalid_user_specified_reference(config):
+        expect(gitman.update(depth=1, lock=False)) == True
+
+        expect(gitman.lock("gitman_1@deadbeef_ref")) == False

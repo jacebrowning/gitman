@@ -180,11 +180,40 @@ class Config:
 
         return count
 
+    @classmethod
+    def _split_name_and_rev(cls, name_rev):
+        true_name = name_rev
+        rev = None
+        if "@" in name_rev:
+            name_split = name_rev.split("@")
+            true_name = name_split[0]
+            rev = name_split[1]
+        return true_name, rev
+
+    @classmethod
+    def _remap_names_and_revs(cls, names):
+
+        name_rev_map = {}
+
+        for name in names:
+            base_name, rev = cls._split_name_and_rev(name)
+            name_rev_map[base_name] = rev
+
+        return name_rev_map.keys(), name_rev_map
+
     def lock_dependencies(self, *names, obey_existing=True, skip_changes=False):
         """Lock down the immediate dependency versions."""
+        sources_to_install, source_to_install_revs = self._remap_names_and_revs(
+            [*names]
+        )
         sources = self._get_sources(use_locked=obey_existing).copy()
+
+        skip_default = True
+        if len(sources_to_install) == 0:
+            skip_default = False
+
         sources_filter = self._get_sources_filter(
-            *names, sources=sources, skip_default_group=False
+            *sources_to_install, sources=sources, skip_default_group=skip_default
         )
 
         shell.cd(self.location_path)
@@ -197,7 +226,10 @@ class Config:
                 log.info("Skipped dependency: %s", source.name)
                 continue
 
-            source_locked = source.lock(skip_changes=skip_changes)
+            rev = None
+            if source.name in source_to_install_revs.keys():
+                rev = source_to_install_revs[source.name]
+            source_locked = source.lock(skip_changes=skip_changes, rev=rev)
 
             if source_locked is not None:
                 try:

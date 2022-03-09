@@ -220,7 +220,7 @@ class Source:
 
         raise self._invalid_repository
 
-    def lock(self, rev=None, allow_dirty=False, skip_changes=False):
+    def lock(self, rev=None, allow_dirty=False, skip_changes=False, verify_rev=True):
         """Create a locked source object.
 
         Return a locked version of the current source if not dirty
@@ -231,6 +231,13 @@ class Source:
             _, _, rev = self.identify(
                 allow_dirty=allow_dirty, allow_missing=False, skip_changes=skip_changes
             )
+        elif verify_rev:
+            shell.cd(self.name)
+            rev_tmp = rev
+            rev = git.get_object_rev(rev)
+            if rev is None:
+                log.error(f"No commit found for {rev_tmp} in source {self.name}")
+                return None
 
         if rev == self.DIRTY:
             return None

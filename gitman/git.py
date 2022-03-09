@@ -259,6 +259,19 @@ def get_branch():
     return git("rev-parse", "--abbrev-ref", "HEAD", _show=False)[0]
 
 
+def get_object_rev(object_name):
+    """Get the revision associated with the object specified."""
+    log_results = git("log", "-n", "1", object_name, _show=False, _ignore=True)
+
+    commit_sha = None
+
+    if len(log_results) > 0:
+        if "commit" in log_results[0]:
+            commit_sha = log_results[0].replace("commit ", "")
+
+    return commit_sha
+
+
 def _get_sha_from_rev(rev):
     """Get a rev-parse string's hash."""
     if "@{" in rev:
