@@ -233,7 +233,11 @@ class Source:
             )
         elif verify_rev:
             shell.cd(self.name)
+            rev_tmp = rev
             rev = git.get_object_rev(rev)
+            if rev == None:
+                log.error(f"No commit found for {rev_tmp} in source {self.name}")
+
 
         if rev == self.DIRTY:
             return None

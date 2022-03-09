@@ -181,7 +181,7 @@ class Config:
         return count
 
     @classmethod
-    def split_name_and_rev(cls, name_rev):
+    def _split_name_and_rev(cls, name_rev):
         true_name = name_rev
         rev = None
         if "@" in name_rev:
@@ -191,19 +191,19 @@ class Config:
         return true_name, rev
 
     @classmethod
-    def remap_names_and_revs(cls, names):
+    def _remap_names_and_revs(cls, names):
 
         name_rev_map = {}
 
         for name in names:
-            base_name, rev = cls.split_name_and_rev(name)
+            base_name, rev = cls._split_name_and_rev(name)
             name_rev_map[base_name] = rev
 
         return name_rev_map.keys(), name_rev_map
 
     def lock_dependencies(self, *names, obey_existing=True, skip_changes=False):
         """Lock down the immediate dependency versions."""
-        sources_to_install, source_to_install_revs = self.remap_names_and_revs([*names])
+        sources_to_install, source_to_install_revs = self._remap_names_and_revs([*names])
         sources = self._get_sources(use_locked=obey_existing).copy()
 
         skip_default = True
