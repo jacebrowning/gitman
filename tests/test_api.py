@@ -1325,8 +1325,7 @@ def describe_lock():
             "63ddfd82d308ddae72d31b61cb8942c898fa05b5"
         )
 
-    def it_should_fail_to_lock_to_invalid_user_specified_reference(config):
+    def it_should_skip_lock_to_invalid_user_specified_reference(config):
         expect(gitman.update(depth=1, lock=False)) == True
 
-        with pytest.raises(ShellError):
-            gitman.lock("gitman_1@deadbeef_ref")
+        expect(gitman.lock("gitman_1@deadbeef_ref")) == False

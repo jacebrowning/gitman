@@ -237,6 +237,7 @@ class Source:
             rev = git.get_object_rev(rev)
             if rev is None:
                 log.error(f"No commit found for {rev_tmp} in source {self.name}")
+                return None
 
         if rev == self.DIRTY:
             return None
