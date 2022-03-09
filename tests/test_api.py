@@ -15,7 +15,6 @@ from gitman import shell
 from gitman.exceptions import (
     InvalidConfig,
     InvalidRepository,
-    ShellError,
     UncommittedChanges,
 )
 from gitman.models import Config
