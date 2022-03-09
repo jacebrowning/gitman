@@ -238,7 +238,6 @@ class Source:
             if rev == None:
                 log.error(f"No commit found for {rev_tmp} in source {self.name}")
 
-
         if rev == self.DIRTY:
             return None
 

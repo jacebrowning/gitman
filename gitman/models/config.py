@@ -203,7 +203,9 @@ class Config:
 
     def lock_dependencies(self, *names, obey_existing=True, skip_changes=False):
         """Lock down the immediate dependency versions."""
-        sources_to_install, source_to_install_revs = self._remap_names_and_revs([*names])
+        sources_to_install, source_to_install_revs = self._remap_names_and_revs(
+            [*names]
+        )
         sources = self._get_sources(use_locked=obey_existing).copy()
 
         skip_default = True
