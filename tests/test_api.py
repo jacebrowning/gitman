@@ -12,11 +12,7 @@ from freezegun import freeze_time
 
 import gitman
 from gitman import shell
-from gitman.exceptions import (
-    InvalidConfig,
-    InvalidRepository,
-    UncommittedChanges,
-)
+from gitman.exceptions import InvalidConfig, InvalidRepository, UncommittedChanges
 from gitman.models import Config
 
 from .utilities import strip
