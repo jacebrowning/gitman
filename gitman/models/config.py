@@ -192,7 +192,6 @@ class Config:
 
     @classmethod
     def _remap_names_and_revs(cls, names):
-
         name_rev_map = {}
 
         for name in names:

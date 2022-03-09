@@ -1,3 +1,7 @@
+# 3.2 (alpha)
+
+- Added support for locking dependencies to specific versions.
+
 # 3.1 (2022-02-23)
 
 - Updated `--force-interactive` prompt to default to keeping changes.

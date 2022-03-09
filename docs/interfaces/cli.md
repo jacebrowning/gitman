@@ -146,14 +146,18 @@ To restore the exact versions previously checked out, run:
 $ gitman install
 ```
 
-To lock a source to a specific revision
+### Version Pinning
+
+To lock a dependency to a specific version:
+
 ```
-$gitman lock <name1>@<sha_rev>
+$ gitman lock <name1>@<sha_rev>
 ```
 
-To lock a source to latest revision of a specific tag or branch
+or to lock a source to latest revision of a specific tag or branch:
+
 ```
-$gitman lock <name1>@<git_tag_or_branch>
+$ gitman lock <name1>@<git_tag_or_branch>
 ```
 
 ## Uninstall

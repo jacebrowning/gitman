@@ -82,13 +82,14 @@ with optional arguments:
 - `*names`: optional list of dependency source or group names to filter on
 - `root`: specifies the path to the root working tree
 
-with specific revision per source:
+and specific versions per source:
 
-- Each item in name may be followed by @git_rev or @git_branch or @git_tag.
-- Example:
-  - `*names = ["<source1>@<sha_rev>", <source2>@<tag>", "<source3>"]`.
-  - Source1 and source2 will be locked to sha_rev and tag if they exist in the repository,
-    source3 will be locked to the currently checked out revision.
+- Each name may be followed by `@<sha>`, `@<branch>`, or `@<tag>`
+- For example:
+    - `*names = ["source1@abc123", source2@v1.0", "source3"]`
+    - `source1` will be locked to the `abc123` SHA if it exists
+    - `source2` will be locked to the `v1.0` tag if it exists
+    - `source3` will be locked to the currently checked out version
 
 ## Uninstall
 
