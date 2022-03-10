@@ -146,6 +146,10 @@ MKDOCS_INDEX := site/index.html
 
 .PHONY: docs
 docs: mkdocs uml ## Generate documentation and UML
+ifndef CI
+	@ eval "sleep 3; bin/open http://127.0.0.1:8000" &
+	poetry run mkdocs serve
+endif
 
 .PHONY: mkdocs
 mkdocs: install $(MKDOCS_INDEX)
@@ -174,11 +178,6 @@ docs/demo.cast: Makefile
 	/usr/X11/bin/resize -s 61 127
 	poetry run asciinema rec $@ --overwrite --command "make demo CI=true RECORDING_DELAY=1" --title "GitMan Demo"
 	poetry run asciinema upload $@
-
-.PHONY: mkdocs-serve
-mkdocs-serve: mkdocs
-	eval "sleep 3; bin/open http://127.0.0.1:8000" &
-	poetry run mkdocs serve
 
 # BUILD #######################################################################
 

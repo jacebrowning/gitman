@@ -29,6 +29,13 @@ or limit the traversal of nested dependencies:
 ```sh
 $ gitman install --depth=<count>
 ```
+### Additional Options
+
+Install will only fetch from the repository if needed. To always fetch, run:
+
+```sh
+$ gitman install --fetch
+```
 
 It will leave untracked files alone. To delete them, run:
 
@@ -36,13 +43,9 @@ It will leave untracked files alone. To delete them, run:
 $ gitman install --clean
 ```
 
-It will only fetch from the repository if needed. To always fetch, run:
+### Handling Changes
 
-```sh
-$ gitman install --fetch
-```
-
-It will exit with an error if there are any uncommitted changes in dependencies or a post-install script fails. To overwrite all changes or ignore script failures, run:
+Install will exit with an error if there are any uncommitted changes in dependencies or a post-install script fails. To overwrite all changes or ignore script failures, run:
 
 ```sh
 $ gitman install --force
@@ -80,7 +83,9 @@ or limit the traversal of nested dependencies:
 $ gitman update --depth=<count>
 ```
 
-This will also record the exact versions of any previously locked dependencies. Disable this behavior by instead running:
+### Additional Options
+
+Update will also record the exact versions of any previously locked dependencies. Disable this behavior by instead running:
 
 ```sh
 $ gitman update --skip-lock
@@ -92,7 +97,9 @@ or to additionally get the latest versions of all nested dependencies, run:
 $ gitman update --all
 ```
 
-It will exit with an error if there are any uncommitted changes in dependencies or a post-install script fails. To overwrite all changes or ignore script failures, run:
+### Handling Changes
+
+Update will exit with an error if there are any uncommitted changes in dependencies or a post-install script fails. To overwrite all changes or ignore script failures, run:
 
 ```sh
 $ gitman update --force
@@ -150,13 +157,13 @@ $ gitman install
 
 To lock a dependency to a specific version:
 
-```
+```sh
 $ gitman lock <name1>@<sha_rev>
 ```
 
 or to lock a source to latest revision of a specific tag or branch:
 
-```
+```sh
 $ gitman lock <name1>@<git_tag_or_branch>
 ```
 

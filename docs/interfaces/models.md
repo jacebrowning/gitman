@@ -14,7 +14,7 @@ from gitman.models import Source
 source = Source("https://github.com/jacebrowning/gitman-demo")
 ```
 
-or customize the source name and revision to get:
+or customize the source name and revision:
 
 ```python
 source = Source(
@@ -38,10 +38,14 @@ or overwrite changes, if necessary:
 source.update_files(force=True)
 ```
 
-## `Group`
-
-*TBD*
-
 ## `Config`
 
-*TBD*
+You can also manipulate the configuration file programmatically:
+
+```python
+from gitman.models import load_config
+
+config = load_config()
+
+config.install_dependencies()
+```

@@ -20,13 +20,13 @@ then credential storage is not set up correctly.
 
 To use the Keychain on macOS, run:
 
-```
+```sh
 $ git config --global credential.helper osxkeychain
 ```
 
 To use the Credential Manager on Windows run:
 
-```
+```sh
 $ git config --global credential.helper wincred
 ```
 
