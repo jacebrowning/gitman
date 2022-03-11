@@ -88,7 +88,7 @@ class Config:
             return 0
 
         sources = self._get_sources(use_locked=False if update else None)
-        sources_filter = self._get_sources_filter(
+        sources_filter = self._get_sources_filtered(
             *names, sources=sources, skip_default_group=skip_default_group
         )
 
@@ -135,6 +135,7 @@ class Config:
             shell.cd(self.location_path, _show=False)
 
         common.dedent()
+
         if sources_filter:
             log.error("No such dependency: %s", " ".join(sources_filter))
             return 0
@@ -149,7 +150,7 @@ class Config:
             return 0
 
         sources = self._get_sources()
-        sources_filter = self._get_sources_filter(
+        sources_filter = self._get_sources_filtered(
             *names, sources=sources, skip_default_group=False
         )
 
@@ -193,11 +194,9 @@ class Config:
     @classmethod
     def _remap_names_and_revs(cls, names):
         name_rev_map = {}
-
         for name in names:
             base_name, rev = cls._split_name_and_rev(name)
             name_rev_map[base_name] = rev
-
         return name_rev_map.keys(), name_rev_map
 
     def lock_dependencies(self, *names, obey_existing=True, skip_changes=False):
@@ -211,7 +210,7 @@ class Config:
         if len(sources_to_install) == 0:
             skip_default = False
 
-        sources_filter = self._get_sources_filter(
+        sources_filter = self._get_sources_filtered(
             *sources_to_install, sources=sources, skip_default_group=skip_default
         )
 
@@ -326,7 +325,7 @@ class Config:
         if use_locked is True:
             if self.sources_locked:
                 return self.sources_locked
-            log.info("No locked sources, defaulting to none...")
+            log.info("No locked sources, defaulting to none")
             return []
 
         sources: List[Source] = []
@@ -334,10 +333,10 @@ class Config:
             sources = self.sources
         else:
             if self.sources_locked:
-                log.info("Defaulting to locked sources...")
+                log.info("Defaulting to locked sources")
                 sources = self.sources_locked
             else:
-                log.info("No locked sources, using latest...")
+                log.info("No locked sources, using latest")
                 sources = self.sources
 
         extras = []
@@ -348,8 +347,8 @@ class Config:
 
         return sources + extras
 
-    def _get_sources_filter(self, *names, sources, skip_default_group):
-        """Get filtered sublist of sources."""
+    def _get_sources_filtered(self, *names, sources, skip_default_group):
+        """Get a filtered subset of sources."""
         names_list = list(names)
 
         if not names_list and not skip_default_group:
@@ -370,7 +369,7 @@ class Config:
         return list(set(sources_filter))
 
 
-def load_config(start=None, *, search=True):
+def load_config(start=None, *, search=True) -> Optional[Config]:
     """Load the config for the current project."""
     start = os.path.abspath(start) if start else _resolve_current_directory()
 

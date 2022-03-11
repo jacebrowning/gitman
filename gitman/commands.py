@@ -85,7 +85,6 @@ def install(
         ", ".join(names) if names else "<all>",
     )
     count = None
-
     config = load_config(root)
 
     if config:
@@ -151,7 +150,6 @@ def update(
         ", ".join(names) if names else "<all>",
     )
     count = None
-
     config = load_config(root)
 
     if config:
@@ -223,7 +221,6 @@ def display(*, root=None, depth=None, allow_dirty=True):
     """
     log.info("Displaying dependencies...")
     count = None
-
     config = load_config(root)
 
     if config:
@@ -254,7 +251,6 @@ def lock(*names, root=None):
     """
     log.info("Locking dependencies...")
     count = None
-
     config = load_config(root)
 
     if config:
@@ -280,7 +276,6 @@ def delete(*, root=None, force=False, keep_location=False):
     """
     log.info("Deleting dependencies...")
     count = None
-
     config = load_config(root)
 
     if config:
@@ -307,7 +302,6 @@ def show(*names, root=None):
 
     """
     log.info("Finding paths...")
-
     config = load_config(root)
 
     if not config:
@@ -321,7 +315,7 @@ def show(*names, root=None):
 
 
 def edit(*, root=None):
-    """Open the confuration file for a project.
+    """Open the configuration file for a project.
 
     Optional arguments:
 
@@ -329,7 +323,6 @@ def edit(*, root=None):
 
     """
     log.info("Launching config...")
-
     config = load_config(root)
 
     if not config:
