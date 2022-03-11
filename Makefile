@@ -9,8 +9,8 @@ all: install
 .PHONY: ci
 ci: format check test mkdocs ## Run all tasks that determine CI status
 
-.PHONY: watch
-watch: install .clean-test ## Continuously run all CI tasks when files chanage
+.PHONY: dev
+dev: install .clean-test ## Continuously run all CI tasks when files chanage
 	poetry run sniffer
 
 .PHONY: demo

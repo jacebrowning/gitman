@@ -293,7 +293,7 @@ class Config:
         common.newline()
         common.indent()
 
-        for source in self.sources:
+        for source in self._get_sources(use_locked=False):
 
             if depth == 0:
                 log.info("Skipped dependency: %s", source.name)
