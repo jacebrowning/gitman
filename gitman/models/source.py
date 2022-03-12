@@ -1,10 +1,13 @@
 import os
+from collections import namedtuple
 from dataclasses import dataclass, field
 from typing import List, Optional
 
 import log
 
 from .. import common, exceptions, git, shell
+
+Identity = namedtuple("Identity", ["path", "url", "rev"])
 
 
 @dataclass
@@ -38,11 +41,10 @@ class Source:
         self.type = self.type or "git"
 
     def __repr__(self):
-        return "<source {}>".format(self)
+        return f"<source {self}>"
 
     def __str__(self):
-        pattern = "['{t}'] '{r}' @ '{v}' in '{d}'"
-        return pattern.format(t=self.type, r=self.repo, v=self.rev, d=self.name)
+        return f"{self.repo!r} @ {self.rev!r} in {self.name!r}"
 
     def __eq__(self, other):
         return self.name == other.name
@@ -55,11 +57,11 @@ class Source:
 
     def update_files(
         self,
-        force=False,
-        force_interactive=False,
-        fetch=False,
-        clean=True,
-        skip_changes=False,
+        force: bool = False,
+        force_interactive: bool = False,
+        fetch: bool = False,
+        clean: bool = True,
+        skip_changes: bool = False,
     ):
         """Ensure the source matches the specified revision."""
         log.info("Updating source files...")
@@ -136,7 +138,7 @@ class Source:
             self.type, self.repo, self.name, fetch=fetch, clean=clean, rev=self.rev
         )
 
-    def create_links(self, root, force=False):
+    def create_links(self, root: str, *, force: bool = False):
         """Create links from the source to target directory."""
         if not self.links:
             return
@@ -145,9 +147,9 @@ class Source:
             target = os.path.join(root, os.path.normpath(link.target))
             relpath = os.path.relpath(os.getcwd(), os.path.dirname(target))
             source = os.path.join(relpath, os.path.normpath(link.source))
-            create_sym_link(source, target, force)
+            create_sym_link(source, target, force=force)
 
-    def run_scripts(self, force=False, show_shell_stdout=False):
+    def run_scripts(self, force: bool = False, show_shell_stdout: bool = False):
         log.info("Running install scripts...")
 
         # Enter the working tree
@@ -177,7 +179,12 @@ class Source:
                     raise exceptions.ScriptFailure(msg)
         common.newline()
 
-    def identify(self, allow_dirty=True, allow_missing=True, skip_changes=False):
+    def identify(
+        self,
+        allow_dirty: bool = True,
+        allow_missing: bool = True,
+        skip_changes: bool = False,
+    ) -> Identity:
         """Get the path and current repository URL and hash."""
         assert self.name
         if os.path.isdir(self.name):
@@ -197,7 +204,7 @@ class Source:
                 if allow_dirty:
                     common.show(self.DIRTY, color="git_dirty", log=False)
                     common.newline()
-                    return path, url, self.DIRTY
+                    return Identity(path, url, self.DIRTY)
 
                 if skip_changes:
                     msg = ("Skipped lock due to uncommitted changes " "in {}").format(
@@ -205,7 +212,7 @@ class Source:
                     )
                     common.show(msg, color="git_changes")
                     common.newline()
-                    return path, url, self.DIRTY
+                    return Identity(path, url, self.DIRTY)
 
                 msg = "Uncommitted changes in {}".format(os.getcwd())
                 raise exceptions.UncommittedChanges(msg)
@@ -213,14 +220,20 @@ class Source:
             rev = git.get_hash(self.type, _show=True)
             common.show(rev, color="git_rev", log=False)
             common.newline()
-            return path, url, rev
+            return Identity(path, url, rev)
 
         if allow_missing:
-            return os.getcwd(), "<missing>", self.UNKNOWN
+            return Identity(os.getcwd(), "<missing>", self.UNKNOWN)
 
         raise self._invalid_repository
 
-    def lock(self, rev=None, allow_dirty=False, skip_changes=False, verify_rev=True):
+    def lock(
+        self,
+        rev: Optional[str] = None,
+        allow_dirty: bool = False,
+        skip_changes: bool = False,
+        verify_rev: bool = True,
+    ) -> Optional["Source"]:
         """Create a locked source object.
 
         Return a locked version of the current source if not dirty
@@ -267,7 +280,7 @@ class Source:
         return exceptions.InvalidRepository(msg)
 
 
-def create_sym_link(source, target, force):
+def create_sym_link(source: str, target: str, *, force: bool):
     log.info("Creating a symbolic link...")
 
     if os.path.islink(target):
