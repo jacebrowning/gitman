@@ -1,6 +1,6 @@
 import os
 import sys
-from typing import List, Optional
+from typing import Iterator, List, Optional
 
 import log
 from datafiles import datafile, field
@@ -8,7 +8,7 @@ from datafiles import datafile, field
 from .. import common, exceptions, shell
 from ..decorators import preserve_cwd
 from .group import Group
-from .source import Source
+from .source import Identity, Source
 
 
 @datafile("{self.root}/{self.filename}", defaults=True, manual=True)
@@ -58,11 +58,11 @@ class Config:
                     ).format(source.name)
                     raise exceptions.InvalidConfig(msg)
 
-    def get_path(self, name=None):
+    def get_path(self, name: Optional[str] = None) -> str:
         """Get the full path to a dependency or internal file."""
         base = self.location_path
         if name == "__config__":
-            return self.path
+            return self.path  # type: ignore
         if name == "__log__":
             return self.log_path
         if name:
@@ -71,24 +71,24 @@ class Config:
 
     def install_dependencies(
         self,
-        *names,
-        depth=None,
-        update=True,
-        recurse=False,
-        force=False,
-        force_interactive=False,
-        fetch=False,
-        clean=True,
-        skip_changes=False,
-        skip_default_group=False,
-    ):  # pylint: disable=too-many-locals
+        *names: str,
+        depth: Optional[int] = None,
+        update: bool = True,
+        recurse: bool = False,
+        force: bool = False,
+        force_interactive: bool = False,
+        fetch: bool = False,
+        clean: bool = True,
+        skip_changes: bool = False,
+        skip_default_group: bool = False,
+    ) -> int:
         """Download or update the specified dependencies."""
         if depth == 0:
             log.info("Skipped directory: %s", self.location_path)
             return 0
 
         sources = self._get_sources(use_locked=False if update else None)
-        sources_filter = self._get_sources_filtered(
+        sources_filter = self._get_sources_filter(
             *names, sources=sources, skip_default_group=skip_default_group
         )
 
@@ -113,6 +113,7 @@ class Config:
                 clean=clean,
                 skip_changes=skip_changes,
             )
+            assert self.root, f"Missing root: {self}"
             source.create_links(self.root, force=force)
             common.newline()
             count += 1
@@ -143,14 +144,20 @@ class Config:
         return count
 
     @preserve_cwd
-    def run_scripts(self, *names, depth=None, force=False, show_shell_stdout=False):
+    def run_scripts(
+        self,
+        *names: str,
+        depth: Optional[int] = None,
+        force: bool = False,
+        show_shell_stdout: bool = False,
+    ) -> int:
         """Run scripts for the specified dependencies."""
         if depth == 0:
             log.info("Skipped directory: %s", self.location_path)
             return 0
 
         sources = self._get_sources()
-        sources_filter = self._get_sources_filtered(
+        sources_filter = self._get_sources_filter(
             *names, sources=sources, skip_default_group=False
         )
 
@@ -199,7 +206,9 @@ class Config:
             name_rev_map[base_name] = rev
         return name_rev_map.keys(), name_rev_map
 
-    def lock_dependencies(self, *names, obey_existing=True, skip_changes=False):
+    def lock_dependencies(
+        self, *names: str, obey_existing: bool = True, skip_changes: bool = False
+    ) -> int:
         """Lock down the immediate dependency versions."""
         sources_to_install, source_to_install_revs = self._remap_names_and_revs(
             [*names]
@@ -210,7 +219,7 @@ class Config:
         if len(sources_to_install) == 0:
             skip_default = False
 
-        sources_filter = self._get_sources_filtered(
+        sources_filter = self._get_sources_filter(
             *sources_to_install, sources=sources, skip_default_group=skip_default
         )
 
@@ -284,7 +293,9 @@ class Config:
 
         common.dedent()
 
-    def get_dependencies(self, depth=None, nested=True, allow_dirty=True):
+    def get_dependencies(
+        self, depth: Optional[int] = None, nested: bool = True, allow_dirty: bool = True
+    ) -> Iterator[Identity]:
         """Yield the path, repository, and hash of each dependency."""
         if not os.path.exists(self.location_path):
             return
@@ -318,13 +329,13 @@ class Config:
 
         common.dedent()
 
-    def log(self, message="", *args):
+    def log(self, message: str = "", *args):
         """Append a message to the log file."""
         os.makedirs(self.location_path, exist_ok=True)
         with open(self.log_path, "a") as outfile:
             outfile.write(message.format(*args) + "\n")
 
-    def _get_sources(self, *, use_locked=None):
+    def _get_sources(self, *, use_locked: Optional[bool] = None) -> List[Source]:
         """Merge source lists using the requested section as the base."""
         if use_locked is True:
             if self.sources_locked:
@@ -351,7 +362,9 @@ class Config:
 
         return sources + extras
 
-    def _get_sources_filtered(self, *names, sources, skip_default_group):
+    def _get_sources_filter(
+        self, *names: str, sources: List[Source], skip_default_group: bool
+    ) -> List[str]:
         """Get a filtered subset of sources."""
         names_list = list(names)
 
@@ -368,7 +381,7 @@ class Config:
         )
 
         if not sources_filter:
-            sources_filter = [source.name for source in sources]
+            sources_filter = [source.name for source in sources if source.name]
 
         return list(set(sources_filter))
 
@@ -383,7 +396,9 @@ class Config:
                     yield from config.get_dependencies(allow_dirty=allow_dirty)
 
 
-def load_config(start=None, *, search=True) -> Optional[Config]:
+def load_config(
+    start: Optional[str] = None, *, search: bool = True
+) -> Optional[Config]:
     """Load the config for the current project."""
     start = os.path.abspath(start) if start else _resolve_current_directory()
 

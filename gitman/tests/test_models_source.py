@@ -38,7 +38,7 @@ class TestSource:
 
     def test_repr(self, source):
         """Verify sources can be represented."""
-        assert "<source ['git'] 'repo' @ 'rev' in 'name'>" == repr(source)
+        assert "<source 'repo' @ 'rev' in 'name'>" == repr(source)
 
     def test_eq(self, source):
         source2 = copy(source)

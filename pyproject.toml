@@ -1,7 +1,7 @@
 [tool.poetry]
 
 name = "gitman"
-version = "3.2a3"
+version = "3.2a4"
 description = "A language-agnostic dependency manager using Git."
 
 license = "MIT"
@@ -54,9 +54,11 @@ black = "^22.1"
 isort = "^5.10"
 
 # Linters
-mypy = "~0.790"
+mypy = "~0.940"
 pydocstyle = "*"
 pylint = "~2.6.0"
+types-freezegun = "*"
+types-setuptools = "*"
 
 # Testing
 pytest = "^5.1.2"

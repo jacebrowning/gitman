@@ -104,7 +104,7 @@ endif
 # TESTS #######################################################################
 
 RANDOM_SEED ?= $(shell date +%s)
-FAILURES := .cache/v/cache/lastfailed
+FAILURES := .cache/pytest/v/cache/lastfailed
 
 PYTEST_OPTIONS := --random --random-seed=$(RANDOM_SEED)
 ifdef DISABLE_COVERAGE
