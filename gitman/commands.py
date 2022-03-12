@@ -6,7 +6,7 @@ import log
 
 from . import common, system
 from .decorators import preserve_cwd
-from .models import Config, Source, load_config
+from .models import Config, Source, find_nested_configs, load_config
 
 
 def init(*, force: bool = False):
@@ -231,9 +231,27 @@ def display(*, root=None, depth=None, allow_dirty=True):
         common.newline()
         config.log(datetime.datetime.now().strftime("%F %T"))
         count = 0
+
+        skip_paths = []
         for identity in config.get_dependencies(depth=depth, allow_dirty=allow_dirty):
             count += 1
             config.log("{}: {} @ {}", *identity)
+            skip_paths.append(identity.path)
+
+        nested_configs = find_nested_configs(depth, skip_paths)
+        if nested_configs:
+            common.show(
+                "Displaying nested dependency versions...", color="message", log=False
+            )
+            common.newline()
+
+            for nested_config in nested_configs:
+                for identity in nested_config.get_dependencies(
+                    depth=depth, allow_dirty=allow_dirty
+                ):
+                    count += 1
+                    config.log("{}: {} @ {}", *identity)
+
         config.log()
 
     return _display_result("display", "Displayed", count)

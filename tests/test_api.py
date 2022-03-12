@@ -1150,7 +1150,6 @@ def describe_update():
 
 
 def describe_list():
-    @pytest.mark.xfail(reason="TODO: Prevent returning the same directory twice")
     @freeze_time("2012-01-14 12:00:01")
     def it_updates_the_log(config):
         gitman.install()

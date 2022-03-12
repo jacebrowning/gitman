@@ -48,7 +48,7 @@ class TestConfig:
         count = config.install_dependencies()
         assert 7 == count
 
-        items = list(config.get_dependencies(nested=False))
+        items = list(config.get_dependencies())
         assert 7 == len(items)
         assert "dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0" == items[0][2]
         assert "050290bca3f14e13fd616604202b579853e7bfb0" == items[1][2]
@@ -58,11 +58,11 @@ class TestConfig:
         assert "7bd138fe7359561a8c2ff9d195dff238794ccc04" == items[5][2]
         assert "2da24fca34af3748e3cab61db81a2ae8b35aec94" == items[6][2]
 
-        assert 5 == len(list(config.get_dependencies(depth=2, nested=False)))
+        assert 5 == len(list(config.get_dependencies(depth=2)))
 
-        assert 3 == len(list(config.get_dependencies(depth=1, nested=False)))
+        assert 3 == len(list(config.get_dependencies(depth=1)))
 
-        assert 0 == len(list(config.get_dependencies(depth=0, nested=False)))
+        assert 0 == len(list(config.get_dependencies(depth=0)))
 
     @pytest.mark.integration
     def test_install_with_dirs(self):

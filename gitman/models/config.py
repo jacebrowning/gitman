@@ -294,7 +294,7 @@ class Config:
         common.dedent()
 
     def get_dependencies(
-        self, depth: Optional[int] = None, nested: bool = True, allow_dirty: bool = True
+        self, depth: Optional[int] = None, allow_dirty: bool = True
     ) -> Iterator[Identity]:
         """Yield the path, repository, and hash of each dependency."""
         if not os.path.exists(self.location_path):
@@ -317,15 +317,11 @@ class Config:
                 common.indent()
                 yield from config.get_dependencies(
                     depth=None if depth is None else max(0, depth - 1),
-                    nested=nested,
                     allow_dirty=allow_dirty,
                 )
                 common.dedent()
 
             shell.cd(self.location_path, _show=False)
-
-        if (depth is None or depth > 1) and nested:
-            yield from self._get_nested(allow_dirty=allow_dirty)
 
         common.dedent()
 
@@ -385,16 +381,6 @@ class Config:
 
         return list(set(sources_filter))
 
-    def _get_nested(self, *, allow_dirty: bool):
-        """Yield all other projects in the same directory."""
-        log.debug("Searching for additional nested projects...")
-        for name in os.listdir():
-            path = os.path.join(self.location_path, name)
-            if os.path.isdir(path) and not name.startswith("."):
-                config = load_config(path, search=False)
-                if config:
-                    yield from config.get_dependencies(allow_dirty=allow_dirty)
-
 
 def load_config(
     start: Optional[str] = None, *, search: bool = True
@@ -427,6 +413,24 @@ def load_config(
         log.debug("No config found in: %s", start)
 
     return None
+
+
+def find_nested_configs(depth: Optional[int], skip_paths: List[str]) -> List[Config]:
+    """Find all all other projects in the same directory."""
+    configs: List[Config] = []
+
+    if depth is not None and depth <= 1:
+        return configs
+
+    log.debug("Searching for additional nested projects...")
+    for name in os.listdir():
+        path = os.path.abspath(name)
+        if os.path.isdir(path) and path not in skip_paths and not name.startswith("."):
+            config = load_config(path, search=False)
+            if config:
+                configs.append(config)
+
+    return configs
 
 
 def _resolve_current_directory():
