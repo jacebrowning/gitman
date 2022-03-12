@@ -85,10 +85,14 @@ def install(
         ", ".join(names) if names else "<all>",
     )
     count = None
-    config = load_config(root)
 
-    if config:
+    config = load_config(root)
+    configs = [config] if config else []
+    configs.extend(find_nested_configs(root, depth, []))
+    if configs:
         common.newline()
+
+    for config in configs:
         common.show("Installing dependencies...", color="message", log=False)
         common.newline()
         count = config.install_dependencies(
@@ -150,10 +154,14 @@ def update(
         ", ".join(names) if names else "<all>",
     )
     count = None
-    config = load_config(root)
 
-    if config:
+    config = load_config(root)
+    configs = [config] if config else []
+    configs.extend(find_nested_configs(root, depth, []))
+    if configs:
         common.newline()
+
+    for config in configs:
         common.show("Updating dependencies...", color="message", log=False)
         common.newline()
         count = config.install_dependencies(
@@ -223,7 +231,7 @@ def display(*, root=None, depth=None, allow_dirty=True):
     count = None
     config = load_config(root)
 
-    if config:
+    if config and config.root:
         common.newline()
         common.show(
             "Displaying current dependency versions...", color="message", log=False
@@ -238,13 +246,12 @@ def display(*, root=None, depth=None, allow_dirty=True):
             config.log("{}: {} @ {}", *identity)
             skip_paths.append(identity.path)
 
-        nested_configs = find_nested_configs(depth, skip_paths)
+        nested_configs = find_nested_configs(config.root, depth, skip_paths)
         if nested_configs:
             common.show(
                 "Displaying nested dependency versions...", color="message", log=False
             )
             common.newline()
-
             for nested_config in nested_configs:
                 for identity in nested_config.get_dependencies(
                     depth=depth, allow_dirty=allow_dirty
@@ -269,10 +276,14 @@ def lock(*names, root=None):
     """
     log.info("Locking dependencies...")
     count = None
-    config = load_config(root)
 
-    if config:
+    config = load_config(root)
+    configs = [config] if config else []
+    configs.extend(find_nested_configs(root, None, []))
+    if configs:
         common.newline()
+
+    for config in configs:
         common.show("Locking dependencies...", color="message", log=False)
         common.newline()
         count = config.lock_dependencies(*names, obey_existing=False)
