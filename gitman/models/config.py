@@ -415,6 +415,29 @@ def load_config(
     return None
 
 
+def find_nested_configs(
+    root: str, depth: Optional[int], skip_paths: List[str]
+) -> List[Config]:
+    """Find all all other projects in the same directory."""
+    root = os.path.abspath(root) if root else _resolve_current_directory()
+    configs: List[Config] = []
+
+    if depth is not None and depth <= 1:
+        return configs
+
+    log.debug(f"Searching for nested project in: {root}")
+    for name in os.listdir(root):
+        if name.startswith("."):
+            continue
+        path = os.path.join(root, name)
+        if os.path.isdir(path) and path not in skip_paths:
+            config = load_config(path, search=False)
+            if config:
+                configs.append(config)
+
+    return configs
+
+
 def _resolve_current_directory():
     start = os.getcwd()
     if sys.version_info < (3, 8) and os.name == "nt":

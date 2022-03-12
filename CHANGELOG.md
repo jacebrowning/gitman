@@ -1,6 +1,7 @@
 # 3.2 (alpha)
 
 - Added support for locking dependencies to specific versions.
+- Updated dependency locator to include all nested projects.
 
 # 3.1 (2022-02-23)
 

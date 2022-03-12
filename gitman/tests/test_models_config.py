@@ -48,15 +48,15 @@ class TestConfig:
         count = config.install_dependencies()
         assert 7 == count
 
-        deps = list(config.get_dependencies())
-        assert 7 == len(deps)
-        assert "dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0" == deps[0][2]
-        assert "050290bca3f14e13fd616604202b579853e7bfb0" == deps[1][2]
-        assert "fb693447579235391a45ca170959b5583c5042d8" == deps[2][2]
-        # master branch always changes --------------------- deps[3][2]
-        # master branch always changes --------------------- deps[4][2]
-        assert "7bd138fe7359561a8c2ff9d195dff238794ccc04" == deps[5][2]
-        assert "2da24fca34af3748e3cab61db81a2ae8b35aec94" == deps[6][2]
+        items = list(config.get_dependencies())
+        assert 7 == len(items)
+        assert "dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0" == items[0][2]
+        assert "050290bca3f14e13fd616604202b579853e7bfb0" == items[1][2]
+        assert "fb693447579235391a45ca170959b5583c5042d8" == items[2][2]
+        # master branch always changes                       items[3][2]
+        # master branch always changes                       items[4][2]
+        assert "7bd138fe7359561a8c2ff9d195dff238794ccc04" == items[5][2]
+        assert "2da24fca34af3748e3cab61db81a2ae8b35aec94" == items[6][2]
 
         assert 5 == len(list(config.get_dependencies(depth=2)))
 
