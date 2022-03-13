@@ -90,12 +90,14 @@ def install(
     configs = [config] if config else []
     configs.extend(find_nested_configs(root, depth, []))
     if configs:
+        count = 0
         common.newline()
 
     for config in configs:
         common.show("Installing dependencies...", color="message", log=False)
         common.newline()
-        count = config.install_dependencies(
+
+        _count = config.install_dependencies(
             *names,
             update=False,
             depth=depth,
@@ -106,8 +108,9 @@ def install(
             skip_changes=skip_changes,
             skip_default_group=skip_default_group,
         )
+        count += _count  # type: ignore
 
-        if count:
+        if _count:
             _run_scripts(
                 *names, depth=depth, force=force, _config=config, show_shell_stdout=True
             )
@@ -159,12 +162,13 @@ def update(
     configs = [config] if config else []
     configs.extend(find_nested_configs(root, depth, []))
     if configs:
+        count = 0
         common.newline()
 
     for config in configs:
         common.show("Updating dependencies...", color="message", log=False)
         common.newline()
-        count = config.install_dependencies(
+        _count = config.install_dependencies(
             *names,
             update=True,
             depth=depth,
@@ -176,8 +180,9 @@ def update(
             skip_changes=skip_changes,
             skip_default_group=skip_default_group,
         )
+        count += _count  # type: ignore
 
-        if count and lock is not False:
+        if _count and lock is not False:
             common.show("Recording installed versions...", color="message", log=False)
             common.newline()
             config.lock_dependencies(
@@ -186,7 +191,7 @@ def update(
                 skip_changes=skip_changes or force_interactive,
             )
 
-        if count:
+        if _count:
             _run_scripts(
                 *names, depth=depth, force=force, _config=config, show_shell_stdout=True
             )
@@ -281,12 +286,13 @@ def lock(*names, root=None):
     configs = [config] if config else []
     configs.extend(find_nested_configs(root, None, []))
     if configs:
+        count = 0
         common.newline()
 
     for config in configs:
         common.show("Locking dependencies...", color="message", log=False)
         common.newline()
-        count = config.lock_dependencies(*names, obey_existing=False)
+        count += config.lock_dependencies(*names, obey_existing=False)  # type: ignore
         common.dedent(level=0)
 
     return _display_result("lock", "Locked", count)
@@ -361,7 +367,7 @@ def edit(*, root=None):
     return system.launch(config.path)
 
 
-def _display_result(present, past, count, allow_zero=False):
+def _display_result(modify, modified, count, allow_zero=False):
     """Convert a command's dependency count to a return status.
 
     >>> _display_result("sample", "Sampled", 1)
@@ -378,11 +384,11 @@ def _display_result(present, past, count, allow_zero=False):
 
     """
     if count is None:
-        log.warning("No dependencies to %s", present)
+        common.show(f"No dependencies to {modify}", color="error")
     elif count == 1:
-        log.info("%s 1 dependency", past)
+        common.show(f"{modified} 1 dependency", color="message")
     else:
-        log.info("%s %s dependencies", past, count)
+        common.show(f"{modified} {count} dependencies", color="message")
 
     if count:
         return True

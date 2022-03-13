@@ -2,6 +2,7 @@
 
 - Added support for locking dependencies to specific versions.
 - Updated dependency locator to include all nested projects.
+- Added a summary message to display the dependency count.
 
 # 3.1 (2022-02-23)
 

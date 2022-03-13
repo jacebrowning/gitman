@@ -5,7 +5,7 @@ from typing import Iterator, List, Optional
 import log
 from datafiles import datafile, field
 
-from .. import common, exceptions, shell
+from .. import common, exceptions, settings, shell
 from ..decorators import preserve_cwd
 from .group import Group
 from .source import Identity, Source
@@ -422,7 +422,7 @@ def find_nested_configs(
     root = os.path.abspath(root) if root else _resolve_current_directory()
     configs: List[Config] = []
 
-    if depth is not None and depth <= 1:
+    if (depth is not None and depth <= 1) or settings.CI:
         return configs
 
     log.debug(f"Searching for nested project in: {root}")
