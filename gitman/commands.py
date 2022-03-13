@@ -389,6 +389,7 @@ def _display_result(modify, modified, count, allow_zero=False):
         common.show(f"{modified} 1 dependency", color="message")
     else:
         common.show(f"{modified} {count} dependencies", color="message")
+    common.newline()
 
     if count:
         return True

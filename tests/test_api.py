@@ -61,7 +61,7 @@ default_group: ''
 """.lstrip()
 
 
-@pytest.yield_fixture
+@pytest.fixture
 def config():
     log.info("Temporary directory: %s", TMP)
 
