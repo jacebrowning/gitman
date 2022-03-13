@@ -19,4 +19,5 @@ VERBOSE2_LOGGING_LEVEL = logging.DEBUG
 LOGGING_DATEFMT = "%Y-%m-%d %H:%M"
 
 # Display settings
+CI = bool(os.getenv("CI", ""))
 RECORDING_DELAY = int(os.getenv("RECORDING_DELAY", "0"))
