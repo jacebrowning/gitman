@@ -1,6 +1,6 @@
-# 3.2 (alpha)
+# 3.2 (beta)
 
-- Added support for locking dependencies to specific versions.
+- Added support for locking dependencies to specific versions. (@Erich-McMillan)
 - Updated dependency locator to include all nested projects.
 - Added a summary message to display the dependency count.
 
