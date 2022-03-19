@@ -25,6 +25,7 @@ class Source:
     rev: str = "main"
 
     type: str = "git"
+    params: List[str] = field(default_factory=list)
     sparse_paths: List[str] = field(default_factory=list)
     links: List[Link] = field(default_factory=list)
 
@@ -81,6 +82,7 @@ class Source:
                 self.name,
                 sparse_paths=self.sparse_paths,
                 rev=self.rev,
+                user_params=self.params,
             )
 
         # Enter the working tree
