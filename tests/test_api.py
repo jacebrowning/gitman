@@ -27,6 +27,8 @@ sources:
     name: gitman_1
     rev: example-branch
     type: git
+    params:
+      -
     sparse_paths:
       -
     links:
@@ -37,6 +39,8 @@ sources:
     name: gitman_2
     rev: example-tag
     type: git
+    params:
+      -
     sparse_paths:
       -
     links:
@@ -47,6 +51,8 @@ sources:
     name: gitman_3
     rev: 9bf18e16b956041f0267c21baad555a23237b52e
     type: git
+    params:
+      -
     sparse_paths:
       -
     links:
@@ -97,6 +103,8 @@ def describe_init():
             name: sample_dependency
             rev: master
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -108,6 +116,8 @@ def describe_init():
             name: sample_dependency
             rev: ebbbf773431ba07510251bb03f9525c7bab2b13a
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -147,6 +157,8 @@ def describe_install():  # pylint: disable=too-many-statements
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
             type: git
+            params:
+              -
             rev: example-branch
             links:
               -
@@ -185,6 +197,8 @@ def describe_install():  # pylint: disable=too-many-statements
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
             type: git
+            params:
+              -
             rev: example-branch
             links:
               -
@@ -316,6 +330,8 @@ def describe_install():  # pylint: disable=too-many-statements
             sources:
               - name: gitman_1
                 type: git
+                params:
+                  -
                 repo: https://github.com/jacebrowning/gitman-demo
                 rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
                 links:
@@ -344,6 +360,8 @@ def describe_install():  # pylint: disable=too-many-statements
                     sources:
                       - name: gitman_1
                         type: git
+                        params:
+                          -
                         repo: https://github.com/jacebrowning/gitman-demo
                         sparse_paths:
                           - src/*
@@ -378,6 +396,8 @@ def describe_install():  # pylint: disable=too-many-statements
                 sources:
                   - name: gitman_1
                     type: git
+                    params:
+                      -
                     repo: https://github.com/jacebrowning/gitman-demo
                     sparse_paths:
                       -
@@ -388,6 +408,8 @@ def describe_install():  # pylint: disable=too-many-statements
                       -
                   - name: gitman_2
                     type: git
+                    params:
+                      -
                     repo: https://github.com/jacebrowning/gitman-demo
                     sparse_paths:
                       -
@@ -441,6 +463,8 @@ def describe_install():  # pylint: disable=too-many-statements
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
             type: git
+            params:
+              -
             sparse_paths:
               -
             rev: example-branch
@@ -451,6 +475,8 @@ def describe_install():  # pylint: disable=too-many-statements
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
+            params:
+              -
             sparse_paths:
               -
             rev: example-tag
@@ -481,6 +507,8 @@ def describe_install():  # pylint: disable=too-many-statements
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
             type: git
+            params:
+              -
             sparse_paths:
               -
             rev: example-branch
@@ -491,6 +519,8 @@ def describe_install():  # pylint: disable=too-many-statements
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
+            params:
+              -
             sparse_paths:
               -
             rev: example-tag
@@ -620,6 +650,8 @@ def describe_update():
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
             type: git
+            params:
+              -
             sparse_paths:
               -
             rev: example-branch
@@ -630,6 +662,8 @@ def describe_update():
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
+            params:
+              -
             sparse_paths:
               -
             rev: example-tag
@@ -641,6 +675,8 @@ def describe_update():
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
+            params:
+              -
             sparse_paths:
               -
             rev: (old revision)
@@ -665,6 +701,8 @@ def describe_update():
             name: gitman_1
             rev: example-branch
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -675,6 +713,8 @@ def describe_update():
             name: gitman_2
             rev: example-tag
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -686,6 +726,8 @@ def describe_update():
             name: gitman_2
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -707,6 +749,8 @@ def describe_update():
             name: gitman_1
             rev: example-branch
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -716,6 +760,8 @@ def describe_update():
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
+            params:
+              -
             sparse_paths:
               -
             rev: example-tag
@@ -728,6 +774,8 @@ def describe_update():
             name: gitman_2
             rev: (old revision)
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -750,6 +798,8 @@ def describe_update():
             name: gitman_1
             rev: example-branch
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -760,6 +810,8 @@ def describe_update():
             name: gitman_2
             rev: example-tag
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -771,6 +823,8 @@ def describe_update():
             name: gitman_2
             rev: (old revision)
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -790,10 +844,14 @@ def describe_update():
         sources:
           - name: gitman_1
             type: git
+            params:
+              -
             repo: https://github.com/jacebrowning/gitman-demo
             rev: example-branch
           - name: gitman_2
             type: git
+            params:
+              -
             repo: https://github.com/jacebrowning/gitman-demo
             rev: example-branch
         groups:
@@ -816,6 +874,8 @@ def describe_update():
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
             type: git
+            params:
+              -
             sparse_paths:
               -
             rev: example-branch
@@ -826,6 +886,8 @@ def describe_update():
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
+            params:
+              -
             sparse_paths:
               -
             rev: example-tag
@@ -836,6 +898,8 @@ def describe_update():
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_3
             type: git
+            params:
+              -
             sparse_paths:
               -
             rev: example-tag
@@ -847,6 +911,8 @@ def describe_update():
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
             type: git
+            params:
+              -
             sparse_paths:
               -
             rev: (old revision)
@@ -857,6 +923,8 @@ def describe_update():
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
+            params:
+              -
             sparse_paths:
               -
             rev: (old revision)
@@ -884,6 +952,8 @@ def describe_update():
             name: gitman_1
             rev: example-branch
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -894,6 +964,8 @@ def describe_update():
             name: gitman_2
             rev: example-tag
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -904,6 +976,8 @@ def describe_update():
             name: gitman_3
             rev: example-tag
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -915,6 +989,8 @@ def describe_update():
             name: gitman_1
             rev: dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -925,6 +1001,8 @@ def describe_update():
             name: gitman_2
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -964,6 +1042,8 @@ def describe_update():
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
+            params:
+              -
             sparse_paths:
               -
             rev: example-tag
@@ -975,6 +1055,8 @@ def describe_update():
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
+            params:
+              -
             sparse_paths:
               -
             rev: (old revision)
@@ -998,6 +1080,8 @@ def describe_update():
             name: gitman_2
             rev: example-tag
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -1009,6 +1093,8 @@ def describe_update():
             name: gitman_2
             rev: (old revision)
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -1052,6 +1138,8 @@ def describe_update():
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
+            params:
+              -
             sparse_paths:
               -
             rev: example-tag
@@ -1063,6 +1151,8 @@ def describe_update():
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
+            params:
+              -
             sparse_paths:
               -
             rev: (old revision)
@@ -1087,6 +1177,8 @@ def describe_update():
             name: gitman_2
             rev: example-tag
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -1098,6 +1190,8 @@ def describe_update():
             name: gitman_2
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -1118,6 +1212,8 @@ def describe_update():
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
             type: git
+            params:
+              -
             rev: example-branch
             links:
               -
@@ -1202,6 +1298,8 @@ def describe_lock():
             name: gitman_1
             rev: dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -1212,6 +1310,8 @@ def describe_lock():
             name: gitman_2
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -1222,6 +1322,8 @@ def describe_lock():
             name: gitman_3
             rev: 9bf18e16b956041f0267c21baad555a23237b52e
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -1245,6 +1347,8 @@ def describe_lock():
             name: gitman_1
             rev: dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
@@ -1255,6 +1359,8 @@ def describe_lock():
             name: gitman_3
             rev: 9bf18e16b956041f0267c21baad555a23237b52e
             type: git
+            params:
+              -
             sparse_paths:
               -
             links:
