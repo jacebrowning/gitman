@@ -28,7 +28,7 @@ def clone(
     cache=settings.CACHE,
     sparse_paths=None,
     rev=None,
-    user_params=[]
+    user_params=None
 ):
     """Clone a new Git repository."""
     log.debug("Creating a new repository...")
@@ -50,7 +50,12 @@ def clone(
     sparse_paths_repo = repo if settings.CACHE_DISABLE else reference
 
     if not settings.CACHE_DISABLE and not os.path.isdir(reference):
-        git(*(["clone", "--mirror", repo, reference] + user_params))
+        git(
+            *(
+                ["clone", "--mirror", repo, reference]
+                + ([] if user_params is None else user_params)
+            )
+        )
 
     if sparse_paths and sparse_paths[0]:
         os.mkdir(normpath)
@@ -71,9 +76,14 @@ def clone(
         # that not all repos have `master` as their default branch
         git("-C", normpath, "pull", "origin", rev)
     elif settings.CACHE_DISABLE:
-        git(*(["clone", repo, normpath] + user_params))
+        git(*(["clone", repo, normpath] + ([] if user_params is None else user_params)))
     else:
-        git(*(["clone", "--reference", reference, repo, normpath] + user_params))
+        git(
+            *(
+                ["clone", "--reference", reference, repo, normpath]
+                + ([] if user_params is None else user_params)
+            )
+        )
 
 
 def is_sha(rev):
