@@ -3,7 +3,6 @@
 import inspect
 import os
 import shutil
-import sys
 from contextlib import suppress
 
 import log
@@ -191,7 +190,11 @@ def describe_install():  # pylint: disable=too-many-statements
         expect(len(os.listdir(config.location))) == 3
 
         # ensure the submodule cloned successfully by checking for a constituent file
-        expect(os.path.isfile(os.path.join(TMP, config.location, "gitman_sm_1/mrpossoms/README.md"))) == True
+        expect(
+            os.path.isfile(
+                os.path.join(TMP, config.location, "gitman_sm_1/mrpossoms/README.md")
+            )
+        ) == True
 
     def it_can_handle_missing_locked_sources(config):
         config.datafile.text = strip(
