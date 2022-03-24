@@ -41,6 +41,14 @@ class Source:
             self.name = str(self.name)
         self.type = self.type or "git"
 
+        # sanitize params strings by splitting on spaces
+        tmp_params = []
+        for param in self.params:
+            for component in param.split(" "):
+                if len(component) > 0:
+                    tmp_params.append(component)
+        self.params = tmp_params
+
     def __repr__(self):
         return f"<source {self}>"
 
