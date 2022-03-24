@@ -154,12 +154,13 @@ def describe_install():  # pylint: disable=too-many-statements
             """
         location: deps
         sources:
-          - repo: https://github.com/jacebrowning/gitman-demo
-            name: gitman_1
+          - repo: https://github.com/mrpossoms/gitman-demo-submodule
+            name: gitman_sm_1
             type: git
             params:
-              -
-            rev: example-branch
+              - --recursive
+              - --reference-if-able /Users/kirkroerig/.gitcache/gitman-demo-submodule.reference
+            rev: main
             links:
               -
             scripts:
@@ -188,6 +189,8 @@ def describe_install():  # pylint: disable=too-many-statements
         expect(gitman.install(depth=1)) == True
 
         expect(len(os.listdir(config.location))) == 3
+
+        expect(os.path.isfile(os.path(config.location + "/mrpossoms/README.md" ))) == True
 
     def it_can_handle_missing_locked_sources(config):
         config.datafile.text = strip(
