@@ -3,6 +3,7 @@
 import inspect
 import os
 import shutil
+import sys
 from contextlib import suppress
 
 import log
@@ -159,7 +160,6 @@ def describe_install():  # pylint: disable=too-many-statements
             type: git
             params:
               - --recursive
-              - --reference-if-able /Users/kirkroerig/.gitcache/gitman-demo-submodule.reference
             rev: main
             links:
               -
@@ -190,7 +190,8 @@ def describe_install():  # pylint: disable=too-many-statements
 
         expect(len(os.listdir(config.location))) == 3
 
-        expect(os.path.isfile(os.path(config.location + "/mrpossoms/README.md" ))) == True
+        # ensure the submodule cloned successfully by checking for a constituent file
+        expect(os.path.isfile(os.path.join(TMP, config.location, "gitman_sm_1/mrpossoms/README.md"))) == True
 
     def it_can_handle_missing_locked_sources(config):
         config.datafile.text = strip(

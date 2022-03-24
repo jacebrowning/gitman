@@ -53,7 +53,7 @@ def clone(
         git(
             *(
                 ["clone", "--mirror", repo, reference]
-                + ([] if user_params is None else user_params)
+                + (user_params if user_params else [])
             )
         )
 
@@ -76,12 +76,12 @@ def clone(
         # that not all repos have `master` as their default branch
         git("-C", normpath, "pull", "origin", rev)
     elif settings.CACHE_DISABLE:
-        git(*(["clone", repo, normpath] + ([] if user_params is None else user_params)))
+        git(*(["clone", repo, normpath] + (user_params if user_params else [])))
     else:
         git(
             *(
-                ["clone", "--reference", reference, repo, normpath]
-                + ([] if user_params is None else user_params)
+                ["clone", "--reference-if-able", reference, repo, normpath]
+                + (user_params if user_params else [])
             )
         )
 
