@@ -41,14 +41,6 @@ class Source:
             self.name = str(self.name)
         self.type = self.type or "git"
 
-        # sanitize params strings by splitting on spaces
-        if self.params:
-            tmp_params = []
-            for param in self.params.split(" "):
-                if len(param) > 0:
-                    tmp_params.append(param)
-            self.params = tmp_params
-
     def __repr__(self):
         return f"<source {self}>"
 
@@ -63,6 +55,16 @@ class Source:
 
     def __lt__(self, other):
         return self.name < other.name
+
+    def clone_params_if_any(self):
+        # sanitize params strings by splitting on spaces
+        if self.params:
+            params_list = []
+            for param in self.params.split(" "):
+                if len(param) > 0:
+                    params_list.append(param)
+            return params_list
+        return None
 
     def update_files(
         self,
@@ -90,7 +92,7 @@ class Source:
                 self.name,
                 sparse_paths=self.sparse_paths,
                 rev=self.rev,
-                user_params=self.params,
+                user_params=self.clone_params_if_any(),
             )
 
         # Enter the working tree
