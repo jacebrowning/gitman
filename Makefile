@@ -61,6 +61,8 @@ endif
 .PHONY: doctor
 doctor:  ## Confirm system dependencies are available
 	bin/verchew
+	cp .pre-commit .git/hooks/pre-commit
+	chmod +x .git/hooks/pre-commit
 
 # PROJECT DEPENDENCIES ########################################################
 
