@@ -25,7 +25,7 @@ class Source:
     rev: str = "main"
 
     type: str = "git"
-    params: List[str] = field(default_factory=list)
+    params: Optional[str] = None
     sparse_paths: List[str] = field(default_factory=list)
     links: List[Link] = field(default_factory=list)
 
@@ -42,12 +42,12 @@ class Source:
         self.type = self.type or "git"
 
         # sanitize params strings by splitting on spaces
-        tmp_params = []
-        for param in self.params:
-            for component in param.split(" "):
-                if len(component) > 0:
-                    tmp_params.append(component)
-        self.params = tmp_params
+        if self.params:
+            tmp_params = []
+            for param in self.params.split(" "):
+                if len(param) > 0:
+                    tmp_params.append(param)
+            self.params = tmp_params
 
     def __repr__(self):
         return f"<source {self}>"
