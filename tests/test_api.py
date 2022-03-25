@@ -183,7 +183,7 @@ def describe_install():  # pylint: disable=too-many-statements
 
         expect(len(os.listdir(config.location))) == 3
 
-        # ensure the submodule cloned successfully by checking for a constituent file
+        # ensure the submodule cloned successfully by checking for a constituent file.
         expect(
             os.path.isfile(
                 os.path.join(TMP, config.location, "gitman_sm_1/mrpossoms/README.md")
