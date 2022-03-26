@@ -20,9 +20,21 @@ def gitsvn(*args, **kwargs):
     return call("git", "svn", *args, **kwargs)
 
 
-def clone(type, repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None):
+def clone(
+    type,
+    repo,
+    path,
+    *,
+    cache=settings.CACHE,
+    sparse_paths=None,
+    rev=None,
+    user_params=None
+):
     """Clone a new Git repository."""
     log.debug("Creating a new repository...")
+
+    if user_params is None:
+        user_params = []
 
     if type == "git-svn":
         # just the preperation for the svn deep clone / checkout here
@@ -41,7 +53,7 @@ def clone(type, repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None
     sparse_paths_repo = repo if settings.CACHE_DISABLE else reference
 
     if not settings.CACHE_DISABLE and not os.path.isdir(reference):
-        git("clone", "--mirror", repo, reference)
+        git("clone", "--mirror", repo, reference, *user_params)
 
     if sparse_paths and sparse_paths[0]:
         os.mkdir(normpath)
@@ -62,9 +74,9 @@ def clone(type, repo, path, *, cache=settings.CACHE, sparse_paths=None, rev=None
         # that not all repos have `master` as their default branch
         git("-C", normpath, "pull", "origin", rev)
     elif settings.CACHE_DISABLE:
-        git("clone", repo, normpath)
+        git("clone", repo, normpath, *user_params)
     else:
-        git("clone", "--reference", reference, repo, normpath)
+        git("clone", "--reference-if-able", reference, repo, normpath, *user_params)
 
 
 def is_sha(rev):

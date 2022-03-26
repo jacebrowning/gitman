@@ -4,6 +4,7 @@ sources:
     name: gitman_1
     rev: example-branch
     type: git
+    params: --recursive
     sparse_paths:
       -
     links:
@@ -16,6 +17,7 @@ sources:
     name: gitman_2
     rev: example-tag
     type: git
+    params:
     sparse_paths:
       -
     links:
@@ -26,6 +28,7 @@ sources:
     name: gitman_3
     rev: master@{2015-06-18 11:11:11}
     type: git
+    params:
     sparse_paths:
       -
     links:
@@ -37,6 +40,7 @@ sources:
     name: gitman_4
     rev: example-branch-2
     type: git
+    params:
     sparse_paths:
       -
     links:
@@ -48,6 +52,7 @@ sources_locked:
     name: gitman_1
     rev: dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0
     type: git
+    params:
     sparse_paths:
       -
     links:
@@ -59,6 +64,7 @@ sources_locked:
     name: gitman_2
     rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
     type: git
+    params:
     sparse_paths:
       -
     links:
@@ -69,6 +75,7 @@ sources_locked:
     name: gitman_3
     rev: 2da24fca34af3748e3cab61db81a2ae8b35aec94
     type: git
+    params:
     sparse_paths:
       -
     links:
@@ -80,6 +87,7 @@ sources_locked:
     name: gitman_4
     rev: f50c1ac8bf27377625b0cc93ea27f8069c7b513a
     type: git
+    params:
     sparse_paths:
       -
     links:

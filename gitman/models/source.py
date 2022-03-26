@@ -25,6 +25,7 @@ class Source:
     rev: str = "main"
 
     type: str = "git"
+    params: Optional[str] = None
     sparse_paths: List[str] = field(default_factory=list)
     links: List[Link] = field(default_factory=list)
 
@@ -55,6 +56,16 @@ class Source:
     def __lt__(self, other):
         return self.name < other.name
 
+    def clone_params_if_any(self):
+        # sanitize params strings by splitting on spaces
+        if self.params:
+            params_list = []
+            for param in self.params.split(" "):
+                if len(param) > 0:
+                    params_list.append(param)
+            return params_list
+        return None
+
     def update_files(
         self,
         force: bool = False,
@@ -81,6 +92,7 @@ class Source:
                 self.name,
                 sparse_paths=self.sparse_paths,
                 rev=self.rev,
+                user_params=self.clone_params_if_any(),
             )
 
         # Enter the working tree

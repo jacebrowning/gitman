@@ -22,7 +22,7 @@ class TestGit:
             [
                 "git clone --mirror mock.git "
                 + os.path.normpath("cache/mock.reference"),
-                "git clone --reference "
+                "git clone --reference-if-able "
                 + os.path.normpath("cache/mock.reference")
                 + " mock.git "
                 + os.path.normpath("mock/path"),
@@ -48,7 +48,7 @@ class TestGit:
         check_calls(
             mock_call,
             [
-                "git clone --reference "
+                "git clone --reference-if-able "
                 + os.path.normpath("cache/mock.reference")
                 + " mock.git "
                 + os.path.normpath("mock/path")
