@@ -1,6 +1,6 @@
 # Environment Setup
 
-The following environment variables can be used to configure the behavior of GitMan.
+The following environment variables can be used to change the default behavior of GitMan.
 
 ## `GITMAN_CACHE`
 
