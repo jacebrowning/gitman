@@ -11,7 +11,7 @@ import log
 from . import __version__, commands, common, exceptions
 
 
-def main(args=None, function=None):  # pylint: disable=too-many-statements
+def main(args=None, function=None):
     """Process command-line arguments and run the program."""
 
     # Shared options
@@ -242,7 +242,7 @@ def main(args=None, function=None):  # pylint: disable=too-many-statements
         sys.exit(1)
 
 
-def _get_command(function, namespace):  # pylint: disable=too-many-statements
+def _get_command(function, namespace):
     args: List = []
     kwargs: Dict = {}
 

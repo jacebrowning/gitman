@@ -31,6 +31,37 @@ class Source:
     | `links` | Creates symlinks within a project | No | `[]` |
     | `scripts` | Shell commands to run after checkout | No | `[]` |
 
+    ### Params
+
+    Params are passed directly to the `clone` command to modify behavior such as:
+
+    ```
+    # Shallow clone:
+    params: --depth=1
+
+    # Include submodules:
+    params: --recurse-submodules
+    ```
+
+    ### Sparse Paths
+
+    See [using sparse checkouts][using-sparse-checkouts] for more information.
+
+    ### Links
+
+    See [using multiple links][using-multiple-links] for more information.
+
+    ### Scripts
+
+    Scripts can be used to run post-checkout commands such us build steps. For example:
+
+    ```
+    repo: "https://github.com/koalaman/shellcheck"
+    scripts:
+      - brew install cabal-install
+      - cabal install
+    ```
+
     """
 
     repo: str = ""

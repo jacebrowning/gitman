@@ -131,7 +131,7 @@ def describe_init():
         expect(config.datafile.text) == CONFIG
 
 
-def describe_install():  # pylint: disable=too-many-statements
+def describe_install():
     def it_creates_missing_directories(config):
         shell.rm(config.location)
 
