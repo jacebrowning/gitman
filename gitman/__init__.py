@@ -1,9 +1,12 @@
 """Package for GitMan."""
 
-from pkg_resources import get_distribution
+from pkg_resources import DistributionNotFound, get_distribution
 
 from .commands import delete as uninstall  # pylint: disable=redefined-builtin
 from .commands import display as list
 from .commands import init, install, lock, update
 
-__version__ = get_distribution("gitman").version
+try:
+    __version__ = get_distribution("gitman").version
+except DistributionNotFound:
+    __version__ = "???"
