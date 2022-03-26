@@ -18,7 +18,20 @@ class Link:
 
 @dataclass
 class Source:
-    """A dictionary of `git` and `ln` arguments."""
+    """Represents a repository to clone and options for controlling checkout.
+
+    | Key | Purpose | Required | Default |
+    | --- | ------- | -------- | ------- |
+    | `repo` | URL of the repository | Yes |
+    | `name` | Directory for checkout | Yes | (inferred) |
+    | `rev` | SHA, tag, or branch to checkout | Yes | `"main"`|
+    | `type` | `"git"` or `"git-svn"` | No | `"git"` |
+    | `params` | Additional arguments for `clone` | No | `null` |
+    | `sparse_paths` | Controls partial checkout | No | `[]` |
+    | `links` | Creates symlinks within a project | No | `[]` |
+    | `scripts` | Shell commands to run after checkout | No | `[]` |
+
+    """
 
     repo: str = ""
     name: Optional[str] = None
