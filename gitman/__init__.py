@@ -2,7 +2,7 @@
 
 from pkg_resources import DistributionNotFound, get_distribution
 
-from .commands import delete as uninstall  # pylint: disable=redefined-builtin
+from .commands import delete as uninstall
 from .commands import display as list
 from .commands import init, install, lock, update
 
