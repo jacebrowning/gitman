@@ -7,6 +7,11 @@ edit_uri: https://github.com/jacebrowning/gitman/edit/main/docs
 
 theme: readthedocs
 
+plugins:
+  - mkdocstrings:
+     watch:
+        - gitman
+
 markdown_extensions:
   - codehilite
 
@@ -16,6 +21,7 @@ nav:
     - Git: setup/git.md
     - Git SVN: setup/git-svn.md
     - Environment: setup/environment.md
+    - Configuration: setup/configuration.md
   - Interfaces:
     - Command Line: interfaces/cli.md
     - Git Plugin: interfaces/plugin.md

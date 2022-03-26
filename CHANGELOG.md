@@ -3,6 +3,7 @@
 - Added support for locking dependencies to specific versions. (@Erich-McMillan)
 - Updated dependency locator to include all nested projects.
 - Added a summary message to display the dependency count.
+- Added support for custom `clone` params. (@mrpossoms)
 
 # 3.1 (2022-02-23)
 
