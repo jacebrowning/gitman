@@ -127,7 +127,7 @@
 
 # 0.8.3 (2016-03-14)
 
-- Renamed to GitMan.
+- Renamed to Gitman.
 
 # 0.8.2 (2016-02-24)
 

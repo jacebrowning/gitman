@@ -1,6 +1,6 @@
 # Build System Integration
 
-GitMan can be invoked from your build system or continuous integration environment. It provides a convenient way to access its internal file and directory paths using the [`show`](../interfaces/cli.md#show) command.
+Gitman can be invoked from your build system or continuous integration environment. It provides a convenient way to access its internal file and directory paths using the [`show`](../interfaces/cli.md#show) command.
 
 ## Makefile
 

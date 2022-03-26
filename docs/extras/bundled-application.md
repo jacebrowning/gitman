@@ -1,23 +1,23 @@
-# Self-Contained / Portable GitMan
+# Self-Contained / Portable Gitman
 
-There are scenarios where a global GitMan installation via [pip](https://github.com/pypa/pip) or a local GitMan installation via [Poetry](https://github.com/sdispater/poetry) is not possible or difficult to manage.
+There are scenarios where a global Gitman installation via [pip](https://github.com/pypa/pip) or a local Gitman installation via [Poetry](https://github.com/sdispater/poetry) is not possible or difficult to manage.
 For example, when a local system doesn't have the required python or pip version installed and or the global installation may produce side effects (different parallel python versions on the same machine).
-Furthermore there are scenarios where a high degree of reproducibility, managing multiple different versions of GitMan on the same machine and hassle free distribution of GitMan is desired.
+Furthermore there are scenarios where a high degree of reproducibility, managing multiple different versions of Gitman on the same machine and hassle free distribution of Gitman is desired.
 
-In these scenarios, it can be helpful to use a self contained GitMan application besides the possibility to use a virtual environment (e.g. via pyenv + Poetry or Docker).
-It is possible to build a single self contained OS-specific GitMan binary using [PyInstaller](https://www.pyinstaller.org/) that can be used locally or globally.
-Over this way it is possible to manage multiple different versions of GitMan on the same machine and to easily distribute the GitMan application (including all needed dependencies) by simply copying one single file.
+In these scenarios, it can be helpful to use a self contained Gitman application besides the possibility to use a virtual environment (e.g. via pyenv + Poetry or Docker).
+It is possible to build a single self contained OS-specific Gitman binary using [PyInstaller](https://www.pyinstaller.org/) that can be used locally or globally.
+Over this way it is possible to manage multiple different versions of Gitman on the same machine and to easily distribute the Gitman application (including all needed dependencies) by simply copying one single file.
 
-Following this approach, the `gitman.yml` and the corresponding compatible version of the GitMan application can be managed side by side in the same repository to ensure
+Following this approach, the `gitman.yml` and the corresponding compatible version of the Gitman application can be managed side by side in the same repository to ensure
 reproducibility and easy distribution.
 
 ## Prerequisites
 
 ### General prerequisites
 
-The [PyInstaller](https://www.pyinstaller.org/) will encapsulate the required parts of the local installed python version and the needed modules in the self contained GitMan binary.
+The [PyInstaller](https://www.pyinstaller.org/) will encapsulate the required parts of the local installed python version and the needed modules in the self contained Gitman binary.
 
-In this matter, ensure that the required python version and development tools are locally available (see [GitMan requirements](../index.md#Setup) and [development setup](../about/contributing.md#Setup)).
+In this matter, ensure that the required python version and development tools are locally available (see [Gitman requirements](../index.md#Setup) and [development setup](../about/contributing.md#Setup)).
 
 The compatible PyInstaller package will be automatically resolved by poetry. It is not necessary to explicitly install the PyInstaller via pip.
 
@@ -59,12 +59,12 @@ Some notes regarding macOS prerequisites can be found [here](https://pyinstaller
 
 ## Binary Build
 
-To build the self contained GitMan binary use:
+To build the self contained Gitman binary use:
 
 ```sh
 $ make exe
 ```
 
-By default this call installs the [PyInstaller](https://www.pyinstaller.org/) pip-Package as part of the GitMan virtual environment.
+By default this call installs the [PyInstaller](https://www.pyinstaller.org/) pip-Package as part of the Gitman virtual environment.
 
 The build output is located in the `dist` folder.

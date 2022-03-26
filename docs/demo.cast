@@ -1,4 +1,4 @@
-{"version": 2, "width": 127, "height": 61, "timestamp": 1647198484, "env": {"SHELL": "/bin/zsh", "TERM": "xterm-256color"}, "title": "GitMan Demo"}
+{"version": 2, "width": 127, "height": 61, "timestamp": 1647198484, "env": {"SHELL": "/bin/zsh", "TERM": "xterm-256color"}, "title": "Gitman Demo"}
 [0.056301, "o", "gitman update\r\n"]
 [0.800778, "o", "\r\n"]
 [1.805232, "o", "\u001b[1m\u001b[37mUpdating dependencies...\u001b[0m\r\n"]

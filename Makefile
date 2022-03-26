@@ -175,7 +175,7 @@ docs/demo.gif: docs/demo.cast
 	asciicast2gif $< $@
 docs/demo.cast: Makefile
 	/usr/X11/bin/resize -s 61 127
-	poetry run asciinema rec $@ --overwrite --command "make demo CI=true RECORDING_DELAY=1" --title "GitMan Demo"
+	poetry run asciinema rec $@ --overwrite --command "make demo CI=true RECORDING_DELAY=1" --title "Gitman Demo"
 	poetry run asciinema upload $@
 
 # BUILD #######################################################################

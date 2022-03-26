@@ -17,7 +17,7 @@ def main(args=None, function=None):
     # Shared options
     debug = argparse.ArgumentParser(add_help=False)
     debug.add_argument(
-        "-V", "--version", action="version", version="GitMan v" + __version__
+        "-V", "--version", action="version", version="Gitman v" + __version__
     )
     debug_group = debug.add_mutually_exclusive_group()
     debug_group.add_argument(

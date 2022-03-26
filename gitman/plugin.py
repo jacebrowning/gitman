@@ -8,7 +8,7 @@ from . import __version__, common
 from .cli import _get_command, _run_command
 
 PROG = "git deps"
-DESCRIPTION = "Use GitMan (v{}) to install repositories.".format(__version__)
+DESCRIPTION = "Use Gitman (v{}) to install repositories.".format(__version__)
 
 
 def main(args=None):

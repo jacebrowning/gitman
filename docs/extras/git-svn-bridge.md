@@ -6,11 +6,11 @@ One of Git’s great features is a bidirectional bridge to Subversion called `gi
 
 > **Important**
 >
-> The GitMan `git svn` support does currently not track any changes in the imported SVN repository.
+> The Gitman `git svn` support does currently not track any changes in the imported SVN repository.
 > The focus of this feature is to just import SVN dependencies
 > in a readonly fashion.
 > In this matter any changes in the imported svn repository
-> will be overridden by an update/install process (like an implicit `--force` for each GitMan command).
+> will be overridden by an update/install process (like an implicit `--force` for each Gitman command).
 
 To import SVN repositories it is required to specify the repo source parameter `type` to `git-svn` for the corresponding entries.
 
@@ -40,7 +40,7 @@ By default, the `repo` source parameter `type` is `git`.
 
 > **Note**
 >
-> The GitMan `git svn` support internally uses:
+> The Gitman `git svn` support internally uses:
 >
 > ```
 > $ git svn clone -r <rev> <repo>

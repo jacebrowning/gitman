@@ -1,4 +1,4 @@
-"""Package for GitMan."""
+"""Package for Gitman."""
 
 from pkg_resources import DistributionNotFound, get_distribution
 
