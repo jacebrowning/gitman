@@ -1,4 +1,4 @@
-# 3.2 (beta)
+# 3.2 (2022-04-08)
 
 - Added support for locking dependencies to specific versions. (@Erich-McMillan)
 - Updated dependency locator to include all nested projects.
