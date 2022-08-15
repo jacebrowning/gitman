@@ -162,7 +162,7 @@ requests = ">=2.0,<3.0"
 
 [[package]]
 name = "datafiles"
-version = "1.2"
+version = "1.4.2"
 description = "File-based ORM for dataclasses."
 category = "main"
 optional = false
@@ -171,10 +171,10 @@ python-versions = ">=3.7,<4.0"
 [package.dependencies]
 cached_property = ">=1.5,<2.0"
 classproperties = ">=0.2,<0.3"
-minilog = ">=2.0,<3.0"
+minilog = ">=2.1,<3.0"
 parse = ">=1.12,<2.0"
-"ruamel.yaml" = ">=0.17.20,<0.18.0"
-tomlkit = ">=0.7.2,<0.8.0"
+"ruamel.yaml" = ">=0.17.21,<0.18.0"
+tomlkit = ">=0.10.1,<0.11.0"
 typing-extensions = ">=3.7,<4.0"
 
 [[package]]
@@ -858,11 +858,11 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "tomlkit"
-version = "0.7.2"
+version = "0.10.2"
 description = "Style preserving TOML library"
 category = "main"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+python-versions = ">=3.6,<4.0"
 
 [[package]]
 name = "typed-ast"
@@ -951,7 +951,7 @@ docs = ["rst.linker (>=1.9)", "jaraco.packaging (>=8.2)", "sphinx"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "fba8388cdbc6079b5c4f56f92c62b36602ebf9b8ee410930455c4da29925bb28"
+content-hash = "31c99992b1407e135bb32c8ae7ccc7d12310338a9f3395683e5f8c92c6bb2cfa"
 
 [metadata.files]
 altgraph = [
@@ -1070,8 +1070,8 @@ coveragespace = [
     {file = "coveragespace-4.2.tar.gz", hash = "sha256:b23263b7b9689fd7ded975809b134453c0e0cdbf1dea6b60bf8ebed2c78f9270"},
 ]
 datafiles = [
-    {file = "datafiles-1.2-py3-none-any.whl", hash = "sha256:75f3f572884f045e101262f014a3c594b67df14a55da82d19394c0e9854be6e6"},
-    {file = "datafiles-1.2.tar.gz", hash = "sha256:209493cac9640e30d51de0c59708ddba1d57d317878b278a69532adad07f543a"},
+    {file = "datafiles-1.4.2-py3-none-any.whl", hash = "sha256:eaab264253f05e746c8c13096bd79153510a1d8077fee38351512f0b33cfb334"},
+    {file = "datafiles-1.4.2.tar.gz", hash = "sha256:64756b0c73333877b83164951f4a66a0d6ae7611db9d8ac63010cbe74f07afe6"},
 ]
 docopt = [
     {file = "docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"},
@@ -1443,8 +1443,8 @@ tomli = [
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
 ]
 tomlkit = [
-    {file = "tomlkit-0.7.2-py2.py3-none-any.whl", hash = "sha256:173ad840fa5d2aac140528ca1933c29791b79a374a0861a80347f42ec9328117"},
-    {file = "tomlkit-0.7.2.tar.gz", hash = "sha256:d7a454f319a7e9bd2e249f239168729327e4dd2d27b17dc68be264ad1ce36754"},
+    {file = "tomlkit-0.10.2-py3-none-any.whl", hash = "sha256:905cf92c2111ef80d355708f47ac24ad1b6fc2adc5107455940088c9bbecaedb"},
+    {file = "tomlkit-0.10.2.tar.gz", hash = "sha256:30d54c0b914e595f3d10a87888599eab5321a2a69abc773bbefff51599b72db6"},
 ]
 typed-ast = [
     {file = "typed_ast-1.4.3-cp35-cp35m-manylinux1_i686.whl", hash = "sha256:2068531575a125b87a41802130fa7e29f26c09a2833fea68d9a40cf33902eba6"},
