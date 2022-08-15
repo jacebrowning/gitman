@@ -3,8 +3,9 @@
 import datetime
 
 import log
+from startfile import startfile
 
-from . import common, system
+from . import common
 from .decorators import preserve_cwd
 from .models import Config, Source, find_nested_configs, load_config
 
@@ -364,7 +365,7 @@ def edit(*, root=None):
         log.error("No config found")
         return False
 
-    return system.launch(config.path)
+    return startfile(config.path)
 
 
 def _display_result(modify, modified, count, allow_zero=False):

@@ -34,7 +34,7 @@ def describe_show():
         expect(show.mock_calls) == [call(location, color="path")]
 
     @patch("gitman.common.show")
-    def it_can_print_a_depenendcy_path(show, location):
+    def it_can_print_a_dependency_path(show, location):
         cli.main(["show", "bar"])
 
         expect(show.mock_calls) == [call(os.path.join(location, "bar"), color="path")]
@@ -44,17 +44,3 @@ def describe_show():
 
         with expect.raises(SystemExit):
             cli.main(["show"])
-
-
-def describe_edit():
-    @patch("gitman.system.launch")
-    def it_launches_the_config(launch, config):
-        cli.main(["edit"])
-
-        expect(launch.mock_calls) == [call(config), call().__bool__()]
-
-    def it_exits_when_no_config_found(tmpdir):
-        tmpdir.chdir()
-
-        with expect.raises(SystemExit):
-            cli.main(["edit"])

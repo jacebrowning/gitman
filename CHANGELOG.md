@@ -1,3 +1,7 @@
+# 3.3 (beta)
+
+- Replaced custom file openers with [universal-startfile](https://github.com/jacebrowning/universal-startfile).
+
 # 3.2 (2022-04-08)
 
 - Added support for locking dependencies to specific versions. (@Erich-McMillan)
