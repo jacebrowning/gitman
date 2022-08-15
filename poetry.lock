@@ -21,17 +21,6 @@ typed-ast = {version = ">=1.4.0,<1.5", markers = "implementation_name == \"cpyth
 wrapt = ">=1.11,<2.0"
 
 [[package]]
-name = "astunparse"
-version = "1.6.3"
-description = "An AST unparser for Python"
-category = "dev"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-six = ">=1.6.1,<2.0"
-
-[[package]]
 name = "atomicwrites"
 version = "1.4.0"
 description = "Atomic file writes."
@@ -354,7 +343,7 @@ python-versions = ">=3.7,<4.0"
 
 [[package]]
 name = "mkdocs"
-version = "1.2.3"
+version = "1.3.1"
 description = "Project documentation with Markdown."
 category = "dev"
 optional = false
@@ -363,9 +352,9 @@ python-versions = ">=3.6"
 [package.dependencies]
 click = ">=3.3"
 ghp-import = ">=1.0"
-importlib-metadata = ">=3.10"
-Jinja2 = ">=2.10.1"
-Markdown = ">=3.2.1"
+importlib-metadata = ">=4.3"
+Jinja2 = ">=2.10.2"
+Markdown = ">=3.2.1,<3.4"
 mergedeep = ">=1.3.4"
 packaging = ">=20.5"
 PyYAML = ">=3.10"
@@ -374,52 +363,6 @@ watchdog = ">=2.0"
 
 [package.extras]
 i18n = ["babel (>=2.9.0)"]
-
-[[package]]
-name = "mkdocs-autorefs"
-version = "0.4.1"
-description = "Automatically link across pages in MkDocs."
-category = "dev"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-Markdown = ">=3.3"
-mkdocs = ">=1.1"
-
-[[package]]
-name = "mkdocstrings"
-version = "0.18.1"
-description = "Automatic documentation from sources, for MkDocs."
-category = "dev"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-Jinja2 = ">=2.11.1"
-Markdown = ">=3.3"
-MarkupSafe = ">=1.1"
-mkdocs = ">=1.2"
-mkdocs-autorefs = ">=0.3.1"
-mkdocstrings-python-legacy = ">=0.2"
-pymdown-extensions = ">=6.3"
-
-[package.extras]
-python-legacy = ["mkdocstrings-python-legacy (>=0.2.1)"]
-python = ["mkdocstrings-python (>=0.5.2)"]
-crystal = ["mkdocstrings-crystal (>=0.3.4)"]
-
-[[package]]
-name = "mkdocstrings-python-legacy"
-version = "0.2.2"
-description = "A legacy Python handler for mkdocstrings."
-category = "dev"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-mkdocstrings = ">=0.18"
-pytkdocs = ">=0.14"
 
 [[package]]
 name = "mypy"
@@ -595,17 +538,6 @@ mccabe = ">=0.6,<0.7"
 toml = ">=0.7.1"
 
 [[package]]
-name = "pymdown-extensions"
-version = "9.3"
-description = "Extension pack for Python Markdown."
-category = "dev"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-Markdown = ">=3.2"
-
-[[package]]
 name = "pync"
 version = "2.0.3"
 description = "Python Wrapper for Mac OS 10.10 Notification Center"
@@ -712,22 +644,6 @@ description = "console colouring for python"
 category = "dev"
 optional = false
 python-versions = "*"
-
-[[package]]
-name = "pytkdocs"
-version = "0.16.1"
-description = "Load Python objects documentation."
-category = "dev"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-astunparse = {version = ">=1.6", markers = "python_version < \"3.9\""}
-cached-property = {version = ">=1.5", markers = "python_version < \"3.8\""}
-typing-extensions = {version = ">=3.7", markers = "python_version < \"3.8\""}
-
-[package.extras]
-numpy-style = ["docstring_parser (>=0.7)"]
 
 [[package]]
 name = "pywin32-ctypes"
@@ -951,7 +867,7 @@ docs = ["rst.linker (>=1.9)", "jaraco.packaging (>=8.2)", "sphinx"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "fba8388cdbc6079b5c4f56f92c62b36602ebf9b8ee410930455c4da29925bb28"
+content-hash = "d8267f4f0c97c133b4f36642309ccab1dc47447dc18e9e124dcf64078bbb3ae7"
 
 [metadata.files]
 altgraph = [
@@ -961,10 +877,6 @@ altgraph = [
 astroid = [
     {file = "astroid-2.4.2-py3-none-any.whl", hash = "sha256:bc58d83eb610252fd8de6363e39d4f1d0619c894b0ed24603b881c02e64c7386"},
     {file = "astroid-2.4.2.tar.gz", hash = "sha256:2f4078c2a41bf377eea06d71c9d2ba4eb8f6b1af2135bec27bbbb7d8f12bb703"},
-]
-astunparse = [
-    {file = "astunparse-1.6.3-py2.py3-none-any.whl", hash = "sha256:c2652417f2c8b5bb325c885ae329bdf3f86424075c4fd1a128674bc6fba4b8e8"},
-    {file = "astunparse-1.6.3.tar.gz", hash = "sha256:5ad93a8456f0d084c3456d059fd9a92cce667963232cbf763eac3bc5b7940872"},
 ]
 atomicwrites = [
     {file = "atomicwrites-1.4.0-py2.py3-none-any.whl", hash = "sha256:6d1784dea7c0c8d4a5172b6c620f40b6e4cbfdf96d783691f2e1302a7b88e197"},
@@ -1196,20 +1108,8 @@ minilog = [
     {file = "minilog-2.1.tar.gz", hash = "sha256:2048a8d381b36ef5f146fb9a657e627729411f8e2ed0047e2c1286cf8e3e58d7"},
 ]
 mkdocs = [
-    {file = "mkdocs-1.2.3-py3-none-any.whl", hash = "sha256:a1fa8c2d0c1305d7fc2b9d9f607c71778572a8b110fb26642aa00296c9e6d072"},
-    {file = "mkdocs-1.2.3.tar.gz", hash = "sha256:89f5a094764381cda656af4298727c9f53dc3e602983087e1fe96ea1df24f4c1"},
-]
-mkdocs-autorefs = [
-    {file = "mkdocs-autorefs-0.4.1.tar.gz", hash = "sha256:70748a7bd025f9ecd6d6feeba8ba63f8e891a1af55f48e366d6d6e78493aba84"},
-    {file = "mkdocs_autorefs-0.4.1-py3-none-any.whl", hash = "sha256:a2248a9501b29dc0cc8ba4c09f4f47ff121945f6ce33d760f145d6f89d313f5b"},
-]
-mkdocstrings = [
-    {file = "mkdocstrings-0.18.1-py3-none-any.whl", hash = "sha256:4053929356df8cd69ed32eef71d8f676a472ef72980c9ffd4f933ead1debcdad"},
-    {file = "mkdocstrings-0.18.1.tar.gz", hash = "sha256:fb7c91ce7e3ab70488d3fa6c073a4f827cdc319042f682ef8ea95459790d64fc"},
-]
-mkdocstrings-python-legacy = [
-    {file = "mkdocstrings-python-legacy-0.2.2.tar.gz", hash = "sha256:f0e7ec6a19750581b752acb38f6b32fcd1efe006f14f6703125d2c2c9a5c6f02"},
-    {file = "mkdocstrings_python_legacy-0.2.2-py3-none-any.whl", hash = "sha256:379107a3a5b8db9b462efc4493c122efe21e825e3702425dbd404621302a563a"},
+    {file = "mkdocs-1.3.1-py3-none-any.whl", hash = "sha256:fda92466393127d2da830bc6edc3a625a14b436316d1caf347690648e774c4f0"},
+    {file = "mkdocs-1.3.1.tar.gz", hash = "sha256:a41a2ff25ce3bbacc953f9844ba07d106233cd76c88bac1f59cb1564ac0d87ed"},
 ]
 mypy = [
     {file = "mypy-0.940-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:0fdc9191a49c77ab5fa0439915d405e80a1118b163ab03cd2a530f346b12566a"},
@@ -1296,10 +1196,6 @@ pylint = [
     {file = "pylint-2.6.2-py3-none-any.whl", hash = "sha256:e71c2e9614a4f06e36498f310027942b0f4f2fde20aebb01655b31edc63b9eaf"},
     {file = "pylint-2.6.2.tar.gz", hash = "sha256:718b74786ea7ed07aa0c58bf572154d4679f960d26e9641cc1de204a30b87fc9"},
 ]
-pymdown-extensions = [
-    {file = "pymdown-extensions-9.3.tar.gz", hash = "sha256:a80553b243d3ed2d6c27723bcd64ca9887e560e6f4808baa96f36e93061eaf90"},
-    {file = "pymdown_extensions-9.3-py3-none-any.whl", hash = "sha256:b37461a181c1c8103cfe1660081726a0361a8294cbfda88e5b02cefe976f0546"},
-]
 pync = [
     {file = "pync-2.0.3.tar.gz", hash = "sha256:38b9e61735a3161f9211a5773c5f5ea698f36af4ff7f77fa03e8d1ff0caa117f"},
 ]
@@ -1334,10 +1230,6 @@ python-dateutil = [
 python-termstyle = [
     {file = "python-termstyle-0.1.10.tar.gz", hash = "sha256:f42a6bb16fbfc5e2c66d553e7ad46524ea833872f75ee5d827c15115fafc94e2"},
     {file = "python-termstyle-0.1.10.tgz", hash = "sha256:6faf42ba42f2826c38cf70dacb3ac51f248a418e48afc0e36593df11cf3ab1d2"},
-]
-pytkdocs = [
-    {file = "pytkdocs-0.16.1-py3-none-any.whl", hash = "sha256:a8c3f46ecef0b92864cc598e9101e9c4cf832ebbf228f50c84aa5dd850aac379"},
-    {file = "pytkdocs-0.16.1.tar.gz", hash = "sha256:e2ccf6dfe9dbbceb09818673f040f1a7c32ed0bffb2d709b06be6453c4026045"},
 ]
 pywin32-ctypes = [
     {file = "pywin32-ctypes-0.2.0.tar.gz", hash = "sha256:24ffc3b341d457d48e8922352130cf2644024a4ff09762a2261fd34c36ee5942"},
