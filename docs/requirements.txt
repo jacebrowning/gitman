@@ -77,6 +77,7 @@ typed-ast==1.4.3; python_version < "3.8" and implementation_name == "cpython" an
 types-freezegun==1.1.7
 types-setuptools==57.4.11
 typing-extensions==3.10.0.2; python_version >= "3.7" and python_version < "3.8" and python_full_version >= "3.6.2"
+universal-startfile==0.1; python_version >= "3.7" and python_version < "4.0"
 urllib3==1.26.9; python_version >= "3.6" and python_full_version < "3.0.0" and python_version < "4.0" or python_full_version >= "3.6.0" and python_version < "4" and python_version >= "3.6"
 watchdog==2.1.7; python_version >= "3.7"
 wrapt==1.14.0; python_version >= "3.5" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.5"
