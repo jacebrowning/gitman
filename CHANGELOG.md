@@ -1,5 +1,6 @@
-# 3.3 (beta)
+# 3.3 (2022-08-20)
 
+- **BREAKING**: Dropped support for Python 3.7.
 - Replaced custom file openers with [universal-startfile](https://github.com/jacebrowning/universal-startfile).
 
 # 3.2 (2022-04-08)
