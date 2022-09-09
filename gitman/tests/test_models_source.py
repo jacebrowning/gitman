@@ -23,7 +23,7 @@ class TestSource:
         assert "HEAD" == source.rev
 
     def test_init_invalid_rev_default_gets_corrected(self):
-        source = Source(type="git", repo="http://example.com/foo/bar.git", rev=None)
+        source = Source(type="git", repo="http://example.com/foo/bar.git", rev="")
 
         assert "HEAD" == source.rev
 
