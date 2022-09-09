@@ -20,7 +20,12 @@ class TestSource:
 
         assert "http://example.com/foo/bar.git" == source.repo
         assert "bar" == source.name
-        assert "main" == source.rev
+        assert "HEAD" == source.rev
+
+    def test_init_invalid_rev_default_gets_corrected(self):
+        source = Source(type="git", repo="http://example.com/foo/bar.git", rev=None)
+
+        assert "HEAD" == source.rev
 
     def test_init_name_as_path(self, tmp_path):
         """Verify the name can be a path."""
