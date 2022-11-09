@@ -89,7 +89,9 @@ def is_sha(rev):
     return re.match("^[0-9a-f]{7,40}$", rev) is not None
 
 
-def fetch(type, repo, path, rev=None, fetch_params=None):  # pylint: disable=unused-argument
+def fetch(
+    type, repo, path, rev=None, fetch_params=None
+):  # pylint: disable=unused-argument
     """Fetch the latest changes from the remote repository."""
 
     if fetch_params is None:

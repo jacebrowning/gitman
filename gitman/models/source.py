@@ -195,7 +195,13 @@ class Source:
 
         # Fetch the desired revision
         if fetch or git.is_fetch_required(self.type, self.rev):
-            git.fetch(self.type, self.repo, self.name, rev=self.rev, fetch_params=self.clone_fetch_params_if_any())
+            git.fetch(
+                self.type,
+                self.repo,
+                self.name,
+                rev=self.rev,
+                fetch_params=self.clone_fetch_params_if_any(),
+            )
 
         # Update the working tree to the desired revision
         git.update(
