@@ -144,11 +144,11 @@ toml = ["tomli"]
 
 [[package]]
 name = "coveragespace"
-version = "5.0"
+version = "6.0"
 description = "A place to track your code coverage metrics."
 category = "dev"
 optional = false
-python-versions = ">=3.7,<4.0"
+python-versions = ">=3.8,<4.0"
 
 [package.dependencies]
 colorama = ">=0.4"
@@ -933,7 +933,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "c86a8050e509bbb7c802035b47cd5f8654a654fad391ce4acd00f4f2b0e06605"
+content-hash = "c50c0a6edb9984c641047273064f2c8b2e0b5d2b50fc034f3cd462ed5e06158e"
 
 [metadata.files]
 altgraph = [
@@ -1056,8 +1056,8 @@ coverage = [
     {file = "coverage-6.4.4.tar.gz", hash = "sha256:e16c45b726acb780e1e6f88b286d3c10b3914ab03438f32117c4aa52d7f30d58"},
 ]
 coveragespace = [
-    {file = "coveragespace-5.0-py3-none-any.whl", hash = "sha256:b1ffa5dc1e6b4f1e64c764a676c6ec3bd875448942d441c307c338086f2c8f4c"},
-    {file = "coveragespace-5.0.tar.gz", hash = "sha256:7cc03a8f380922d993f43e67009d35886702342ac08aabd6467a1b4e2e059ce9"},
+    {file = "coveragespace-6.0-py3-none-any.whl", hash = "sha256:362fb19fa760a35e6da799b31cd18bde709b93452cb753931ff63708915516b3"},
+    {file = "coveragespace-6.0.tar.gz", hash = "sha256:4ca158725b24f7344686b5c21d495837d932fd549a8c79d1b15cdb4f905e8713"},
 ]
 datafiles = [
     {file = "datafiles-2.0-py3-none-any.whl", hash = "sha256:88fdb13c200978d4d0f15c9c4401703acf6793250896d065d52b845a782e0a46"},
