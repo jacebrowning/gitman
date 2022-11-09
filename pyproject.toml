@@ -1,7 +1,7 @@
 [tool.poetry]
 
 name = "gitman"
-version = "3.3"
+version = "3.3.1"
 description = "A language-agnostic dependency manager using Git."
 
 license = "MIT"
@@ -45,7 +45,7 @@ python = "^3.8"
 
 datafiles = "^2.0"
 minilog = "^2.1"
-universal-startfile = "*"
+universal-startfile = "~0.2"
 
 [tool.poetry.dev-dependencies]
 
@@ -63,8 +63,8 @@ types-setuptools = "*"
 # Testing
 pytest = "^6"
 pytest-cov = "*"
-pytest-describe = "^1.0"
-pytest-expecter = "^2.1"
+pytest-describe = "^2.0"
+pytest-expecter = "^3.0"
 pytest-random = "*"
 freezegun = "*"
 

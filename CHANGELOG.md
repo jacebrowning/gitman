@@ -1,3 +1,7 @@
+# 3.3.1 (2022-11-09)
+
+- Replaced deprecated `pkg_resources` with `importlib` for package metadata.
+
 # 3.3 (2022-08-20)
 
 - **BREAKING**: Dropped support for Python 3.7.

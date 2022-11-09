@@ -1,12 +1,14 @@
-"""Package for Gitman."""
-
-from pkg_resources import DistributionNotFound, get_distribution
+from importlib.metadata import PackageNotFoundError, version
 
 from .commands import delete as uninstall
 from .commands import display as list
 from .commands import init, install, lock, update
 
 try:
-    __version__ = get_distribution("gitman").version
-except DistributionNotFound:
-    __version__ = "???"
+    __version__ = version("gitman")
+except PackageNotFoundError:
+    __version__ = "(local)"
+
+
+del PackageNotFoundError
+del version
