@@ -77,7 +77,7 @@ class TestSource:
             "git", "repo", "name", rev="rev", sparse_paths=[], user_params=None
         )
         mock_is_fetch_required.assert_called_once_with("git", "rev")
-        mock_fetch.assert_called_once_with("git", "repo", "name", rev="rev")
+        mock_fetch.assert_called_once_with("git", "repo", "name", rev="rev", fetch_params=None)
         mock_update.assert_called_once_with(
             "git", "repo", "name", clean=True, fetch=False, rev="rev"
         )
@@ -125,7 +125,7 @@ class TestSource:
         mock_clone.assert_not_called()
         mock_rebuild.assert_called_once_with("git", "repo")
         mock_is_fetch_required.assert_not_called()
-        mock_fetch.assert_called_once_with("git", "repo", "name", rev="rev")
+        mock_fetch.assert_called_once_with("git", "repo", "name", rev="rev", fetch_params=None)
         mock_update.assert_called_once_with(
             "git", "repo", "name", clean=True, fetch=True, rev="rev"
         )

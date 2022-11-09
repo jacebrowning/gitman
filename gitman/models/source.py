@@ -70,6 +70,7 @@ class Source:
 
     type: str = "git"
     params: Optional[str] = None
+    fetch_params: Optional[str] = None
     sparse_paths: List[str] = field(default_factory=list)
     links: List[Link] = field(default_factory=list)
 
@@ -101,10 +102,17 @@ class Source:
         return self.name < other.name
 
     def clone_params_if_any(self):
+        self.clone_params_var_if_any(self.params)
+
+    def clone_fetch_params_if_any(self):
+        self.clone_params_var_if_any(self.fetch_params)
+
+    @staticmethod
+    def clone_params_var_if_any(params):
         # sanitize params strings by splitting on spaces
-        if self.params:
+        if params:
             params_list = []
-            for param in self.params.split(" "):
+            for param in params.split(" "):
                 if len(param) > 0:
                     params_list.append(param)
             return params_list
@@ -187,7 +195,7 @@ class Source:
 
         # Fetch the desired revision
         if fetch or git.is_fetch_required(self.type, self.rev):
-            git.fetch(self.type, self.repo, self.name, rev=self.rev)
+            git.fetch(self.type, self.repo, self.name, rev=self.rev, fetch_params=self.clone_fetch_params_if_any())
 
         # Update the working tree to the desired revision
         git.update(

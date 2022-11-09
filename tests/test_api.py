@@ -28,6 +28,7 @@ sources:
     rev: example-branch
     type: git
     params:
+    fetch_params:
     sparse_paths:
       -
     links:
@@ -39,6 +40,7 @@ sources:
     rev: example-tag
     type: git
     params:
+    fetch_params:
     sparse_paths:
       -
     links:
@@ -50,6 +52,7 @@ sources:
     rev: 9bf18e16b956041f0267c21baad555a23237b52e
     type: git
     params:
+    fetch_params:
     sparse_paths:
       -
     links:
@@ -101,6 +104,7 @@ def describe_init():
             rev: master
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -113,6 +117,7 @@ def describe_init():
             rev: ebbbf773431ba07510251bb03f9525c7bab2b13a
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -153,6 +158,7 @@ def describe_install():
             name: gitman_sm_1
             type: git
             params: --recursive
+            fetch_params:
             rev: main
             links:
               -
@@ -199,6 +205,7 @@ def describe_install():
             name: gitman_1
             type: git
             params:
+            fetch_params:
             rev: example-branch
             links:
               -
@@ -334,6 +341,7 @@ def describe_install():
               - name: gitman_1
                 type: git
                 params:
+                fetch_params:
                 repo: https://github.com/jacebrowning/gitman-demo
                 rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
                 links:
@@ -363,6 +371,7 @@ def describe_install():
                       - name: gitman_1
                         type: git
                         params:
+                        fetch_params:
                         repo: https://github.com/jacebrowning/gitman-demo
                         sparse_paths:
                           - src/*
@@ -398,6 +407,7 @@ def describe_install():
                   - name: gitman_1
                     type: git
                     params:
+                    fetch_params:
                     repo: https://github.com/jacebrowning/gitman-demo
                     sparse_paths:
                       -
@@ -409,6 +419,7 @@ def describe_install():
                   - name: gitman_2
                     type: git
                     params:
+                    fetch_params:
                     repo: https://github.com/jacebrowning/gitman-demo
                     sparse_paths:
                       -
@@ -463,6 +474,7 @@ def describe_install():
             name: gitman_1
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             rev: example-branch
@@ -474,6 +486,7 @@ def describe_install():
             name: gitman_2
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             rev: example-tag
@@ -505,6 +518,7 @@ def describe_install():
             name: gitman_1
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             rev: example-branch
@@ -516,6 +530,7 @@ def describe_install():
             name: gitman_2
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             rev: example-tag
@@ -646,6 +661,7 @@ def describe_update():
             name: gitman_1
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             rev: example-branch
@@ -657,6 +673,7 @@ def describe_update():
             name: gitman_2
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             rev: example-tag
@@ -669,6 +686,7 @@ def describe_update():
             name: gitman_2
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             rev: (old revision)
@@ -694,6 +712,7 @@ def describe_update():
             rev: example-branch
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -705,6 +724,7 @@ def describe_update():
             rev: example-tag
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -717,6 +737,7 @@ def describe_update():
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -739,6 +760,7 @@ def describe_update():
             rev: example-branch
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -749,6 +771,7 @@ def describe_update():
             name: gitman_2
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             rev: example-tag
@@ -762,6 +785,7 @@ def describe_update():
             rev: (old revision)
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -785,6 +809,7 @@ def describe_update():
             rev: example-branch
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -796,6 +821,7 @@ def describe_update():
             rev: example-tag
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -808,6 +834,7 @@ def describe_update():
             rev: (old revision)
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -828,11 +855,13 @@ def describe_update():
           - name: gitman_1
             type: git
             params:
+            fetch_params:
             repo: https://github.com/jacebrowning/gitman-demo
             rev: example-branch
           - name: gitman_2
             type: git
             params:
+            fetch_params:
             repo: https://github.com/jacebrowning/gitman-demo
             rev: example-branch
         groups:
@@ -856,6 +885,7 @@ def describe_update():
             name: gitman_1
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             rev: example-branch
@@ -867,6 +897,7 @@ def describe_update():
             name: gitman_2
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             rev: example-tag
@@ -878,6 +909,7 @@ def describe_update():
             name: gitman_3
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             rev: example-tag
@@ -890,6 +922,7 @@ def describe_update():
             name: gitman_1
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             rev: (old revision)
@@ -901,6 +934,7 @@ def describe_update():
             name: gitman_2
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             rev: (old revision)
@@ -929,6 +963,7 @@ def describe_update():
             rev: example-branch
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -940,6 +975,7 @@ def describe_update():
             rev: example-tag
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -951,6 +987,7 @@ def describe_update():
             rev: example-tag
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -963,6 +1000,7 @@ def describe_update():
             rev: dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -974,6 +1012,7 @@ def describe_update():
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -1014,6 +1053,7 @@ def describe_update():
             name: gitman_2
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             rev: example-tag
@@ -1026,6 +1066,7 @@ def describe_update():
             name: gitman_2
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             rev: (old revision)
@@ -1050,6 +1091,7 @@ def describe_update():
             rev: example-tag
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -1062,6 +1104,7 @@ def describe_update():
             rev: (old revision)
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -1106,6 +1149,7 @@ def describe_update():
             name: gitman_2
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             rev: example-tag
@@ -1118,6 +1162,7 @@ def describe_update():
             name: gitman_2
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             rev: (old revision)
@@ -1143,6 +1188,7 @@ def describe_update():
             rev: example-tag
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -1155,6 +1201,7 @@ def describe_update():
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -1179,6 +1226,7 @@ def describe_update():
             name: gitman_1
             type: git
             params:
+            fetch_params:
             rev: example-branch
             links:
               -
@@ -1264,6 +1312,7 @@ def describe_lock():
             rev: dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -1275,6 +1324,7 @@ def describe_lock():
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -1286,6 +1336,7 @@ def describe_lock():
             rev: 9bf18e16b956041f0267c21baad555a23237b52e
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -1310,6 +1361,7 @@ def describe_lock():
             rev: dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
@@ -1321,6 +1373,7 @@ def describe_lock():
             rev: 9bf18e16b956041f0267c21baad555a23237b52e
             type: git
             params:
+            fetch_params:
             sparse_paths:
               -
             links:
