@@ -46,24 +46,24 @@ or manually create one (`gitman.yml` or `.gitman.yml`) in the root of your worki
 location: vendor/gitman
 
 sources:
-  - repo: https://github.com/kstenerud/iOS-Universal-Framework
+  - repo: "https://github.com/kstenerud/iOS-Universal-Framework"
     name: framework
     rev: Mk5-end-of-life
-  - repo: https://github.com/jonreid/XcodeCoverage
+  - repo: "https://github.com/jonreid/XcodeCoverage"
     name: coverage
     links:
       - target: Tools/XcodeCoverage
-  - repo: https://github.com/dxa4481/truffleHog
+  - repo: "https://github.com/dxa4481/truffleHog"
     name: trufflehog
     rev: master
     scripts:
       - chmod a+x truffleHog/truffleHog.py
-  - repo: https://github.com/FortAwesome/Font-Awesome
+  - repo: "https://github.com/FortAwesome/Font-Awesome"
     name: fontawesome
     rev: master
     sparse_paths:
       - "webfonts/*"
-  - repo: https://github.com/google/material-design-icons.git
+  - repo: "https://github.com/google/material-design-icons"
     name: material-design-icons
     rev: master
 
