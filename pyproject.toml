@@ -56,7 +56,7 @@ isort = "^5.10"
 # Linters
 mypy = "~0.940"
 pydocstyle = "*"
-pylint = "~2.6.0"
+pylint = "~2.6"
 types-freezegun = "*"
 types-setuptools = "*"
 
