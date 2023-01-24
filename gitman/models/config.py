@@ -418,7 +418,7 @@ def load_config(
 def find_nested_configs(
     root: str, depth: Optional[int], skip_paths: List[str]
 ) -> List[Config]:
-    """Find all all other projects in the same directory."""
+    """Find all other projects in the same directory."""
     root = os.path.abspath(root) if root else _resolve_current_directory()
     configs: List[Config] = []
 
@@ -434,6 +434,14 @@ def find_nested_configs(
             config = load_config(path, search=False)
             if config:
                 configs.append(config)
+
+            if os.path.islink(path):
+                continue
+
+            if depth is not None:
+                configs.extend(find_nested_configs(path, depth - 1, skip_paths))
+            else:
+                configs.extend(find_nested_configs(path, depth, skip_paths))
 
     return configs
 
