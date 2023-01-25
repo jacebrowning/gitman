@@ -1,3 +1,7 @@
+# 3.3.2 (2023-01-25)
+
+- Fixed handling of `depth` to find nested configs. (@DavidWatkins)
+
 # 3.3.1 (2022-11-09)
 
 - Replaced deprecated `pkg_resources` with `importlib` for package metadata.
