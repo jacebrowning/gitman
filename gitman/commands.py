@@ -271,12 +271,13 @@ def display(*, root=None, depth=None, allow_dirty=True):
 
 
 @preserve_cwd
-def lock(*names, root=None):
+def lock(*names, depth=None, root=None):
     """Lock current dependency versions for a project.
 
     Optional arguments:
 
     - `*names`: optional list of dependency directory names to filter on
+    - `depth`: number of levels of dependencies to traverse
     - `root`: specifies the path to the root working tree
 
     """
@@ -285,7 +286,7 @@ def lock(*names, root=None):
 
     config = load_config(root)
     configs = [config] if config else []
-    configs.extend(find_nested_configs(root, None, []))
+    configs.extend(find_nested_configs(root, depth, []))
     if configs:
         count = 0
         common.newline()

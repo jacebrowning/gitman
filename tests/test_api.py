@@ -1252,7 +1252,7 @@ def describe_list():
 def describe_lock():
     def it_records_all_versions_when_no_arguments(config):
         expect(gitman.update(depth=1, lock=False)) == True
-        expect(gitman.lock()) == True
+        expect(gitman.lock(depth=1)) == True
 
         config.datafile.load()
         expect(config.datafile.text).contains(
@@ -1298,7 +1298,7 @@ def describe_lock():
 
     def it_records_specified_dependencies(config):
         expect(gitman.update(depth=1, lock=False)) == True
-        expect(gitman.lock("gitman_1", "gitman_3")) == True
+        expect(gitman.lock("gitman_1", "gitman_3", depth=1)) == True
 
         config.datafile.load()
         expect(config.datafile.text).contains(
@@ -1370,7 +1370,7 @@ def describe_lock():
     def it_should_lock_repository_to_user_specified_rev(config):
         expect(gitman.update(depth=1, lock=False)) == True
 
-        expect(gitman.lock("gitman_1@master")) == True
+        expect(gitman.lock("gitman_1@master", depth=1)) == True
         config.datafile.load()
         expect(config.datafile.text).contains(
             "63ddfd82d308ddae72d31b61cb8942c898fa05b5"
@@ -1379,7 +1379,9 @@ def describe_lock():
     def it_should_lock_repository_to_latest_rev_in_user_specified_reference(config):
         expect(gitman.update(depth=1, lock=False)) == True
 
-        expect(gitman.lock("gitman_1@63ddfd82d308ddae72d31b61cb8942c898fa05b5")) == True
+        expect(
+            gitman.lock("gitman_1@63ddfd82d308ddae72d31b61cb8942c898fa05b5", depth=1)
+        ) == True
 
         config.datafile.load()
         expect(config.datafile.text).contains(
@@ -1389,4 +1391,4 @@ def describe_lock():
     def it_should_skip_lock_to_invalid_user_specified_reference(config):
         expect(gitman.update(depth=1, lock=False)) == True
 
-        expect(gitman.lock("gitman_1@deadbeef_ref")) == False
+        expect(gitman.lock("gitman_1@deadbeef_ref", depth=1)) == False

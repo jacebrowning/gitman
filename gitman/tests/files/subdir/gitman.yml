@@ -1,0 +1,27 @@
+location: ../../../../tmp/subdir
+sources:
+- name: gitman_4
+  type: git
+  repo: https://github.com/jacebrowning/gitman-demo
+  rev: example-branch
+- name: gitman_5
+  type: git
+  repo: https://github.com/jacebrowning/gitman-demo
+  rev: example-tag
+- name: gitman_6
+  type: git
+  repo: https://github.com/jacebrowning/gitman-demo
+  rev: master@{2015-06-18 11:11:11}
+sources_locked:
+- name: gitman_4
+  type: git
+  repo: https://github.com/jacebrowning/gitman-demo
+  rev: eb37743011a398b208dd9f9ef79a408c0fc10d48
+- name: gitman_5
+  type: git
+  repo: https://github.com/jacebrowning/gitman-demo
+  rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
+- name: gitman_6
+  type: git
+  repo: https://github.com/jacebrowning/gitman-demo
+  rev: 2da24fca34af3748e3cab61db81a2ae8b35aec94
