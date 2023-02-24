@@ -1,4 +1,4 @@
-# 3.3.2 (2023-01-25)
+# 3.3.3 (2023-01-25)
 
 - Fixed handling of `depth` to find nested configs. (@DavidWatkins)
 
