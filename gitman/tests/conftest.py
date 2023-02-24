@@ -11,6 +11,7 @@ REASON = "'{0}' variable not set".format(ENV)
 
 ROOT = os.path.dirname(__file__)
 FILES = os.path.join(ROOT, "files")
+SYMLINK_TEST = os.path.join(ROOT, "symlink_test")
 
 
 def pytest_configure(config):
