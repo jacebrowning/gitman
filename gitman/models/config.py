@@ -471,7 +471,7 @@ def filter_nested_configs(
     configs = []
     config_location_path = Path(top_level_config.location_path)
     for nested_config in nested_configs:
-        nested_config_root = Path(nested_config.root)
+        nested_config_root = Path(nested_config.location_path)
         if config_location_path in nested_config_root.parents:
             configs.append(nested_config)
 
