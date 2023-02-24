@@ -467,7 +467,7 @@ def _valid_filename(filename):
 def filter_nested_configs(
     top_level_config: Config, nested_configs: List[Config]
 ) -> List[Config]:
-    """Filter subdirectories inside of parent config"""
+    """Filter subdirectories inside of parent config."""
     configs = []
     config_location_path = Path(top_level_config.location_path)
     for nested_config in nested_configs:
