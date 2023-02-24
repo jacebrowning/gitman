@@ -1,5 +1,6 @@
 import os
 import sys
+from pathlib import Path
 from typing import Iterator, List, Optional
 
 import log
@@ -430,7 +431,7 @@ def find_nested_configs(
         if name.startswith("."):
             continue
         path = os.path.join(root, name)
-        if os.path.isdir(path) and path not in skip_paths:
+        if os.path.isdir(path) and path not in skip_paths and not os.path.islink(path):
             config = load_config(path, search=False)
             if config:
                 configs.append(config)
@@ -461,3 +462,17 @@ def _valid_filename(filename):
     if name.startswith("."):
         name = name[1:]
     return name in {"gitman", "gdm"} and ext in {".yml", ".yaml"}
+
+
+def filter_nested_configs(
+    top_level_config: Config, nested_configs: List[Config]
+) -> List[Config]:
+    """Filter subdirectories inside of parent config."""
+    configs = []
+    config_location_path = Path(top_level_config.location_path)
+    for nested_config in nested_configs:
+        nested_config_root = Path(nested_config.location_path)
+        if config_location_path in nested_config_root.parents:
+            configs.append(nested_config)
+
+    return configs
