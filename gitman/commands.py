@@ -1,7 +1,6 @@
 """Functions to manage the installation of dependencies."""
 
 import datetime
-import os
 
 import log
 from startfile import startfile
