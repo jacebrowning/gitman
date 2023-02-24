@@ -1,6 +1,7 @@
 """Functions to manage the installation of dependencies."""
 
 import datetime
+import os
 
 import log
 from startfile import startfile
@@ -8,6 +9,7 @@ from startfile import startfile
 from . import common
 from .decorators import preserve_cwd
 from .models import Config, Source, find_nested_configs, load_config
+from .models.config import filter_nested_configs
 
 
 def init(*, force: bool = False):
@@ -89,7 +91,10 @@ def install(
 
     config = load_config(root)
     configs = [config] if config else []
-    configs.extend(find_nested_configs(root, depth, []))
+    nested_configs = find_nested_configs(root, depth, [])
+    nested_configs = filter_nested_configs(config, nested_configs)
+    configs.extend(nested_configs)
+
     if configs:
         count = 0
         common.newline()
