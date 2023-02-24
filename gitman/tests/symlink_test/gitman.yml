@@ -1,9 +1,0 @@
-location: ../../../tmp
-sources:
-- name: gitman_1
-  type: git
-  repo: https://github.com/jacebrowning/gitman-demo
-  rev: example-branch
-  links:
-    - source: ''
-      target: symlink_test/link

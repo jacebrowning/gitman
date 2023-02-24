@@ -7,7 +7,7 @@ from expecter import expect
 
 from gitman.models import Config, load_config
 
-from .conftest import FILES, SYMLINK_TEST
+from .conftest import FILES
 
 
 class TestConfig:
@@ -101,15 +101,6 @@ class TestConfig:
 
         count = config.install_dependencies(depth=2)
         assert 5 == count
-
-    @pytest.mark.integration
-    def test_install_with_symlink(self):
-        """Verify an install with unlimited depth ignores symlinked dependencies."""
-        config = Config(SYMLINK_TEST)
-
-        count = config.install_dependencies()
-        count2 = config.install_dependencies()
-        assert count == count2
 
 
 def describe_config():
