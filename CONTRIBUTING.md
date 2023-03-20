@@ -6,7 +6,7 @@
     * Windows: http://mingw.org/download/installer
     * Mac: http://developer.apple.com/xcode
     * Linux: http://www.gnu.org/software/make
-* Python: `$ pyenv install`
+* Python: `$ asdf install`
 * Poetry: https://poetry.eustace.io/docs/#installation
 * Graphviz: http://www.graphviz.org/Download.php
 
@@ -61,7 +61,7 @@ $ make dev
 The CI server will report overall build status:
 
 ```sh
-$ make ci
+$ make all
 ```
 
 # Release Tasks

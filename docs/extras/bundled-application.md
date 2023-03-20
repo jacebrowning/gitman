@@ -4,7 +4,7 @@ There are scenarios where a global Gitman installation via [pip](https://github.
 For example, when a local system doesn't have the required python or pip version installed and or the global installation may produce side effects (different parallel python versions on the same machine).
 Furthermore there are scenarios where a high degree of reproducibility, managing multiple different versions of Gitman on the same machine and hassle free distribution of Gitman is desired.
 
-In these scenarios, it can be helpful to use a self contained Gitman application besides the possibility to use a virtual environment (e.g. via pyenv + Poetry or Docker).
+In these scenarios, it can be helpful to use a self contained Gitman application besides the possibility to use a virtual environment (e.g. via Poetry or Docker).
 It is possible to build a single self contained OS-specific Gitman binary using [PyInstaller](https://www.pyinstaller.org/) that can be used locally or globally.
 Over this way it is possible to manage multiple different versions of Gitman on the same machine and to easily distribute the Gitman application (including all needed dependencies) by simply copying one single file.
 
