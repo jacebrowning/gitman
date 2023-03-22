@@ -99,8 +99,9 @@ def install(
         count = 0
         common.newline()
 
-    for config in configs:
-        common.show("Installing dependencies...", color="message", log=False)
+    for index, config in enumerate(configs):
+        label = "nested dependencies" if index else "dependencies"
+        common.show(f"Installing {label}...", color="message", log=False)
         common.newline()
 
         _count = config.install_dependencies(
@@ -117,9 +118,10 @@ def install(
         count += _count  # type: ignore
 
         if _count:
-            _run_scripts(
-                *names, depth=depth, force=force, _config=config, show_shell_stdout=True
-            )
+            label = "nested scripts" if index else "scripts"
+            common.show(f"Running {label}...", color="message", log=False)
+            common.newline()
+            config.run_scripts(*names, depth=depth, force=force, show_shell_stdout=True)
 
     return _display_result("install", "Installed", count)
 
@@ -171,8 +173,9 @@ def update(
         count = 0
         common.newline()
 
-    for config in configs:
-        common.show("Updating dependencies...", color="message", log=False)
+    for index, config in enumerate(configs):
+        label = "nested dependencies" if index else "dependencies"
+        common.show(f"Updating {label}...", color="message", log=False)
         common.newline()
         _count = config.install_dependencies(
             *names,
@@ -198,33 +201,12 @@ def update(
             )
 
         if _count:
-            _run_scripts(
-                *names, depth=depth, force=force, _config=config, show_shell_stdout=True
-            )
+            label = "nested scripts" if index else "scripts"
+            common.show(f"Running {label}...", color="message", log=False)
+            common.newline()
+            config.run_scripts(*names, depth=depth, force=force, show_shell_stdout=True)
 
     return _display_result("update", "Updated", count)
-
-
-def _run_scripts(
-    *names, depth=None, force=False, _config=None, show_shell_stdout=False
-):
-    """Run post-install scripts.
-
-    Optional arguments:
-
-    - `*names`: optional list of dependency directory names filter on
-    - `depth`: number of levels of dependencies to traverse
-    - `force`: indicates script errors can be ignored
-    - `show_shell_stdout`: allows to print realtime output from shell commands
-
-    """
-    assert _config, "'_config' is required"
-
-    common.show("Running scripts...", color="message", log=False)
-    common.newline()
-    _config.run_scripts(
-        *names, depth=depth, force=force, show_shell_stdout=show_shell_stdout
-    )
 
 
 @preserve_cwd
