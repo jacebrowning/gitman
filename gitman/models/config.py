@@ -378,7 +378,10 @@ class Config:
         )
 
         if not sources_filter:
-            sources_filter = [source.name for source in sources if source.name]
+            if names:
+                log.warn(f"No dependencies match: {' '.join(names)}")
+            else:
+                sources_filter = [source.name for source in sources if source.name]
 
         return list(set(sources_filter))
 

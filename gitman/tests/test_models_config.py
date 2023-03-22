@@ -65,14 +65,14 @@ class TestConfig:
         assert 0 == len(list(config.get_dependencies(depth=0)))
 
     @pytest.mark.integration
-    def test_install_with_dirs(self):
+    def test_install_with_names(self):
         """Verify the dependency list can be filtered."""
         config = Config(FILES)
 
         count = config.install_dependencies("gitman_2", "gitman_3")
         assert 2 == count
 
-    def test_install_with_dirs_unknown(self):
+    def test_install_with_names_unknown(self):
         """Verify zero dependencies are installed with unknown dependency."""
         config = Config(FILES)
 
