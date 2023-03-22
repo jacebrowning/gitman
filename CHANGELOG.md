@@ -1,3 +1,7 @@
+# 3.4 (beta)
+
+- Updating messaging to clarify when nested dependencies are updated.
+
 # 3.3.3 (2023-01-25)
 
 - Fixed handling of `depth` to find nested configs. (@DavidWatkins)
