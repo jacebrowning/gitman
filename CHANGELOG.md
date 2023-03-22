@@ -2,6 +2,7 @@
 
 - Updated messaging to clarify when nested dependencies are updated.
 - Added a warning when no dependencies match the specified names.
+- Added `all` as a keyword to bypass the default dependency group.
 
 # 3.3.3 (2023-01-25)
 

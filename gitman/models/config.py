@@ -364,7 +364,6 @@ class Config:
     ) -> List[str]:
         """Get a filtered subset of sources."""
         names_list = list(names)
-
         if not names_list and not skip_default_group:
             names_list.append(self.default_group)
 
@@ -377,8 +376,9 @@ class Config:
             [source.name for source in sources if source.name in names_list]
         )
 
+        # Fall back to all sources if allowed
         if not sources_filter:
-            if names:
+            if names and names_list != ["all"]:
                 log.warn(f"No dependencies match: {' '.join(names)}")
             else:
                 sources_filter = [source.name for source in sources if source.name]

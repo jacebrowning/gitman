@@ -257,6 +257,10 @@ def describe_install():
 
             expect(os.listdir()).contains("my_link")
 
+        @pytest.mark.xfail(
+            os.name == "nt",
+            reason="https://github.com/jacebrowning/gitman/issues/284",
+        )
         def it_should_not_overwrite_files(config_with_link):
             os.system("touch my_link")
 
@@ -298,9 +302,6 @@ def describe_install():
 
             return config
 
-        @pytest.mark.xfail(
-            os.name == "nt", reason="https://github.com/jacebrowning/gitman/issues/284"
-        )
         def it_should_create_links(config_with_links):
             expect(gitman.install(depth=1)) == True
             expect(os.listdir()).contains("gmd_3")
@@ -1167,9 +1168,6 @@ def describe_update():
         """
         )
 
-    @pytest.mark.xfail(
-        os.name == "nt", reason="https://github.com/jacebrowning/gitman/issues/284"
-    )
     def it_merges_sources(config):
         config.datafile.text = strip(
             """
