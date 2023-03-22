@@ -1,6 +1,7 @@
 # 3.4 (beta)
 
-- Updating messaging to clarify when nested dependencies are updated.
+- Updated messaging to clarify when nested dependencies are updated.
+- Added a warning when no dependencies match the specified names.
 
 # 3.3.3 (2023-01-25)
 
