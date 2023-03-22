@@ -5,7 +5,17 @@ dependencies to install if no inputs are provided to `gitman install`. If
 if is set to a blank string, `default_group: ''`, then all sources are
 installed.
 
-When nested gitman projects are used default groups are installed if they
+## Overriding Groups
+
+To ignore the `default_group` and install all dependencies, use the `all` keyword:
+
+```sh
+$ gitman install all
+```
+
+## Nested Projects
+
+When nested Gitman projects are used default groups are installed if they
 exist. In the case of the following project layout:
 
 Project A's configuration file:

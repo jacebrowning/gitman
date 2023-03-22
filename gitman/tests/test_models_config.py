@@ -72,6 +72,15 @@ class TestConfig:
         count = config.install_dependencies("gitman_2", "gitman_3")
         assert 2 == count
 
+    @pytest.mark.integration
+    def test_install_with_names_all(self):
+        """Verify all dependencies can be installed."""
+        config = Config(FILES)
+
+        count = config.install_dependencies("all")
+        assert 7 == count
+
+    @pytest.mark.integration
     def test_install_with_names_unknown(self):
         """Verify zero dependencies are installed with unknown dependency."""
         config = Config(FILES)
@@ -79,6 +88,7 @@ class TestConfig:
         count = config.install_dependencies("foobar")
         assert 0 == count
 
+    @pytest.mark.integration
     def test_install_with_depth_0(self):
         """Verify an install depth of 0 installs nothing."""
         config = Config(FILES)
