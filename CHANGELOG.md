@@ -1,4 +1,4 @@
-# 3.4 (beta)
+# 3.4 (2023-03-24)
 
 - Updated messaging to clarify when nested dependencies are updated.
 - Added a warning when no dependencies match the specified names.
