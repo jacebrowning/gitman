@@ -118,7 +118,7 @@ def pwd(_show=True):
     return cwd
 
 
-def ln(source, target, symbolic):
+def ln(source, target, *, symbolic:bool):
     if symbolic:
         dirpath = os.path.dirname(target)
         if not os.path.isdir(dirpath):
