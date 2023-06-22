@@ -211,7 +211,7 @@ class Source:
                 source = os.path.join(relpath, os.path.normpath(link.source))
             else:
                 source = os.path.join(os.getcwd(), os.path.normpath(link.source))
-            create_sym_link(source, target, symbolic=link.symbolic, force=force)
+            create_link(source, target, symbolic=bool(link.symbolic), force=force)
 
     def run_scripts(self, force: bool = False, show_shell_stdout: bool = False):
         log.info("Running install scripts...")
@@ -344,7 +344,7 @@ class Source:
         return exceptions.InvalidRepository(msg)
 
 
-def create_link(source: str, target: str, *, force: bool, symbolic:bool = True):
+def create_link(source: str, target: str, *, force: bool, symbolic: bool = True):
 
     if symbolic:
         log.info("Creating a symbolic link...")
@@ -367,4 +367,4 @@ def create_link(source: str, target: str, *, force: bool, symbolic:bool = True):
                 msg = "Preexisting file location at {}".format(target)
                 raise exceptions.UncommittedChanges(msg)
 
-    shell.ln(source, target, symbolic)
+    shell.ln(source, target, symbolic=symbolic)

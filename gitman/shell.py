@@ -118,7 +118,7 @@ def pwd(_show=True):
     return cwd
 
 
-def ln(source, target, *, symbolic:bool):
+def ln(source, target, *, symbolic: bool):
     if symbolic:
         dirpath = os.path.dirname(target)
         if not os.path.isdir(dirpath):
@@ -147,21 +147,17 @@ def ln(source, target, *, symbolic:bool):
                 os.path.join(source, os.path.relpath(cwd, target))
             )
 
+            for dir in dirs:
+                target_dir = os.path.join(cwd, dir)
+                source_dir = os.path.join(wd_source, dir)
+                if not os.path.isdir(source_dir):
+                    rm(target_dir)
+
             for file in files:
                 target_file = os.path.join(cwd, file)
                 source_file = os.path.join(wd_source, file)
                 if not os.path.isfile(source_file):
                     rm(target_file)
-
-            for dir in dirs:
-                target_dir = os.path.join(cwd, dir)
-                source_dir = os.path.join(wd_source, dir)
-                if not os.path.isdir(source_dir):
-                    target_dirs.append(target_dir)
-
-        # delete directories from target not present in source
-        for dir in target_dirs:
-            rm(dir)
 
 
 def rm(path):
