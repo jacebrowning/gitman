@@ -141,7 +141,6 @@ def ln(source, target, *, symbolic: bool):
                     os.link(file_source, file_target)
 
         # delete files and record directories from target not present in source
-        target_dirs = []
         for (cwd, dirs, files) in os.walk(target):
             wd_source = os.path.normpath(
                 os.path.join(source, os.path.relpath(cwd, target))
