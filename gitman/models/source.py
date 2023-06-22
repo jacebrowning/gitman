@@ -344,7 +344,7 @@ class Source:
         return exceptions.InvalidRepository(msg)
 
 
-def create_sym_link(source: str, target: str, symbolic, *, force: bool):
+def create_link(source: str, target: str, *, force: bool, symbolic:bool = True):
 
     if symbolic:
         log.info("Creating a symbolic link...")
