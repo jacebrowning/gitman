@@ -130,8 +130,7 @@ def ln(source, target, *, symbolic: bool):
         # sync files and directories to source not present in target
         for (wd_source, dirs, files) in os.walk(source):
             wd_target = os.path.normpath(
-                os.path.join(target, os.path.relpath(wd_source, source))
-            )
+                os.path.join(target, os.path.relpath(wd_source, source)))
             for dir in dirs:
                 mkdir(os.path.join(wd_target, dir))
             for file in files:
