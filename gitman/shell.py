@@ -143,15 +143,12 @@ def ln(source, target, *, symbolic: bool):
         # delete files and record directories from target not present in source
         for (cwd, dirs, files) in os.walk(target):
             wd_source = os.path.normpath(
-                os.path.join(source, os.path.relpath(cwd, target))
-            )
-
+                os.path.join(source, os.path.relpath(cwd, target)))
             for dir in dirs:
                 target_dir = os.path.join(cwd, dir)
                 source_dir = os.path.join(wd_source, dir)
                 if not os.path.isdir(source_dir):
                     rm(target_dir)
-
             for file in files:
                 target_file = os.path.join(cwd, file)
                 source_file = os.path.join(wd_source, file)
