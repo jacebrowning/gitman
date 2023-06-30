@@ -85,7 +85,7 @@ class TestPrograms:
     @patch("os.path.isdir", Mock(return_value=True))
     def test_hln(self, mock_call):
         """Verify the commands to create hard links."""
-        shell.ln("mock/target", "mock/source", symbolic=True)
+        shell.ln("mock/target", "mock/source", symbolic=False)
         check_calls(mock_call, [])
 
     @patch("os.path.isfile", Mock(return_value=True))
