@@ -6,7 +6,7 @@ from typing import Iterator, List, Optional
 import log
 from datafiles import datafile, field
 
-from .. import common, exceptions, settings, shell
+from .. import common, exceptions, shell
 from ..decorators import preserve_cwd
 from .group import Group
 from .source import Identity, Source

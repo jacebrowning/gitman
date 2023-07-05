@@ -6,9 +6,8 @@ import pytest
 from expecter import expect
 
 from gitman.models import Config, find_nested_configs, load_config
-from .. import settings
+from gitman.models.config import filter_nested_configs
 
-from ..models.config import filter_nested_configs
 from .conftest import FILES
 
 
