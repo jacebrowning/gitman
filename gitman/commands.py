@@ -90,10 +90,8 @@ def install(
 
     config = load_config(root)
     configs = [config] if config else []
-    nested_configs = find_nested_configs(root, depth, [])
-    if config is not None:
-        nested_configs = filter_nested_configs(config, nested_configs)
-    configs.extend(nested_configs)
+    configs.extend(find_nested_configs(root, depth, []))
+    configs = filter_nested_configs(configs)
 
     if configs:
         count = 0
