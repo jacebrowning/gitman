@@ -168,7 +168,7 @@ def main(args=None, function=None):
         "lock",
         description=info.capitalize() + ".",
         help=info,
-        parents=[debug, project],
+        parents=[debug, project, depth],
         formatter_class=common.WideHelpFormatter,
     )
     sub.add_argument("name", nargs="*", help="list of dependency names to lock")
@@ -287,6 +287,7 @@ def _get_command(function, namespace):
         args = namespace.name
         kwargs.update(
             root=namespace.root,
+            depth=namespace.depth,
         )
 
     elif namespace.command == "uninstall":
