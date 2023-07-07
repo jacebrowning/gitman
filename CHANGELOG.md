@@ -1,3 +1,7 @@
+# 3.4.1 (beta)
+
+- Fixed logic in filtering nested config.
+
 # 3.4 (2023-03-24)
 
 - Updated messaging to clarify when nested dependencies are updated.
