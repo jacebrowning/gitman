@@ -6,7 +6,7 @@ from typing import Iterator, List, Optional
 import log
 from datafiles import datafile, field
 
-from .. import common, exceptions, settings, shell
+from .. import common, exceptions, shell
 from ..decorators import preserve_cwd
 from .group import Group
 from .source import Identity, Source
@@ -426,7 +426,7 @@ def find_nested_configs(
     root = os.path.abspath(root) if root else _resolve_current_directory()
     configs: List[Config] = []
 
-    if (depth is not None and depth <= 1) or settings.CI:
+    if depth is not None and depth <= 1:
         return configs
 
     log.debug(f"Searching for nested project in: {root}")
@@ -467,15 +467,18 @@ def _valid_filename(filename):
     return name in {"gitman", "gdm"} and ext in {".yml", ".yaml"}
 
 
-def filter_nested_configs(
-    top_level_config: Config, nested_configs: List[Config]
-) -> List[Config]:
+def filter_nested_configs(configs: List[Config]) -> List[Config]:
     """Filter subdirectories inside of parent config."""
-    configs = []
-    config_location_path = Path(top_level_config.location_path)
-    for nested_config in nested_configs:
-        nested_config_root = Path(nested_config.location_path)
-        if config_location_path in nested_config_root.parents:
-            configs.append(nested_config)
+    filtered_configs = []
+    for config_a in configs:
+        is_nested = False
+        for config_b in configs:
+            if config_a == config_b:
+                continue
+            if Path(config_b.location_path) in Path(config_a.location_path).parents:
+                is_nested = True
+                break
+        if not is_nested:
+            filtered_configs.append(config_a)
 
-    return configs
+    return filtered_configs

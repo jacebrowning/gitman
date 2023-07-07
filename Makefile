@@ -12,8 +12,8 @@ dev: install .clean-test ## Continuously run all CI tasks when files chanage
 
 .PHONY: demo
 demo: install
-	@ echo gitman update
-	@ poetry run gitman update
+	@ echo gitman install
+	@ poetry run gitman install --depth 1
 ifdef RECORDING_DELAY
 	@ sleep $(RECORDING_DELAY)
 	@ sleep $(RECORDING_DELAY)
@@ -21,7 +21,7 @@ ifdef RECORDING_DELAY
 	@ sleep $(RECORDING_DELAY)
 endif
 	@ echo gitman list
-	@ poetry run gitman list
+	@ poetry run gitman list --depth 1
 ifdef RECORDING_DELAY
 	@ sleep $(RECORDING_DELAY)
 	@ sleep $(RECORDING_DELAY)
@@ -29,15 +29,15 @@ ifdef RECORDING_DELAY
 	@ sleep $(RECORDING_DELAY)
 endif
 	@ echo gitman lock
-	@ poetry run gitman lock
+	@ poetry run gitman lock --depth 1
 ifdef RECORDING_DELAY
 	@ sleep $(RECORDING_DELAY)
 	@ sleep $(RECORDING_DELAY)
 	@ clear
 	@ sleep $(RECORDING_DELAY)
 endif
-	@ echo gitman install
-	@ poetry run gitman install
+	@ echo gitman update
+	@ poetry run gitman update --depth 1
 ifdef RECORDING_DELAY
 	@ sleep $(RECORDING_DELAY)
 	@ sleep $(RECORDING_DELAY)

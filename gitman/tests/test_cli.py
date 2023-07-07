@@ -359,12 +359,12 @@ def describe_lock():
     @patch("gitman.commands.lock")
     def with_no_arguments(lock):
         cli.main(["lock"])
-        lock.assert_called_once_with(root=None)
+        lock.assert_called_once_with(root=None, depth=5)
 
     @patch("gitman.commands.lock")
     def with_dependencies(lock):
         cli.main(["lock", "foo", "bar"])
-        lock.assert_called_once_with("foo", "bar", root=None)
+        lock.assert_called_once_with("foo", "bar", root=None, depth=5)
 
 
 class TestUninstall:
