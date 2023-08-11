@@ -191,7 +191,13 @@ class Source:
 
         # Update the working tree to the desired revision
         git.update(
-            self.type, self.repo, self.name, fetch=fetch, clean=clean, rev=self.rev
+            self.type,
+            self.repo,
+            self.name,
+            fetch=fetch,
+            clean=clean,
+            rev=self.rev,
+            sparse_paths=self.sparse_paths,
         )
 
     def create_links(self, root: str, *, force: bool = False):

@@ -28,7 +28,7 @@ def clone(
     cache=settings.CACHE,
     sparse_paths=None,
     rev=None,
-    user_params=None
+    user_params=None,
 ):
     """Clone a new Git repository."""
     log.debug("Creating a new repository...")
@@ -196,7 +196,14 @@ def changes(type, include_untracked=False, display_status=True, _show=False):
 
 
 def update(
-    type, repo, path, *, clean=True, fetch=False, rev=None
+    type,
+    repo,
+    path,
+    *,
+    clean=True,
+    fetch=False,
+    rev=None,
+    sparse_paths=None,
 ):  # pylint: disable=redefined-outer-name,unused-argument
 
     if type == "git-svn":
@@ -222,6 +229,32 @@ def update(
     git("stash", **hide)
     if clean:
         git("clean", "--force", "-d", "-x", _show=False)
+
+    # Retrieve current sparse paths (if any) to check if updates are required.
+    current_sparse_paths = []
+    if os.path.exists(".git/info/sparse-checkout"):
+        with open(".git/info/sparse-checkout", "r") as fd:
+            current_sparse_paths = fd.read().splitlines()
+
+    # Check if we have new/updated sparse paths or if they have all been removed.
+    is_sparse_checkout = sparse_paths and sparse_paths[0]
+
+    # If there's a mismatch between new and old sparse path configs, update the tree first.
+    if sorted(sparse_paths if is_sparse_checkout else []) != sorted(
+        current_sparse_paths
+    ):
+        # Configure sparse checkout with given paths or * to restore full checkout.
+        git("config", "core.sparseCheckout", "true", _show=is_sparse_checkout)
+        with open(".git/info/sparse-checkout", "w") as fd:
+            fd.write("\n".join(sparse_paths if is_sparse_checkout else ["*"]))
+
+        # Update the current tree with sparse or full checkout as specified above.
+        git("read-tree", "-m", "-u", "HEAD", _show=False, _stream=False)
+
+        # If no longer a sparse checkout, disable and remove sparse paths config.
+        if not is_sparse_checkout:
+            git("config", "core.sparseCheckout", "false", _show=not is_sparse_checkout)
+            os.unlink(".git/info/sparse-checkout")
 
     rev = _get_sha_from_rev(rev)
     git("checkout", "--force", rev, _stream=False)

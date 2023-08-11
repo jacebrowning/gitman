@@ -79,7 +79,7 @@ class TestSource:
         mock_is_fetch_required.assert_called_once_with("git", "rev")
         mock_fetch.assert_called_once_with("git", "repo", "name", rev="rev")
         mock_update.assert_called_once_with(
-            "git", "repo", "name", clean=True, fetch=False, rev="rev"
+            "git", "repo", "name", clean=True, fetch=False, rev="rev", sparse_paths=[]
         )
 
     @patch("os.path.isdir", Mock(return_value=True))
@@ -127,7 +127,7 @@ class TestSource:
         mock_is_fetch_required.assert_not_called()
         mock_fetch.assert_called_once_with("git", "repo", "name", rev="rev")
         mock_update.assert_called_once_with(
-            "git", "repo", "name", clean=True, fetch=True, rev="rev"
+            "git", "repo", "name", clean=True, fetch=True, rev="rev", sparse_paths=[]
         )
 
     def test_identify_missing(self, source, tmpdir):
