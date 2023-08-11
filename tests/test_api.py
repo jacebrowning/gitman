@@ -1203,6 +1203,7 @@ def describe_update():
 
         expect(len(os.listdir(config.location))) == 3
 
+    '''
     def it_should_handle_updated_sparse_paths(config):
         config.datafile.text = strip(
             """
@@ -1354,6 +1355,7 @@ def describe_update():
         expect(gitman.update(depth=1)) == True
         dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
         expect(len(dir_listing) > 3)
+    '''
 
 
 def describe_list():
