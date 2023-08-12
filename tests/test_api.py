@@ -352,7 +352,7 @@ def describe_install():
 
     def describe_sparse_paths():
         @pytest.fixture
-        def config_with_sparse_paths(config):
+        def config_with_scripts(config):
             config.datafile.text = strip(
                 """
                     location: deps
@@ -385,7 +385,14 @@ def describe_install():
             expect(dir_listing).contains("src")
             expect(len(dir_listing) == 1)
 
-        def it_should_handle_updated_sparse_paths(config):
+        def it_handles_changes_to_sparse_paths(config):
+            expect(gitman.install("gitman_1", depth=1, force=True)) == True
+            dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
+            expect(dir_listing).contains("src")
+            expect(len(dir_listing) == 1)
+
+            os.chdir(TMP)
+
             config.datafile.text = strip(
                 """
                     location: deps
@@ -396,7 +403,7 @@ def describe_install():
                         repo: https://github.com/jacebrowning/gitman-demo
                         sparse_paths:
                           - Makefile
-                        rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
+                        rev: dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0
                         links:
                           -
                         scripts:
@@ -405,58 +412,9 @@ def describe_install():
             )
             config.datafile.load()
 
-            expect(gitman.install(depth=1, force=True)) == True
+            expect(gitman.install("gitman_1", depth=1, force=True)) == True
             dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
             expect(dir_listing).contains("Makefile")
-            expect(len(dir_listing) == 1)
-
-        def it_should_handle_new_sparse_paths(config):
-            config.datafile.text = strip(
-                """
-                    location: deps
-                    sources:
-                      - name: gitman_1
-                        type: git
-                        params:
-                        repo: https://github.com/jacebrowning/gitman-demo
-                        sparse_paths:
-                          -
-                        rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
-                        links:
-                          -
-                        scripts:
-                          -
-                    """
-            )
-            config.datafile.load()
-
-            expect(gitman.install(depth=1, force=True)) == True
-            dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
-            expect(len(dir_listing) > 1)
-
-        def it_should_handle_removed_sparse_paths(config):
-            config.datafile.text = strip(
-                """
-                    location: deps
-                    sources:
-                      - name: gitman_1
-                        type: git
-                        params:
-                        repo: https://github.com/jacebrowning/gitman-demo
-                        sparse_paths:
-                          - src/*
-                        rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
-                        links:
-                          -
-                        scripts:
-                          -
-                    """
-            )
-            config.datafile.load()
-
-            expect(gitman.install(depth=1, force=True)) == True
-            dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
-            expect(dir_listing).contains("src")
             expect(len(dir_listing) == 1)
 
     def describe_mixed_names():
