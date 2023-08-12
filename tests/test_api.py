@@ -1204,6 +1204,29 @@ def describe_update():
         expect(len(os.listdir(config.location))) == 3
 
     def describe_sparse_paths_updates():
+        @pytest.fixture
+        def config_for_sparse_paths(config):
+            config.datafile.text = strip(
+                """
+                    location: deps
+                    sources:
+                      - name: gitman_1
+                        type: git
+                        params:
+                        repo: https://github.com/jacebrowning/gitman-demo
+                        sparse_paths:
+                          -
+                        rev: 63ddfd82d308ddae72d31b61cb8942c898fa05b5
+                        links:
+                          -
+                        scripts:
+                          -
+                    """
+            )
+            config.datafile.load()
+
+            return config
+
         def it_should_handle_updated_sparse_paths(config):
             config.datafile.text = strip(
                 """
