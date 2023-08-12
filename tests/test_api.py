@@ -401,7 +401,7 @@ def describe_install():
                         sparse_paths:
                           - gdm/*
                           - Makefile
-                        rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
+                        rev: 63ddfd82d308ddae72d31b61cb8942c898fa05b5
                         links:
                           -
                         scripts:
@@ -428,7 +428,7 @@ def describe_install():
                         repo: https://github.com/jacebrowning/gitman-demo
                         sparse_paths:
                           - docs/*
-                        rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
+                        rev: 63ddfd82d308ddae72d31b61cb8942c898fa05b5
                         links:
                           -
                         scripts:
@@ -436,6 +436,7 @@ def describe_install():
                     """
             )
             config.datafile.load()
+
             expect(gitman.install(depth=1)) == True
             dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
             expect(dir_listing).contains("docs")
@@ -452,7 +453,7 @@ def describe_install():
                         repo: https://github.com/jacebrowning/gitman-demo
                         sparse_paths:
                           -
-                        rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
+                        rev: 63ddfd82d308ddae72d31b61cb8942c898fa05b5
                         links:
                           -
                         scripts:
@@ -479,7 +480,7 @@ def describe_install():
                           - gdm/*
                           - docs/*
                           - Makefile
-                        rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
+                        rev: 63ddfd82d308ddae72d31b61cb8942c898fa05b5
                         links:
                           -
                         scripts:
@@ -487,6 +488,7 @@ def describe_install():
                     """
             )
             config.datafile.load()
+
             expect(gitman.install(depth=1)) == True
             dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
             expect(dir_listing).contains("docs")
@@ -507,7 +509,7 @@ def describe_install():
                           - gdm/*
                           - docs/*
                           - Makefile
-                        rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
+                        rev: 63ddfd82d308ddae72d31b61cb8942c898fa05b5
                         links:
                           -
                         scripts:
@@ -535,7 +537,7 @@ def describe_install():
                         repo: https://github.com/jacebrowning/gitman-demo
                         sparse_paths:
                           -
-                        rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
+                        rev: 63ddfd82d308ddae72d31b61cb8942c898fa05b5
                         links:
                           -
                         scripts:
@@ -543,6 +545,7 @@ def describe_install():
                     """
             )
             config.datafile.load()
+
             expect(gitman.install(depth=1)) == True
             dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
             expect(len(dir_listing) > 3)
