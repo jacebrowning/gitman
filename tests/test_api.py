@@ -386,6 +386,27 @@ def describe_install():
             expect(len(dir_listing) == 1)
 
         def it_handles_changes_to_sparse_paths(config):
+            os.chdir(TMP)
+
+            config.datafile.text = strip(
+                """
+                    location: deps
+                    sources:
+                      - name: gitman_1
+                        type: git
+                        params:
+                        repo: https://github.com/jacebrowning/gitman-demo
+                        sparse_paths:
+                          - src/*
+                        rev: dfd561870c0eb6e814f8f6cd11f8f62f4ae88ea0
+                        links:
+                          -
+                        scripts:
+                          -
+                    """
+            )
+            config.datafile.load()
+
             expect(gitman.install("gitman_1", depth=1, force=True)) == True
             dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
             expect(dir_listing).contains("src")
