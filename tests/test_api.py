@@ -406,7 +406,7 @@ def describe_install():
             )
             config.datafile.load()
 
-            expect(gitman.install(depth=1)) == True
+            expect(gitman.install(depth=1, force=True)) == True
             dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
             expect(dir_listing).contains("gdm")
             expect(dir_listing).contains("Makefile")
@@ -430,7 +430,8 @@ def describe_install():
                     """
             )
             config.datafile.load()
-            expect(gitman.install(depth=1)) == True
+
+            expect(gitman.install(depth=1, force=True)) == True
             dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
             expect(dir_listing).contains("docs")
             expect(len(dir_listing) == 1)
@@ -455,7 +456,7 @@ def describe_install():
             )
             config.datafile.load()
 
-            expect(gitman.install(depth=1)) == True
+            expect(gitman.install(depth=1, force=True)) == True
             dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
             expect(len(dir_listing) > 3)
 
@@ -479,7 +480,7 @@ def describe_install():
                     """
             )
             config.datafile.load()
-            expect(gitman.install(depth=1)) == True
+            expect(gitman.install(depth=1, force=True)) == True
             dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
             expect(dir_listing).contains("docs")
             expect(dir_listing).contains("gdm")
@@ -533,7 +534,7 @@ def describe_install():
                     """
             )
             config.datafile.load()
-            expect(gitman.install(depth=1)) == True
+            expect(gitman.install(depth=1, force=True)) == True
             dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
             expect(len(dir_listing) > 3)
 
