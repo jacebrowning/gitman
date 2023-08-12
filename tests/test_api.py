@@ -363,7 +363,7 @@ def describe_install():
                         repo: https://github.com/jacebrowning/gitman-demo
                         sparse_paths:
                           - src/*
-                        rev: example-branch
+                        rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
                         links:
                           -
                         scripts:
@@ -396,7 +396,7 @@ def describe_install():
                         repo: https://github.com/jacebrowning/gitman-demo
                         sparse_paths:
                           - Makefile
-                        rev: example-branch
+                        rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
                         links:
                           -
                         scripts:
@@ -421,7 +421,7 @@ def describe_install():
                         repo: https://github.com/jacebrowning/gitman-demo
                         sparse_paths:
                           -
-                        rev: example-branch
+                        rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
                         links:
                           -
                         scripts:
@@ -445,7 +445,7 @@ def describe_install():
                         repo: https://github.com/jacebrowning/gitman-demo
                         sparse_paths:
                           - src/*
-                        rev: example-branch
+                        rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
                         links:
                           -
                         scripts:
