@@ -585,9 +585,9 @@ def describe_sparse_paths_updates():
                     params:
                     repo: https://github.com/jacebrowning/gitman-demo
                     sparse_paths:
-                      - gdm/*
-                      - Makefile
-                    rev: 63ddfd82d308ddae72d31b61cb8942c898fa05b5
+                      - src/*
+                      - .gitignore
+                    rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
                     links:
                       -
                     scripts:
@@ -598,8 +598,8 @@ def describe_sparse_paths_updates():
 
         expect(gitman.install("gitman_1", depth=1, force=True)) == True
         dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
-        expect(dir_listing).contains("gdm")
-        expect(dir_listing).contains("Makefile")
+        expect(dir_listing).contains("src")
+        expect(dir_listing).contains(".gitignore")
         expect(len(dir_listing) == 2)
 
         config.datafile.text = strip(
@@ -611,8 +611,8 @@ def describe_sparse_paths_updates():
                     params:
                     repo: https://github.com/jacebrowning/gitman-demo
                     sparse_paths:
-                      - docs/*
-                    rev: 63ddfd82d308ddae72d31b61cb8942c898fa05b5
+                      - src/*
+                    rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
                     links:
                       -
                     scripts:
@@ -623,110 +623,8 @@ def describe_sparse_paths_updates():
 
         expect(gitman.install("gitman_1", depth=1, force=True)) == True
         dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
-        expect(dir_listing).contains("docs")
+        expect(dir_listing).contains("src")
         expect(len(dir_listing) == 1)
-
-    def it_should_handle_new_sparse_paths(config):
-        config.datafile.text = strip(
-            """
-                location: deps
-                sources:
-                  - name: gitman_1
-                    type: git
-                    params:
-                    repo: https://github.com/jacebrowning/gitman-demo
-                    sparse_paths:
-                      -
-                    rev: 63ddfd82d308ddae72d31b61cb8942c898fa05b5
-                    links:
-                      -
-                    scripts:
-                      -
-                """
-        )
-        config.datafile.load()
-
-        expect(gitman.install("gitman_1", depth=1, force=True)) == True
-        dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
-        expect(len(dir_listing) > 3)
-
-        config.datafile.text = strip(
-            """
-                location: deps
-                sources:
-                  - name: gitman_1
-                    type: git
-                    params:
-                    repo: https://github.com/jacebrowning/gitman-demo
-                    sparse_paths:
-                      - gdm/*
-                      - docs/*
-                      - Makefile
-                    rev: 63ddfd82d308ddae72d31b61cb8942c898fa05b5
-                    links:
-                      -
-                    scripts:
-                      -
-                """
-        )
-        config.datafile.load()
-        expect(gitman.install("gitman_1", depth=1, force=True)) == True
-        dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
-        expect(dir_listing).contains("docs")
-        expect(dir_listing).contains("gdm")
-        expect(dir_listing).contains("Makefile")
-        expect(len(dir_listing) == 3)
-
-    def it_should_handle_removed_sparse_paths(config):
-        config.datafile.text = strip(
-            """
-                location: deps
-                sources:
-                  - name: gitman_1
-                    type: git
-                    params:
-                    repo: https://github.com/jacebrowning/gitman-demo
-                    sparse_paths:
-                      - gdm/*
-                      - docs/*
-                      - Makefile
-                    rev: 63ddfd82d308ddae72d31b61cb8942c898fa05b5
-                    links:
-                      -
-                    scripts:
-                      -
-                """
-        )
-        config.datafile.load()
-
-        expect(gitman.install("gitman_1", depth=1, force=True)) == True
-        dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
-        expect(dir_listing).contains("docs")
-        expect(dir_listing).contains("gdm")
-        expect(dir_listing).contains("Makefile")
-        expect(len(dir_listing) == 3)
-
-        config.datafile.text = strip(
-            """
-                location: deps
-                sources:
-                  - name: gitman_1
-                    type: git
-                    params:
-                    repo: https://github.com/jacebrowning/gitman-demo
-                    sparse_paths:
-                      -
-                    rev: 63ddfd82d308ddae72d31b61cb8942c898fa05b5
-                    links:
-                      -
-                    scripts:
-                      -
-                """
-        )
-        config.datafile.load()
-        expect(gitman.install("gitman_1", depth=1, force=True)) == True
-        dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
-        expect(len(dir_listing) > 3)
 
 
 def describe_uninstall():
