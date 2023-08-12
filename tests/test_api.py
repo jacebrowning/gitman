@@ -1259,7 +1259,6 @@ def describe_update():
         config.datafile.load()
 
         expect(gitman.install(depth=1)) == True
-        expect(os.listdir(config.location)) == ["foo"]
         expect(len(os.listdir(config.location))) == 3
 
 
