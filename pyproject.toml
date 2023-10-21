@@ -75,7 +75,7 @@ coveragespace = "^6.0"
 # Documentation
 mkdocs = "^1.2.3"
 mkdocstrings = "^0.18.1"
-pygments = "^2.7.4"
+pygments = "^2.15.0"
 jinja2 = "~3.0.3"
 
 # Tooling
