@@ -62,15 +62,15 @@ types-freezegun = "*"
 types-setuptools = "*"
 
 # Testing
-pytest = "^7.3"
-pytest-cov = "^4.1"
-pytest-describe = "^2.0"
+pytest = "^8.1"
+pytest-cov = "^5.0"
+pytest-describe = "^2.2"
 pytest-expecter = "^3.0"
 pytest-random = "*"
 freezegun = "*"
 
 # Reports
-coveragespace = "^6.0"
+coveragespace = "^6.1"
 
 # Documentation
 mkdocs = "^1.2.3"
@@ -116,6 +116,7 @@ addopts = """
 -r sxX
 --show-capture=log
 
+--cov=gitman
 --cov-report=html
 --cov-report=term-missing:skip-covered
 --no-cov-on-fail

@@ -226,20 +226,20 @@ toml = ["tomli"]
 
 [[package]]
 name = "coveragespace"
-version = "6.0"
+version = "6.1"
 description = "A place to track your code coverage metrics."
 optional = false
-python-versions = ">=3.8,<4.0"
+python-versions = "<4.0,>=3.8"
 files = [
-    {file = "coveragespace-6.0-py3-none-any.whl", hash = "sha256:362fb19fa760a35e6da799b31cd18bde709b93452cb753931ff63708915516b3"},
-    {file = "coveragespace-6.0.tar.gz", hash = "sha256:4ca158725b24f7344686b5c21d495837d932fd549a8c79d1b15cdb4f905e8713"},
+    {file = "coveragespace-6.1-py3-none-any.whl", hash = "sha256:ca6ccd5eb32eb6ce5fe78de6c052353b9fbb378a886fde0838480defe33406a8"},
+    {file = "coveragespace-6.1.tar.gz", hash = "sha256:049c0b7b629ad43d72692f0f99b9f8a97936ad596f7f27c1af61323fba90ebef"},
 ]
 
 [package.dependencies]
 colorama = ">=0.4"
 coverage = ">=4.0"
 docopt = ">=0.6"
-minilog = ">=2.0,<3.0"
+minilog = ">=2.0"
 requests = ">=2.28,<3.0"
 
 [[package]]
@@ -770,13 +770,13 @@ test = ["appdirs (==1.4.4)", "pytest (>=6)", "pytest-cov (>=2.7)", "pytest-mock 
 
 [[package]]
 name = "pluggy"
-version = "1.0.0"
+version = "1.5.0"
 description = "plugin and hook calling mechanisms for python"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.8"
 files = [
-    {file = "pluggy-1.0.0-py2.py3-none-any.whl", hash = "sha256:74134bbf457f031a36d68416e1509f34bd5ccc019f0bcc952c7b909d06b37bd3"},
-    {file = "pluggy-1.0.0.tar.gz", hash = "sha256:4224373bacce55f955a878bf9cfa763c1e360858e330072059e10bad68531159"},
+    {file = "pluggy-1.5.0-py3-none-any.whl", hash = "sha256:44e1ad92c8ca002de6377e165f3e0f1be63266ab4d554740532335b9d75ea669"},
+    {file = "pluggy-1.5.0.tar.gz", hash = "sha256:2cffa88e94fdc978c4c574f15f9e59b7f4201d439195c3715ca9e2486f1d0cf1"},
 ]
 
 [package.extras]
@@ -915,13 +915,13 @@ diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
 name = "pytest"
-version = "7.3.1"
+version = "8.1.2"
 description = "pytest: simple powerful testing with Python"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "pytest-7.3.1-py3-none-any.whl", hash = "sha256:3799fa815351fea3a5e96ac7e503a96fa51cc9942c3753cda7651b93c1cfa362"},
-    {file = "pytest-7.3.1.tar.gz", hash = "sha256:434afafd78b1d78ed0addf160ad2b77a30d35d4bdf8af234fe621919d9ed15e3"},
+    {file = "pytest-8.1.2-py3-none-any.whl", hash = "sha256:6c06dc309ff46a05721e6fd48e492a775ed8165d2ecdf57f156a80c7e95bb142"},
+    {file = "pytest-8.1.2.tar.gz", hash = "sha256:f3c45d1d5eed96b01a2aea70dee6a4a366d51d38f9957768083e4fecfc77f3ef"},
 ]
 
 [package.dependencies]
@@ -929,21 +929,21 @@ colorama = {version = "*", markers = "sys_platform == \"win32\""}
 exceptiongroup = {version = ">=1.0.0rc8", markers = "python_version < \"3.11\""}
 iniconfig = "*"
 packaging = "*"
-pluggy = ">=0.12,<2.0"
-tomli = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
+pluggy = ">=1.4,<2.0"
+tomli = {version = ">=1", markers = "python_version < \"3.11\""}
 
 [package.extras]
-testing = ["argcomplete", "attrs (>=19.2.0)", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "xmlschema"]
+testing = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
 
 [[package]]
 name = "pytest-cov"
-version = "4.1.0"
+version = "5.0.0"
 description = "Pytest plugin for measuring coverage."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "pytest-cov-4.1.0.tar.gz", hash = "sha256:3904b13dfbfec47f003b8e77fd5b589cd11904a21ddf1ab38a64f204d6a10ef6"},
-    {file = "pytest_cov-4.1.0-py3-none-any.whl", hash = "sha256:6ba70b9e97e69fcc3fb45bfeab2d0a138fb65c4d0d6a41ef33983ad114be8c3a"},
+    {file = "pytest-cov-5.0.0.tar.gz", hash = "sha256:5837b58e9f6ebd335b0f8060eecce69b662415b16dc503883a02f45dfeb14857"},
+    {file = "pytest_cov-5.0.0-py3-none-any.whl", hash = "sha256:4f0764a1219df53214206bf1feea4633c3b558a2925c8b59f144f682861ce652"},
 ]
 
 [package.dependencies]
@@ -951,21 +951,21 @@ coverage = {version = ">=5.2.1", extras = ["toml"]}
 pytest = ">=4.6"
 
 [package.extras]
-testing = ["fields", "hunter", "process-tests", "pytest-xdist", "six", "virtualenv"]
+testing = ["fields", "hunter", "process-tests", "pytest-xdist", "virtualenv"]
 
 [[package]]
 name = "pytest-describe"
-version = "2.0.1"
+version = "2.2.0"
 description = "Describe-style plugin for pytest"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "pytest-describe-2.0.1.tar.gz", hash = "sha256:e5cbaa31169f0060348ad5ca0191027e5f1f41f3f27fdeef208365e09c55eb9a"},
-    {file = "pytest_describe-2.0.1-py3-none-any.whl", hash = "sha256:ea347838bdf774b498ee7cb4a0b802a40be89e667a399fb63d860e3223bf4183"},
+    {file = "pytest-describe-2.2.0.tar.gz", hash = "sha256:39bb05eb90f2497d9ca342ef9a0b7fa5bada7e58505aec33f66d661d631955b7"},
+    {file = "pytest_describe-2.2.0-py3-none-any.whl", hash = "sha256:bd9e2c73acb4b9522a8400823d98f5b6a081667d3bfd7243a8598336896b544d"},
 ]
 
 [package.dependencies]
-pytest = ">=4.0.0"
+pytest = ">=4.6,<9"
 
 [[package]]
 name = "pytest-expecter"
@@ -1505,4 +1505,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "67f1867ebfbfad6dd0d8cc899eddac5a7d842639b5a9e73634873ab960f2675f"
+content-hash = "7bdcc911a273562f0e521bc14cd797a9b62e1bed2423eb9ee9a359bfbfc18bb7"
