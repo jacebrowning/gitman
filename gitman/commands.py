@@ -62,6 +62,7 @@ def install(
     clean=True,
     skip_changes=False,
     skip_default_group=False,
+    skip_scripts=False,
 ):
     """Install dependencies for a project.
 
@@ -80,6 +81,7 @@ def install(
      should be skipped
     - `skip_default_group`: indicates default_group should be skipped if
      `*names` is empty
+    - `skip_scripts`: indicates scripts should be skipped
     """
     log.info(
         "%sInstalling dependencies: %s",
@@ -115,7 +117,7 @@ def install(
         )
         count += _count  # type: ignore
 
-        if _count:
+        if _count and not skip_scripts:
             label = "nested scripts" if index else "scripts"
             common.show(f"Running {label}...", color="message", log=False)
             common.newline()
@@ -136,6 +138,7 @@ def update(
     lock=None,  # pylint: disable=redefined-outer-name
     skip_changes=False,
     skip_default_group=False,
+    skip_scripts=False,
 ):
     """Update dependencies for a project.
 
@@ -155,6 +158,7 @@ def update(
      should be skipped
     - `skip_default_group`: indicates default_group should be skipped if
      `*names` is empty
+    - `skip_scripts`: indicates scripts should be skipped
     """
     log.info(
         "%s dependencies%s: %s",
@@ -198,7 +202,7 @@ def update(
                 skip_changes=skip_changes or force_interactive,
             )
 
-        if _count:
+        if _count and not skip_scripts:
             label = "nested scripts" if index else "scripts"
             common.show(f"Running {label}...", color="message", log=False)
             common.newline()

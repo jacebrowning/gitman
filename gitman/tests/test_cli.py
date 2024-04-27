@@ -77,6 +77,7 @@ class TestInstall:
             fetch=False,
             clean=False,
             skip_changes=False,
+            skip_scripts=False,
             skip_default_group=False,
         )
 
@@ -93,6 +94,7 @@ class TestInstall:
             fetch=False,
             clean=False,
             skip_changes=False,
+            skip_scripts=False,
             skip_default_group=False,
         )
 
@@ -109,6 +111,7 @@ class TestInstall:
             fetch=False,
             clean=False,
             skip_changes=False,
+            skip_scripts=False,
             skip_default_group=False,
         )
 
@@ -125,6 +128,7 @@ class TestInstall:
             fetch=True,
             clean=False,
             skip_changes=False,
+            skip_scripts=False,
             skip_default_group=False,
         )
 
@@ -141,6 +145,7 @@ class TestInstall:
             fetch=False,
             clean=True,
             skip_changes=False,
+            skip_scripts=False,
             skip_default_group=False,
         )
 
@@ -159,6 +164,7 @@ class TestInstall:
             fetch=False,
             clean=False,
             skip_changes=False,
+            skip_scripts=False,
             skip_default_group=False,
         )
 
@@ -175,6 +181,7 @@ class TestInstall:
             fetch=False,
             clean=False,
             skip_changes=False,
+            skip_scripts=False,
             skip_default_group=False,
         )
 
@@ -204,6 +211,7 @@ class TestUpdate:
             recurse=False,
             lock=None,
             skip_changes=False,
+            skip_scripts=False,
         )
 
     @patch("gitman.commands.update")
@@ -220,6 +228,7 @@ class TestUpdate:
             recurse=True,
             lock=None,
             skip_changes=False,
+            skip_scripts=False,
         )
 
     @patch("gitman.commands.update")
@@ -236,6 +245,7 @@ class TestUpdate:
             recurse=False,
             lock=False,
             skip_changes=False,
+            skip_scripts=False,
         )
 
     @patch("gitman.commands.update")
@@ -252,6 +262,7 @@ class TestUpdate:
             recurse=False,
             lock=None,
             skip_changes=True,
+            skip_scripts=False,
         )
 
     @patch("gitman.commands.update")
@@ -268,6 +279,7 @@ class TestUpdate:
             recurse=False,
             lock=None,
             skip_changes=False,
+            skip_scripts=False,
         )
 
     @patch("gitman.commands.update")
@@ -284,6 +296,7 @@ class TestUpdate:
             recurse=False,
             lock=None,
             skip_changes=False,
+            skip_scripts=False,
         )
 
     @patch("gitman.commands.update")
@@ -302,6 +315,7 @@ class TestUpdate:
             recurse=False,
             lock=None,
             skip_changes=False,
+            skip_scripts=False,
         )
 
     @patch("gitman.commands.update")
@@ -318,6 +332,7 @@ class TestUpdate:
             recurse=False,
             lock=None,
             skip_changes=False,
+            skip_scripts=False,
         )
 
 

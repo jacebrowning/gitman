@@ -62,6 +62,13 @@ def main(args=None):
         action="store_true",
         dest="no_defaults",
     )
+    parser.add_argument(
+        "-S",
+        "--no-scripts",
+        help="skip running scripts after installation",
+        action="store_true",
+        dest="no_scripts",
+    )
 
     # Update option
     group.add_argument(

@@ -118,6 +118,13 @@ def main(args=None, function=None):
         action="store_true",
         dest="no_defaults",
     )
+    sub.add_argument(
+        "-S",
+        "--no-scripts",
+        help="skip running scripts after installation",
+        action="store_true",
+        dest="no_scripts",
+    )
 
     # Update parser
     info = "update dependencies to the latest versions"
@@ -143,6 +150,13 @@ def main(args=None, function=None):
         dest="lock",
         default=None,
         help="disable recording of updated versions",
+    )
+    sub.add_argument(
+        "-S",
+        "--no-scripts",
+        help="skip running scripts after installation",
+        action="store_true",
+        dest="no_scripts",
     )
 
     # List parser
@@ -262,6 +276,7 @@ def _get_command(function, namespace):
             force_interactive=namespace.force_interactive,
             clean=namespace.clean,
             skip_changes=namespace.skip_changes,
+            skip_scripts=namespace.no_scripts,
         )
         if namespace.command == "install":
             kwargs.update(
