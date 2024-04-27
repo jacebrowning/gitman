@@ -304,6 +304,7 @@ def describe_install():
             expect(os.listdir()).contains("gmd_3")
             expect(os.listdir()).contains("gmd_4")
 
+        @pytest.mark.skipif(os.name == "nt", reason="Test does not work on Windows")
         def it_should_not_overwrite_files(config_with_links):
             os.system("touch gmd_3")
 
