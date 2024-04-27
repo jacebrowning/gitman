@@ -1,4 +1,4 @@
-# pylint: disable=no-self-use,redefined-outer-name,unused-variable,expression-not-assigned,misplaced-comparison-constant,len-as-condition
+# pylint: disable=redefined-outer-name,unused-variable,expression-not-assigned,len-as-condition
 
 import os
 

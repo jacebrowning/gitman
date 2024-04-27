@@ -13,7 +13,8 @@ from gitman import cli
 def config(tmpdir):
     tmpdir.chdir()
     path = str(tmpdir.join("gdm.yml"))
-    open(path, "w").close()
+    with open(path, "w", encoding="utf-8"):
+        pass
     return path
 
 
@@ -21,7 +22,7 @@ def config(tmpdir):
 def location(tmpdir):
     tmpdir.chdir()
     path = str(tmpdir.join("gdm.yml"))
-    with open(path, "w") as outfile:
+    with open(path, "w", encoding="utf-8") as outfile:
         outfile.write("location: foo")
     return str(tmpdir.join("foo"))
 

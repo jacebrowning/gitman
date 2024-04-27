@@ -329,7 +329,7 @@ class Config:
     def log(self, message: str = "", *args):
         """Append a message to the log file."""
         os.makedirs(self.location_path, exist_ok=True)
-        with open(self.log_path, "a") as outfile:
+        with open(self.log_path, "a", encoding="utf-8") as outfile:
             outfile.write(message.format(*args) + "\n")
 
     def _get_sources(self, *, use_locked: Optional[bool] = None) -> List[Source]:

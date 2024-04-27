@@ -1213,7 +1213,7 @@ def describe_list():
         gitman.install()
         gitman.list()
 
-        with open(config.log_path) as stream:
+        with open(config.log_path, encoding="utf-8") as stream:
             contents = stream.read().replace(TMP, "tmp").replace("\\", "/")
         expect(contents) == strip(
             """
@@ -1233,7 +1233,7 @@ def describe_list():
     def it_handles_missing_dependencies(config):
         gitman.list()
 
-        with open(config.log_path) as stream:
+        with open(config.log_path, encoding="utf-8") as stream:
             contents = stream.read().replace(TMP, "tmp").replace("\\", "/")
         expect(contents) == strip(
             """

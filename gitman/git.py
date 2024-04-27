@@ -62,11 +62,15 @@ def clone(
         git("-C", normpath, "remote", "add", "-f", "origin", sparse_paths_repo)
 
         with open(
-            "%s/%s/.git/info/sparse-checkout" % (os.getcwd(), normpath), "w"
+            "%s/%s/.git/info/sparse-checkout" % (os.getcwd(), normpath),
+            "w",
+            encoding="utf-8",
         ) as fd:
             fd.write("\n".join(sparse_paths))
         with open(
-            "%s/%s/.git/objects/info/alternates" % (os.getcwd(), normpath), "w"
+            "%s/%s/.git/objects/info/alternates" % (os.getcwd(), normpath),
+            "w",
+            encoding="utf-8",
         ) as fd:
             fd.write("%s/objects" % sparse_paths_repo)
 
