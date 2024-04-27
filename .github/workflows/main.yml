@@ -41,7 +41,8 @@ jobs:
     - name: Run Demo
       run: make demo
 
-    - name: Upload coverage
-      uses: codecov/codecov-action@v1
-      with:
-        fail_ci_if_error: true
+    # TODO: Add code coverage
+    # - name: Upload coverage
+    #   uses: codecov/codecov-action@v1
+    #   with:
+    #     fail_ci_if_error: true
