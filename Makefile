@@ -94,7 +94,7 @@ check: install format  ## Run formaters, linters, and static analysis
 ifdef CI
 	git diff --exit-code
 endif
-	poetry run mypy $(PACKAGE) tests --config-file=.mypy.ini
+	poetry run mypy $(PACKAGE) tests
 	poetry run pylint $(PACKAGE) tests --rcfile=.pylint.ini
 	poetry run pydocstyle $(PACKAGE) tests
 
@@ -106,6 +106,9 @@ FAILURES := .cache/pytest/v/cache/lastfailed
 PYTEST_OPTIONS := --random --random-seed=$(RANDOM_SEED)
 ifdef DISABLE_COVERAGE
 PYTEST_OPTIONS += --no-cov --disable-warnings
+endif
+ifdef CI
+PYTEST_OPTIONS += --cov-report=xml
 endif
 PYTEST_RERUN_OPTIONS := --last-failed --exitfirst
 
