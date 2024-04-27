@@ -24,8 +24,6 @@ def pytest_configure(config):
 def pytest_runtest_setup(item):
     """Disable file storage during unit tests."""
     if "integration" in item.keywords:
-        if os.name == "nt":
-            pytest.skip("Integration tests not supported on Windows")
         if not os.getenv(ENV):
             pytest.skip(REASON)
         else:

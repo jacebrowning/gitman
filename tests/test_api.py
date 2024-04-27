@@ -190,7 +190,6 @@ def describe_install():
             )
         ) == True
 
-    @pytest.mark.skipif(os.name == "nt", reason="Test does not work on Windows")
     def it_can_handle_missing_locked_sources(config):
         config.datafile.text = strip(
             """
@@ -264,7 +263,6 @@ def describe_install():
             with pytest.raises(RuntimeError):
                 gitman.install(depth=1)
 
-        @pytest.mark.skipif(os.name == "nt", reason="Test does not work on Windows")
         def it_should_not_overwrite_non_empty_directories(config_with_link):
             os.system("mkdir my_link")
             os.system("touch mylink/my_link")
@@ -305,7 +303,6 @@ def describe_install():
             expect(os.listdir()).contains("gmd_3")
             expect(os.listdir()).contains("gmd_4")
 
-        @pytest.mark.skipif(os.name == "nt", reason="Test does not work on Windows")
         def it_should_not_overwrite_files(config_with_links):
             os.system("touch gmd_3")
 
@@ -586,7 +583,6 @@ def describe_uninstall():
 
         expect(os.path.exists(config.location)) == False
 
-    @pytest.mark.skipif(os.name == "nt", reason="Test does not work on Windows")
     def it_should_not_fail_when_no_dependencies_exist(config):
         expect(os.path.isdir(config.location)) == False
 
@@ -614,7 +610,6 @@ def describe_uninstall():
 
             gitman.uninstall()
 
-        @pytest.mark.skipif(os.name == "nt", reason="Test does not work on Windows")
         def it_should_not_fail_when_no_dependencies_exist(config):
             expect(os.path.isdir(config.location)) == False
 
@@ -1169,7 +1164,6 @@ def describe_update():
         """
         )
 
-    @pytest.mark.skipif(os.name == "nt", reason="Test does not work on Windows")
     def it_merges_sources(config):
         config.datafile.text = strip(
             """
