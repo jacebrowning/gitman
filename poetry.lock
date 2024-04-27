@@ -247,13 +247,13 @@ requests = ">=2.28,<3.0"
 
 [[package]]
 name = "datafiles"
-version = "2.1.2"
+version = "2.2.2"
 description = "File-based ORM for dataclasses."
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "datafiles-2.1.2-py3-none-any.whl", hash = "sha256:67d7bcd105136ac41ec79b41a880935132c1cffbea4e240a46f5edf9ff9c04df"},
-    {file = "datafiles-2.1.2.tar.gz", hash = "sha256:4994974ca2bdbebecc8718294f6aaa674bc0a6ab185d4917c16739dc01719990"},
+    {file = "datafiles-2.2.2-py3-none-any.whl", hash = "sha256:ad50344be44444edf8220046b3cfb81aff61aed5c3dd61f2808caf5add2f5ec2"},
+    {file = "datafiles-2.2.2.tar.gz", hash = "sha256:c82e3ca2e187f5fdbb6eb01c4001021c945f0e75de1e32b0aeece3615d8d478b"},
 ]
 
 [package.dependencies]
@@ -563,13 +563,13 @@ files = [
 
 [[package]]
 name = "minilog"
-version = "2.1"
+version = "2.3"
 description = "Minimalistic wrapper for Python logging."
 optional = false
-python-versions = ">=3.7,<4.0"
+python-versions = ">=3.8,<4.0"
 files = [
-    {file = "minilog-2.1-py3-none-any.whl", hash = "sha256:0c48879cc9e72f0127aa2c36b522dc6fa10fa8532956197436b491d31617d5d5"},
-    {file = "minilog-2.1.tar.gz", hash = "sha256:2048a8d381b36ef5f146fb9a657e627729411f8e2ed0047e2c1286cf8e3e58d7"},
+    {file = "minilog-2.3-py3-none-any.whl", hash = "sha256:e42dc2def1da424e90d6664279c128dde94adc5840557b27857957ed23ee09b6"},
+    {file = "minilog-2.3.tar.gz", hash = "sha256:ebdf354f1dd86a2e8a824cdde4b7b50cdbc24b99a5465bc4d1806bd1e030bc92"},
 ]
 
 [[package]]
@@ -1523,4 +1523,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "57db716615480e0afd7c322f9b543cbd03ce837ae24d449c0a514b1518fb3e8a"
+content-hash = "dad9947a02a8a872e1d04c9299183b9ae4025abac59eb797bf13b0425cd8d602"

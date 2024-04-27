@@ -1,7 +1,7 @@
-# 3.4.1 (beta)
+# 3.5 (2024-04-27)
 
-- Fixed logic in filtering nested config.
 - Added `--no-scripts` option to skip install/update scripts.
+- Fixed logic in filtering nested configs.
 
 # 3.4 (2023-03-24)
 
