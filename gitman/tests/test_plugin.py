@@ -6,7 +6,6 @@ from gitman import plugin
 
 
 class TestMain:
-
     """Unit tests for the top-level arguments."""
 
     @patch("gitman.cli.commands")
@@ -25,6 +24,7 @@ class TestMain:
                 force=False,
                 force_interactive=False,
                 skip_changes=False,
+                skip_scripts=False,
                 skip_default_group=False,
             ),
             call.install().__bool__(),  # command status check
@@ -47,6 +47,7 @@ class TestMain:
                 recurse=False,
                 lock=True,
                 skip_changes=False,
+                skip_scripts=False,
             ),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
@@ -68,6 +69,7 @@ class TestMain:
                 recurse=True,
                 lock=True,
                 skip_changes=False,
+                skip_scripts=False,
             ),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
@@ -89,6 +91,7 @@ class TestMain:
                 recurse=False,
                 lock=False,
                 skip_changes=False,
+                skip_scripts=False,
             ),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
@@ -110,6 +113,7 @@ class TestMain:
                 recurse=False,
                 lock=True,
                 skip_changes=True,
+                skip_scripts=False,
             ),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
