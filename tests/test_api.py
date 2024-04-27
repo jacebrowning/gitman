@@ -264,6 +264,7 @@ def describe_install():
             with pytest.raises(RuntimeError):
                 gitman.install(depth=1)
 
+        @pytest.mark.skipif(os.name == "nt", reason="Test does not work on Windows")
         def it_should_not_overwrite_non_empty_directories(config_with_link):
             os.system("mkdir my_link")
             os.system("touch mylink/my_link")
