@@ -190,6 +190,7 @@ def describe_install():
             )
         ) == True
 
+    @pytest.mark.skipif(os.name == "nt", reason="Test does not work on Windows")
     def it_can_handle_missing_locked_sources(config):
         config.datafile.text = strip(
             """
@@ -583,6 +584,7 @@ def describe_uninstall():
 
         expect(os.path.exists(config.location)) == False
 
+    @pytest.mark.skipif(os.name == "nt", reason="Test does not work on Windows")
     def it_should_not_fail_when_no_dependencies_exist(config):
         expect(os.path.isdir(config.location)) == False
 
@@ -1164,6 +1166,7 @@ def describe_update():
         """
         )
 
+    @pytest.mark.skipif(os.name == "nt", reason="Test does not work on Windows")
     def it_merges_sources(config):
         config.datafile.text = strip(
             """
