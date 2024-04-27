@@ -614,6 +614,7 @@ def describe_uninstall():
 
             gitman.uninstall()
 
+        @pytest.mark.skipif(os.name == "nt", reason="Test does not work on Windows")
         def it_should_not_fail_when_no_dependencies_exist(config):
             expect(os.path.isdir(config.location)) == False
 
