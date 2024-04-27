@@ -6,9 +6,7 @@ jobs:
   build:
     strategy:
       matrix:
-        # TODO: Add Windows support
-        # os: [ubuntu-latest, windows-latest]
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest]
         python-version: ["3.8", "3.9"]
 
     runs-on: ${{ matrix.os }}
