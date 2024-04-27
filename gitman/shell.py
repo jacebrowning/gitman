@@ -46,14 +46,16 @@ def call(name, *args, _show=True, _stream=True, _shell=False, _ignore=False):
     else:
         env.pop(lp_key, None)  # last resort: remove the env var
 
-    command = subprocess.Popen(  # pylint: disable=subprocess-run-check
-        name if _shell else [name, *args],
-        encoding="utf-8",
-        universal_newlines=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        shell=_shell,
-        env=env,
+    command = (
+        subprocess.Popen(  # pylint: disable=subprocess-run-check,consider-using-with
+            name if _shell else [name, *args],
+            encoding="utf-8",
+            universal_newlines=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            shell=_shell,
+            env=env,
+        )
     )
 
     # Poll process.stdout to show stdout live

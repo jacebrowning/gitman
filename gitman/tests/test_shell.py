@@ -1,4 +1,4 @@
-# pylint: disable=no-self-use,misplaced-comparison-constant,expression-not-assigned
+# pylint: disable=expression-not-assigned
 
 import os
 from unittest.mock import Mock, patch

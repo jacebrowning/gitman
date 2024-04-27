@@ -1,4 +1,4 @@
-# pylint: disable=no-self-use,unused-variable,expression-not-assigned
+# pylint: disable=unused-variable,expression-not-assigned
 
 from unittest.mock import Mock, patch
 

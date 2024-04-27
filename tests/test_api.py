@@ -264,6 +264,7 @@ def describe_install():
             with pytest.raises(RuntimeError):
                 gitman.install(depth=1)
 
+        @pytest.mark.skipif(os.name == "nt", reason="Test does not work on Windows")
         def it_should_not_overwrite_non_empty_directories(config_with_link):
             os.system("mkdir my_link")
             os.system("touch mylink/my_link")
@@ -304,6 +305,7 @@ def describe_install():
             expect(os.listdir()).contains("gmd_3")
             expect(os.listdir()).contains("gmd_4")
 
+        @pytest.mark.skipif(os.name == "nt", reason="Test does not work on Windows")
         def it_should_not_overwrite_files(config_with_links):
             os.system("touch gmd_3")
 
@@ -1213,7 +1215,7 @@ def describe_list():
         gitman.install()
         gitman.list()
 
-        with open(config.log_path) as stream:
+        with open(config.log_path, encoding="utf-8") as stream:
             contents = stream.read().replace(TMP, "tmp").replace("\\", "/")
         expect(contents) == strip(
             """
@@ -1233,7 +1235,7 @@ def describe_list():
     def it_handles_missing_dependencies(config):
         gitman.list()
 
-        with open(config.log_path) as stream:
+        with open(config.log_path, encoding="utf-8") as stream:
             contents = stream.read().replace(TMP, "tmp").replace("\\", "/")
         expect(contents) == strip(
             """
