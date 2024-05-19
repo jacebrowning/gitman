@@ -171,6 +171,7 @@ def update(
     config = load_config(root)
     configs = [config] if config else []
     configs.extend(find_nested_configs(root, depth, []))
+
     if configs:
         count = 0
         common.newline()

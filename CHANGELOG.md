@@ -1,3 +1,7 @@
+# 3.5.1 (2024-05-19)
+
+- Updated nested config lookup to ignore build and package directories.
+
 # 3.5 (2024-04-27)
 
 - Added `--no-scripts` option to skip install/update scripts.
