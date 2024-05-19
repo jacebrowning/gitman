@@ -431,16 +431,16 @@ def find_nested_configs(
 
     log.debug(f"Searching for nested project in: {root}")
     for name in os.listdir(root):
-        if name.startswith("."):
+        if name[0] in {".", "_", "@"}:
+            continue
+        if name in {"build", "dist", "node_modules", "venv"}:
             continue
         path = os.path.join(root, name)
-        if os.path.isdir(path) and path not in skip_paths and not os.path.islink(path):
-            config = load_config(path, search=False)
-            if config:
+        if path in skip_paths:
+            continue
+        if os.path.isdir(path) and not os.path.islink(path):
+            if config := load_config(path, search=False):
                 configs.append(config)
-
-            if os.path.islink(path):
-                continue
 
             if depth is not None:
                 configs.extend(find_nested_configs(path, depth - 1, skip_paths))
