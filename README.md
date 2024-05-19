@@ -5,8 +5,9 @@ Gitman is a language-agnostic dependency manager using Git. It aims to serve as 
 [![Demo](https://raw.githubusercontent.com/jacebrowning/gitman/main/docs/demo.gif)](https://asciinema.org/a/3DLos4HIU84P0AfFlZMYcgPus)
 
 [![Linux Build](https://img.shields.io/github/actions/workflow/status/jacebrowning/gitman/main.yml?branch=main&label=linux)](https://github.com/jacebrowning/gitman/actions)
-[![Windows Build](https://img.shields.io/appveyor/ci/jacebrowning/gitman/main.svg?label=window)](https://ci.appveyor.com/project/jacebrowning/gitman)
-[![Code Coverage](https://img.shields.io/codecov/c/gh/jacebrowning/gitman)](https://codecov.io/gh/jacebrowning/gitman)
+[![Windows Build](https://img.shields.io/appveyor/ci/jacebrowning/gitman/main.svg?label=windows)](https://ci.appveyor.com/project/jacebrowning/gitman)
+[![Code Coverage](https://img.shields.io/codecov/c/github/jacebrowning/gitman)
+](https://codecov.io/gh/jacebrowning/gitman)
 [![Code Quality](https://img.shields.io/scrutinizer/g/jacebrowning/gitman.svg?label=quality)](https://scrutinizer-ci.com/g/jacebrowning/gitman/?branch=main)
 [![PyPI License](https://img.shields.io/pypi/l/gitman.svg)](https://pypi.org/project/gitman)
 [![PyPI Version](https://img.shields.io/pypi/v/gitman.svg?label=version)](https://pypi.org/project/gitman)
