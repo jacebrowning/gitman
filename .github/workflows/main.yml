@@ -30,11 +30,11 @@ jobs:
     - name: Install dependencies
       run: make install
 
-    - name: Check code
-      run: make check
-
     - name: Test code
       run: make test
+
+    - name: Check code
+      run: make check
 
     - name: Run Demo
       run: make demo
