@@ -1,3 +1,7 @@
+# 3.5.2 (2024-06-22)
+
+- Fixed logic to included all nested configs.
+
 # 3.5.1 (2024-05-19)
 
 - Updated nested config lookup to ignore build and package directories.
