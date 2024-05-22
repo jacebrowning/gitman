@@ -1,6 +1,5 @@
 import os
 import sys
-from pathlib import Path
 from typing import Iterator, List, Optional
 
 import log
@@ -465,20 +464,3 @@ def _valid_filename(filename):
     if name.startswith("."):
         name = name[1:]
     return name in {"gitman", "gdm"} and ext in {".yml", ".yaml"}
-
-
-def filter_nested_configs(configs: List[Config]) -> List[Config]:
-    """Filter subdirectories inside of parent config."""
-    filtered_configs = []
-    for config_a in configs:
-        is_nested = False
-        for config_b in configs:
-            if config_a == config_b:
-                continue
-            if Path(config_b.location_path) in Path(config_a.location_path).parents:
-                is_nested = True
-                break
-        if not is_nested:
-            filtered_configs.append(config_a)
-
-    return filtered_configs

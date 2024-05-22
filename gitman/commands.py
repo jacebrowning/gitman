@@ -8,7 +8,6 @@ from startfile import startfile
 from . import common
 from .decorators import preserve_cwd
 from .models import Config, Source, find_nested_configs, load_config
-from .models.config import filter_nested_configs
 
 
 def init(*, force: bool = False):
@@ -93,7 +92,6 @@ def install(
     config = load_config(root)
     configs = [config] if config else []
     configs.extend(find_nested_configs(root, depth, []))
-    configs = filter_nested_configs(configs)
 
     if configs:
         count = 0
@@ -277,7 +275,7 @@ def lock(*names, depth=None, root=None):
     config = load_config(root)
     configs = [config] if config else []
     configs.extend(find_nested_configs(root, depth, []))
-    configs = filter_nested_configs(configs)
+
     if configs:
         count = 0
         common.newline()

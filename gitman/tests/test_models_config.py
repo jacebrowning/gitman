@@ -5,8 +5,7 @@ import os
 import pytest
 from expecter import expect
 
-from gitman.models import Config, find_nested_configs, load_config
-from gitman.models.config import filter_nested_configs
+from gitman.models import Config, load_config
 
 from .conftest import FILES
 
@@ -149,16 +148,3 @@ class TestLoad:
         config = load_config()
 
         assert None is config
-
-    @pytest.mark.integration
-    def test_filter_nested_config(self):
-        """Verify that filter_nested_config removes nested configs"""
-        config = load_config(FILES)
-        assert None is not config
-        count = config.install_dependencies(depth=2)
-        assert 5 == count
-        configs = [config] if config else []
-        configs.extend(find_nested_configs(FILES, depth=2, skip_paths=[]))
-        assert 2 == len(configs)
-        configs = filter_nested_configs(configs)
-        assert 1 == len(configs)
