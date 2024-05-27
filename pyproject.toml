@@ -44,7 +44,7 @@ classifiers = [
 
 python = "^3.8"
 
-datafiles = "^2.2"
+datafiles = "^2.2.3"
 minilog = "^2.3"
 universal-startfile = "~0.2"
 
