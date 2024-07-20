@@ -41,7 +41,7 @@ jobs:
 
     - name: Upload coverage
       uses: codecov/codecov-action@v4
-      if: ${{ github.repository == 'jacebrowning/gitman' }}
+      if: steps.fork-check.outputs.is-fork == 'false'
       with:
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
