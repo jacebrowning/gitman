@@ -49,3 +49,40 @@ $ git clone https://<token>@github.com/<owner>/<repo>.git
 ```
 
 The token can also be written to `.netrc` during builds, see the guide for [Travis CI](https://docs.travis-ci.com/user/private-dependencies/#API-Token).
+
+## Symlinks in Git Repositories under Windows
+
+If you're using Windows, there are some additional prerequisites to ensure Gitman works seamlessly.
+
+### Permission to create Symlinks
+
+For Gitman to link your dependencies to your project, your Windows user account needs permission to create symlinks. By default, this permission may not be granted. To enable it, you can:
+* Assign your user account the **"Create symbolic links"** permission in the Local Group Policy Editor.
+* Enable **"Developer Mode"** in the Windows Settings.
+* Run the command-line interface as an **Administrator**.
+
+### Configure Git to Handle Symlinks Correctly
+
+In Git for Windows, symlink support must be enabled. You can do this during the installation process (checkbox in the install wizard) or by configuring it manually with the following command:
+
+```sh
+$ git config --global core.symlinks true
+```
+
+Additionally, Git does not inherently distinguish between symlinks to files and directories. To handle symlinks properly in your repositories, specify the type of symlink in your `.gitattributes` file. By default, Git assumes a symlink points to a file, so only symlinks to directories need to be declared:
+
+```
+relative/path/to/your/symlink symlink=dir
+```
+
+This ensures your symlinks work correctly after re-cloning your repository.
+
+In some setups, it might be impractical to check in your symlinks. If that's the case, you can exclude your symlinks by adding them to `.gitignore` or `.git/info/exclude`. The latter is preferable as it does not modify the repository's actual content. Automate this step by adding the following to the script section of your gitman.yml:
+
+```sh
+mkdir -p .git/info
+touch .git/info/exclude
+git ls-files -o --exclude-standard > /tmp/unstaged_files
+cat /tmp/unstaged_files >> .git/info/exclude
+rm /tmp/unstaged_files
+```
