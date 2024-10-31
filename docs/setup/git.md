@@ -50,18 +50,19 @@ $ git clone https://<token>@github.com/<owner>/<repo>.git
 
 The token can also be written to `.netrc` during builds, see the guide for [Travis CI](https://docs.travis-ci.com/user/private-dependencies/#API-Token).
 
-## Symlinks in Git Repositories under Windows
+## Symlinks on Windows
 
-If you're using Windows, there are some additional prerequisites to ensure Gitman works seamlessly.
+If you're using Windows, there are some additional prerequisites to ensure Gitman works seamlessly with symbolic links.
 
-### Permission to create Symlinks
+### Grant Permissions
 
 For Gitman to link your dependencies to your project, your Windows user account needs permission to create symlinks. By default, this permission may not be granted. To enable it, you can:
-* Assign your user account the **"Create symbolic links"** permission in the Local Group Policy Editor.
-* Enable **"Developer Mode"** in the Windows Settings.
+
+* Assign your user account the **Create symbolic links** permission in the Local Group Policy Editor.
+* Enable **Developer Mode** in the Windows Settings.
 * Run the command-line interface as an **Administrator**.
 
-### Configure Git to Handle Symlinks Correctly
+### Configure Git
 
 In Git for Windows, symlink support must be enabled. You can do this during the installation process (checkbox in the install wizard) or by configuring it manually with the following command:
 
