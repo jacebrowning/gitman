@@ -32,6 +32,8 @@ sources:
       -
     links:
       -
+    copies:
+      -
     scripts:
       -
   - repo: https://github.com/jacebrowning/gitman-demo
@@ -43,6 +45,8 @@ sources:
       -
     links:
       -
+    copies:
+      -
     scripts:
       -
   - repo: https://github.com/jacebrowning/gitman-demo
@@ -53,6 +57,8 @@ sources:
     sparse_paths:
       -
     links:
+      -
+    copies:
       -
     scripts:
       -
@@ -105,6 +111,8 @@ def describe_init():
               -
             links:
               -
+            copies:
+              -
             scripts:
               -
         sources_locked:
@@ -116,6 +124,8 @@ def describe_init():
             sparse_paths:
               -
             links:
+              -
+            copies:
               -
             scripts:
               -
@@ -156,6 +166,8 @@ def describe_install():
             rev: main
             links:
               -
+            copies:
+              -
             scripts:
               -
         sources_locked:
@@ -165,6 +177,8 @@ def describe_install():
             rev: example-branch
             links:
               -
+            copies:
+              -
             scripts:
               -
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -172,6 +186,8 @@ def describe_install():
             type: git
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
             links:
+              -
+            copies:
               -
             scripts:
               -
@@ -202,6 +218,8 @@ def describe_install():
             rev: example-branch
             links:
               -
+            copies:
+              -
             scripts:
               -
         sources_locked:
@@ -210,6 +228,8 @@ def describe_install():
             type: git
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
             links:
+              -
+            copies:
               -
             scripts:
               -

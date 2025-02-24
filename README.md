@@ -67,6 +67,8 @@ sources:
   - repo: "https://github.com/google/material-design-icons"
     name: material-design-icons
     rev: master
+    copies:
+      - target: Icons
 
 groups:
   - name: code
