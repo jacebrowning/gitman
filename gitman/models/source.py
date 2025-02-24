@@ -57,6 +57,10 @@ class Source:
 
     See [using multiple links][using-multiple-links] for more information.
 
+    ### Copies
+
+    See [using multiple copies][using-multiple-copies] for more information.
+
     ### Scripts
 
     Scripts can be used to run post-checkout commands such us build steps. For example:
