@@ -339,7 +339,7 @@ class Source:
             name=self.name,
             rev=rev,
             links=self.links,
-            copy=self.copy,
+            copies=self.copies,
             scripts=self.scripts,
             sparse_paths=self.sparse_paths,
         )
