@@ -345,6 +345,109 @@ def describe_install():
 
             expect(gitman.install(depth=1, force=True)) == True
 
+    def describe_copies():
+        @pytest.fixture
+        def config_with_copy(config):
+            config.datafile.text = strip(
+                """
+            location: deps
+            sources:
+              - name: gitman_1
+                repo: https://github.com/jacebrowning/gitman-demo
+                rev: 954e166c17d61935037fbd0799fbe0176c29df10
+                links:
+                  - 
+                copies:
+                  - target: my_copy
+                  - source: gdm/common.py
+                    target: libCommon.py
+                scripts:
+                  -
+            """
+            )
+            config.datafile.load()
+
+            return config
+
+        def it_should_create_copies(config_with_copy):
+            expect(gitman.install(depth=1)) == True
+
+            expect(os.listdir()).contains("my_copy")
+            expect(os.listdir()).contains("libCommon.py")
+
+        def it_should_not_overwrite_files(config_with_copy):
+            os.system("touch my_copy")
+
+            with pytest.raises(RuntimeError):
+                gitman.install(depth=1)
+
+        def it_should_not_overwrite_non_empty_directories(config_with_copy):
+            os.system("mkdir my_copy")
+            os.system("touch my_copy/my_copy")
+
+            with pytest.raises(RuntimeError):
+                gitman.install(depth=1)
+
+        def it_overwrites_files_with_force(config_with_copy):
+            os.system("touch my_copy")
+
+            expect(gitman.install(depth=1, force=True)) == True
+    
+    def describe_multi_copies():
+        @pytest.fixture
+        def config_with_copies(config):
+            config.datafile.text = strip(
+                """
+            location: deps
+            sources:
+              - name: gitman_1
+                repo: https://github.com/jacebrowning/gitman-demo
+                rev: e6e7595cef573589bcfbbf6c9398b7c166cdda9d
+                links:
+                  -
+                copies:
+                  - source: gdm/test
+                    target: gmd_test
+                  - source: gdm/command.py
+                    target: gdmCommand.py
+                scripts:
+                  -
+            """
+            )
+            config.datafile.load()
+
+            return config
+
+        def it_should_create_copies(config_with_copies):
+            expect(gitman.install(depth=1)) == True
+            expect(os.listdir()).contains("gmd_test")
+            expect(os.listdir()).contains("gdmCommand.py")
+
+        def it_should_not_overwrite_files_with_folders(config_with_copies):
+            os.system("touch gmd_test")
+            
+            with pytest.raises(RuntimeError):
+                gitman.install(depth=1)
+
+        def it_should_merge_with_non_empty_directories(config_with_copies):
+            os.system("mkdir gmd_test")
+            os.system("touch gmd_test/my_copy")
+
+            expect(os.listdir("gmd_test")).contains("my_copy")
+
+        def it_should_overwrite_files(config_with_copies):
+            os.system("mkdir gmd_test")
+            os.system("touch gmd_test/test_all.py")
+            os.system("touch gdmCommand.py")
+
+            expect(os.listdir("gmd_test")).contains("test_all.py")
+            expect(os.listdir()).contains("gdmCommand.py")
+            
+        def it_overwrites_files_with_force(config_with_copies):
+            os.system("mkdir gmd_test")
+            os.system("touch gmd_test/my_copy")
+            assert "my_copy" not in os.listdir("gmd_test")
+     
     def describe_scripts():
         @pytest.fixture
         def config_with_scripts(config):
