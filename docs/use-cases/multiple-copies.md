@@ -29,8 +29,8 @@ sources:
 
 This will result in the following copies:
 
-- `<root>/vendor/partial_repo` -> `<root>/.gitman/my_dependency/include`
-- `<root>/vendor/full_repo` -> `<root>/.gitman/my_dependency`
+- `<root>/.gitman/my_dependency/include` -> `<root>/vendor/partial_repo`
+- `<root>/.gitman/my_dependency` -> `<root>/vendor/full_repo`
 
 ## Alternative Syntax
 
