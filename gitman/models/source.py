@@ -224,7 +224,7 @@ class Source:
         for copy in self.copies:
             target = os.path.join(root, os.path.normpath(copy.target))
             relpath = os.path.relpath(os.getcwd(), os.path.dirname(target))
-            source = os.path.join(relpath, os.path.normpath(copy.source))
+            source = os.path.join(root, os.path.join(relpath, copy.source) if copy.source else relpath)
             create_copy(source, target, force=force)
 
     def run_scripts(self, force: bool = False, show_shell_stdout: bool = False):
@@ -381,6 +381,11 @@ def create_copy(source: str, target: str, *, force: bool):
         os.remove(target)
     elif os.path.exists(target):
         if force:
+            shell.rm(target)
+        elif os.path.isfile(target) and os.path.isdir(source):
+            msg = "Preexisting file location to be replaced by folder at {}".format(target)
+            raise exceptions.UncommittedChanges(msg)
+        elif os.path.isfile(target) and os.path.isfile(source):
             shell.rm(target)
         else:
             msg = "Preexisting target location at {}".format(target)

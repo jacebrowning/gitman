@@ -132,9 +132,8 @@ def cp(source, target):
     dirpath = os.path.dirname(target)
     if not os.path.isdir(dirpath):
         mkdir(dirpath)
-    
     if os.path.isdir(source):
-        shutil.copytree(src=source, dst=target)
+        shutil.copytree(src=source, dst=target, dirs_exist_ok=True)
     else:
         shutil.copy2(src=source, dst=target)
 
