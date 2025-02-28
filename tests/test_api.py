@@ -421,7 +421,7 @@ def describe_install():
             expect(os.listdir()).contains("gdmCommands.py")
 
         def it_should_not_overwrite_files_with_folders(config_with_copies):
-            os.system("touch gmd_test")
+            os.system("touch gdm_test")
             
             with pytest.raises(RuntimeError):
                 gitman.install(depth=1)
@@ -431,7 +431,7 @@ def describe_install():
             os.system("touch gdm_test/my_copy")
 
             expect(gitman.install(depth=1)) == True
-            expect(os.listdir("gmd_test")).contains("my_copy")
+            expect(os.listdir("gdm_test")).contains("my_copy")
 
         def it_should_overwrite_files(config_with_copies):
             os.system("mkdir gdm_test")
@@ -440,7 +440,7 @@ def describe_install():
 
             expect(gitman.install(depth=1)) == True
             expect(os.listdir("gdm_test")).contains("test_all.py")
-            expect(os.listdir()).contains("gdmCommand.py")
+            expect(os.listdir()).contains("gdmCommands.py")
             
         def it_overwrites_files_with_force(config_with_copies):
             os.system("mkdir gdm_test")
