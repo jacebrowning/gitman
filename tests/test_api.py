@@ -356,7 +356,7 @@ def describe_install():
                 repo: https://github.com/jacebrowning/gitman-demo
                 rev: 954e166c17d61935037fbd0799fbe0176c29df10
                 links:
-                  - 
+                  -
                 copies:
                   - target: my_copy
                   - source: gdm/common.py
@@ -389,7 +389,7 @@ def describe_install():
             os.system("touch my_copy")
 
             expect(gitman.install(depth=1, force=True)) == True
-    
+
     def describe_multi_copies():
         @pytest.fixture
         def config_with_copies(config):
@@ -422,7 +422,7 @@ def describe_install():
 
         def it_should_not_overwrite_files_with_folders(config_with_copies):
             os.system("touch gdm_test")
-            
+
             with pytest.raises(RuntimeError):
                 gitman.install(depth=1)
 
@@ -441,13 +441,13 @@ def describe_install():
             expect(gitman.install(depth=1)) == True
             expect(os.listdir("gdm_test")).contains("test_all.py")
             expect(os.listdir()).contains("gdmCommands.py")
-            
+
         def it_overwrites_files_with_force(config_with_copies):
             os.system("mkdir gdm_test")
             os.system("touch gdm_test/my_copy")
             expect(gitman.install(depth=1, force=True)) == True
             expect("my_copy" not in os.listdir("gdm_test")) == True
-     
+
     def describe_scripts():
         @pytest.fixture
         def config_with_scripts(config):

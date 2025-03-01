@@ -1,8 +1,8 @@
 """Utilities to call shell programs."""
 
 import os
-import subprocess
 import shutil
+import subprocess
 
 import log
 

@@ -15,6 +15,7 @@ class Link:
     source: str = ""
     target: str = ""
 
+
 @dataclass
 class Copy:
     source: str = ""
@@ -217,14 +218,16 @@ class Source:
             create_sym_link(source, target, force=force)
 
     def create_copies(self, root: str, *, force: bool = False):
-        """Create copies from source to target"""
+        """Create copies from source to target."""
         if not self.copies:
             return
 
         for copy in self.copies:
             target = os.path.join(root, os.path.normpath(copy.target))
             relpath = os.path.relpath(os.getcwd(), os.path.dirname(target))
-            source = os.path.join(root, os.path.join(relpath, copy.source) if copy.source else relpath)
+            source = os.path.join(
+                root, os.path.join(relpath, copy.source) if copy.source else relpath
+            )
             create_copy(source, target, force=force)
 
     def run_scripts(self, force: bool = False, show_shell_stdout: bool = False):
@@ -383,7 +386,9 @@ def create_copy(source: str, target: str, *, force: bool):
         if force:
             shell.rm(target)
         elif os.path.isfile(target) and os.path.isdir(source):
-            msg = "Preexisting file location to be replaced by folder at {}".format(target)
+            msg = "Preexisting file location to be replaced by folder at {}".format(
+                target
+            )
             raise exceptions.UncommittedChanges(msg)
         elif os.path.isfile(target) and os.path.isfile(source):
             shell.rm(target)
