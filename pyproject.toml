@@ -1,7 +1,7 @@
 [tool.poetry]
 
 name = "gitman"
-version = "3.5.2"
+version = "3.5.3"
 description = "A language-agnostic dependency manager using Git."
 
 license = "MIT"
@@ -48,7 +48,7 @@ datafiles = "^2.3.1"
 minilog = "^2.3.1"
 universal-startfile = "~0.2"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 
 # Formatters
 black = "^24.8"
