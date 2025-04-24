@@ -5,7 +5,7 @@ environment:
     RANDOM_SEED: 0
   matrix:
     - PYTHON_MAJOR: 3
-      PYTHON_MINOR: 8
+      PYTHON_MINOR: 9
 
 cache:
   - .venv -> poetry.lock
