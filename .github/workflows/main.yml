@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.9", "3.10", "3.11"]
 
     steps:
     - uses: actions/checkout@v4
@@ -18,7 +18,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Install Poetry
-      run: curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.8.5 python3 -
+      run: curl -sSL https://install.python-poetry.org | python -
 
     - name: Check dependencies
       run: make doctor

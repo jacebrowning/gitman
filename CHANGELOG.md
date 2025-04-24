@@ -1,3 +1,7 @@
+# 3.5.3 (2025-04-24)
+
+- Fixed handling of git cache when using sparse checkouts. (@mastupristi)
+
 # 3.5.2 (2024-06-22)
 
 - Fixed logic to included all nested configs.
