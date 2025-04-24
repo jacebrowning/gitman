@@ -56,27 +56,22 @@ def clone(
         git("clone", "--mirror", repo, reference, *user_params)
 
     if sparse_paths and sparse_paths[0]:
-        os.mkdir(normpath)
+        os.makedirs(normpath)
         git("-C", normpath, "init")
-        git("-C", normpath, "config", "core.sparseCheckout", "true")
-        git("-C", normpath, "remote", "add", "-f", "origin", sparse_paths_repo)
+        git("-C", normpath, "remote", "add", "origin", repo)
 
-        with open(
-            "%s/%s/.git/info/sparse-checkout" % (os.getcwd(), normpath),
-            "w",
-            encoding="utf-8",
-        ) as fd:
-            fd.write("\n".join(sparse_paths))
-        with open(
-            "%s/%s/.git/objects/info/alternates" % (os.getcwd(), normpath),
-            "w",
-            encoding="utf-8",
-        ) as fd:
-            fd.write("%s/objects" % sparse_paths_repo)
+        if not settings.CACHE_DISABLE:
+            with open(
+                "%s/%s/.git/objects/info/alternates" % (os.getcwd(), normpath),
+                "w",
+                encoding="utf-8",
+            ) as fd:
+                fd.write("%s/objects" % sparse_paths_repo)
 
-        # We use directly the revision requested here in order to respect,
-        # that not all repos have `master` as their default branch
-        git("-C", normpath, "pull", "origin", rev)
+        git("-C", normpath, "sparse-checkout", "init", "--cone")
+        git("-C", normpath, "sparse-checkout", "set", *sparse_paths)
+        git("-C", normpath, "fetch", "origin")
+        git("-C", normpath, "checkout", rev)
     elif settings.CACHE_DISABLE:
         git("clone", repo, normpath, *user_params)
     else:
