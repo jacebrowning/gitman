@@ -20,7 +20,7 @@ or customize the source name and revision:
 source = Source(
     repo="https://github.com/jacebrowning/gitman-demo",
     name="my-demo", # defaults to repository name
-    rev="my-branch", # defaults to 'main'
+    rev="my-branch", # defaults to 'HEAD'
 )
 ```
 
