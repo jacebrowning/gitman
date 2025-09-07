@@ -17,7 +17,7 @@ Gitman is a language-agnostic dependency manager using Git. It aims to serve as 
 
 ### Requirements
 
-- Python 3.8+
+- Python 3.9+
 - Git 2.8+ (with [stored credentials](http://gitman.readthedocs.io/en/latest/setup/git/))
 
 ### Installation
