@@ -161,20 +161,20 @@ CYAN = "\033[36m"
 WHITE = "\033[37m"
 RESET = "\033[0m"
 
-COLORS = dict(
-    path="",
-    git_rev=BOLD + BLUE,
-    git_dirty=BOLD + MAGENTA,
-    git_changes=YELLOW,
-    shell=BOLD + GREEN,
-    shell_info=MAGENTA,
-    shell_output=CYAN,
-    shell_error=YELLOW,
-    message=BOLD + WHITE,
-    prompt=BOLD + WHITE,
-    success=BOLD + GREEN,
-    error=BOLD + RED,
-)
+COLORS = {
+    "path": "",
+    "git_rev": BOLD + BLUE,
+    "git_dirty": BOLD + MAGENTA,
+    "git_changes": YELLOW,
+    "shell": BOLD + GREEN,
+    "shell_info": MAGENTA,
+    "shell_output": CYAN,
+    "shell_error": YELLOW,
+    "message": BOLD + WHITE,
+    "prompt": BOLD + WHITE,
+    "success": BOLD + GREEN,
+    "error": BOLD + RED,
+}
 
 
 def style(msg, name=None, *, _color_support=False):
