@@ -1,7 +1,7 @@
 [tool.poetry]
 
 name = "gitman"
-version = "3.5.3"
+version = "3.6"
 description = "A language-agnostic dependency manager using Git."
 
 license = "MIT"
@@ -30,10 +30,11 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development",
     "Topic :: Software Development :: Build Tools",
     "Topic :: Software Development :: Version Control",
@@ -42,7 +43,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 
-python = "^3.8"
+python = "^3.9"
 
 datafiles = "^2.3.1"
 minilog = "^2.3.1"
