@@ -1,5 +1,4 @@
 import os
-import sys
 from typing import Iterator, List, Optional
 
 import log
@@ -450,12 +449,8 @@ def find_nested_configs(
 
 
 def _resolve_current_directory():
-    start = os.getcwd()
-    if sys.version_info < (3, 8) and os.name == "nt":
-        log.warn("Python 3.8+ is required to resolve virtual drives on Windows")
-    else:
-        start = os.path.realpath(start)
-        os.chdir(start)
+    start = os.path.realpath(os.getcwd())
+    os.chdir(start)
     return start
 
 
