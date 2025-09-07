@@ -1,3 +1,7 @@
+# 3.6 (2025-09-07)
+
+- Dropped support for Python 3.8 and added support for Python 3.12 and 3.13.
+
 # 3.5.3 (2025-04-24)
 
 - Fixed handling of git cache when using sparse checkouts. (@mastupristi)

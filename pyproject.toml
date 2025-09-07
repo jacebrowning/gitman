@@ -1,7 +1,7 @@
 [tool.poetry]
 
 name = "gitman"
-version = "3.5.3"
+version = "3.6"
 description = "A language-agnostic dependency manager using Git."
 
 license = "MIT"
@@ -30,10 +30,11 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development",
     "Topic :: Software Development :: Build Tools",
     "Topic :: Software Development :: Version Control",
@@ -42,7 +43,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 
-python = "^3.8"
+python = "^3.9"
 
 datafiles = "^2.3.1"
 minilog = "^2.3.1"
@@ -57,7 +58,7 @@ isort = "^5.13"
 # Linters
 mypy = "^1.3"
 pydocstyle = "*"
-pylint = "~2.15"
+pylint = "~3.3"
 types-freezegun = "*"
 types-setuptools = "*"
 
@@ -84,6 +85,10 @@ sniffer = "*"
 macfsevents = { version = "*", platform = "darwin" }
 pync = { version = "*", platform = "darwin" }
 rope = "^0.14"
+
+[tool.poetry.requires-plugins]
+
+poetry-plugin-export = ">=1.8"
 
 [tool.poetry.scripts]
 
