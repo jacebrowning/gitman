@@ -64,7 +64,7 @@ types-setuptools = "*"
 
 # Testing
 pytest = "^8.3"
-pytest-cov = "^5.0"
+pytest-cov = ">=5,<8"
 pytest-describe = "^2.2"
 pytest-expecter = "^3.0"
 pytest-random = "*"
