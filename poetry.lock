@@ -478,14 +478,14 @@ sly = ">=0.5"
 
 [[package]]
 name = "macfsevents"
-version = "0.8.1"
+version = "0.8.4"
 description = "Thread-based interface to file system observation primitives."
 optional = false
 python-versions = "*"
 groups = ["dev"]
 markers = "sys_platform == \"darwin\""
 files = [
-    {file = "MacFSEvents-0.8.1.tar.gz", hash = "sha256:1324b66b356051de662ba87d84f73ada062acd42b047ed1246e60a449f833e10"},
+    {file = "MacFSEvents-0.8.4.tar.gz", hash = "sha256:bf7283f1d517764ccdc8195b21631dbbac1c506b920bf9a8ea2956b3127651cb"},
 ]
 
 [[package]]
