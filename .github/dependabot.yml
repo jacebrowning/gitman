@@ -1,0 +1,12 @@
+version: 2
+updates:
+  # Enable version updates for Python dependencies
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Exclude the generated docs/requirements.txt file
+    ignore:
+      - dependency-name: "*"
+        paths:
+          - "docs/requirements.txt"
