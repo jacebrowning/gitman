@@ -53,7 +53,7 @@ universal-startfile = "~0.2"
 
 # Formatters
 black = "^24.8"
-isort = "^5.13"
+isort = ">=5.13,<7.0"
 
 # Linters
 mypy = "^1.3"
