@@ -84,7 +84,7 @@ pyinstaller = "^6.15"
 sniffer = "*"
 macfsevents = { version = "*", platform = "darwin" }
 pync = { version = "*", platform = "darwin" }
-rope = "^0.14"
+rope = ">=0.14,<1.15"
 
 [tool.poetry.requires-plugins]
 
