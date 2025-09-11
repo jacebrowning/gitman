@@ -67,7 +67,7 @@ DEPENDENCIES := $(VIRTUAL_ENV)/.poetry-$(shell bin/checksum pyproject.toml poetr
 .PHONY: install
 install: $(DEPENDENCIES) .cache
 
-$(DEPENDENCIES): poetry.lock
+$(DEPENDENCIES): poetry.lock docs/requirements.txt
 	@ poetry config virtualenvs.in-project true
 	poetry install
 	@ touch $@
@@ -76,6 +76,9 @@ ifndef CI
 poetry.lock: pyproject.toml
 	poetry lock
 	@ touch $@
+
+docs/requirements.txt: poetry.lock
+	poetry export --with dev --without-hashes --output $@
 endif
 
 .cache:
@@ -153,16 +156,13 @@ endif
 
 .PHONY: mkdocs
 mkdocs: install $(MKDOCS_INDEX)
-$(MKDOCS_INDEX): docs/requirements.txt mkdocs.yml docs/*.md
+$(MKDOCS_INDEX): mkdocs.yml docs/*.md
 	@ mkdir -p docs/about
 	@ cd docs && ln -sf ../README.md index.md
 	@ cd docs/about && ln -sf ../../CHANGELOG.md changelog.md
 	@ cd docs/about && ln -sf ../../CONTRIBUTING.md contributing.md
 	@ cd docs/about && ln -sf ../../LICENSE.md license.md
 	poetry run mkdocs build --clean --strict
-
-docs/requirements.txt: poetry.lock
-	poetry export --with dev --without-hashes --output $@
 
 .PHONY: uml
 uml: install docs/*.png
