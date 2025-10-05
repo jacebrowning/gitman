@@ -34,6 +34,8 @@ sources:
       -
     scripts:
       -
+    patches:
+      -
   - repo: https://github.com/jacebrowning/gitman-demo
     name: gitman_2
     rev: example-tag
@@ -45,6 +47,8 @@ sources:
       -
     scripts:
       -
+    patches:
+      -
   - repo: https://github.com/jacebrowning/gitman-demo
     name: gitman_3
     rev: 9bf18e16b956041f0267c21baad555a23237b52e
@@ -55,6 +59,8 @@ sources:
     links:
       -
     scripts:
+      -
+    patches:
       -
 sources_locked:
   -
@@ -107,6 +113,8 @@ def describe_init():
               -
             scripts:
               -
+            patches:
+              -
         sources_locked:
           - repo: https://github.com/githubtraining/hellogitworld
             name: sample_dependency
@@ -118,6 +126,8 @@ def describe_init():
             links:
               -
             scripts:
+              -
+            patches:
               -
         default_group: ''
         groups:
@@ -158,6 +168,8 @@ def describe_install():
               -
             scripts:
               -
+            patches:
+              -
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -167,6 +179,8 @@ def describe_install():
               -
             scripts:
               -
+            patches:
+              -
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_3
             type: git
@@ -174,6 +188,8 @@ def describe_install():
             links:
               -
             scripts:
+              -
+            patches:
               -
         """
         )
@@ -204,6 +220,8 @@ def describe_install():
               -
             scripts:
               -
+            patches:
+              -
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -212,6 +230,8 @@ def describe_install():
             links:
               -
             scripts:
+              -
+            patches:
               -
         """
         )
@@ -467,6 +487,8 @@ def describe_install():
               -
             scripts:
               -
+            patches:
+              -
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
@@ -477,6 +499,8 @@ def describe_install():
             links:
               -
             scripts:
+              -
+            patches:
               -
         groups:
           - name: main
@@ -509,6 +533,8 @@ def describe_install():
               -
             scripts:
               -
+            patches:
+              -
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
@@ -519,6 +545,8 @@ def describe_install():
             links:
               -
             scripts:
+              -
+            patches:
               -
         groups:
           - name: main
@@ -650,6 +678,8 @@ def describe_update():
               -
             scripts:
               -
+            patches:
+              -
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
@@ -660,6 +690,8 @@ def describe_update():
             links:
               -
             scripts:
+              -
+            patches:
               -
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -672,6 +704,8 @@ def describe_update():
             links:
               -
             scripts:
+              -
+            patches:
               -
         groups:
           -
@@ -697,6 +731,8 @@ def describe_update():
               -
             scripts:
               -
+            patches:
+              -
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             rev: example-tag
@@ -707,6 +743,8 @@ def describe_update():
             links:
               -
             scripts:
+              -
+            patches:
               -
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -719,6 +757,8 @@ def describe_update():
             links:
               -
             scripts:
+              -
+            patches:
               -
         groups:
           -
@@ -742,6 +782,8 @@ def describe_update():
               -
             scripts:
               -
+            patches:
+              -
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
@@ -752,6 +794,8 @@ def describe_update():
             links:
               -
             scripts:
+              -
+            patches:
               -
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -764,6 +808,8 @@ def describe_update():
             links:
               -
             scripts:
+              -
+            patches:
               -
         groups:
           -
@@ -788,6 +834,8 @@ def describe_update():
               -
             scripts:
               -
+            patches:
+              -
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             rev: example-tag
@@ -798,6 +846,8 @@ def describe_update():
             links:
               -
             scripts:
+              -
+            patches:
               -
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -810,6 +860,8 @@ def describe_update():
             links:
               -
             scripts:
+              -
+            patches:
               -
         groups:
           -
@@ -860,6 +912,8 @@ def describe_update():
               -
             scripts:
               -
+            patches:
+              -
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
@@ -871,6 +925,8 @@ def describe_update():
               -
             scripts:
               -
+            patches:
+              -
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_3
             type: git
@@ -881,6 +937,8 @@ def describe_update():
             links:
               -
             scripts:
+              -
+            patches:
               -
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -894,6 +952,8 @@ def describe_update():
               -
             scripts:
               -
+            patches:
+              -
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
@@ -904,6 +964,8 @@ def describe_update():
             links:
               -
             scripts:
+              -
+            patches:
               -
         groups:
           - name: group_a
@@ -932,6 +994,8 @@ def describe_update():
               -
             scripts:
               -
+            patches:
+              -
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             rev: example-tag
@@ -943,6 +1007,8 @@ def describe_update():
               -
             scripts:
               -
+            patches:
+              -
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_3
             rev: example-tag
@@ -953,6 +1019,8 @@ def describe_update():
             links:
               -
             scripts:
+              -
+            patches:
               -
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -966,6 +1034,8 @@ def describe_update():
               -
             scripts:
               -
+            patches:
+              -
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
@@ -976,6 +1046,8 @@ def describe_update():
             links:
               -
             scripts:
+              -
+            patches:
               -
         groups:
           - name: group_a
@@ -1018,6 +1090,8 @@ def describe_update():
               -
             scripts:
               -
+            patches:
+              -
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -1029,6 +1103,8 @@ def describe_update():
             links:
               -
             scripts:
+              -
+            patches:
               -
         groups:
           -
@@ -1053,6 +1129,8 @@ def describe_update():
               -
             scripts:
               -
+            patches:
+              -
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -1064,6 +1142,8 @@ def describe_update():
             links:
               -
             scripts:
+              -
+            patches:
               -
         groups:
           -
@@ -1110,6 +1190,8 @@ def describe_update():
               -
             scripts:
               -
+            patches:
+              -
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -1121,6 +1203,8 @@ def describe_update():
             links:
               -
             scripts:
+              -
+            patches:
               -
         groups:
           -
@@ -1146,6 +1230,8 @@ def describe_update():
               -
             scripts:
               -
+            patches:
+              -
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -1157,6 +1243,8 @@ def describe_update():
             links:
               -
             scripts:
+              -
+            patches:
               -
         groups:
           -
@@ -1178,6 +1266,8 @@ def describe_update():
               -
             scripts:
               -
+            patches:
+              -
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -1187,6 +1277,8 @@ def describe_update():
               -
             scripts:
               -
+            patches:
+              -
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_3
             type: git
@@ -1194,6 +1286,8 @@ def describe_update():
             links:
               -
             scripts:
+              -
+            patches:
               -
         """
         )
@@ -1264,6 +1358,8 @@ def describe_lock():
               -
             scripts:
               -
+            patches:
+              -
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
@@ -1275,6 +1371,8 @@ def describe_lock():
               -
             scripts:
               -
+            patches:
+              -
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_3
             rev: 9bf18e16b956041f0267c21baad555a23237b52e
@@ -1285,6 +1383,8 @@ def describe_lock():
             links:
               -
             scripts:
+              -
+            patches:
               -
         """
             )
@@ -1310,6 +1410,8 @@ def describe_lock():
               -
             scripts:
               -
+            patches:
+              -
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_3
             rev: 9bf18e16b956041f0267c21baad555a23237b52e
@@ -1320,6 +1422,8 @@ def describe_lock():
             links:
               -
             scripts:
+              -
+            patches:
               -
         """
             )

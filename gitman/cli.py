@@ -125,6 +125,13 @@ def main(args=None, function=None):
         action="store_true",
         dest="no_scripts",
     )
+    sub.add_argument(
+        "-P",
+        "--no-patches",
+        help="skip patches after installation",
+        action="store_true",
+        dest="no_patches",
+    )
 
     # Update parser
     info = "update dependencies to the latest versions"
@@ -157,6 +164,13 @@ def main(args=None, function=None):
         help="skip running scripts after installation",
         action="store_true",
         dest="no_scripts",
+    )
+    sub.add_argument(
+        "-P",
+        "--no-patches",
+        help="skip patches after installation",
+        action="store_true",
+        dest="no_patches",
     )
 
     # List parser
@@ -277,6 +291,7 @@ def _get_command(function, namespace):
             clean=namespace.clean,
             skip_changes=namespace.skip_changes,
             skip_scripts=namespace.no_scripts,
+            skip_patches=namespace.no_patches,
         )
         if namespace.command == "install":
             kwargs.update(
@@ -350,6 +365,8 @@ def _run_command(function, args, kwargs):
     except exceptions.ScriptFailure as exception:
         _show_error(exception)
         exit_message = "Run again with '--force' to ignore script errors"
+    except exceptions.PatchFailure as exception:
+        _show_error(exception)
     except exceptions.InvalidConfig as exception:
         _show_error(exception)
         exit_message = "Adapt config and run again"

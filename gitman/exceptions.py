@@ -24,3 +24,7 @@ class UncommittedChanges(RuntimeError):
 
 class ScriptFailure(ShellError):
     """Raised when post-install script has a non-zero exit code."""
+
+
+class PatchFailure(ShellError):
+    """Raised when applying a patch has a non-zero exit code."""

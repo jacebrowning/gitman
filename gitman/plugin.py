@@ -69,6 +69,13 @@ def main(args=None):
         action="store_true",
         dest="no_scripts",
     )
+    parser.add_argument(
+        "-P",
+        "--no-patches",
+        help="skip patches after installation",
+        action="store_true",
+        dest="no_patches",
+    )
 
     # Update option
     group.add_argument(

@@ -62,6 +62,7 @@ def install(
     skip_changes=False,
     skip_default_group=False,
     skip_scripts=False,
+    skip_patches=False,
 ):
     """Install dependencies for a project.
 
@@ -70,10 +71,10 @@ def install(
     - `*names`: optional list of dependency directory names to filter on
     - `root`: specifies the path to the root working tree
     - `depth`: number of levels of dependencies to traverse
-    - `force`: indicates uncommitted changes can be overwritten and
-               script errors can be ignored
+    - `force`: indicates uncommitted changes can be overwritten,
+               script errors can be ignored and failed patches can be ignored
     - `force_interactive`: indicates uncommitted changes can be interactively
-    overwritten and script errors can be ignored
+    overwritten, script errors can be ignored and failed patches can be ignored
     - `fetch`: indicates the latest branches should always be fetched
     - `clean`: indicates untracked files should be deleted from dependencies
     - `skip_changes`: indicates dependencies with uncommitted changes
@@ -81,6 +82,7 @@ def install(
     - `skip_default_group`: indicates default_group should be skipped if
      `*names` is empty
     - `skip_scripts`: indicates scripts should be skipped
+    - `skip_patches`: indicates patches should be skipped
     """
     log.info(
         "%sInstalling dependencies: %s",
@@ -115,6 +117,10 @@ def install(
         )
         count += _count  # type: ignore
 
+        if _count and not skip_patches:
+            common.show("Applying patches...", color="message", log=False)
+            common.newline()
+            config.apply_patches(*names, depth=depth, force=force)
         if _count and not skip_scripts:
             label = "nested scripts" if index else "scripts"
             common.show(f"Running {label}...", color="message", log=False)
@@ -137,6 +143,7 @@ def update(
     skip_changes=False,
     skip_default_group=False,
     skip_scripts=False,
+    skip_patches=False,
 ):
     """Update dependencies for a project.
 
@@ -157,6 +164,7 @@ def update(
     - `skip_default_group`: indicates default_group should be skipped if
      `*names` is empty
     - `skip_scripts`: indicates scripts should be skipped
+    - `skip_patches`: indicates patches should be skipped
     """
     log.info(
         "%s dependencies%s: %s",
@@ -201,6 +209,10 @@ def update(
                 skip_changes=skip_changes or force_interactive,
             )
 
+        if _count and not skip_patches:
+            common.show("Applying patches...", color="message", log=False)
+            common.newline()
+            config.apply_patches(*names, depth=depth, force=force)
         if _count and not skip_scripts:
             label = "nested scripts" if index else "scripts"
             common.show(f"Running {label}...", color="message", log=False)

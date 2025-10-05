@@ -78,6 +78,40 @@ def clone(
         git("clone", "--reference-if-able", reference, repo, normpath, *user_params)
 
 
+def create_branch_local(type, name: str, base_ref: str = "HEAD", recreate: bool = True):
+    """Create a local branch.
+
+    :param recreate: delete and create if already exists
+    """
+    if type == "git-svn":
+        # ignore creating branch in case of git-svn
+        return
+
+    assert type == "git"
+
+    # check if branch exists and delete
+    if recreate and _local_branch_exists(name):
+        git("branch", "-D", name, _show=False)
+
+    # Create branch
+    git("branch", name, base_ref, _show=False)
+
+
+def checkout(type, branch_name: str):
+    """Checkout a specific branch.
+
+    :param branch_name: branch name for the checkout
+    """
+    if type == "git-svn":
+        # ignore svn
+        return
+
+    assert type == "git"
+
+    # Cehckout branch
+    git("checkout", branch_name)
+
+
 def is_sha(rev):
     """Heuristically determine whether a revision corresponds to a commit SHA.
 
@@ -194,6 +228,26 @@ def changes(type, include_untracked=False, display_status=True, _show=False):
     return status
 
 
+def am(patch, _skip=False):
+    """Apply a patch.
+
+    :param patch: the patch to be applied
+    :param _skip: skip patch if applying fails
+    """
+    try:
+        git("am", "--3way", patch, _show=True)
+    except ShellError as e:
+        if _skip:
+            # Check if current git am is stuck
+            rebase_dir = git("rev-parse", "--git-path", "rebase-apply", _show=False)
+            if rebase_dir and os.path.isdir(rebase_dir[0]):
+                try:
+                    git("am", "--skip", _show=True, _ignore=True)
+                except ShellError:
+                    pass
+        raise ShellError from e
+
+
 def update(
     type, repo, path, *, clean=True, fetch=False, rev=None
 ):  # pylint: disable=redefined-outer-name,unused-argument
@@ -241,14 +295,17 @@ def get_url(type):
     return git("config", "--get", "remote.origin.url", _show=False)[0]
 
 
-def get_hash(type, _show=False):
+def get_hash(type, short=False, _show=False):
     """Get the current working tree's hash."""
     if type == "git-svn":
         return "".join(filter(str.isdigit, gitsvn("info", _show=_show)[4]))
 
     assert type == "git"
-
-    return git("rev-parse", "HEAD", _show=_show, _stream=False)[0]
+    args = ["rev-parse"]
+    if short:
+        args.append("--short")
+    args.append("HEAD")
+    return git(*args, _show=_show, _stream=False)[0]
 
 
 def get_tag():
@@ -281,6 +338,15 @@ def get_object_rev(object_name):
             commit_sha = log_results[0].replace("commit ", "")
 
     return commit_sha
+
+
+def _local_branch_exists(name) -> bool:
+    """Check if a local branch exists."""
+    try:
+        git("rev-parse", "--verify", name, _show=False)
+        return True
+    except ShellError:
+        return False
 
 
 def _get_sha_from_rev(rev):

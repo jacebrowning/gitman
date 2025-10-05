@@ -30,6 +30,7 @@ class Source:
     | `sparse_paths` | Controls partial checkout | No | `[]` |
     | `links` | Creates symlinks within a project | No | `[]` |
     | `scripts` | Shell commands to run after checkout | No | `[]` |
+    | `patches` | patches to be applied after checkout | No | `[]` |
 
     ### Params
 
@@ -62,6 +63,17 @@ class Source:
       - cabal install
     ```
 
+    ### Patches
+
+    Patches that are applied after checkout. For example:
+
+    ```
+    repo: "https://github.com/koalaman/shellcheck"
+    patches:
+      - patchdir/0001-add-something.patch
+      - patchdir/0002-add-more.patch
+    ```
+
     """
 
     repo: str = ""
@@ -74,6 +86,7 @@ class Source:
     links: List[Link] = field(default_factory=list)
 
     scripts: List[str] = field(default_factory=list)
+    patches: List[str] = field(default_factory=list)
 
     DIRTY = "<dirty>"
     UNKNOWN = "<unknown>"
@@ -235,6 +248,46 @@ class Source:
                     raise exceptions.ScriptFailure(msg)
         common.newline()
 
+    def apply_patches(self, topdir: str, skip: bool = False):
+        log.info("Applying patches...")
+
+        # Enter the working tree
+        if not git.valid():
+            raise self._invalid_repository
+
+        # Check for patches
+        if not self.patches or not self.patches[0]:
+            common.show("(no patches to apply)", color="shell_info")
+            common.newline()
+            return
+
+        # Create a branch from the current hash to apply patches
+        try:
+            hash = git.get_hash(self.type, short=True, _show=False)
+            patched_branch = hash + "-patched"
+            git.create_branch_local(self.type, patched_branch)
+            git.checkout(self.type, patched_branch)
+            log.info("Working on local branch{} for patching.".format(patched_branch))
+        except exceptions.ShellError as exc:
+            msg = "Patch preparation failed! Could not create branch {}".format(
+                patched_branch
+            )
+            raise exceptions.PatchFailure(msg) from exc
+
+        # Apply all patches
+        for patch in self.patches:
+            try:
+                # Convert patch to absolute path
+                patch_path = os.path.abspath(os.path.join(topdir, patch))
+                git.am(patch_path, skip)
+            except exceptions.ShellError as exc:
+                if skip:
+                    log.debug("Ignored error from patch '%s'", patch)
+                else:
+                    msg = "Failed to apply patch '{}' in {}".format(patch, os.getcwd())
+                    raise exceptions.PatchFailure(msg) from exc
+        common.newline()
+
     def identify(
         self,
         allow_dirty: bool = True,
@@ -318,6 +371,7 @@ class Source:
             rev=rev,
             links=self.links,
             scripts=self.scripts,
+            patches=self.patches,
             sparse_paths=self.sparse_paths,
         )
         return source

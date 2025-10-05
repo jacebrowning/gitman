@@ -187,6 +187,52 @@ class Config:
 
         return count
 
+    @preserve_cwd
+    def apply_patches(
+        self,
+        *names: str,
+        depth: Optional[int] = None,
+        force: bool = False,
+    ) -> int:
+        """Apply patches for the specified dependencies."""
+        if depth == 0:
+            log.info("Skipped directory: %s", self.location_path)
+            return 0
+
+        sources = self._get_sources()
+        sources_filter = self._get_sources_filter(
+            *names, sources=sources, skip_default_group=False
+        )
+
+        shell.cd(self.location_path)
+        common.newline()
+        common.indent()
+
+        count = 0
+        for source in sources:
+            if source.name in sources_filter:
+                shell.cd(source.name)
+
+                config = load_config(search=False)
+                if config:
+                    common.indent()
+                    remaining_depth = None if depth is None else max(0, depth - 1)
+                    if remaining_depth:
+                        common.newline()
+                    count += config.apply_patches(depth=remaining_depth, force=force)
+                    common.dedent()
+
+                source.apply_patches(
+                    topdir=os.path.normpath(self.location_path), skip=force
+                )
+                count += 1
+
+                shell.cd(self.location_path, _show=False)
+
+        common.dedent()
+
+        return count
+
     @classmethod
     def _split_name_and_rev(cls, name_rev):
         true_name = name_rev
