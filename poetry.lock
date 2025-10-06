@@ -1626,14 +1626,14 @@ files = [
 
 [[package]]
 name = "universal-startfile"
-version = "0.2"
+version = "0.3"
 description = "A cross-platform version of 'os.startfile' from the standard library."
 optional = false
-python-versions = ">=3.8,<4.0"
+python-versions = "<4.0,>=3.9"
 groups = ["main"]
 files = [
-    {file = "universal-startfile-0.2.tar.gz", hash = "sha256:1e970e782de10e726ebde2ae8887469d93a75eb67f81b82633979c11739a212a"},
-    {file = "universal_startfile-0.2-py3-none-any.whl", hash = "sha256:dc1de2c595f7897609fe319bd5da764043e637db8e32d572ec94fa3589f49df0"},
+    {file = "universal_startfile-0.3-py3-none-any.whl", hash = "sha256:4afd041fcfdbb8f51c474894177a079bc833ebed404218b24b6ceb105c084f89"},
+    {file = "universal_startfile-0.3.tar.gz", hash = "sha256:a0f8a832400bdd0257cbe073df34df1f129863a22c674808cf8431f8e79191f7"},
 ]
 
 [[package]]
@@ -1712,4 +1712,4 @@ test = ["big-O", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more-it
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.9,<3.15"
-content-hash = "bac97ce7e2a2bd0f566052fd3b0e5cf88f4c9ec17eeb21bb823c396f141caa90"
+content-hash = "1aad16029dff502e945cff8c8a61f910bacdbc5129fa156563fd8deeb4505175"
