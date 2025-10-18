@@ -10,8 +10,9 @@ theme: readthedocs
 plugins:
   - autorefs
   - mkdocstrings:
-     watch:
-        - gitman
+      handlers:
+        python:
+          paths: [gitman]
 
 markdown_extensions:
   - codehilite
