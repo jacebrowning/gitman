@@ -1,6 +1,7 @@
 """Utilities to call shell programs."""
 
 import os
+import shutil
 import subprocess
 
 import log
@@ -125,6 +126,16 @@ def ln(source, target):
     if not os.path.isdir(dirpath):
         mkdir(dirpath)
     os.symlink(source, target)
+
+
+def cp(source, target):
+    dirpath = os.path.dirname(target)
+    if not os.path.isdir(dirpath):
+        mkdir(dirpath)
+    if os.path.isdir(source):
+        shutil.copytree(src=source, dst=target, dirs_exist_ok=True)
+    else:
+        shutil.copy2(src=source, dst=target)
 
 
 def rm(path):

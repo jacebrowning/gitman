@@ -10,6 +10,8 @@ sources:
     links:
       - source: ''
         target: demo/example
+    copies:
+      -
     scripts:
       - cat .noserc
       - make foobar
@@ -22,6 +24,9 @@ sources:
       -
     links:
       -
+    copies:
+      - source: ''
+        target: demo/example
     scripts:
       -
   - repo: https://github.com/jacebrowning/gitman-demo
@@ -32,6 +37,8 @@ sources:
     sparse_paths:
       -
     links:
+      -
+    copies:
       -
     scripts:
       - echo "Hello, World!"
@@ -45,6 +52,8 @@ sources:
       -
     links:
       -
+    copies:
+      -
     scripts:
       -
 sources_locked:
@@ -56,6 +65,8 @@ sources_locked:
     sparse_paths:
       -
     links:
+      -
+    copies:
       -
     scripts:
       - cat .noserc
@@ -69,6 +80,8 @@ sources_locked:
       -
     links:
       -
+    copies:
+      -
     scripts:
       -
   - repo: https://github.com/jacebrowning/gitman-demo
@@ -79,6 +92,8 @@ sources_locked:
     sparse_paths:
       -
     links:
+      -
+    copies:
       -
     scripts:
       - echo "Hello, World!"
@@ -91,6 +106,8 @@ sources_locked:
     sparse_paths:
       -
     links:
+      -
+    copies:
       -
     scripts:
       -

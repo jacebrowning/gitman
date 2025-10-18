@@ -52,7 +52,7 @@ The token can also be written to `.netrc` during builds, see the guide for [Trav
 
 ## Symlinks on Windows
 
-If you're using Windows, there are some additional prerequisites to ensure Gitman works seamlessly with symbolic links.
+If you're using Windows, there are some additional prerequisites to ensure Gitman works seamlessly with symbolic links. You could consider using copies instead.
 
 ### Grant Permissions
 

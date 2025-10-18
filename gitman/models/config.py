@@ -115,6 +115,8 @@ class Config:
             assert self.root, f"Missing root: {self}"
             source.create_links(self.root, force=force)
             common.newline()
+            source.create_copies(self.root, force=force)
+            common.newline()
             count += 1
 
             config = load_config(search=False)

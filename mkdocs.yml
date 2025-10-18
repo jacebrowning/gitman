@@ -36,6 +36,7 @@ nav:
     - Sparse Checkouts: use-cases/sparse-checkouts.md
     - Default Groups: use-cases/default-groups.md
     - Multiple Links: use-cases/multiple-links.md
+    - Multiple Copies: use-cases/multiple-copies.md
   - Extras:
     - Git SVN Bridge: extras/git-svn-bridge.md
     - Bundled Application: extras/bundled-application.md
