@@ -1,3 +1,7 @@
+# 3.7 (2025-10-18)
+
+- Added support for applying post-checkout Git patches. (@C0DE-X)
+
 # 3.6 (2025-09-07)
 
 - Dropped support for Python 3.8 and added support for Python 3.12 and 3.13.
