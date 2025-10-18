@@ -23,6 +23,7 @@ class TestMain:
                 force_interactive=False,
                 skip_changes=False,
                 skip_scripts=False,
+                skip_patches=False,
                 skip_default_group=False,
             ),
             call.install().__bool__(),  # command status check
@@ -46,6 +47,7 @@ class TestMain:
                 lock=True,
                 skip_changes=False,
                 skip_scripts=False,
+                skip_patches=False,
             ),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
@@ -68,6 +70,7 @@ class TestMain:
                 lock=True,
                 skip_changes=False,
                 skip_scripts=False,
+                skip_patches=False,
             ),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
@@ -90,6 +93,7 @@ class TestMain:
                 lock=False,
                 skip_changes=False,
                 skip_scripts=False,
+                skip_patches=False,
             ),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
@@ -112,6 +116,7 @@ class TestMain:
                 lock=True,
                 skip_changes=True,
                 skip_scripts=False,
+                skip_patches=False,
             ),
             call.update().__bool__(),  # command status check
         ] == mock_commands.mock_calls
