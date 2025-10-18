@@ -37,7 +37,7 @@ def clone(
         user_params = []
 
     if type == "git-svn":
-        # just the preperation for the svn deep clone / checkout here
+        # just the preparation for the svn deep clone / checkout here
         # clone will be made in update function to simplify source.py).
         os.makedirs(path)
         return
@@ -84,12 +84,11 @@ def create_branch_local(type, name: str, base_ref: str = "HEAD", recreate: bool 
     :param recreate: delete and create if already exists
     """
     if type == "git-svn":
-        # ignore creating branch in case of git-svn
-        return
+        return  # ignore creating branch in case of git-svn
 
     assert type == "git"
 
-    # check if branch exists and delete
+    # Check if branch exists and delete
     if recreate and _local_branch_exists(name):
         git("branch", "-D", name, _show=False)
 
@@ -103,12 +102,11 @@ def checkout(type, branch_name: str):
     :param branch_name: branch name for the checkout
     """
     if type == "git-svn":
-        # ignore svn
-        return
+        return  # ignore checkout in the case of git-svn
 
     assert type == "git"
 
-    # Cehckout branch
+    # Checkout branch
     git("checkout", branch_name)
 
 
@@ -186,7 +184,7 @@ def rebuild(type, repo):  # pylint: disable=unused-argument
 
     assert type == "git"
 
-    common.show("Rebuilding mising git repo...", color="message")
+    common.show("Rebuilding missing git repo...", color="message")
     git("init", _show=True)
     git("remote", "add", "origin", repo, _show=True)
     common.show("Rebuilt git repo...", color="message")
@@ -197,8 +195,7 @@ def changes(type, include_untracked=False, display_status=True, _show=False):
     status = False
 
     if type == "git-svn":
-        # ignore changes in case of git-svn
-        return status
+        return status  # ignore changes in case of git-svn
 
     assert type == "git"
 
