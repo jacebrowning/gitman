@@ -47,7 +47,7 @@ python = "^3.9,<3.15"
 
 datafiles = "^2.3.1"
 minilog = "^2.3.1"
-universal-startfile = ">=0.2,<0.4"
+universal-startfile = ">=0.2,<0.5"
 
 [tool.poetry.group.dev.dependencies]
 
