@@ -1071,18 +1071,18 @@ testing = ["process-tests", "pytest-xdist", "virtualenv"]
 
 [[package]]
 name = "pytest-describe"
-version = "2.2.0"
+version = "3.0.0"
 description = "Describe-style plugin for pytest"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.9"
 groups = ["dev"]
 files = [
-    {file = "pytest-describe-2.2.0.tar.gz", hash = "sha256:39bb05eb90f2497d9ca342ef9a0b7fa5bada7e58505aec33f66d661d631955b7"},
-    {file = "pytest_describe-2.2.0-py3-none-any.whl", hash = "sha256:bd9e2c73acb4b9522a8400823d98f5b6a081667d3bfd7243a8598336896b544d"},
+    {file = "pytest_describe-3.0.0-py3-none-any.whl", hash = "sha256:946d40b5d77faf4eb610b94f2d54ab8b6721cc0b313f5bfb3663fd25c6a3920a"},
+    {file = "pytest_describe-3.0.0.tar.gz", hash = "sha256:50e0b7f404decaeb1b5d7bca13cbe369208d1eeffafc2802663777b195f074ff"},
 ]
 
 [package.dependencies]
-pytest = ">=4.6,<9"
+pytest = ">=6,<9"
 
 [[package]]
 name = "pytest-expecter"
@@ -1720,4 +1720,4 @@ test = ["big-O", "jaraco.functools", "jaraco.itertools", "jaraco.test", "more-it
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.9,<3.15"
-content-hash = "647e0cf358397a8139c97d63138ea9a9e69eaf196b630465c5bab52c7224f69b"
+content-hash = "4ab564b1b380a0b5a5bc8bc00ef539a33f066c1772c41401583d205124730ee7"
