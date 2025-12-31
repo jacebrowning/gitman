@@ -120,8 +120,13 @@ def is_sha(rev):
     return re.match("^[0-9a-f]{7,40}$", rev) is not None
 
 
-def fetch(type, repo, path, rev=None):  # pylint: disable=unused-argument
+def fetch(
+    type, repo, path, rev=None, fetch_params=None
+):  # pylint: disable=unused-argument
     """Fetch the latest changes from the remote repository."""
+
+    if fetch_params is None:
+        fetch_params = []
 
     if type == "git-svn":
         # deep clone happens in update function
@@ -130,7 +135,7 @@ def fetch(type, repo, path, rev=None):  # pylint: disable=unused-argument
     assert type == "git"
 
     git("remote", "set-url", "origin", repo)
-    args = ["fetch", "--tags", "--force", "--prune", "origin"]
+    args = ["fetch", "--tags", "--force", "--prune", *fetch_params, "origin"]
     if rev:
         if is_sha(rev):
             pass  # fetch only works with a SHA if already present locally
