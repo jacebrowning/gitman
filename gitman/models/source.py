@@ -24,7 +24,7 @@ class Source:
     | --- | ------- | -------- | ------- |
     | `repo` | URL of the repository | Yes |
     | `name` | Directory for checkout | Yes | (inferred) |
-    | `rev` | SHA, tag, or branch to checkout | Yes | `"main"`|
+    | `rev` | SHA, tag, or branch to checkout | Yes | `"HEAD"`|
     | `type` | `"git"` or `"git-svn"` | No | `"git"` |
     | `params` | Additional arguments for `clone` | No | `null` |
     | `sparse_paths` | Controls partial checkout | No | `[]` |
@@ -78,7 +78,7 @@ class Source:
 
     repo: str = ""
     name: Optional[str] = None
-    rev: str = "main"
+    rev: str = "HEAD"
 
     type: str = "git"
     params: Optional[str] = None
@@ -97,6 +97,8 @@ class Source:
         else:
             self.name = str(self.name)
         self.type = self.type or "git"
+        if not self.rev:
+            self.rev = "HEAD"
 
     def __repr__(self):
         return f"<source {self}>"
