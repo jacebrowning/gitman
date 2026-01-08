@@ -1,6 +1,6 @@
 # Git SVN Setup
 
-If you're planning to use `gitman` to manage Subversion repositories, ensure `git svn` is configured correctly.
+If you're planning to use Gitman to manage Subversion repositories, ensure `git svn` is configured correctly.
 
 ## Install missing SVN packages
 
@@ -11,7 +11,7 @@ sudo apt-get install subversion libapache2-svn
 
 ## Credentials
 
-In order for `gitman` to interact with `git svn`, it must be configured to store your SVN credentials (cached) for private repository access. As a test, trying cloning one of your private repositories:
+In order for Gitman to interact with `git svn`, it must be configured to store your SVN credentials (cached) for private repository access. As a test, trying cloning one of your private repositories:
 
 ```sh
 $ git svn clone -r <rev> <repo>

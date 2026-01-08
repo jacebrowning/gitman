@@ -4,7 +4,7 @@ Gitman can be invoked from your build system or continuous integration environme
 
 ## Makefile
 
-The following example shows one way you might want to call `gitman` from within a Makefile:
+The following example shows one way you might want to call Gitman from within a Makefile:
 
 ```makefile
 .PHONY: all

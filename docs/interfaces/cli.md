@@ -1,6 +1,6 @@
 # Command-line Interface
 
-After setting up `gitman` with a [config file](../index.md#setup), various commands can be run to manage these Git-controlled source dependencies.
+After setting up Gitman with a [config file](../index.md#setup), various commands can be run to manage these Git-controlled source dependencies.
 
 ## Init
 

@@ -1,6 +1,6 @@
 # Tracking Branches in Dependencies
 
-One common use case of `gitman` is to track versions of related product sub-components such as a web app that depends on an API.
+One common use case of Gitman is to track versions of related product sub-components such as a web app that depends on an API.
 
 ## Sample Configuration
 

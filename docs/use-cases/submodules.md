@@ -14,7 +14,7 @@ Using Git in the outer working tree will essentially ignore the contents of the 
 
 ## Mimicking Submodules
 
-To get the same behavior using `gitman`, first delete the `.gitmodules` file and create a new `.gitman.yml`:
+To get the same behavior using Gitman, first delete the `.gitmodules` file and create a new `.gitman.yml`:
 
 ```yaml
 location: .gitman
