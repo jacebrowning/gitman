@@ -1,7 +1,7 @@
 # Linking Related Feature Branches
 
 
-Another use case of `gitman` is to test experimental versions of related product sub-components. In the [web app + API example](branch-tracking.md), a new feature might require changes in both the API and web app.
+Another use case of Gitman is to test experimental versions of related product sub-components. In the [web app + API example](branch-tracking.md), a new feature might require changes in both the API and web app.
 
 ## Custom Locked Sources
 
