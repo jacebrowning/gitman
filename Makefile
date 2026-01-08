@@ -55,6 +55,12 @@ endif
 
 # SYSTEM DEPENDENCIES #########################################################
 
+.PHONY: bootstrap
+bootstrap: ## Attempt to install system dependencies
+	asdf plugin add python || asdf plugin update python
+	asdf plugin add poetry || asdf plugin update poetry
+	asdf install
+
 .PHONY: doctor
 doctor:  ## Confirm system dependencies are available
 	bin/verchew
@@ -172,11 +178,11 @@ docs/*.png: $(MODULES)
 	- mv -f packages_$(PACKAGE).png docs/packages.png
 
 docs/demo.gif: docs/demo.cast
-	asciicast2gif $< $@
+	npx --yes asciicast2gif $< $@
 docs/demo.cast: Makefile
 	/usr/X11/bin/resize -s 61 127
-	poetry run asciinema rec $@ --overwrite --command "make demo CI=true RECORDING_DELAY=1" --title "Gitman Demo"
-	poetry run asciinema upload $@
+	poetry run asciinema rec $@ --overwrite --output-format=asciicast-v2 --command="make demo CI=true RECORDING_DELAY=1" --title="Gitman Demo"
+	ASCIINEMA_API_URL=https://asciinema.org poetry run asciinema upload $@
 
 # BUILD #######################################################################
 

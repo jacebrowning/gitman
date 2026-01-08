@@ -2,7 +2,7 @@
 
 Gitman is a language-agnostic dependency manager using Git. It aims to serve as a submodules replacement and provides advanced options for managing versions of nested Git repositories.
 
-[![Demo](https://raw.githubusercontent.com/jacebrowning/gitman/main/docs/demo.gif)](https://asciinema.org/a/3DLos4HIU84P0AfFlZMYcgPus)
+[![Demo](https://raw.githubusercontent.com/jacebrowning/gitman/main/docs/demo.gif)](https://asciinema.org/a/IyeLCRjDXZbsFETz)
 
 [![Linux Build](https://img.shields.io/github/actions/workflow/status/jacebrowning/gitman/main.yml?branch=main&label=linux)](https://github.com/jacebrowning/gitman/actions)
 [![Windows Build](https://img.shields.io/appveyor/ci/jacebrowning/gitman/main.svg?label=windows)](https://ci.appveyor.com/project/jacebrowning/gitman)

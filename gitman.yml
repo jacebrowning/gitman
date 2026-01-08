@@ -13,6 +13,8 @@ sources:
     scripts:
       - cat .noserc
       - make foobar
+    patches:
+      -
   - repo: https://github.com/jacebrowning/gitman-demo
     name: gitman_2
     rev: example-tag
@@ -23,6 +25,8 @@ sources:
     links:
       -
     scripts:
+      -
+    patches:
       -
   - repo: https://github.com/jacebrowning/gitman-demo
     name: gitman_3
@@ -36,6 +40,8 @@ sources:
     scripts:
       - echo "Hello, World!"
       - pwd
+    patches:
+      -
   - repo: https://github.com/jacebrowning/gitman-demo
     name: gitman_4
     rev: example-branch-2
@@ -47,6 +53,8 @@ sources:
       -
     scripts:
       -
+    patches:
+      -
 sources_locked:
   - repo: https://github.com/jacebrowning/gitman-demo
     name: gitman_1
@@ -56,10 +64,13 @@ sources_locked:
     sparse_paths:
       -
     links:
-      -
+      - source: ''
+        target: demo/example
     scripts:
       - cat .noserc
       - make foobar
+    patches:
+      -
   - repo: https://github.com/jacebrowning/gitman-demo
     name: gitman_2
     rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
@@ -70,6 +81,8 @@ sources_locked:
     links:
       -
     scripts:
+      -
+    patches:
       -
   - repo: https://github.com/jacebrowning/gitman-demo
     name: gitman_3
@@ -83,6 +96,8 @@ sources_locked:
     scripts:
       - echo "Hello, World!"
       - pwd
+    patches:
+      -
   - repo: https://github.com/jacebrowning/gitman-demo
     name: gitman_4
     rev: f50c1ac8bf27377625b0cc93ea27f8069c7b513a
@@ -93,6 +108,8 @@ sources_locked:
     links:
       -
     scripts:
+      -
+    patches:
       -
 groups:
   - name: group_a
