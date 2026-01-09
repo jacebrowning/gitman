@@ -32,6 +32,8 @@ class Source:
     | `scripts` | Shell commands to run after checkout | No | `[]` |
     | `patches` | patches to be applied after checkout | No | `[]` |
 
+    <br>
+
     ### Params
 
     Params are passed directly to the `clone` command to modify behavior such as:

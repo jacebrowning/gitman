@@ -157,7 +157,7 @@ MKDOCS_INDEX := site/index.html
 docs: mkdocs uml ## Generate documentation and UML
 ifndef CI
 	@ eval "sleep 3; bin/open http://127.0.0.1:8000" &
-	poetry run mkdocs serve
+	poetry run mkdocs serve --watch gitman
 endif
 
 .PHONY: mkdocs
