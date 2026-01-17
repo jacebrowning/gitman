@@ -18,7 +18,7 @@ future==0.18.3 ; python_version >= "3.9" and python_version < "3.15" and sys_pla
 ghp-import==2.1.0 ; python_version >= "3.9" and python_version < "3.15"
 griffe==1.14.0 ; python_version >= "3.9" and python_version < "3.11"
 griffe==1.15.0 ; python_version >= "3.11" and python_version < "3.15"
-idna==3.3 ; python_version >= "3.9" and python_version < "3.15"
+idna==3.7 ; python_version >= "3.9" and python_version < "3.15"
 importlib-metadata==4.12.0 ; python_version == "3.9"
 iniconfig==1.1.1 ; python_version >= "3.9" and python_version < "3.15"
 isort==6.1.0 ; python_version >= "3.9" and python_version < "3.15"
