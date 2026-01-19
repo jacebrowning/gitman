@@ -13,6 +13,8 @@ plugins:
       handlers:
         python:
           paths: [gitman]
+          options:
+            show_source: false
 
 markdown_extensions:
   - codehilite
