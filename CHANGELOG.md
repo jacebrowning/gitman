@@ -1,4 +1,4 @@
-# 3.8 (unreleased)
+# 3.8 (2026-02-01)
 
 - Dropped support for Python 3.9 and added support for Python 3.14.
 
