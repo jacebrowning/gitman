@@ -63,7 +63,7 @@ types-freezegun = "*"
 types-setuptools = "*"
 
 # Testing
-pytest = "^8.3"
+pytest = ">=8.3,<10.0"
 pytest-cov = ">=5,<8"
 pytest-describe = ">=2.2,<4.0"
 pytest-expecter = "^3.0"
