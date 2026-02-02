@@ -386,9 +386,7 @@ class Source:
 
             Not a valid repository: {}
             During install you can rebuild a repo with a missing .git directory using the --force option
-            """.format(
-            path
-        )
+            """.format(path)
         return exceptions.InvalidRepository(msg)
 
 
