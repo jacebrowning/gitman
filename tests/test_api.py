@@ -98,8 +98,7 @@ def describe_init():
 
         expect(gitman.init()) == True
 
-        expect(Config().datafile.text) == strip(
-            """
+        expect(Config().datafile.text) == strip("""
         location: gitman_sources
         sources:
           - repo: https://github.com/githubtraining/hellogitworld
@@ -132,8 +131,7 @@ def describe_init():
         default_group: ''
         groups:
           -
-        """
-        )
+        """)
 
     def it_does_not_modify_existing_config_file(config):
         expect(gitman.init()) == False
@@ -155,8 +153,7 @@ def describe_install():
         expect(config.datafile.text) == CONFIG
 
     def it_merges_sources(config):
-        config.datafile.text = strip(
-            """
+        config.datafile.text = strip("""
         location: deps
         sources:
           - repo: https://github.com/mrpossoms/gitman-demo-submodule
@@ -191,8 +188,7 @@ def describe_install():
               -
             patches:
               -
-        """
-        )
+        """)
         config.datafile.load()
 
         expect(gitman.install(depth=1)) == True
@@ -207,8 +203,7 @@ def describe_install():
         ) == True
 
     def it_can_handle_missing_locked_sources(config):
-        config.datafile.text = strip(
-            """
+        config.datafile.text = strip("""
         location: deps
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -233,8 +228,7 @@ def describe_install():
               -
             patches:
               -
-        """
-        )
+        """)
         config.datafile.load()
 
         expect(gitman.install("gitman_1", depth=1)) == True
@@ -255,8 +249,7 @@ def describe_install():
     def describe_links():
         @pytest.fixture
         def config_with_link(config):
-            config.datafile.text = strip(
-                """
+            config.datafile.text = strip("""
             location: deps
             sources:
               - name: gitman_1
@@ -266,8 +259,7 @@ def describe_install():
                   - target: my_link
                 scripts:
                   -
-            """
-            )
+            """)
             config.datafile.load()
 
             return config
@@ -298,8 +290,7 @@ def describe_install():
     def describe_multi_links():
         @pytest.fixture
         def config_with_links(config):
-            config.datafile.text = strip(
-                """
+            config.datafile.text = strip("""
             location: deps
             sources:
               - name: gitman_1
@@ -312,8 +303,7 @@ def describe_install():
                     target: gmd_4
                 scripts:
                   -
-            """
-            )
+            """)
             config.datafile.load()
 
             return config
@@ -344,8 +334,7 @@ def describe_install():
     def describe_scripts():
         @pytest.fixture
         def config_with_scripts(config):
-            config.datafile.text = strip(
-                """
+            config.datafile.text = strip("""
             location: deps
             sources:
               - name: gitman_1
@@ -357,8 +346,7 @@ def describe_install():
                   -
                 scripts:
                   - make foobar
-            """
-            )
+            """)
             config.datafile.load()
 
             return config
@@ -373,8 +361,7 @@ def describe_install():
     def describe_sparse_paths():
         @pytest.fixture
         def config_with_scripts(config):
-            config.datafile.text = strip(
-                """
+            config.datafile.text = strip("""
                     location: deps
                     sources:
                       - name: gitman_1
@@ -388,8 +375,7 @@ def describe_install():
                           -
                         scripts:
                           -
-                    """
-            )
+                    """)
             config.datafile.load()
 
             return config
@@ -408,8 +394,7 @@ def describe_install():
     def describe_mixed_names():
         @pytest.fixture
         def config_with_group(config):
-            config.datafile.text = strip(
-                """
+            config.datafile.text = strip("""
                 location: deps
                 sources:
                   - name: gitman_1
@@ -442,8 +427,7 @@ def describe_install():
                     members:
                     - gitman_1
                     - gitman_2
-                """
-            )
+                """)
             config.datafile.load()
 
             return config
@@ -472,8 +456,7 @@ def describe_install():
     def describe_default_group():
         @pytest.fixture
         def config_with_default_group(config):
-            config.datafile.text = strip(
-                """
+            config.datafile.text = strip("""
         location: deps
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -510,16 +493,14 @@ def describe_install():
             members:
               - gitman_2
         default_group: 'main'
-        """
-            )
+        """)
             config.datafile.load()
 
             return config
 
         @pytest.fixture
         def config_without_default_group(config):
-            config.datafile.text = strip(
-                """
+            config.datafile.text = strip("""
         location: deps
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -556,8 +537,7 @@ def describe_install():
             members:
               - gitman_2
         default_group: ''
-        """
-            )
+        """)
             config.datafile.load()
 
             return config
@@ -663,8 +643,7 @@ def describe_update():
         expect(config.datafile.text) == CONFIG
 
     def it_locks_previously_unlocked_dependencies(config):
-        config.datafile.text = strip(
-            """
+        config.datafile.text = strip("""
         location: deps
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -709,15 +688,13 @@ def describe_update():
               -
         groups:
           -
-        """
-        )
+        """)
         config.datafile.load()
 
         gitman.update(depth=1)
 
         config.datafile.load()
-        expect(config.datafile.text) == strip(
-            """
+        expect(config.datafile.text) == strip("""
         location: deps
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -763,12 +740,10 @@ def describe_update():
         groups:
           -
         default_group: ''
-        """
-        )
+        """)
 
     def it_should_not_lock_dependencies_when_disabled(config):
-        config.datafile.text = strip(
-            """
+        config.datafile.text = strip("""
         location: deps
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -813,14 +788,12 @@ def describe_update():
               -
         groups:
           -
-        """
-        )
+        """)
         config.datafile.load()
 
         gitman.update(depth=1, lock=False)
 
-        expect(config.datafile.text) == strip(
-            """
+        expect(config.datafile.text) == strip("""
         location: deps
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -866,12 +839,10 @@ def describe_update():
         groups:
           -
         default_group: ''
-        """
-        )
+        """)
 
     def it_should_not_allow_source_and_group_name_conflicts(config):
-        config.datafile.text = strip(
-            """
+        config.datafile.text = strip("""
         location: deps
         sources:
           - name: gitman_1
@@ -889,16 +860,14 @@ def describe_update():
             members:
               - gitman_1
               - gitman_2
-            """
-        )
+            """)
         config.datafile.load()
 
         with pytest.raises(InvalidConfig):
             gitman.update(depth=1, lock=True)
 
     def it_locks_previously_locked_dependencies_by_group_name(config):
-        config.datafile.text = strip(
-            """
+        config.datafile.text = strip("""
         location: deps
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -972,15 +941,13 @@ def describe_update():
             members:
               - gitman_1
               - gitman_2
-        """
-        )
+        """)
         config.datafile.load()
 
         gitman.update("group_a", depth=1)
 
         config.datafile.load()
-        expect(config.datafile.text) == strip(
-            """
+        expect(config.datafile.text) == strip("""
         location: deps
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -1055,8 +1022,7 @@ def describe_update():
               - gitman_1
               - gitman_2
         default_group: ''
-        """
-        )
+        """)
 
     def it_should_not_lock_dependencies_changes_force_interactive_no(
         config, monkeypatch
@@ -1075,8 +1041,7 @@ def describe_update():
         # with no to skip the force process
         monkeypatch.setattr("builtins.input", lambda x: "n")
 
-        config.datafile.text = strip(
-            """
+        config.datafile.text = strip("""
         location: deps
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -1108,14 +1073,12 @@ def describe_update():
               -
         groups:
           -
-        """
-        )
+        """)
         config.datafile.load()
 
         gitman.update(depth=1, force_interactive=True)
 
-        expect(config.datafile.text) == strip(
-            """
+        expect(config.datafile.text) == strip("""
         location: deps
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -1148,8 +1111,7 @@ def describe_update():
         groups:
           -
         default_group: ''
-        """
-        )
+        """)
 
     def it_locks_dependencies_changes_force_interactive_yes(config, monkeypatch):
         def git_changes(
@@ -1175,8 +1137,7 @@ def describe_update():
         # with yes to invoke the force process
         monkeypatch.setattr("builtins.input", lambda x: "y")
 
-        config.datafile.text = strip(
-            """
+        config.datafile.text = strip("""
         location: deps
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -1208,15 +1169,13 @@ def describe_update():
               -
         groups:
           -
-        """
-        )
+        """)
         config.datafile.load()
 
         gitman.update(depth=1, force_interactive=True)
 
         config.datafile.load()
-        expect(config.datafile.text) == strip(
-            """
+        expect(config.datafile.text) == strip("""
         location: deps
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -1249,12 +1208,10 @@ def describe_update():
         groups:
           -
         default_group: ''
-        """
-        )
+        """)
 
     def it_merges_sources(config):
-        config.datafile.text = strip(
-            """
+        config.datafile.text = strip("""
         location: deps
         sources:
           - repo: https://github.com/jacebrowning/gitman-demo
@@ -1289,8 +1246,7 @@ def describe_update():
               -
             patches:
               -
-        """
-        )
+        """)
         config.datafile.load()
 
         expect(gitman.install(depth=1)) == True
@@ -1343,9 +1299,7 @@ def describe_lock():
         expect(gitman.lock(depth=1)) == True
 
         config.datafile.load()
-        expect(config.datafile.text).contains(
-            strip(
-                """
+        expect(config.datafile.text).contains(strip("""
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
@@ -1386,18 +1340,14 @@ def describe_lock():
               -
             patches:
               -
-        """
-            )
-        )
+        """))
 
     def it_records_specified_dependencies(config):
         expect(gitman.update(depth=1, lock=False)) == True
         expect(gitman.lock("gitman_1", "gitman_3", depth=1)) == True
 
         config.datafile.load()
-        expect(config.datafile.text).contains(
-            strip(
-                """
+        expect(config.datafile.text).contains(strip("""
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
@@ -1425,9 +1375,7 @@ def describe_lock():
               -
             patches:
               -
-        """
-            )
-        )
+        """))
 
     def it_should_fail_on_dirty_repositories(config):
         expect(gitman.update(depth=1, lock=False)) == True
