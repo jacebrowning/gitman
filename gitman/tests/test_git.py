@@ -64,6 +64,17 @@ class TestGit:
             ],
         )
 
+    def test_fetch_params(self, mock_call):
+        """Verify the commands to fetch from a Git repository w/ params."""
+        git.fetch("git", "mock.git", "mock/path", fetch_params=["--depth", "1"])
+        check_calls(
+            mock_call,
+            [
+                "git remote set-url origin mock.git",
+                "git fetch --tags --force --prune --depth 1 origin",
+            ],
+        )
+
     def test_fetch_rev(self, mock_call):
         """Verify the commands to fetch from a Git repository w/ rev."""
         git.fetch("git", "mock.git", "mock/path", "mock-rev")
