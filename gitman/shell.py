@@ -120,11 +120,39 @@ def pwd(_show=True):
     return cwd
 
 
-def ln(source, target):
-    dirpath = os.path.dirname(target)
-    if not os.path.isdir(dirpath):
-        mkdir(dirpath)
-    os.symlink(source, target)
+def ln(source, target, *, symbolic: bool):
+    if symbolic:
+        dirpath = os.path.dirname(target)
+        if not os.path.isdir(dirpath):
+            mkdir(dirpath)
+        os.symlink(source, target)
+    else:
+        if not os.path.isdir(target):
+            mkdir(target)
+        # sync files and directories to source not present in target
+        for (wd_source, dirs, files) in os.walk(source):
+            wd_target = os.path.normpath(os.path.join(target, os.path.relpath(wd_source, source)))
+            for dir in dirs:
+                mkdir(os.path.join(wd_target, dir))
+            for file in files:
+                file_source = os.path.join(wd_source, file)
+                file_target = os.path.join(wd_target, file)
+                if not os.path.exists(file_target):
+                    os.link(file_source, file_target)
+
+        # delete files and record directories from target not present in source
+        for (cwd, dirs, files) in os.walk(target):
+            wd_source = os.path.normpath(os.path.join(source, os.path.relpath(cwd, target)))
+            for dir in dirs:
+                target_dir = os.path.join(cwd, dir)
+                source_dir = os.path.join(wd_source, dir)
+                if not os.path.isdir(source_dir):
+                    rm(target_dir)
+            for file in files:
+                target_file = os.path.join(cwd, file)
+                source_file = os.path.join(wd_source, file)
+                if not os.path.isfile(source_file):
+                    rm(target_file)
 
 
 def rm(path):

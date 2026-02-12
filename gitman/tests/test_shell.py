@@ -66,7 +66,7 @@ class TestPrograms:
     @patch("os.symlink")
     def test_ln(self, mock_symlink, mock_call):
         """Verify the commands to create symbolic links."""
-        shell.ln("mock/target", "mock/source")
+        shell.ln("mock/target", "mock/source", symbolic=True)
         mock_symlink.assert_called_once_with("mock/target", "mock/source")
         check_calls(mock_call, [])
 
@@ -75,12 +75,18 @@ class TestPrograms:
     @patch("os.symlink")
     def test_ln_missing_parent(self, mock_symlink, mock_call):
         """Verify the commands to create symbolic links (missing parent)."""
-        shell.ln("mock/target", "mock/source")
+        shell.ln("mock/target", "mock/source", symbolic=True)
         mock_symlink.assert_called_once_with("mock/target", "mock/source")
         if os.name == "nt":
             check_calls(mock_call, ["mkdir mock"])
         else:
             check_calls(mock_call, ["mkdir -p mock"])
+
+    @patch("os.path.isdir", Mock(return_value=True))
+    def test_hln(self, mock_call):
+        """Verify the commands to create hard links."""
+        shell.ln("mock/target", "mock/source", symbolic=False)
+        check_calls(mock_call, [])
 
     @patch("os.path.isfile", Mock(return_value=True))
     def test_rm_file(self, mock_call):

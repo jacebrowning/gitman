@@ -14,6 +14,11 @@ Identity = namedtuple("Identity", ["path", "url", "rev"])
 class Link:
     source: str = ""
     target: str = ""
+    symbolic: Optional[bool] = None
+
+    def __post_init__(self):
+        if self.symbolic is None:
+            self.symbolic = True
 
 
 @dataclass
@@ -216,9 +221,12 @@ class Source:
 
         for link in self.links:
             target = os.path.join(root, os.path.normpath(link.target))
-            relpath = os.path.relpath(os.getcwd(), os.path.dirname(target))
-            source = os.path.join(relpath, os.path.normpath(link.source))
-            create_sym_link(source, target, force=force)
+            if link.symbolic:
+                relpath = os.path.relpath(os.getcwd(), os.path.dirname(target))
+                source = os.path.join(relpath, os.path.normpath(link.source))
+            else:
+                source = os.path.join(os.getcwd(), os.path.normpath(link.source))
+            create_link(source, target, symbolic=bool(link.symbolic), force=force)
 
     def run_scripts(self, force: bool = False, show_shell_stdout: bool = False):
         log.info("Running install scripts...")
@@ -390,16 +398,27 @@ class Source:
         return exceptions.InvalidRepository(msg)
 
 
-def create_sym_link(source: str, target: str, *, force: bool):
-    log.info("Creating a symbolic link...")
+def create_link(source: str, target: str, *, force: bool, symbolic: bool = True):
+
+    if symbolic:
+        log.info("Creating a symbolic link...")
+    else:
+        log.info("Creating a hard link...")
 
     if os.path.islink(target):
         os.remove(target)
     elif os.path.exists(target):
-        if force:
-            shell.rm(target)
-        else:
-            msg = "Preexisting link location at {}".format(target)
-            raise exceptions.UncommittedChanges(msg)
+        if symbolic:
+            if force:
+                shell.rm(target)
+            else:
+                msg = "Preexisting link location at {}".format(target)
+                raise exceptions.UncommittedChanges(msg)
+        elif not os.path.isdir(target):
+            if force:
+                shell.rm(target)
+            else:
+                msg = "Preexisting file location at {}".format(target)
+                raise exceptions.UncommittedChanges(msg)
 
-    shell.ln(source, target)
+    shell.ln(source, target, symbolic=symbolic)
