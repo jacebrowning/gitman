@@ -391,6 +391,48 @@ def describe_install():
             expect(dir_listing).contains("src")
             expect(len(dir_listing) == 1)
 
+        def it_updates_sparse_paths_on_subsequent_install(config):
+            config.datafile.text = strip("""
+                    location: deps
+                    sources:
+                      - name: gitman_1
+                        type: git
+                        params:
+                        repo: https://github.com/jacebrowning/gitman-demo
+                        sparse_paths:
+                          - src/*
+                        rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
+                        links:
+                          -
+                        scripts:
+                          -
+                    """)
+            config.datafile.load()
+            expect(gitman.install(depth=1, force=True)) == True
+            dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
+            expect(dir_listing).contains("src")
+
+            # Change sparse_paths and re-install to verify update takes effect
+            config.datafile.text = strip("""
+                    location: deps
+                    sources:
+                      - name: gitman_1
+                        type: git
+                        params:
+                        repo: https://github.com/jacebrowning/gitman-demo
+                        sparse_paths:
+                          - nonexistent_dir/*
+                        rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
+                        links:
+                          -
+                        scripts:
+                          -
+                    """)
+            config.datafile.load()
+            expect(gitman.install(depth=1, force=True)) == True
+            dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
+            expect("src" not in dir_listing)
+
     def describe_mixed_names():
         @pytest.fixture
         def config_with_group(config):

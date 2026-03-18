@@ -12,6 +12,11 @@ from .exceptions import ShellError
 from .shell import call, pwd
 
 
+def sanitize_sparse_paths(sparse_paths):
+    """Strip trailing glob patterns for cone mode (e.g. 'src/*' -> 'src')."""
+    return [p.rstrip("/*") if p.endswith("/*") else p for p in sparse_paths]
+
+
 def git(*args, **kwargs):
     return call("git", *args, **kwargs)
 
@@ -69,7 +74,7 @@ def clone(
                 fd.write("%s/objects" % sparse_paths_repo)
 
         git("-C", normpath, "sparse-checkout", "init", "--cone")
-        git("-C", normpath, "sparse-checkout", "set", *sparse_paths)
+        git("-C", normpath, "sparse-checkout", "set", *sanitize_sparse_paths(sparse_paths))
         git("-C", normpath, "fetch", "origin")
         git("-C", normpath, "checkout", rev)
     elif settings.CACHE_DISABLE:
@@ -243,6 +248,11 @@ def am(patch, _skip=False):
                 except ShellError:
                     pass
         raise ShellError from e
+
+
+def apply_sparse_checkout(sparse_paths):
+    """Re-apply sparse-checkout paths to an existing working tree."""
+    git("sparse-checkout", "set", *_sanitize_sparse_paths(sparse_paths))
 
 
 def update(
