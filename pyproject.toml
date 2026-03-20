@@ -1,7 +1,7 @@
 [tool.poetry]
 
 name = "gitman"
-version = "3.8"
+version = "3.8.1"
 description = "A language-agnostic dependency manager using Git."
 
 license = "MIT"
@@ -71,7 +71,7 @@ pytest-random = "*"
 freezegun = "*"
 
 # Reports
-coveragespace = "^6.1"
+coveragespace = "^6.2"
 
 # Documentation
 mkdocs = "^1.2.3"
