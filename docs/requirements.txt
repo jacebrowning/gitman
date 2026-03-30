@@ -45,7 +45,7 @@ pefile==2022.5.30 ; python_version >= "3.10" and python_version < "3.15" and sys
 platformdirs==2.5.2 ; python_version >= "3.10" and python_version < "3.15"
 pluggy==1.5.0 ; python_version >= "3.10" and python_version < "3.15"
 pydocstyle==6.3.0 ; python_version >= "3.10" and python_version < "3.15"
-pygments==2.19.2 ; python_version >= "3.10" and python_version < "3.15"
+pygments==2.20.0 ; python_version >= "3.10" and python_version < "3.15"
 pyinstaller-hooks-contrib==2026.0 ; python_version >= "3.10" and python_version < "3.15"
 pyinstaller==6.19.0 ; python_version >= "3.10" and python_version < "3.15"
 pylint==4.0.5 ; python_version >= "3.10" and python_version < "3.15"
