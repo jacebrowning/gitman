@@ -56,7 +56,7 @@ black = ">=24.8,<27.0"
 isort = ">=5.13,<9.0"
 
 # Linters
-mypy = "^1.3"
+mypy = ">=1.3,<3.0"
 pydocstyle = "*"
 pylint = ">=3.3,<4.1"
 types-freezegun = "*"
