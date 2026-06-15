@@ -1252,14 +1252,14 @@ pytest = ">=6,<10"
 
 [[package]]
 name = "pytest-expecter"
-version = "3.0"
+version = "3.1"
 description = "Better testing with expecter and pytest."
 optional = false
-python-versions = ">=3.8,<4.0"
+python-versions = "<4.0,>=3.10"
 groups = ["dev"]
 files = [
-    {file = "pytest-expecter-3.0.tar.gz", hash = "sha256:be8f3e9f823af6d6713e3f552ed47560061a2fd243a78952180f5df61a2b76a4"},
-    {file = "pytest_expecter-3.0-py3-none-any.whl", hash = "sha256:98fe65ecc1ddb7ca29084dc68ec07983dbbdb20b566fd14140b0b5f4b7c84cc8"},
+    {file = "pytest_expecter-3.1-py3-none-any.whl", hash = "sha256:b400425e9f65eacd49bfb6fed6d83e4482f58d3b22f7d353146ed513f12d60a2"},
+    {file = "pytest_expecter-3.1.tar.gz", hash = "sha256:219a9a0042eb7b912f9854184b66ea658f513290c434ab0d6dba2a5899104e99"},
 ]
 
 [[package]]
