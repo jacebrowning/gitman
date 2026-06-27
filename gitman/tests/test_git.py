@@ -1,5 +1,5 @@
 import os
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, mock_open, patch
 
 from gitman import git, settings
 from gitman.exceptions import ShellError
@@ -52,6 +52,77 @@ class TestGit:
                 + os.path.normpath("mock/path")
             ],
         )
+
+    @patch("builtins.open", mock_open())
+    @patch("os.makedirs", Mock(return_value=None))
+    @patch("os.path.isdir", Mock(return_value=False))
+    def test_clone_sparse_cone(self, mock_call):
+        """Verify sparse checkout uses cone mode and sanitizes paths."""
+        git.clone(
+            "git",
+            "mock.git",
+            "mock/path",
+            cache="cache",
+            sparse_paths=["src/*"],
+            rev="rev",
+        )
+        check_calls(
+            mock_call,
+            [
+                "git clone --mirror mock.git "
+                + os.path.normpath("cache/mock.reference"),
+                "git -C " + os.path.normpath("mock/path") + " init",
+                "git -C "
+                + os.path.normpath("mock/path")
+                + " remote add origin mock.git",
+                "git -C "
+                + os.path.normpath("mock/path")
+                + " sparse-checkout set --cone src",
+                "git -C " + os.path.normpath("mock/path") + " fetch origin",
+                "git -C " + os.path.normpath("mock/path") + " checkout rev",
+            ],
+        )
+
+    @patch("builtins.open", mock_open())
+    @patch("os.makedirs", Mock(return_value=None))
+    @patch("os.path.isdir", Mock(return_value=False))
+    def test_clone_sparse_no_cone(self, mock_call):
+        """Verify sparse checkout passes patterns unmodified in no-cone mode."""
+        git.clone(
+            "git",
+            "mock.git",
+            "mock/path",
+            cache="cache",
+            sparse_paths=["src/*"],
+            sparse_paths_type="no-cone",
+            rev="rev",
+        )
+        check_calls(
+            mock_call,
+            [
+                "git clone --mirror mock.git "
+                + os.path.normpath("cache/mock.reference"),
+                "git -C " + os.path.normpath("mock/path") + " init",
+                "git -C "
+                + os.path.normpath("mock/path")
+                + " remote add origin mock.git",
+                "git -C "
+                + os.path.normpath("mock/path")
+                + " sparse-checkout set --no-cone src/*",
+                "git -C " + os.path.normpath("mock/path") + " fetch origin",
+                "git -C " + os.path.normpath("mock/path") + " checkout rev",
+            ],
+        )
+
+    def test_apply_sparse_checkout_cone(self, mock_call):
+        """Verify re-applying sparse paths sanitizes globs in cone mode."""
+        git.apply_sparse_checkout(["src/*"])
+        check_calls(mock_call, ["git sparse-checkout set --cone src"])
+
+    def test_apply_sparse_checkout_no_cone(self, mock_call):
+        """Verify re-applying sparse paths keeps patterns raw in no-cone mode."""
+        git.apply_sparse_checkout(["src/*"], "no-cone")
+        check_calls(mock_call, ["git sparse-checkout set --no-cone src/*"])
 
     def test_fetch(self, mock_call):
         """Verify the commands to fetch from a Git repository."""

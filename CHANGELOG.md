@@ -1,3 +1,9 @@
+# Unreleased
+
+- Added `sparse_paths_type` option to select between `"cone"` (default) and `"no-cone"` sparse-checkout modes, enabling file-level and regex patterns. (#360)
+- Fixed sparse-path filtering that incorrectly included root-level files after v3.5.3 switched to cone mode. (#363)
+- Updated `regex` dependency to resolve an import-time crash in the `sly` lexer. (#363)
+
 # 3.8.1 (2025-03-20)
 
 - Fixed reapplication of sparse paths after install. (@fhamdi-bdai)
