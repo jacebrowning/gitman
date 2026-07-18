@@ -1,3 +1,7 @@
+# 3.9 (unreleased)
+
+- Added a per-source `recurse` option to override `--recurse` for a dependency's nested dependencies.
+
 # 3.8.1 (2025-03-20)
 
 - Fixed reapplication of sparse paths after install. (@fhamdi-bdai)

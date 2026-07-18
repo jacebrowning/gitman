@@ -31,6 +31,7 @@ class Source:
     | `links` | Creates symlinks within a project | No | `[]` |
     | `scripts` | Shell commands to run after checkout | No | `[]` |
     | `patches` | patches to be applied after checkout | No | `[]` |
+    | `recurse` | Overrides `--recurse` for this dependency's nested dependencies | No | `null` (inherit `--recurse`) |
 
     <br>
 
@@ -76,6 +77,19 @@ class Source:
       - patchdir/0002-add-more.patch
     ```
 
+    ### Recurse
+
+    Overrides the command-line `--recurse` option for this specific dependency,
+    controlling whether its own nested dependencies are also updated when running
+    `gitman update`. When unset (`null`), the command-line value is used. Set to
+    `true` to always update this dependency's nested dependencies, or `false` to
+    never update them:
+
+    ```
+    repo: "https://github.com/example/repo"
+    recurse: false
+    ```
+
     """
 
     repo: str = ""
@@ -89,6 +103,7 @@ class Source:
 
     scripts: List[str] = field(default_factory=list)
     patches: List[str] = field(default_factory=list)
+    recurse: Optional[bool] = None
 
     DIRTY = "<dirty>"
     UNKNOWN = "<unknown>"
