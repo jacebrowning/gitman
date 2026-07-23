@@ -32,6 +32,7 @@ def clone(
     *,
     cache=settings.CACHE,
     sparse_paths=None,
+    sparse_paths_type="cone",
     rev=None,
     user_params=None
 ):
@@ -61,6 +62,10 @@ def clone(
         git("clone", "--mirror", repo, reference, *user_params)
 
     if sparse_paths and sparse_paths[0]:
+        cone = sparse_paths_type != "no-cone"
+        mode_flag = "--cone" if cone else "--no-cone"
+        paths = sanitize_sparse_paths(sparse_paths) if cone else sparse_paths
+
         os.makedirs(normpath)
         git("-C", normpath, "init")
         git("-C", normpath, "remote", "add", "origin", repo)
@@ -73,14 +78,7 @@ def clone(
             ) as fd:
                 fd.write("%s/objects" % sparse_paths_repo)
 
-        git("-C", normpath, "sparse-checkout", "init", "--cone")
-        git(
-            "-C",
-            normpath,
-            "sparse-checkout",
-            "set",
-            *sanitize_sparse_paths(sparse_paths)
-        )
+        git("-C", normpath, "sparse-checkout", "set", mode_flag, *paths)
         git("-C", normpath, "fetch", "origin")
         git("-C", normpath, "checkout", rev)
     elif settings.CACHE_DISABLE:
@@ -256,9 +254,12 @@ def am(patch, _skip=False):
         raise ShellError from e
 
 
-def apply_sparse_checkout(sparse_paths):
+def apply_sparse_checkout(sparse_paths, sparse_paths_type="cone"):
     """Re-apply sparse-checkout paths to an existing working tree."""
-    git("sparse-checkout", "set", *sanitize_sparse_paths(sparse_paths))
+    cone = sparse_paths_type != "no-cone"
+    mode_flag = "--cone" if cone else "--no-cone"
+    paths = sanitize_sparse_paths(sparse_paths) if cone else sparse_paths
+    git("sparse-checkout", "set", mode_flag, *paths)
 
 
 def update(

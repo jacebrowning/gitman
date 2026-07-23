@@ -30,6 +30,7 @@ sources:
     params:
     sparse_paths:
       -
+    sparse_paths_type: cone
     links:
       -
     scripts:
@@ -43,6 +44,7 @@ sources:
     params:
     sparse_paths:
       -
+    sparse_paths_type: cone
     links:
       -
     scripts:
@@ -56,6 +58,7 @@ sources:
     params:
     sparse_paths:
       -
+    sparse_paths_type: cone
     links:
       -
     scripts:
@@ -108,6 +111,7 @@ def describe_init():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -122,6 +126,7 @@ def describe_init():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -370,6 +375,7 @@ def describe_install():
                         repo: https://github.com/jacebrowning/gitman-demo
                         sparse_paths:
                           - src/*
+                        sparse_paths_type: cone
                         rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
                         links:
                           -
@@ -401,6 +407,7 @@ def describe_install():
                         repo: https://github.com/jacebrowning/gitman-demo
                         sparse_paths:
                           - src/*
+                        sparse_paths_type: cone
                         rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
                         links:
                           -
@@ -422,6 +429,7 @@ def describe_install():
                         repo: https://github.com/jacebrowning/gitman-demo
                         sparse_paths:
                           - nonexistent_dir/*
+                        sparse_paths_type: cone
                         rev: ddbe17ef173538d1fda29bd99a14bab3c5d86e78
                         links:
                           -
@@ -432,6 +440,40 @@ def describe_install():
             expect(gitman.install(depth=1, force=True)) == True
             dir_listing = os.listdir(os.path.join(config.location, "gitman_1"))
             expect("src" not in dir_listing)
+
+    def describe_sparse_paths_no_cone():
+        @pytest.fixture
+        def config_with_no_cone(config):
+            config.datafile.text = strip("""
+                    location: deps
+                    sources:
+                      - name: gitman_1
+                        type: git
+                        params:
+                        repo: https://github.com/filipopo/gitman-issue-files
+                        sparse_paths_type: no-cone
+                        sparse_paths:
+                          - a/
+                          - c
+                        rev: main
+                        links:
+                          -
+                        scripts:
+                          -
+                    """)
+            config.datafile.load()
+
+            return config
+
+        def it_only_includes_listed_files_and_dirs(config_with_no_cone):
+            expect(gitman.install(depth=1, force=True)) == True
+            dir_listing = os.listdir(
+                os.path.join(config_with_no_cone.location, "gitman_1")
+            )
+            expect(dir_listing).contains("a")
+            expect(dir_listing).contains("c")
+            expect("b" not in dir_listing)
+            expect("d" not in dir_listing)
 
     def describe_mixed_names():
         @pytest.fixture
@@ -445,6 +487,7 @@ def describe_install():
                     repo: https://github.com/jacebrowning/gitman-demo
                     sparse_paths:
                       -
+                    sparse_paths_type: cone
                     rev: example-branch
                     links:
                       -
@@ -456,6 +499,7 @@ def describe_install():
                     repo: https://github.com/jacebrowning/gitman-demo
                     sparse_paths:
                       -
+                    sparse_paths_type: cone
                     rev: example-tag
                     links:
                       -
@@ -507,6 +551,7 @@ def describe_install():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             rev: example-branch
             links:
               -
@@ -520,6 +565,7 @@ def describe_install():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             rev: example-tag
             links:
               -
@@ -551,6 +597,7 @@ def describe_install():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             rev: example-branch
             links:
               -
@@ -564,6 +611,7 @@ def describe_install():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             rev: example-tag
             links:
               -
@@ -694,6 +742,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             rev: example-branch
             links:
               -
@@ -707,6 +756,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             rev: example-tag
             links:
               -
@@ -721,6 +771,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             rev: (old revision)
             links:
               -
@@ -746,6 +797,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -759,6 +811,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -773,6 +826,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -795,6 +849,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -807,6 +862,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             rev: example-tag
             links:
               -
@@ -822,6 +878,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -845,6 +902,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -858,6 +916,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -872,6 +931,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -918,6 +978,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             rev: example-branch
             links:
               -
@@ -931,6 +992,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             rev: example-tag
             links:
               -
@@ -944,6 +1006,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             rev: example-tag
             links:
               -
@@ -958,6 +1021,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             rev: (old revision)
             links:
               -
@@ -971,6 +1035,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             rev: (old revision)
             links:
               -
@@ -999,6 +1064,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -1012,6 +1078,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -1025,6 +1092,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -1039,6 +1107,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -1052,6 +1121,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -1092,6 +1162,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             rev: example-tag
             links:
               -
@@ -1106,6 +1177,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             rev: (old revision)
             links:
               -
@@ -1130,6 +1202,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -1144,6 +1217,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -1188,6 +1262,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             rev: example-tag
             links:
               -
@@ -1202,6 +1277,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             rev: (old revision)
             links:
               -
@@ -1227,6 +1303,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -1241,6 +1318,7 @@ def describe_update():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -1350,6 +1428,7 @@ def describe_lock():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -1363,6 +1442,7 @@ def describe_lock():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -1376,6 +1456,7 @@ def describe_lock():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -1398,6 +1479,7 @@ def describe_lock():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:
@@ -1411,6 +1493,7 @@ def describe_lock():
             params:
             sparse_paths:
               -
+            sparse_paths_type: cone
             links:
               -
             scripts:

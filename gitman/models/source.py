@@ -28,6 +28,7 @@ class Source:
     | `type` | `"git"` or `"git-svn"` | No | `"git"` |
     | `params` | Additional arguments for `clone` | No | `null` |
     | `sparse_paths` | Controls partial checkout | No | `[]` |
+    | `sparse_paths_type` | `"cone"` or `"no-cone"` sparse mode | No | `"cone"` |
     | `links` | Creates symlinks within a project | No | `[]` |
     | `scripts` | Shell commands to run after checkout | No | `[]` |
     | `patches` | patches to be applied after checkout | No | `[]` |
@@ -49,6 +50,15 @@ class Source:
     ### Sparse Paths
 
     See [using sparse checkouts][using-sparse-checkouts] for more information.
+
+    The `sparse_paths_type` option selects git's sparse-checkout mode:
+
+    - `"cone"` (default): only directory patterns are supported; git uses a
+      faster hash-based algorithm. Note that all root-level files are always
+      included in cone mode.
+    - `"no-cone"`: patterns are treated as gitignore-style regular expressions
+      and passed unmodified. This enables file-level and glob patterns (e.g.
+      `"*.c"`) that cone mode cannot match.
 
     ### Links
 
@@ -85,6 +95,7 @@ class Source:
     type: str = "git"
     params: Optional[str] = None
     sparse_paths: List[str] = field(default_factory=list)
+    sparse_paths_type: str = "cone"
     links: List[Link] = field(default_factory=list)
 
     scripts: List[str] = field(default_factory=list)
@@ -150,6 +161,7 @@ class Source:
                 self.repo,
                 self.name,
                 sparse_paths=self.sparse_paths,
+                sparse_paths_type=self.sparse_paths_type,
                 rev=self.rev,
                 user_params=self.clone_params_if_any(),
             )
@@ -206,7 +218,7 @@ class Source:
 
         # Re-apply sparse-checkout paths in case they changed since initial clone
         if self.sparse_paths and self.sparse_paths[0]:
-            git.apply_sparse_checkout(self.sparse_paths)
+            git.apply_sparse_checkout(self.sparse_paths, self.sparse_paths_type)
 
         # Update the working tree to the desired revision
         git.update(
@@ -379,6 +391,7 @@ class Source:
             scripts=self.scripts,
             patches=self.patches,
             sparse_paths=self.sparse_paths,
+            sparse_paths_type=self.sparse_paths_type,
         )
         return source
 

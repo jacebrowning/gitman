@@ -74,7 +74,13 @@ class TestSource:
         source.update_files()
 
         mock_clone.assert_called_once_with(
-            "git", "repo", "name", rev="rev", sparse_paths=[], user_params=None
+            "git",
+            "repo",
+            "name",
+            rev="rev",
+            sparse_paths=[],
+            sparse_paths_type="cone",
+            user_params=None,
         )
         mock_is_fetch_required.assert_called_once_with("git", "rev")
         mock_fetch.assert_called_once_with("git", "repo", "name", rev="rev")
