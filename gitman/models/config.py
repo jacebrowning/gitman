@@ -120,10 +120,11 @@ class Config:
             config = load_config(search=False)
             if config:
                 common.indent()
+                source_recurse = recurse if source.recurse is None else source.recurse
                 count += config.install_dependencies(
                     depth=None if depth is None else max(0, depth - 1),
-                    update=update and recurse,
-                    recurse=recurse,
+                    update=update and source_recurse,
+                    recurse=source_recurse,
                     force=force,
                     fetch=fetch,
                     clean=clean,
