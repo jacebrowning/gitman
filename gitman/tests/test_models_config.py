@@ -1,11 +1,12 @@
 # pylint: disable=redefined-outer-name,unused-variable,expression-not-assigned,len-as-condition
 
 import os
+from unittest.mock import MagicMock, patch
 
 import pytest
 from expecter import expect
 
-from gitman.models import Config, load_config
+from gitman.models import Config, Source, load_config
 
 from .conftest import FILES
 
@@ -134,6 +135,54 @@ def describe_config():
             expect(config.get_path("foobar")) == os.path.normpath(
                 "m/root/m/location/foobar"
             )
+
+
+class TestRecurse:
+    """Verify a source's ``recurse`` overrides ``--recurse`` for its subtree."""
+
+    @staticmethod
+    def _record_propagated_recurse(command_recurse, source_recurse):
+        """Install a single source and return the (update, recurse) it passes down."""
+        config = Config("mock/root")
+        source = Source(repo="https://example.com/repo", name="dep")
+        source.recurse = source_recurse
+
+        recorded = {}
+
+        def record(**kwargs):
+            recorded["update"] = kwargs.get("update")
+            recorded["recurse"] = kwargs.get("recurse")
+            return 0
+
+        child = MagicMock()
+        child.install_dependencies.side_effect = record
+
+        with patch.object(Config, "_get_sources", return_value=[source]), patch.object(
+            Config, "_get_sources_filter", return_value=["dep"]
+        ), patch.object(Source, "update_files"), patch.object(
+            Source, "create_links"
+        ), patch(
+            "gitman.models.config.shell"
+        ), patch(
+            "gitman.models.config.os.path.isdir", return_value=True
+        ), patch(
+            "gitman.models.config.load_config", return_value=child
+        ):
+            config.install_dependencies(
+                "dep", update=True, recurse=command_recurse
+            )
+
+        return recorded["update"], recorded["recurse"]
+
+    def test_unset_inherits_command_recurse(self):
+        assert (False, False) == self._record_propagated_recurse(False, None)
+        assert (True, True) == self._record_propagated_recurse(True, None)
+
+    def test_true_forces_recurse_when_command_disables_it(self):
+        assert (True, True) == self._record_propagated_recurse(False, True)
+
+    def test_false_prevents_recurse_when_command_enables_it(self):
+        assert (False, False) == self._record_propagated_recurse(True, False)
 
 
 class TestLoad:

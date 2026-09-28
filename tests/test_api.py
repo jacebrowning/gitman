@@ -36,6 +36,7 @@ sources:
       -
     patches:
       -
+    recurse:
   - repo: https://github.com/jacebrowning/gitman-demo
     name: gitman_2
     rev: example-tag
@@ -49,6 +50,7 @@ sources:
       -
     patches:
       -
+    recurse:
   - repo: https://github.com/jacebrowning/gitman-demo
     name: gitman_3
     rev: 9bf18e16b956041f0267c21baad555a23237b52e
@@ -62,6 +64,7 @@ sources:
       -
     patches:
       -
+    recurse:
 sources_locked:
   -
 groups:
@@ -114,6 +117,7 @@ def describe_init():
               -
             patches:
               -
+            recurse:
         sources_locked:
           - repo: https://github.com/githubtraining/hellogitworld
             name: sample_dependency
@@ -128,6 +132,7 @@ def describe_init():
               -
             patches:
               -
+            recurse:
         default_group: ''
         groups:
           -
@@ -167,6 +172,7 @@ def describe_install():
               -
             patches:
               -
+            recurse:
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -178,6 +184,7 @@ def describe_install():
               -
             patches:
               -
+            recurse:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_3
             type: git
@@ -188,6 +195,7 @@ def describe_install():
               -
             patches:
               -
+            recurse:
         """)
         config.datafile.load()
 
@@ -217,6 +225,7 @@ def describe_install():
               -
             patches:
               -
+            recurse:
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -228,6 +237,7 @@ def describe_install():
               -
             patches:
               -
+            recurse:
         """)
         config.datafile.load()
 
@@ -514,6 +524,7 @@ def describe_install():
               -
             patches:
               -
+            recurse:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
@@ -527,6 +538,7 @@ def describe_install():
               -
             patches:
               -
+            recurse:
         groups:
           - name: main
             members:
@@ -558,6 +570,7 @@ def describe_install():
               -
             patches:
               -
+            recurse:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
@@ -571,6 +584,7 @@ def describe_install():
               -
             patches:
               -
+            recurse:
         groups:
           - name: main
             members:
@@ -701,6 +715,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
@@ -714,6 +729,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -728,6 +744,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         groups:
           -
         """)
@@ -752,6 +769,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             rev: example-tag
@@ -765,6 +783,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -779,6 +798,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         groups:
           -
         default_group: ''
@@ -801,6 +821,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
@@ -814,6 +835,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -828,6 +850,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         groups:
           -
         """)
@@ -851,6 +874,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             rev: example-tag
@@ -864,6 +888,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -878,6 +903,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         groups:
           -
         default_group: ''
@@ -925,6 +951,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
@@ -938,6 +965,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_3
             type: git
@@ -951,6 +979,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
@@ -965,6 +994,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             type: git
@@ -978,6 +1008,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         groups:
           - name: group_a
             members:
@@ -1005,6 +1036,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             rev: example-tag
@@ -1018,6 +1050,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_3
             rev: example-tag
@@ -1031,6 +1064,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_1
@@ -1045,6 +1079,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
@@ -1058,6 +1093,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         groups:
           - name: group_a
             members:
@@ -1099,6 +1135,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -1113,6 +1150,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         groups:
           -
         """)
@@ -1136,6 +1174,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -1150,6 +1189,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         groups:
           -
         default_group: ''
@@ -1195,6 +1235,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -1209,6 +1250,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         groups:
           -
         """)
@@ -1233,6 +1275,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -1247,6 +1290,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         groups:
           -
         default_group: ''
@@ -1267,6 +1311,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         sources_locked:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
@@ -1278,6 +1323,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_3
             type: git
@@ -1288,6 +1334,7 @@ def describe_update():
               -
             patches:
               -
+            recurse:
         """)
         config.datafile.load()
 
@@ -1356,6 +1403,7 @@ def describe_lock():
               -
             patches:
               -
+            recurse:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_2
             rev: 7bd138fe7359561a8c2ff9d195dff238794ccc04
@@ -1369,6 +1417,7 @@ def describe_lock():
               -
             patches:
               -
+            recurse:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_3
             rev: 9bf18e16b956041f0267c21baad555a23237b52e
@@ -1382,6 +1431,7 @@ def describe_lock():
               -
             patches:
               -
+            recurse:
         """))
 
     def it_records_specified_dependencies(config):
@@ -1404,6 +1454,7 @@ def describe_lock():
               -
             patches:
               -
+            recurse:
           - repo: https://github.com/jacebrowning/gitman-demo
             name: gitman_3
             rev: 9bf18e16b956041f0267c21baad555a23237b52e
@@ -1417,6 +1468,7 @@ def describe_lock():
               -
             patches:
               -
+            recurse:
         """))
 
     def it_should_fail_on_dirty_repositories(config):
@@ -1480,3 +1532,4 @@ def describe_lock():
         expect(gitman.update(depth=1, lock=False)) == True
 
         expect(gitman.lock("gitman_1@deadbeef_ref", depth=1)) == False
+
