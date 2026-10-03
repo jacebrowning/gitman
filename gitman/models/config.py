@@ -420,8 +420,9 @@ class Config:
             [source.name for source in sources if source.name in names_list]
         )
 
-        # Fall back to all sources if allowed
-        if not sources_filter:
+        # Fall back to all sources if allowed, unless a group matched (an
+        # empty group is intentionally empty, not a request for everything)
+        if not sources_filter and not groups_filter:
             if names and names_list != ["all"]:
                 log.warn(f"No dependencies match: {' '.join(names)}")
             else:

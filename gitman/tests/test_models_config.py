@@ -5,7 +5,7 @@ import os
 import pytest
 from expecter import expect
 
-from gitman.models import Config, load_config
+from gitman.models import Config, Group, Source, load_config
 
 from .conftest import FILES
 
@@ -134,6 +134,62 @@ def describe_config():
             expect(config.get_path("foobar")) == os.path.normpath(
                 "m/root/m/location/foobar"
             )
+
+    def describe_get_sources_filter():
+        def it_returns_empty_when_default_group_has_no_members(config):
+            config.sources = [Source(repo="http://example.com/repo1", name="repo1")]
+            config.groups = [Group(name="empty", members=[])]
+            config.default_group = "empty"
+
+            expect(
+                config._get_sources_filter(
+                    sources=config.sources, skip_default_group=False
+                )
+            ) == []
+
+        def it_returns_empty_when_empty_group_specified_by_name(config):
+            config.sources = [Source(repo="http://example.com/repo1", name="repo1")]
+            config.groups = [Group(name="empty", members=[])]
+            config.default_group = ""
+
+            expect(
+                config._get_sources_filter(
+                    "empty", sources=config.sources, skip_default_group=False
+                )
+            ) == []
+
+        def it_returns_all_when_skip_default_group_is_true(config):
+            config.sources = [Source(repo="http://example.com/repo1", name="repo1")]
+            config.groups = [Group(name="empty", members=[])]
+            config.default_group = "empty"
+
+            expect(
+                config._get_sources_filter(
+                    sources=config.sources, skip_default_group=True
+                )
+            ) == ["repo1"]
+
+        def it_returns_all_when_name_all_is_specified(config):
+            config.sources = [Source(repo="http://example.com/repo1", name="repo1")]
+            config.groups = [Group(name="empty", members=[])]
+            config.default_group = "empty"
+
+            expect(
+                config._get_sources_filter(
+                    "all", sources=config.sources, skip_default_group=False
+                )
+            ) == ["repo1"]
+
+        def it_returns_all_when_default_group_is_blank(config):
+            config.sources = [Source(repo="http://example.com/repo1", name="repo1")]
+            config.groups = [Group(name="empty", members=[])]
+            config.default_group = ""
+
+            expect(
+                config._get_sources_filter(
+                    sources=config.sources, skip_default_group=False
+                )
+            ) == ["repo1"]
 
 
 class TestLoad:

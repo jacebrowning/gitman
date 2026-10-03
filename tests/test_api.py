@@ -2,7 +2,6 @@
 
 import inspect
 import os
-import shutil
 from contextlib import suppress
 
 import log
@@ -74,8 +73,8 @@ default_group: ''
 def config():
     log.info("Temporary directory: %s", TMP)
 
-    with suppress(FileNotFoundError, PermissionError):
-        shutil.rmtree(TMP)
+    # 'shell.rm' handles read-only files (e.g. `.git` objects) on Windows
+    shell.rm(TMP)
     with suppress(FileExistsError):
         os.makedirs(TMP)
     os.chdir(TMP)
@@ -620,6 +619,79 @@ def describe_install():
             expect(
                 os.path.exists(
                     os.path.join(config_with_default_group.location, "gitman_2")
+                )
+            ) == True
+
+        @pytest.fixture
+        def config_with_empty_default_group(config):
+            config.datafile.text = strip("""
+        location: deps
+        sources:
+          - repo: https://github.com/jacebrowning/gitman-demo
+            name: gitman_1
+            type: git
+            params:
+            sparse_paths:
+              -
+            rev: example-branch
+            links:
+              -
+            scripts:
+              -
+            patches:
+              -
+          - repo: https://github.com/jacebrowning/gitman-demo
+            name: gitman_2
+            type: git
+            params:
+            sparse_paths:
+              -
+            rev: example-tag
+            links:
+              -
+            scripts:
+              -
+            patches:
+              -
+        groups:
+          - name: empty
+            members: null
+          - name: secondary
+            members:
+              - gitman_2
+        default_group: 'empty'
+        """)
+            config.datafile.load()
+
+            return config
+
+        def it_installs_nothing_when_default_group_empty(
+            config_with_empty_default_group,
+        ):
+            gitman.install(depth=1, force=True)
+            expect(
+                os.path.exists(
+                    os.path.join(config_with_empty_default_group.location, "gitman_1")
+                )
+            ) == False
+            expect(
+                os.path.exists(
+                    os.path.join(config_with_empty_default_group.location, "gitman_2")
+                )
+            ) == False
+
+        def it_installs_all_sources_when_all_specified_and_empty_default_group(
+            config_with_empty_default_group,
+        ):
+            expect(gitman.install(depth=1, force=True, skip_default_group=True)) == True
+            expect(
+                os.path.exists(
+                    os.path.join(config_with_empty_default_group.location, "gitman_1")
+                )
+            ) == True
+            expect(
+                os.path.exists(
+                    os.path.join(config_with_empty_default_group.location, "gitman_2")
                 )
             ) == True
 
