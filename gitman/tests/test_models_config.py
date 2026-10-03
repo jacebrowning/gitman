@@ -138,7 +138,7 @@ def describe_config():
     def describe_get_sources_filter():
         def it_returns_empty_when_default_group_has_no_members(config):
             config.sources = [Source(repo="http://example.com/repo1", name="repo1")]
-            config.groups = [Group(name="empty", members=None)]
+            config.groups = [Group(name="empty", members=[])]
             config.default_group = "empty"
 
             expect(
@@ -160,7 +160,7 @@ def describe_config():
 
         def it_returns_all_when_skip_default_group_is_true(config):
             config.sources = [Source(repo="http://example.com/repo1", name="repo1")]
-            config.groups = [Group(name="empty", members=None)]
+            config.groups = [Group(name="empty", members=[])]
             config.default_group = "empty"
 
             expect(
@@ -171,7 +171,7 @@ def describe_config():
 
         def it_returns_all_when_name_all_is_specified(config):
             config.sources = [Source(repo="http://example.com/repo1", name="repo1")]
-            config.groups = [Group(name="empty", members=None)]
+            config.groups = [Group(name="empty", members=[])]
             config.default_group = "empty"
 
             expect(
@@ -182,7 +182,7 @@ def describe_config():
 
         def it_returns_all_when_default_group_is_blank(config):
             config.sources = [Source(repo="http://example.com/repo1", name="repo1")]
-            config.groups = [Group(name="empty", members=None)]
+            config.groups = [Group(name="empty", members=[])]
             config.default_group = ""
 
             expect(

@@ -408,21 +408,20 @@ class Config:
     ) -> List[str]:
         """Get a filtered subset of sources."""
         names_list = list(names)
-        if not names_list and not skip_default_group and self.default_group:
+        if not names_list and not skip_default_group:
             names_list.append(self.default_group)
 
         # Add sources from groups
         groups_filter = [group for group in self.groups if group.name in names_list]
-        sources_filter = [
-            member for group in groups_filter for member in (group.members or [])
-        ]
+        sources_filter = [member for group in groups_filter for member in group.members]
 
         # Add independent sources
         sources_filter.extend(
             [source.name for source in sources if source.name in names_list]
         )
 
-        # Fall back to all sources if allowed
+        # Fall back to all sources if allowed, unless a group matched (an
+        # empty group is intentionally empty, not a request for everything)
         if not sources_filter and not groups_filter:
             if names and names_list != ["all"]:
                 log.warn(f"No dependencies match: {' '.join(names)}")
