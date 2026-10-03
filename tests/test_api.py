@@ -2,7 +2,6 @@
 
 import inspect
 import os
-import shutil
 from contextlib import suppress
 
 import log
@@ -74,8 +73,8 @@ default_group: ''
 def config():
     log.info("Temporary directory: %s", TMP)
 
-    with suppress(FileNotFoundError, PermissionError):
-        shutil.rmtree(TMP)
+    # 'shell.rm' handles read-only files (e.g. `.git` objects) on Windows
+    shell.rm(TMP)
     with suppress(FileExistsError):
         os.makedirs(TMP)
     os.chdir(TMP)
