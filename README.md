@@ -27,6 +27,7 @@ Install this tool globally with [pipx](https://pipxproject.github.io/pipx/) (or 
 ```sh
 $ pipx install gitman
 ```
+
 or add it to your [Poetry](https://python-poetry.org/docs/) project:
 
 ```sh
