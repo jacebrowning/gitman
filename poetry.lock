@@ -82,14 +82,14 @@ files = [
 
 [[package]]
 name = "astroid"
-version = "4.0.3"
+version = "4.3.4"
 description = "An abstract syntax tree for Python with inference support."
 optional = false
 python-versions = ">=3.10.0"
 groups = ["dev"]
 files = [
-    {file = "astroid-4.0.3-py3-none-any.whl", hash = "sha256:864a0a34af1bd70e1049ba1e61cee843a7252c826d97825fcee9b2fcbd9e1b14"},
-    {file = "astroid-4.0.3.tar.gz", hash = "sha256:08d1de40d251cc3dc4a7a12726721d475ac189e4e583d596ece7422bc176bda3"},
+    {file = "astroid-4.3.4-py3-none-any.whl", hash = "sha256:2bcd0d02648a443a4b818c952c3550091989daefac3c12d3b83b2289482e0818"},
+    {file = "astroid-4.3.4.tar.gz", hash = "sha256:d515a105722b72098bbe82d430d65e635f742b6cbac3bdfaf8b7c188b87c5e39"},
 ]
 
 [[package]]
@@ -1223,18 +1223,18 @@ packaging = ">=22.0"
 
 [[package]]
 name = "pylint"
-version = "4.0.9"
+version = "4.1.2"
 description = "python code static checker"
 optional = false
 python-versions = ">=3.10.0"
 groups = ["dev"]
 files = [
-    {file = "pylint-4.0.9-py3-none-any.whl", hash = "sha256:c4ba5bbaf1e70ecf05f08cd7d6091ea04824b79a2b2d9f5b10dc25fc34cb1124"},
-    {file = "pylint-4.0.9.tar.gz", hash = "sha256:6f1305780229ae720e89b8aff2b3ff857cbb268fbab98c8b586960267667ad34"},
+    {file = "pylint-4.1.2-py3-none-any.whl", hash = "sha256:e34c8636edc7d60a2eaadca4ad6c18a49e202361987a26e81b2a17fa92be28e1"},
+    {file = "pylint-4.1.2.tar.gz", hash = "sha256:235f13dc418c0041c649b42a5c35c99f2ffc6ca8b6a7574958eac5335906a68a"},
 ]
 
 [package.dependencies]
-astroid = ">=4.0.2,<=4.1.dev0"
+astroid = ">=4.3.3,<=4.4"
 colorama = {version = ">=0.4.5", markers = "sys_platform == \"win32\""}
 dill = [
     {version = ">=0.3.6", markers = "python_version == \"3.11\""},
@@ -2019,4 +2019,4 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "f637f168ccb712b253a79a6c93e9946aa7a9bb98598098d93b027fe2e3a278e9"
+content-hash = "e29c241db4834f25f1b2f59626a7071ecca7b71f32705947387eac9a376a8a85"
