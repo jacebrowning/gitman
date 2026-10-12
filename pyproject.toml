@@ -30,11 +30,11 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
     "Topic :: Software Development",
     "Topic :: Software Development :: Build Tools",
     "Topic :: Software Development :: Version Control",
@@ -43,9 +43,9 @@ classifiers = [
 
 [tool.poetry.dependencies]
 
-python = "^3.10,<3.15"
+python = "^3.11"
 
-datafiles = "^2.3.1"
+datafiles = "^2.6"
 minilog = "^2.3.1"
 regex = ">=2026.5.9"
 universal-startfile = ">=0.2,<0.5"
@@ -82,7 +82,7 @@ pygments = "^2.15.0"
 jinja2 = "~3.1.6"
 
 # Tooling
-pyinstaller = "^6.15"
+pyinstaller = { version = "^6.15", python = "<3.16" }
 sniffer = "*"
 macfsevents = { version = "*", platform = "darwin", python = "<3.13" }
 pync = { version = "*", platform = "darwin" }
