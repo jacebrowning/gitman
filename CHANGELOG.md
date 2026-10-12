@@ -1,3 +1,8 @@
+# 3.9 (unreleased)
+
+- Added support for Python 3.15.
+- Dropped support for Python 3.10.
+
 # 3.8.1 (2025-03-20)
 
 - Fixed reapplication of sparse paths after install. (@fhamdi-bdai)
