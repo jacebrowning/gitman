@@ -13,6 +13,20 @@ To ignore the `default_group` and install all dependencies, use the `all` keywor
 $ gitman install all
 ```
 
+## Empty Default Groups
+
+To prevent any dependencies from being cloned by default, define a group with no members and set it as the `default_group`:
+
+```yaml
+groups:
+  - name: empty
+    members: null
+
+default_group: empty
+```
+
+When `gitman install` is run, no dependencies will be installed unless a specific group or dependency is requested, or the default group is overridden with `all` or `--no-defaults`.
+
 ## Nested Projects
 
 When nested Gitman projects are used default groups are installed if they
