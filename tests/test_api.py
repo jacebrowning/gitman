@@ -73,6 +73,9 @@ default_group: ''
 def config():
     log.info("Temporary directory: %s", TMP)
 
+    # Leave TMP first: Windows can't delete the current working directory,
+    # and other tests (e.g. `Config.install_dependencies`) may leave us inside it
+    os.chdir(ROOT)
     # 'shell.rm' handles read-only files (e.g. `.git` objects) on Windows
     shell.rm(TMP)
     with suppress(FileExistsError):
