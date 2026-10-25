@@ -1,7 +1,7 @@
 altgraph==0.17.2 ; python_version >= "3.11" and python_version < "3.16"
 ast-serialize==0.6.0 ; python_version >= "3.11" and python_version < "4.0"
 astroid==4.0.3 ; python_version >= "3.11" and python_version < "4.0"
-black==26.5.1 ; python_version >= "3.11" and python_version < "4.0"
+black==26.10.1 ; python_version >= "3.11" and python_version < "4.0"
 cached-property==1.5.2 ; python_version >= "3.11" and python_version < "4.0"
 certifi==2026.10.19 ; python_version >= "3.11" and python_version < "4.0"
 charset-normalizer==2.1.1 ; python_version >= "3.11" and python_version < "4.0"
