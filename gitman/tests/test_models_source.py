@@ -22,6 +22,36 @@ class TestSource:
         assert "bar" == source.name
         assert "main" == source.rev
 
+    def test_init_name_keeps_dots_in_basename(self):
+        """Verify inferred names keep dots (matching `git clone`)."""
+        source = Source(
+            type="git",
+            repo="https://github.com/ctu-mrs/ctu-mrs.github.io.git",
+            name=None,
+        )
+
+        assert "ctu-mrs.github.io" == source.name
+
+    def test_init_name_without_git_suffix(self):
+        """Verify inferred names work when the URL has no .git suffix."""
+        source = Source(
+            type="git",
+            repo="https://github.com/ctu-mrs/ctu-mrs.github.io",
+            name=None,
+        )
+
+        assert "ctu-mrs.github.io" == source.name
+
+    def test_init_name_strips_trailing_slash(self):
+        """Verify a trailing slash on the repo URL is ignored."""
+        source = Source(
+            type="git",
+            repo="https://github.com/ctu-mrs/ctu-mrs.github.io.git/",
+            name=None,
+        )
+
+        assert "ctu-mrs.github.io" == source.name
+
     def test_init_name_as_path(self, tmp_path):
         """Verify the name can be a path."""
         source = Source(type="git", repo="http://example.com", name=tmp_path)

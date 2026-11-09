@@ -95,7 +95,12 @@ class Source:
 
     def __post_init__(self):
         if self.name is None:
-            self.name = self.repo.split("/")[-1].split(".")[0]
+            # Match `git clone` / git.py: basename of the URL, strip a trailing
+            # ".git" only — keep any other dots (e.g. ctu-mrs.github.io).
+            name = self.repo.rstrip("/").split("/")[-1]
+            if name.endswith(".git"):
+                name = name[: -len(".git")]
+            self.name = name
         else:
             self.name = str(self.name)
         self.type = self.type or "git"
