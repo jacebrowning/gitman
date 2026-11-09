@@ -47,7 +47,10 @@ class TestSource:
     def test_init_none_rev_defaults_to_main(self):
         """Verify an explicit None rev defaults to main."""
         source = Source(
-            type="git", repo="http://example.com/foo/bar.git", name=None, rev=None
+            type="git",
+            repo="http://example.com/foo/bar.git",
+            name=None,
+            rev=None,  # type: ignore[arg-type]
         )
 
         assert "main" == source.rev
