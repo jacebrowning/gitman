@@ -98,6 +98,11 @@ class Source:
             self.name = self.repo.split("/")[-1].split(".")[0]
         else:
             self.name = str(self.name)
+        # datafiles sets missing YAML keys to "" for nested dataclasses,
+        # which bypasses the field default of "main" and leads to
+        # `git checkout --force ""`. Treat empty/missing rev as "main".
+        if not self.rev:
+            self.rev = "main"
         self.type = self.type or "git"
 
     def __repr__(self):

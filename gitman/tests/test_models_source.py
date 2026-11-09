@@ -36,6 +36,25 @@ class TestSource:
 
         assert "v1.0" == source.rev
 
+    def test_init_empty_rev_defaults_to_main(self):
+        """Verify an empty rev (as loaded from YAML) defaults to main."""
+        source = Source(
+            type="git", repo="http://example.com/foo/bar.git", name=None, rev=""
+        )
+
+        assert "main" == source.rev
+
+    def test_init_none_rev_defaults_to_main(self):
+        """Verify an explicit None rev defaults to main."""
+        source = Source(
+            type="git",
+            repo="http://example.com/foo/bar.git",
+            name=None,
+            rev=None,  # type: ignore[arg-type]
+        )
+
+        assert "main" == source.rev
+
     def test_repr(self, source):
         """Verify sources can be represented."""
         assert "<source 'repo' @ 'rev' in 'name'>" == repr(source)
