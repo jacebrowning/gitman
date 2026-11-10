@@ -437,6 +437,10 @@ def load_config(
     """Load the config for the current project."""
     start = os.path.abspath(start) if start else _resolve_current_directory()
 
+    if not os.path.isdir(start):
+        log.debug("No config found, missing directory: %s", start)
+        return None
+
     if search:
         log.debug("Searching for config...")
 
@@ -470,6 +474,9 @@ def find_nested_configs(
     """Find all other projects in the same directory."""
     root = os.path.abspath(root) if root else _resolve_current_directory()
     configs: List[Config] = []
+
+    if not os.path.isdir(root):
+        return []
 
     if depth is not None and depth <= 1:
         return configs

@@ -5,7 +5,13 @@ import os
 import pytest
 from expecter import expect
 
-from gitman.models import Config, Group, Source, load_config
+from gitman.models import (
+    Config,
+    Group,
+    Source,
+    find_nested_configs,
+    load_config,
+)
 
 from .conftest import FILES
 
@@ -204,3 +210,16 @@ class TestLoad:
         config = load_config()
 
         assert None is config
+
+    def test_load_from_missing_directory(self, tmp_path):
+        missing = str(tmp_path / "does-not-exist")
+
+        config = load_config(missing)
+
+        assert None is config
+
+    def test_find_nested_configs_in_missing_directory(self, tmp_path):
+        missing = str(tmp_path / "does-not-exist")
+
+        assert [] == find_nested_configs(missing, None, [])
+
