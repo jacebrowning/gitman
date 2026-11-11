@@ -17,7 +17,7 @@ reproducibility and easy distribution.
 
 The [PyInstaller](https://www.pyinstaller.org/) will encapsulate the required parts of the local installed python version and the needed modules in the self contained Gitman binary.
 
-In this matter, ensure that the required python version and development tools are locally available (see [Gitman requirements](../index.md#Setup) and [development setup](../about/contributing.md#Setup)).
+In this matter, ensure that the required python version and development tools are locally available (see [Gitman requirements](../index.md#setup) and [development setup](../about/contributing.md#setup)).
 
 The compatible PyInstaller package will be automatically resolved by poetry. It is not necessary to explicitly install the PyInstaller via pip.
 
