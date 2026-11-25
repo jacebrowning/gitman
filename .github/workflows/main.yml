@@ -43,7 +43,7 @@ jobs:
 
     - name: Upload coverage
       uses: codecov/codecov-action@v4
-      if: steps.fork-check.outputs.is-fork == 'false'
+      if: ${{ secrets.CODECOV_TOKEN != '' }}
       with:
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
